@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,7 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import android.provider.Settings;
 import android.util.Base64;
@@ -65,12 +70,16 @@ public class MainActivity extends AppCompatActivity {
         userRef = db.collection("users");
         photosRef = db.collection("photos");
 
-        HashMap<String, String> data = new HashMap<>();
-        data.put("android_id", androidID);
-        data.put("f_name", "Chirayu");
-        data.put("l_name", "Shah");
-        data.put("email", "cshah1@ualberta.ca");
-        userRef.document(androidID).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        // This was taken from https://firebase.google.com/docs/firestore/manage-data/add-data#data_types October 18 2024
+        HashMap<String, Object> user_data = new HashMap<>();
+        user_data.put("android_id", androidID);
+        user_data.put("f_name", "Chirayu");
+        user_data.put("l_name", "Shah");
+        user_data.put("email", "cshah1@ualberta.ca");
+        user_data.put("isAdmin", true);
+
+        userRef.document("admin_1").set(user_data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("Firestore", "Document successfully written");
@@ -82,6 +91,4 @@ public class MainActivity extends AppCompatActivity {
         // https://www.geeksforgeeks.org/how-to-fetch-device-id-in-android-programmatically/
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-
-
 }
