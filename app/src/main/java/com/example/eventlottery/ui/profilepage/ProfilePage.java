@@ -8,18 +8,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.eventlottery.AndroidID;
 import com.example.eventlottery.R;
 import com.example.eventlottery.databinding.FragmentProfilePageBinding;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.widget.Button;
+
+import java.util.HashMap;
 
 public class ProfilePage extends Fragment {
 
@@ -39,18 +45,21 @@ public class ProfilePage extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
-
         CollectionReference userRef = db.collection("users");
 
         binding = FragmentProfilePageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.fNameTextView;
+        final EditText editFName = binding.fNameEditText;
+        final EditText editLName = binding.lNameEditText;
+        final EditText editEmail = binding.emailEditText;
+        final Button saveButton = binding.saveProfileBtn;
 
-        mViewModel = new ViewModelProvider(this).get(ProfilePageViewModel.class);
-        // TODO: Use the ViewModel
+        HashMap<String, Object> user_data = new HashMap<>();
+        String androidID = new AndroidID().getAndroidId(getContext());
 
         return inflater.inflate(R.layout.fragment_profile_page, container, false);
     }
