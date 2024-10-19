@@ -3,7 +3,14 @@
     <style name="Base.Theme.EventLottery" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="Theme.EventLottery" parent="Base.Theme.EventLottery" />
+
+    <color name="colorPrimaryDark">#004D88</color>
+    <color name="colorAccent">#00C7FF</color>
+    <color name="colorPrimary">#0085E7</color>
 </resources>

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EventLottery</string>
+    <string name="profile_page_phone_number">Phone Number:</string>
+    <string name="profile_page_email">Email Address:</string>
+    <string name="profile_page_last_name">Last Name:</string>
+    <string name="profile_page_first_name">First Name:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

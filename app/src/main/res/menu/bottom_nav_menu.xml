@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home_foreground"/>
+    <item
+        android:id="@+id/notifications"
+        android:title="Notifications"
+        android:icon="@drawable/ic_notifications_foreground"/>
+    <item
+        android:id="@+id/facility"
+        android:title="Facility"
+        android:icon="@drawable/ic_facility_foreground" />
+    <item
+        android:id="@+id/waitlist"
+        android:title="Wait listed Events"
+        android:icon="@drawable/ic_waitlist_foreground" />
+    <item
+        android:id="@+id/person"
+        android:title="Profile"
+        android:icon="@drawable/ic_person_foreground"/>
+
+</menu>
