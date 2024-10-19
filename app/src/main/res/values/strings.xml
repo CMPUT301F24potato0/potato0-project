@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="profile_page_first_name">First name</string>
+    <string name="profile_page_last_name">Last name:</string>
+    <string name="profile_page_phone_number">Phone Number:</string>
+    <string name="profile_page_email">Email Address:</string>
 </resources>
