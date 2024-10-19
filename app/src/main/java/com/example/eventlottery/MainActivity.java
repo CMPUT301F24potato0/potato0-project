@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView
                 .setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.scanQR);
 //        super.onCreate(savedInstanceState);
 //        EdgeToEdge.enable(this);
 //        setContentView(R.layout.activity_main);
