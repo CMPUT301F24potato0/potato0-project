@@ -8,16 +8,25 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class Profile extends Fragment {
 
+    private FirebaseFirestore db;
     public Profile(){
         // require a empty public constructor
+    }
+
+    public Profile(FirebaseFirestore db) {
+        this.db = db;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
+
     }
 }
 //
