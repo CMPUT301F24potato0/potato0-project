@@ -13,56 +13,74 @@
         android:id="@+id/fNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
         android:text="@string/profile_page_first_name"
         android:textSize="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/fNameEditText"
-        tools:layout_editor_absoluteX="20dp" />
-
-    <!-- Last Name -->
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/fNameEditText"
+        android:layout_width="336dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="156dp"
         android:hint="Enter your first name"
         android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Last Name -->
 
     <TextView
         android:id="@+id/lNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/profile_page_last_name"
         android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fNameEditText"
-        tools:layout_editor_absoluteX="20dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/lNameEditText"
+        android:layout_width="336dp"
         android:layout_height="wrap_content"
         android:hint="Enter your last name"
         android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lNameTextView" />
 
     <!-- Phone Number -->
+
     <TextView
         android:id="@+id/phoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/profile_page_phone_number"
         android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lNameEditText"
-        tools:layout_editor_absoluteX="20dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/phoneEditText"
+        android:layout_width="336dp"
         android:layout_height="wrap_content"
         android:hint="Enter your phone number"
         android:inputType="phone"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
 
@@ -72,33 +90,25 @@
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/profile_page_email"
         android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneEditText"
-        tools:layout_editor_absoluteX="20dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/emailEditText"
+        android:layout_width="336dp"
         android:layout_height="wrap_content"
         android:hint="Enter your email address"
         android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLineLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
 
     <Button
         android:id="@+id/saveProfileBtn"
@@ -106,15 +116,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Edit Profile"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/profilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="87dp"
+        android:layout_height="81dp"
         app:layout_constraintBottom_toTopOf="@+id/fNameTextView"
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.697"
+        tools:ignore="MissingConstraints"
         tools:src="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
