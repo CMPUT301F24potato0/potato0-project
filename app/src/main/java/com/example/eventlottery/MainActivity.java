@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -35,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String androidIDStr = androidID.getAndroidId(this);
-
+        String androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);;
+        db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
+        CollectionReference userCol = db.collection("users");
         DocumentReference userRef = db.collection("users").document(androidIDStr);
         final String[] f_name = new String[1];
         final String[] l_name = new String[1];
