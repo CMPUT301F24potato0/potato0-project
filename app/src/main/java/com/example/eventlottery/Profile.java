@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Profile extends Fragment {
 
+    private CurrentUser curUser;
     private FirebaseFirestore db;
     public Profile(){
         // require a empty public constructor
@@ -19,6 +20,11 @@ public class Profile extends Fragment {
 
     public Profile(FirebaseFirestore db) {
         this.db = db;
+    }
+
+    public Profile(FirebaseFirestore db, CurrentUser curUser) {
+        this.db = db;
+        this.curUser = curUser;
     }
 
     @Override
