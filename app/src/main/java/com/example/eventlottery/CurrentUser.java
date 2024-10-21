@@ -6,12 +6,14 @@ public class CurrentUser {
     private String email;
     private String phone;
     private boolean isAdmin;
+    private String iD;
 
-    public CurrentUser(String fName, String lName, String email, boolean isAdmin) {
+    public CurrentUser(String fName, String lName, String email, boolean isAdmin, String iD) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.isAdmin = isAdmin;
+        this.iD = iD;
     }
     public String getfName(){
         return fName;
@@ -28,6 +30,7 @@ public class CurrentUser {
     public boolean getIsAdmin(){
         return isAdmin;
     }
+    public String getiD() {return iD;}
 
     public void setfName(String fName) {
         this.fName = fName;
