@@ -86,10 +86,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 newUser();
             }
         });
-
-
-
-
 //        DocumentReference userRef = db.collection("users").document(androidIDStr);
 //        final String[] f_name = new String[1];
 //        final String[] l_name = new String[1];
@@ -137,11 +133,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         userRef.document(curUser.getiD()).set(data);
     }
 
-    ScanFragment scanFragment = new ScanFragment();
-    NotificationsFragment notificationsFragment = new NotificationsFragment();
-    FacilityFragment facilityFragment = new FacilityFragment();
-    WaitlistedEventsFragment waitlistedEventsFragment = new WaitlistedEventsFragment();
-    Profile profileFragment = new Profile(db, curUser);
+//    ScanFragment scanFragment = new ScanFragment();
+//    NotificationsFragment notificationsFragment = new NotificationsFragment();
+//    FacilityFragment facilityFragment = new FacilityFragment();
+//    WaitlistedEventsFragment waitlistedEventsFragment = new WaitlistedEventsFragment();
+//    Profile profileFragment = new Profile(db, curUser);
 
     @Override
     public boolean
@@ -150,27 +146,27 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.scanQR:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, scanFragment)
+                        .replace(R.id.flFragment, new ScanFragment())
                         .commit();
                 return true;
 
             case R.id.notifications:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, notificationsFragment)
+                        .replace(R.id.flFragment, new NotificationsFragment())
                         .commit();
                 return true;
 
             case R.id.facility:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, facilityFragment)
+                        .replace(R.id.flFragment, new FacilityFragment())
                         .commit();
                 return true;
             case R.id.waitlist:
                 getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.flFragment, waitlistedEventsFragment)
+                    .replace(R.id.flFragment, new WaitlistedEventsFragment())
                     .commit();
                 return true;
 
