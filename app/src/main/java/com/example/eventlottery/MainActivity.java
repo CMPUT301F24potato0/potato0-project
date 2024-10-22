@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Check this for Qr scanner in fragment
+        // https://stackoverflow.com/questions/40725336/android-studio-start-qr-code-scanner-from-fragment
+        // https://medium.com/@dev.jeevanyohan/zxing-qr-code-scanner-android-implementing-in-activities-fragment-custom-colors-faa68bfc761d
 
         bottomNavigationView
                 = findViewById(R.id.bottomNavigationView);
