@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        // Check this for Qr scanner in fragment
+        // https://stackoverflow.com/questions/40725336/android-studio-start-qr-code-scanner-from-fragment
+        // https://medium.com/@dev.jeevanyohan/zxing-qr-code-scanner-android-implementing-in-activities-fragment-custom-colors-faa68bfc761d
 
 //        // https://github.com/journeyapps/zxing-android-embedded/tree/master
 //        ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
