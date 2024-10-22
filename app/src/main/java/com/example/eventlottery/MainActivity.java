@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //    WaitlistedEventsFragment waitlistedEventsFragment = new WaitlistedEventsFragment();
 //    Profile profileFragment = new Profile(db, curUser);
 
+
     @Override
     public boolean
     onNavigationItemSelected(@NonNull MenuItem item) {
