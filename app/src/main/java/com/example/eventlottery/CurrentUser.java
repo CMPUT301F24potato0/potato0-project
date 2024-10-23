@@ -1,5 +1,8 @@
 package com.example.eventlottery;
 
+/**
+ * This Class stores the current user's information
+ */
 public class CurrentUser {
     private String fName;
     private String lName;
@@ -8,42 +11,93 @@ public class CurrentUser {
     private boolean isAdmin;
     private String iD;
 
-    public CurrentUser(String fName, String lName, String email, boolean isAdmin, String iD) {
+    /**
+     * Constructor that updates the local variables
+     * @param fName First Name
+     * @param lName Last Name
+     * @param email Email Address
+     * @param isAdmin Admin Status
+     * @param phone Phone number
+     * @param iD Android ID
+     */
+    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String iD) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.isAdmin = isAdmin;
+        this.phone = phone;
         this.iD = iD;
     }
+
+    /**
+     * Getting First name
+     * @return First name
+     */
     public String getfName(){
         return fName;
     }
+    /**
+     * Getting Last name
+     * @return Last name
+     */
     public String getlName(){
         return lName;
     }
+    /**
+     * Getting phone number
+     * @return phone number as String
+     */
     public String getPhone() {
         return phone;
     }
+    /**
+     * Getting Email address
+     * @return Email address
+     */
     public String getEmail(){
         return email;
     }
+    /**
+     * Getting Admin status
+     * @return Admin status
+     */
     public boolean getIsAdmin(){
         return isAdmin;
     }
-    public String getiD() {return iD;}
-
+    /**
+     * Getting Android ID
+     * @return Android's ID
+     */
+    public String getiD() {
+        return iD;
+    }
+    /**
+     * Setting First name
+     */
     public void setfName(String fName) {
         this.fName = fName;
     }
+    /**
+     * Setting Last name
+     */
     public void setlName(String lName) {
         this.lName = lName;
     }
+    /**
+     * Setting email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
+    /**
+     * Setting phone
+     */
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    /**
+     * Setting Admin Status
+     */
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
