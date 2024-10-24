@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Facility"
-                android:textSize="29dp"/>
+                android:textSize="29sp"/>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +53,7 @@
                     android:id="@+id/facility_page_facility_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:background="@drawable/rounded_corner_background"
                     android:ellipsize="end"
                     android:maxLines="1"
