@@ -1,11 +1,14 @@
 package com.example.eventlottery;
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -13,11 +16,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class is the Scan Fragment
@@ -32,6 +39,33 @@ public class ScanFragment extends Fragment {
     public ScanFragment(){
         // require a empty public constructor
     }
+
+    private String lastText;
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if(result.getText() == null || result.getText().equals(lastText)) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            lastText = result.getText();
+            barcodeView.setStatusText(result.getText());
+
+            Toast.makeText(getContext(), lastText, Toast.LENGTH_SHORT).show();
+
+//            beepManager.playBeepSoundAndVibrate();
+//
+//            //Added preview of scanned barcode
+//            ImageView imageView = rootView.findViewById(R.id.barcodePreview);
+//            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
 
     /**
      *
@@ -60,6 +94,7 @@ public class ScanFragment extends Fragment {
             Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
             barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
             barcodeView.setStatusText("Scanning QR Code");
+            barcodeView.decodeContinuous(callback);
         }
         return rootView;
     }
