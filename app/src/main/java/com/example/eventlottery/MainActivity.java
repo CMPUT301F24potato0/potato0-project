@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public FirebaseFirestore db;
     public CollectionReference userRef;
+    public DocumentReference userDocRef;
     private CurrentUser curUser;
     private String androidIDStr;
 
@@ -126,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new ScanFragment())
+                        .replace(R.id.flFragment, new ScanFragment(db, curUser))
                         .commit();
                 return true;
 

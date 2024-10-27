@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -35,31 +43,31 @@ public class ScanFragment extends Fragment {
 
     private DecoratedBarcodeView barcodeView;
     View rootView;
+    private String eventScanned;
+    private FirebaseFirestore db;
+    private CurrentUser curUser;
 
     public ScanFragment(){
         // require a empty public constructor
     }
 
-    private String lastText;
+
+    public ScanFragment(FirebaseFirestore db, CurrentUser curUser) {
+        this.db = db;
+        this.curUser = curUser;
+    }
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            if(result.getText() == null || result.getText().equals(lastText)) {
-                // Prevent duplicate scans
+            if(result.getText() == null || result.getText().equals(eventScanned)) {
                 return;
             }
 
-            lastText = result.getText();
-            barcodeView.setStatusText(result.getText());
+            eventScanned = result.getText();
 
-            Toast.makeText(getContext(), lastText, Toast.LENGTH_SHORT).show();
-
-//            beepManager.playBeepSoundAndVibrate();
-//
-//            //Added preview of scanned barcode
-//            ImageView imageView = rootView.findViewById(R.id.barcodePreview);
-//            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+            checkEvent(eventScanned);
+//            Toast.makeText(getContext(), eventScanned, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -97,6 +105,36 @@ public class ScanFragment extends Fragment {
             barcodeView.decodeContinuous(callback);
         }
         return rootView;
+    }
+
+    private void checkEvent(String event) {
+        CollectionReference eventRef = db.collection("events");
+        eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    boolean eventFound = false;
+                    for (QueryDocumentSnapshot doc: querySnapshots) {
+                        String eventId = doc.getId();
+                        if (eventId.equals(event)) {
+                            // Start the new event activity and pass in the event id
+
+                            Toast.makeText(getContext(), "Event found: " + event, Toast.LENGTH_SHORT).show();
+                            eventFound = true;
+                        }
+                    }
+                    if (!eventFound) {
+                        Toast.makeText(getContext(), "Event not found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
+
     }
 
     @Override
