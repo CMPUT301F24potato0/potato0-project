@@ -63,11 +63,8 @@ public class ScanFragment extends Fragment {
             if(result.getText() == null || result.getText().equals(eventScanned)) {
                 return;
             }
-
             eventScanned = result.getText();
-
             checkEvent(eventScanned);
-//            Toast.makeText(getContext(), eventScanned, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -107,6 +104,11 @@ public class ScanFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * This function gets the events collection and then loops through to find the event that was scanned.
+     * If event is not found it creates a new toast displaying error message.
+     * @param event The eventID scanned from the qr code
+     */
     private void checkEvent(String event) {
         CollectionReference eventRef = db.collection("events");
         eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -134,7 +136,6 @@ public class ScanFragment extends Fragment {
 
             }
         });
-
     }
 
     @Override
