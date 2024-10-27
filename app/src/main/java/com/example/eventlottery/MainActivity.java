@@ -1,5 +1,7 @@
 package com.example.eventlottery;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -8,6 +10,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -117,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.scanQR:
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
+                }
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.flFragment, new ScanFragment())

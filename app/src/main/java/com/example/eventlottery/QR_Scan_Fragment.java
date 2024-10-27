@@ -30,6 +30,5 @@ public class QR_Scan_Fragment {
 
     public QR_Scan_Fragment(DecoratedBarcodeView scannerView) {
         this.scannerView = scannerView;
-        captureManager = new CaptureManager(, scannerView);
     }
 }

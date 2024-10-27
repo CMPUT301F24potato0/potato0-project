@@ -1,10 +1,23 @@
 package com.example.eventlottery;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * This class is the Scan Fragment
@@ -12,6 +25,9 @@ import androidx.fragment.app.Fragment;
  * This class inflates fragment_scan
  */
 public class ScanFragment extends Fragment {
+
+    private DecoratedBarcodeView barcodeView;
+    View rootView;
 
     public ScanFragment(){
         // require a empty public constructor
@@ -32,6 +48,32 @@ public class ScanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scan, container, false);
+        rootView = inflater.inflate(R.layout.fragment_scan, container, false);
+
+        // https://stackoverflow.com/questions/38552144/how-get-permission-for-camera-in-android-specifically-marshmallow
+        // https://stackoverflow.com/questions/43937292/android-zxing-embedded-barcodeview-not-resuming
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, 100);
+        }
+        else {
+            barcodeView = rootView.findViewById(R.id.scannerView);
+            Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+            barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+            barcodeView.setStatusText("Scanning QR Code");
+        }
+        return rootView;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        barcodeView.pauseAndWait();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+
 }
