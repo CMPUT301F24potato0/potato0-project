@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);;
+        androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.scanQR:
+                // Ask for camera permissions if not already allowed to use camera
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                     ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
                 }

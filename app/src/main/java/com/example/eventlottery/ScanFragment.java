@@ -89,18 +89,12 @@ public class ScanFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_scan, container, false);
 
-        // https://stackoverflow.com/questions/38552144/how-get-permission-for-camera-in-android-specifically-marshmallow
-        // https://stackoverflow.com/questions/43937292/android-zxing-embedded-barcodeview-not-resuming
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, 100);
-        }
-        else {
-            barcodeView = rootView.findViewById(R.id.scannerView);
-            Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
-            barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
-            barcodeView.setStatusText("Scanning QR Code");
-            barcodeView.decodeContinuous(callback);
-        }
+        barcodeView = rootView.findViewById(R.id.scannerView);
+        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+        barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+        barcodeView.setStatusText("Scanning QR Code");
+        barcodeView.decodeContinuous(callback);
+
         return rootView;
     }
 
