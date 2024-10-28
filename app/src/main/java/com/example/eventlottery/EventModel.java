@@ -54,6 +54,8 @@ public class EventModel {
         return waitingList;
     }
 
+
+    // TODO: add logic for adding/removing another person in a waiting list
     public void setWaitingList(ArrayList<String> waitingList) {
         this.waitingList = waitingList;
     }

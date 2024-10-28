@@ -117,10 +117,14 @@ public class ScanFragment extends Fragment {
                     for (QueryDocumentSnapshot doc: querySnapshots) {
                         String eventId = doc.getId();
                         if (eventId.equals(event)) {
-                            // Start the new event activity and pass in the event id
-
-                            Toast.makeText(getContext(), "Event found: " + event, Toast.LENGTH_SHORT).show();
+                            // Start the new event fragment and pass in the event id
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.flFragment, new EventEntrantFragment(db, event))
+                                    .commit();
+                            //Toast.makeText(getContext(), "Event found: " + event, Toast.LENGTH_SHORT).show();
                             eventFound = true;
+                            break;
                         }
                     }
                     if (!eventFound) {
