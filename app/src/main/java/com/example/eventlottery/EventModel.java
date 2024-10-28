@@ -3,6 +3,7 @@ package com.example.eventlottery;
 import java.util.ArrayList;
 
 public class EventModel {
+    private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings
     private ArrayList<String> waitingList;
@@ -14,7 +15,7 @@ public class EventModel {
     private String hashQR; // TODO: part 4
     // TODO: part 4 - poster image
 
-    public EventModel(String eventID,
+    public EventModel(String facilityID, String eventID,
                       ArrayList<String> waitingList,
                       ArrayList<String> invitedList,
                       ArrayList<String> cancelledList,
@@ -22,6 +23,7 @@ public class EventModel {
                       Boolean geolocationRequired,
                       Integer capacity,
                       String hashQR) {
+        this.facilityID = facilityID;
         this.eventID = eventID;
         this.waitingList = waitingList;
         this.invitedList = invitedList;
@@ -30,6 +32,14 @@ public class EventModel {
         this.geolocationRequired = geolocationRequired;
         this.capacity = capacity;
         this.hashQR = hashQR;
+    }
+
+    public String getFacilityID() {
+        return facilityID;
+    }
+
+    public void setFacilityID(String facilityID) {
+        this.facilityID = facilityID;
     }
 
     public String getEventID() {
