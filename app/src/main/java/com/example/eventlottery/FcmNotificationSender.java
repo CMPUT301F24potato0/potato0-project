@@ -26,13 +26,16 @@ public class FcmNotificationSender {
 
     private final Context context;
 
-    private final String postUrl = "https://fcm.googleapis.com/v1/eventlottery/messages:send";
+    private final String topic;
 
-    public FcmNotificationSender(String userFcmToken, String title, String body, Context context){
+    private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery/messages:send";
+
+    public FcmNotificationSender(String userFcmToken, String title, String body, Context context, String topic){
         this.userFcmToken = userFcmToken;
         this.title = title;
         this.body = body;
         this.context = context;
+        this.topic = topic;
     }
 
     public void SendNotifications(){
@@ -45,19 +48,21 @@ public class FcmNotificationSender {
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
-            messageObject.put("token", userFcmToken);
+            messageObject.put("topic", topic);
+            // messageObject.put("token", userFcmToken);
             messageObject.put("notification", notificationObject);
 
             mainObj.put("message", messageObject);
 
-            Log.e("Notificaiton Sender: ", "First");
+            Log.d("Notificaiton Sender: ", "First");
+            Log.d("Notification sent:", mainObj.toString());
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, response -> {
                 // code run got response
             }, volleyError -> {
                 // code run error
                 volleyError.getCause();
-                volleyError.getMessage();
+                Log.d("volleyError", volleyError.getMessage());
             }){
 
                 @NonNull

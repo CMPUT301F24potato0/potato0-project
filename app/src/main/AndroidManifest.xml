@@ -37,9 +37,19 @@
             android:value="Notification" />
 
 
-        <service
+<!--        <service-->
 
-            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+<!--            android:name="com.google.firebase.messaging.FirebaseMessagingService"-->
+<!--            android:exported="false"-->
+<!--            android:directBootAware="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>-->
+<!--                <action android:name="com.google.firebase.MESSAGIN_ID_EVENT"/>-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+        <service
+            android:name="com.example.eventlottery.PushNotificationService"
             android:exported="false"
             android:directBootAware="true">
             <intent-filter>

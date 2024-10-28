@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -77,11 +78,24 @@ public class WaitlistedEventsFragment extends Fragment{
             if (test_context == null){Log.e("Context","It's null");}
             FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
                     token_m,
-                    "This is the test Title","Testing message", test_context
+                    "This is the test Title","Testing message", test_context, "testTopic"
             );
             fcmNotificationSender.SendNotifications();
 
         });
+
+        FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscribed";
+                        if (!task.isSuccessful()) {
+                            msg = "Subscribe failed";
+                        }
+                        Log.d("Notification subscription", msg);
+                        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
 
