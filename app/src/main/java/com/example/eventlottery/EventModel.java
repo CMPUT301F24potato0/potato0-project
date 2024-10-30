@@ -15,6 +15,10 @@ public class EventModel {
     private String hashQR; // TODO: part 4
     // TODO: part 4 - poster image
 
+    public EventModel() {
+
+    }
+
     public EventModel(String facilityID, String eventID,
                       ArrayList<String> waitingList,
                       ArrayList<String> invitedList,

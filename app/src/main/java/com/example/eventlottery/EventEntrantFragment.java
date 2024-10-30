@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,20 +30,23 @@ import java.util.Map;
 
 public class EventEntrantFragment extends Fragment {
 
-    FirebaseFirestore db;
-    String eventID;
-    ImageView eventPoster;
-    TextView eventTitle;
-    TextView eventLocation;
-    TextView eventDate;
-    Button joinUnjoinButton;
-    ImageView organizerProfilePicture;
-    TextView organizerName;
-    TextView eventDescription;
+    private FirebaseFirestore db;
+    private String eventID;
+    private ImageView eventPoster;
+    private TextView eventTitle;
+    private TextView eventLocation;
+    private TextView eventDate;
+    private Button joinUnjoinButton;
+    private ImageView organizerProfilePicture;
+    private TextView organizerName;
+    private TextView eventDescription;
 
-    DocumentReference facilityRef;
-    DocumentReference organizerRef;
+    private EventModel event;
 
+    private DocumentReference facilityRef;
+    private DocumentReference organizerRef;
+
+    private String p4p4;
 
     public EventEntrantFragment() {
         super();
@@ -68,6 +72,8 @@ public class EventEntrantFragment extends Fragment {
         organizerName = rootView.findViewById(R.id.event_entrant_page_organizer_name);
         eventDescription = rootView.findViewById(R.id.event_entrant_page_event_details);
 
+        event = new EventModel();
+        p4p4 = "before";
         // getting event information from Firestore
         DocumentReference eventRef = db.collection("events").document(eventID);
         // getting immediate fields from the event document and updating event page UI
@@ -81,30 +87,71 @@ public class EventEntrantFragment extends Fragment {
                 if (value != null) {
                     // TODO: eventPoster in part 4
                     // TODO: refactor so that it creates a new EventModel object
+
+
+
                     eventTitle.setText(value.get("title").toString());
                     eventLocation.setText(value.get("location_string").toString());
                     eventDate.setText(value.get("join_deadline").toString());
                     eventDescription.setText(value.get("description").toString());
 
-                    facilityRef = db.document(value.get("facility").toString());
+                    //facilityRef = (DocumentReference) value.get("facility");
+                    p4p4 = value.getString("facility");
+                    Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
+//                    facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//                            if (error != null) {
+//                            Log.e("Firestore", error.toString());
+//                            return;
+//                            }
+//                            if (value != null) {
+//                                organizerRef = (DocumentReference) value.get("organizer");
+//                                organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                                    @Override
+//                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//                                        if (error != null) {
+//                                        Log.e("Firestore", error.toString());
+//                                        return;
+//                                        }
+//                                        if (value != null) {
+//                                            // TODO: organizer profile picture in part 4
+//                                            organizerName.setText(value.get("f_name").toString());
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    });
                 }
             }
         });
+        Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
 
+
+//        if (facilityRef == null) {
+//            Toast.makeText(getActivity(), "This is null", Toast.LENGTH_SHORT).show();
+//        }
+//        else {
+//            Toast.makeText(getActivity(), "This: " + facilityRef.getClass().toString(), Toast.LENGTH_SHORT).show();
+//        }
+
+        //Toast.makeText(getActivity(), "facilityRef = " + facilityRef, Toast.LENGTH_SHORT).show();
         // TODO: figure out how to access document through a reference field
         // getting organizer document reference from facility document reference
-        facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (value != null) {
-                    organizerRef = (DocumentReference) value.get("organizer");
-                }
-            }
-        });
+        //Toast.makeText(getContext(), facilityRef.getId(), Toast.LENGTH_SHORT).show();
+//        facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.e("Firestore", error.toString());
+//                    return;
+//                }
+//                if (value != null) {
+//                    organizerRef = (DocumentReference) value.get("organizer");
+//                }
+//            }
+//        });
         // getting organizer information and updating event page UI
 //        organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
 //            @Override
@@ -119,7 +166,6 @@ public class EventEntrantFragment extends Fragment {
 //                }
 //            }
 //        });
-
         // TODO: add functionality to join button
 
         // TODO: add functionality to unjoin button
