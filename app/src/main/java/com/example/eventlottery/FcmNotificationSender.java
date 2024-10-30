@@ -54,7 +54,7 @@ public class FcmNotificationSender {
 
             mainObj.put("message", messageObject);
 
-            Log.d("Notificaiton Sender: ", "First");
+                Log.d("Notificaiton Sender: ", "First");
             Log.d("Notification sent:", mainObj.toString());
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, response -> {
@@ -75,7 +75,7 @@ public class FcmNotificationSender {
                     header.put("Content-Type","application/json; UTF-8");
                     header.put("Authorization","Bearer " + accessKey);
 
-                    Log.e("Notificaiton Sender: ", accessKey);
+//                    Log.e("Notificaiton Sender: ", accessKey);
 
                     return header;
                 }
