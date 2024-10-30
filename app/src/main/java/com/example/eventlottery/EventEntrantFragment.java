@@ -89,6 +89,21 @@ public class EventEntrantFragment extends Fragment {
                         eventLocation.setText(document.getString("location_string"));
                         Date javaDate = document.getTimestamp("join_deadline").toDate();
                         eventDate.setText(javaDate.toString());
+
+                        organizerRef = db.collection("users").document(document.getString("organizer"));
+                        organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot userDoc = task.getResult();
+                                    if (userDoc.exists()) {
+//                                        Log.d("Firebase_Data", "Document data: " + document.getData());
+                                        organizerName.setText(userDoc.getString("f_name") + " " + userDoc.getString("l_name"));
+                                    }
+                                }
+                            }
+                        });
+//                        organizerName.setText(document.getString("organizer"));
                         eventDescription.setText(document.getString("description"));
 //                        p4p4 = document.getString("facility");
                     } else {
@@ -150,7 +165,7 @@ public class EventEntrantFragment extends Fragment {
 //                }
 //            }
 //        });
-        Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
 
 
 //        if (facilityRef == null) {
