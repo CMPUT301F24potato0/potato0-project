@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -76,56 +77,79 @@ public class EventEntrantFragment extends Fragment {
         p4p4 = "before";
         // getting event information from Firestore
         DocumentReference eventRef = db.collection("events").document(eventID);
-        // getting immediate fields from the event document and updating event page UI
-        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (value != null) {
-                    // TODO: eventPoster in part 4
-                    // TODO: refactor so that it creates a new EventModel object
-
-
-
-                    eventTitle.setText(value.get("title").toString());
-                    eventLocation.setText(value.get("location_string").toString());
-                    eventDate.setText(value.get("join_deadline").toString());
-                    eventDescription.setText(value.get("description").toString());
-
-                    //facilityRef = (DocumentReference) value.get("facility");
-                    p4p4 = value.getString("facility");
-                    Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
-//                    facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                            if (error != null) {
-//                            Log.e("Firestore", error.toString());
-//                            return;
-//                            }
-//                            if (value != null) {
-//                                organizerRef = (DocumentReference) value.get("organizer");
-//                                organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                                    @Override
-//                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                                        if (error != null) {
-//                                        Log.e("Firestore", error.toString());
-//                                        return;
-//                                        }
-//                                        if (value != null) {
-//                                            // TODO: organizer profile picture in part 4
-//                                            organizerName.setText(value.get("f_name").toString());
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        }
-//                    });
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("Firebase_Data", "Document data: " + document.getData());
+                        eventTitle.setText(document.getString("title"));
+                        eventLocation.setText(document.getString("location_string"));
+                        Date javaDate = document.getTimestamp("join_deadline").toDate();
+                        eventDate.setText(javaDate.toString());
+                        eventDescription.setText(document.getString("description"));
+//                        p4p4 = document.getString("facility");
+                    } else {
+                        Log.d("Firebase_Data", "No such document");
+                    }
+                } else {
+                    Log.d("Firebase_Data", "get failed with ", task.getException());
                 }
             }
         });
+
+        // getting immediate fields from the event document and updating event page UI
+//        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.e("Firestore", error.toString());
+//                    return;
+//                }
+//                if (value != null) {
+//                    // TODO: eventPoster in part 4
+//                    // TODO: refactor so that it creates a new EventModel object
+//
+//
+//
+//                    eventTitle.setText(value.get("title").toString());
+//                    eventLocation.setText(value.get("location_string").toString());
+//                    eventDate.setText(value.get("join_deadline").toString());
+//                    eventDescription.setText(value.get("description").toString());
+//
+//                    //facilityRef = (DocumentReference) value.get("facility");
+//                    p4p4 = value.getString("facility");
+//                    Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
+////                    facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+////                        @Override
+////                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+////                            if (error != null) {
+////                            Log.e("Firestore", error.toString());
+////                            return;
+////                            }
+////                            if (value != null) {
+////                                organizerRef = (DocumentReference) value.get("organizer");
+////                                organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+////                                    @Override
+////                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+////                                        if (error != null) {
+////                                        Log.e("Firestore", error.toString());
+////                                        return;
+////                                        }
+////                                        if (value != null) {
+////                                            // TODO: organizer profile picture in part 4
+////                                            organizerName.setText(value.get("f_name").toString());
+////                                        }
+////                                    }
+////                                });
+////                            }
+////                        }
+////                    });
+//                }
+//            }
+//        });
         Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
 
 
