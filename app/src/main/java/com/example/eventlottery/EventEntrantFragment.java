@@ -3,7 +3,6 @@ package com.example.eventlottery;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,22 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Date;
-import java.util.Map;
 
 
 public class EventEntrantFragment extends Fragment {
@@ -45,8 +41,10 @@ public class EventEntrantFragment extends Fragment {
     private EventModel event;
 
     private DocumentReference facilityRef;
-    private DocumentReference organizerRef;
 
+    private DocumentReference organizerRef;
+    private LinearLayout linearLayout;
+    private ProgressBar progressBar;
     private String p4p4;
 
     public EventEntrantFragment() {
@@ -73,6 +71,9 @@ public class EventEntrantFragment extends Fragment {
         organizerName = rootView.findViewById(R.id.event_entrant_page_organizer_name);
         eventDescription = rootView.findViewById(R.id.event_entrant_page_event_details);
 
+        progressBar = rootView.findViewById(R.id.progressBar);
+        linearLayout = rootView.findViewById(R.id.linearLayout);
+
         event = new EventModel();
         p4p4 = "before";
         // getting event information from Firestore
@@ -90,22 +91,22 @@ public class EventEntrantFragment extends Fragment {
                         Date javaDate = document.getTimestamp("join_deadline").toDate();
                         eventDate.setText(javaDate.toString());
 
-                        organizerRef = db.collection("users").document(document.getString("organizer"));
+                        organizerRef = document.getDocumentReference("organizer");
+
                         organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                progressBar.setVisibility(View.GONE); // Hide Progress bar
+                                linearLayout.setVisibility(View.VISIBLE);
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot userDoc = task.getResult();
                                     if (userDoc.exists()) {
-//                                        Log.d("Firebase_Data", "Document data: " + document.getData());
                                         organizerName.setText(userDoc.getString("f_name") + " " + userDoc.getString("l_name"));
                                     }
                                 }
                             }
                         });
-//                        organizerName.setText(document.getString("organizer"));
                         eventDescription.setText(document.getString("description"));
-//                        p4p4 = document.getString("facility");
                     } else {
                         Log.d("Firebase_Data", "No such document");
                     }
