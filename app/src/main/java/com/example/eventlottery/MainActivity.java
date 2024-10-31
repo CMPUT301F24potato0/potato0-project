@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public FirebaseFirestore db;
     public CollectionReference userRef;
     public DocumentReference userDocRef;
-    private CurrentUser curUser;
     private String androidIDStr;
+    private CurrentUser curUser;
 
     /**
      * This method is called when opening the app.
@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
 
         androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        curUser = new CurrentUser("", "", "","", false, androidIDStr);
+
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -66,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
-        curUser = new CurrentUser("", "", "","", false, androidIDStr);
 
         userRef = db.collection("users");
 

@@ -33,6 +33,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is the Scan Fragment
@@ -64,7 +65,7 @@ public class ScanFragment extends Fragment {
                 return;
             }
             eventScanned = result.getText();
-            checkEvent(eventScanned);
+            checkEvent(eventScanned, curUser.getiD());
         }
 
         @Override
@@ -103,7 +104,7 @@ public class ScanFragment extends Fragment {
      * If event is not found it creates a new toast displaying error message.
      * @param event The eventID scanned from the qr code
      */
-    private void checkEvent(String event) {
+    private void checkEvent(String event, String userId) {
         CollectionReference eventRef = db.collection("events");
         eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -118,11 +119,10 @@ public class ScanFragment extends Fragment {
                         String eventId = doc.getId();
                         if (eventId.equals(event)) {
                             // Start the new event fragment and pass in the event id
-                            getActivity().getSupportFragmentManager()
+                            requireActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.flFragment, new EventEntrantFragment(db, event))
                                     .commit();
-                            //Toast.makeText(getContext(), "Event found: " + event, Toast.LENGTH_SHORT).show();
                             eventFound = true;
                             break;
                         }

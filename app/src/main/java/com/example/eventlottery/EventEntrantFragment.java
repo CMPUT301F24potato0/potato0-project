@@ -5,12 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,32 +20,34 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.List;
 
 
 public class EventEntrantFragment extends Fragment {
-
+    // Current User
+    private String curUser;
+    // Database Stuff
     private FirebaseFirestore db;
+    private TextView organizerName;
+    private DocumentReference facilityRef;
+    private DocumentReference organizerRef;
+    // Event stuff
     private String eventID;
+    private EventModel event;
+    // XML stuff
+    private TextView eventDescription;
     private ImageView eventPoster;
     private TextView eventTitle;
     private TextView eventLocation;
     private TextView eventDate;
     private Button joinUnjoinButton;
     private ImageView organizerProfilePicture;
-    private TextView organizerName;
-    private TextView eventDescription;
-
-    private EventModel event;
-
-    private DocumentReference facilityRef;
-
-    private DocumentReference organizerRef;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
-    private String p4p4;
 
     public EventEntrantFragment() {
         super();
@@ -74,11 +76,8 @@ public class EventEntrantFragment extends Fragment {
         progressBar = rootView.findViewById(R.id.progressBar);
         linearLayout = rootView.findViewById(R.id.linearLayout);
 
-        event = new EventModel();
-        p4p4 = "before";
         // getting event information from Firestore
         DocumentReference eventRef = db.collection("events").document(eventID);
-
         eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -93,6 +92,7 @@ public class EventEntrantFragment extends Fragment {
 
                         organizerRef = document.getDocumentReference("organizer");
 
+                        assert organizerRef != null;
                         organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -116,98 +116,13 @@ public class EventEntrantFragment extends Fragment {
             }
         });
 
-        // getting immediate fields from the event document and updating event page UI
-//        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.e("Firestore", error.toString());
-//                    return;
-//                }
-//                if (value != null) {
-//                    // TODO: eventPoster in part 4
-//                    // TODO: refactor so that it creates a new EventModel object
-//
-//
-//
-//                    eventTitle.setText(value.get("title").toString());
-//                    eventLocation.setText(value.get("location_string").toString());
-//                    eventDate.setText(value.get("join_deadline").toString());
-//                    eventDescription.setText(value.get("description").toString());
-//
-//                    //facilityRef = (DocumentReference) value.get("facility");
-//                    p4p4 = value.getString("facility");
-//                    Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
-////                    facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-////                        @Override
-////                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-////                            if (error != null) {
-////                            Log.e("Firestore", error.toString());
-////                            return;
-////                            }
-////                            if (value != null) {
-////                                organizerRef = (DocumentReference) value.get("organizer");
-////                                organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-////                                    @Override
-////                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-////                                        if (error != null) {
-////                                        Log.e("Firestore", error.toString());
-////                                        return;
-////                                        }
-////                                        if (value != null) {
-////                                            // TODO: organizer profile picture in part 4
-////                                            organizerName.setText(value.get("f_name").toString());
-////                                        }
-////                                    }
-////                                });
-////                            }
-////                        }
-////                    });
-//                }
-//            }
-//        });
-//        Toast.makeText(getActivity(), p4p4, Toast.LENGTH_SHORT).show();
-
-
-//        if (facilityRef == null) {
-//            Toast.makeText(getActivity(), "This is null", Toast.LENGTH_SHORT).show();
-//        }
-//        else {
-//            Toast.makeText(getActivity(), "This: " + facilityRef.getClass().toString(), Toast.LENGTH_SHORT).show();
-//        }
-
-        //Toast.makeText(getActivity(), "facilityRef = " + facilityRef, Toast.LENGTH_SHORT).show();
-        // TODO: figure out how to access document through a reference field
-        // getting organizer document reference from facility document reference
-        //Toast.makeText(getContext(), facilityRef.getId(), Toast.LENGTH_SHORT).show();
-//        facilityRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.e("Firestore", error.toString());
-//                    return;
-//                }
-//                if (value != null) {
-//                    organizerRef = (DocumentReference) value.get("organizer");
-//                }
-//            }
-//        });
-        // getting organizer information and updating event page UI
-//        organizerRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.e("Firestore", error.toString());
-//                    return;
-//                }
-//                if (value != null) {
-//                    // TODO: organizer profile picture in part 4
-//                    organizerName.setText(value.get("f_name").toString());
-//                }
-//            }
-//        });
         // TODO: add functionality to join button
-
+        joinUnjoinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventRef.update("waiting_list", FieldValue.arrayUnion(Settings.Secure.getString(requireActivity().getContentResolver(), Settings.Secure.ANDROID_ID)));
+            }
+        });
         // TODO: add functionality to unjoin button
         // TODO: 1) check if user already joined
         // TODO: 2) if joined, change text in button to "Unjoin"
@@ -217,7 +132,9 @@ public class EventEntrantFragment extends Fragment {
         return rootView;
     }
 
+    private void addUser(FirebaseFirestore db) {
 
+    }
 
 
 }
