@@ -78,6 +78,7 @@ public class EventEntrantFragment extends Fragment {
 
         // getting event information from Firestore
         DocumentReference eventRef = db.collection("events").document(eventID);
+
         eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -91,7 +92,6 @@ public class EventEntrantFragment extends Fragment {
                         eventDate.setText(javaDate.toString());
 
                         organizerRef = document.getDocumentReference("organizer");
-
                         assert organizerRef != null;
                         organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
