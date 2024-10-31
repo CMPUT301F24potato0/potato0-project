@@ -13,7 +13,7 @@
         android:maxWidth="210dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="User Name here aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        android:text="User Name here"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
