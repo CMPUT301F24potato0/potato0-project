@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
  * This class is the facility fragment
  * This class inflates fragment_facility
@@ -16,6 +18,14 @@ public class FacilityFragment extends Fragment {
 
     public FacilityFragment(){
         // require a empty public constructor
+    }
+
+    private CurrentUser curUser;
+    private FirebaseFirestore db;
+
+    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser) {
+        this.db = db;
+        this.curUser = curUser;
     }
 
     /**

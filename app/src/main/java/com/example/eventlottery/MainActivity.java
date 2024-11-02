@@ -122,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //                    createFacility(androidIDStr);
                     new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
                 }
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser))
+                        .commit();
+
 //                userRef.document(curUser.getiD()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                    @Override
 //                    public void onSuccess(DocumentSnapshot documentSnapshot) {
