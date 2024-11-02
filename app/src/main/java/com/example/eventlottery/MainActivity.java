@@ -9,14 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -24,7 +20,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.Map;
+
+/**
+ * This is the MainActivity class
+ * This class currently handles checking the user in the database, if the user exists then updating the current instance of the user
+ */
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -33,11 +33,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public FirebaseFirestore db;
     public CollectionReference userRef;
     private CurrentUser curUser;
-
     private String androidIDStr;
 
-//    private Map<String, Object> user_map;
-
+    /**
+     * This method is called when opening the app.
+     * This method gets the AndroidID creates a new user.
+     * The method then checks if the user is in the database and then updates the information accordingly
+     * @param savedInstanceState Stores a small amount of data needed to reload UI state if the system stops and then recreates the UI. This was taken from https://developer.android.com/topic/libraries/architecture/saving-states
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
-        curUser = new CurrentUser("Test1", "test1", "test1@email.com",true, androidIDStr);
+        curUser = new CurrentUser("", "", "","", false, androidIDStr);
 
         userRef = db.collection("users");
+
         userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
@@ -69,75 +73,42 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         String email = doc.getString("email");
                         String f_name = doc.getString("f_name");
                         String l_name = doc.getString("l_name");
+                        String phone = doc.getString("phone");
                         if (userID.equals(androidIDStr)) {
                             curUser.setEmail(email);
                             curUser.setfName(f_name);
                             curUser.setlName(l_name);
+                            curUser.setPhone(phone);
                             return;
                         }
-                        //Log.d("Firestore", String.format("City(%s, %s) fetched", city, province));
-                        //cityDataList.add(new City(city, province));
                     }
-
-                    //cityArrayAdapter.notifyDataSetChanged();
                 }
                 newUser();
             }
         });
-//        DocumentReference userRef = db.collection("users").document(androidIDStr);
-//        final String[] f_name = new String[1];
-//        final String[] l_name = new String[1];
-//        String phone;
-//        final String[] email = new String[1];
-//        final boolean[] is_admin = new boolean[1];
-//
-//        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//
-//                    if (document.exists()) {
-//                        Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
-////                        user_map = document.getData();
-//                        f_name[0] = document.getString("f_name");
-//                        l_name[0] = document.getString("f_name");
-//                        email[0] = document.getString("email");
-//                        is_admin[0] = document.getBoolean("isAdmin");
-//                    } else {
-//                        Log.d("Firestore", "No such document");
-////                        user_map = new HashMap<String, Object>();
-////                        user_map.put("android_id", androidIDStr);
-////                        user_map.put("isAdmin", false);
-//                    }
-//                } else {
-//                    Log.d("Firestore", "get failed with ", task.getException());
-//                }
-//            }
-//        });
     }
 
+    /**
+     * This method is to add a new user to the database
+     */
     public void newUser() {
-        // Add the city to the local list
-        //cityDataList.add(city);
-
-        // Add the city to the Firestore collection with the city name as the document Id
-        HashMap<String, String> data = new HashMap<>();
+        // Adding a new User
+        HashMap<String, Object> data = new HashMap<>();
         data.put("android_id", curUser.getiD());
         data.put("email", curUser.getEmail());
         data.put("f_name", curUser.getfName());
         data.put("l_name", curUser.getlName());
-
+        data.put("isAdmin", curUser.getIsAdmin());
+        data.put("phone", curUser.getPhone());
         userRef.document(curUser.getiD()).set(data);
     }
 
-//    ScanFragment scanFragment = new ScanFragment();
-//    NotificationsFragment notificationsFragment = new NotificationsFragment();
-//    FacilityFragment facilityFragment = new FacilityFragment();
-//    WaitlistedEventsFragment waitlistedEventsFragment = new WaitlistedEventsFragment();
-//    Profile profileFragment = new Profile(db, curUser);
-
-
+    /**
+     * This method implements the bottom navigation view.
+     * This method finds the id of the item clicked and uses switch case to create a fragment accordingly.
+     * @param item The selected item
+     * @return true or false
+     */
     @Override
     public boolean
     onNavigationItemSelected(@NonNull MenuItem item) {
@@ -177,6 +148,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         .commit();
                 return true;
         }
-        return false;
+        return false; // if nothing was found then return false
     }
 }
