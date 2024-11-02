@@ -9,6 +9,7 @@
     android:backgroundTint="@color/white">
 
     <TextView
+        android:id="@+id/facility_details_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create a facility:"
@@ -31,6 +32,7 @@
             android:minWidth="162dp"
             android:paddingRight="10dp"/>
         <EditText
+            android:id="@+id/facility_details_edittext_facility_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
@@ -55,6 +57,7 @@
             android:minWidth="162dp"
             android:paddingRight="10dp"/>
         <EditText
+            android:id="@+id/facility_details_edittext_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
@@ -79,6 +82,7 @@
             android:minWidth="162dp"
             android:paddingRight="10dp"/>
         <EditText
+            android:id="@+id/facility_details_edittext_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
@@ -104,6 +108,7 @@
             android:minWidth="162dp"
             android:paddingRight="10dp"/>
         <EditText
+            android:id="@+id/facility_details_edittext_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
@@ -128,6 +133,7 @@
             android:minWidth="162dp"
             android:paddingRight="10dp"/>
         <EditText
+            android:id="@+id/facility_details_edittext_capacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
