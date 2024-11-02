@@ -21,10 +21,6 @@ public class geo_requirement_dialog extends DialogFragment {
     private String userID;
     private DocumentReference eventRef;
 
-    public geo_requirement_dialog() {
-
-    }
-
     public geo_requirement_dialog(String userID, DocumentReference eventRef) {
         this.userID = userID;
         this.eventRef = eventRef;

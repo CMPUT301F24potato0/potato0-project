@@ -11,15 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,7 +24,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firestore.v1.WriteResult;
+
 
 import java.util.Date;
 import java.util.List;
@@ -53,6 +50,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +80,9 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizerProfilePicture = findViewById(R.id.event_entrant_page_profile_picture1);
         organizerName = findViewById(R.id.event_entrant_page_organizer_name1);
         eventDescription = findViewById(R.id.event_entrant_page_event_details1);
+
+        // QR code button
+        Button qrBtn = findViewById(R.id.view_qr_button);
 
         progressBar = findViewById(R.id.progressBar1);
         linearLayout = findViewById(R.id.linearLayout1);
@@ -145,6 +146,13 @@ public class EventEntrantActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
                 startActivity(i);
+            }
+        });
+
+        qrBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
             }
         });
     }
