@@ -36,7 +36,7 @@ android {
 dependencies {
     implementation ("com.google.android.material:material:1.2.0")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
-    implementation(files("C:\\Users\\Chirayu Shah\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
+    //implementation(files("C:\\Users\\Chirayu Shah\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
