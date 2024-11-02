@@ -35,8 +35,12 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(view);
 
-        return builder.create();
 
+        builder
+                .setTitle("Create a facility")
+                .setPositiveButton("Confirm", (dialog, which) -> {
 
+                }
+                .create();
     }
 }
