@@ -48,7 +48,8 @@ public class EventEntrantActivity extends AppCompatActivity {
     private TextView eventTitle;
     private TextView eventLocation;
     private TextView eventDate;
-    private Button joinUnjoinButton;
+    private Button joinBtn;
+    private Button unjoinBtn;
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
@@ -76,7 +77,8 @@ public class EventEntrantActivity extends AppCompatActivity {
         eventTitle = findViewById(R.id.event_entrant_page_event_title1);
         eventLocation = findViewById(R.id.event_entrant_page_event_location1);
         eventDate = findViewById(R.id.event_entrant_page_event_date1);
-        joinUnjoinButton = findViewById(R.id.event_entrant_page_join_unjoin_button1);
+        joinBtn = findViewById(R.id.event_entrant_page_join_button1);
+        unjoinBtn = findViewById(R.id.event_entrant_page_unjoin_button1);
         organizerProfilePicture = findViewById(R.id.event_entrant_page_profile_picture1);
         organizerName = findViewById(R.id.event_entrant_page_organizer_name1);
         eventDescription = findViewById(R.id.event_entrant_page_event_details1);
@@ -86,32 +88,8 @@ public class EventEntrantActivity extends AppCompatActivity {
 
         back = findViewById(R.id.floatingActionButton);
 
-
-
-
         // getting event information from Firestore
         final DocumentReference eventRef = db.collection("events").document(eventID);
-
-        // Joining waiting list onClickListener
-        View.OnClickListener join_list = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // User exists
-                // add user to the wait list
-                eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
-
-            }
-        };
-
-        // Unjoin waiting list onClickListener
-        View.OnClickListener unjoin_list = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // User exists
-                // remove user from the wait list
-                eventRef.update("waiting_list", FieldValue.arrayRemove(userID));
-            }
-        };
 
         eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -132,12 +110,29 @@ public class EventEntrantActivity extends AppCompatActivity {
                     eventDescription.setText(snapshot.getString("description"));
                     progressBar.setVisibility(View.GONE);
                     linearLayout.setVisibility(View.VISIBLE);
+                    boolean geo = snapshot.getBoolean("geolocation_required");
                     if (((List<String>) snapshot.get("waiting_list")).contains(userID)) {
-                        joinUnjoinButton.setText("Unjoin");
-                        joinUnjoinButton.setOnClickListener(unjoin_list);
+                        unjoinBtn.setVisibility(View.VISIBLE);
+                        joinBtn.setVisibility(View.GONE);
+                        unjoinBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                eventRef.update("waiting_list", FieldValue.arrayRemove(userID));
+                            }
+                        });
                     } else {
-                        joinUnjoinButton.setText("Join");
-                        joinUnjoinButton.setOnClickListener(join_list);
+                        unjoinBtn.setVisibility(View.GONE);
+                        joinBtn.setVisibility(View.VISIBLE);
+                        joinBtn.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View view) {
+                               if (geo) {
+                                   new geo_requirement_dialog(userID, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                               } else {
+                                   eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
+                               }
+                           }
+                        });
                     }
                 } else {
                     Log.d("Firebase data", "Current data: null");
@@ -152,11 +147,5 @@ public class EventEntrantActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        // TODO: Implement join button
-        // TODO: add functionality to unjoin button
-        // TODO: 1) check if user already joined
-        // TODO: 2) if joined, change text in button to "Unjoin"
-        // TODO: 3) add functionality to unjoin the event
     }
 }

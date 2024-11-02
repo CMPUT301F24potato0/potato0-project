@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            >
 
             <ImageView
                 android:id="@+id/event_entrant_page_event_poster1"
@@ -72,12 +72,21 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/event_entrant_page_join_unjoin_button1"
+                android:id="@+id/event_entrant_page_join_button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginVertical="10dp"
-                android:text="Join/Unjoin Waitlist" />
+                android:text="Join"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/event_entrant_page_unjoin_button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                android:text="Unjoin"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
