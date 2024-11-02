@@ -116,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-                if (curUser.getFacilityID() == null) {
+
+                if (curUser.getFacilityID().equals("")) {
                     Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
 //                    createFacility(androidIDStr);
                     new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
