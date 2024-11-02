@@ -9,6 +9,7 @@ public class CurrentUser {
     private String email;
     private String phone;
     private boolean isAdmin;
+    private String facilityID;
     private String iD;
 
     /**
@@ -20,11 +21,12 @@ public class CurrentUser {
      * @param phone Phone number
      * @param iD Android ID
      */
-    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String iD) {
+    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.isAdmin = isAdmin;
+        this.facilityID = facilityID;
         this.phone = phone;
         this.iD = iD;
     }
@@ -100,5 +102,13 @@ public class CurrentUser {
      */
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public String getFacilityID() {
+        return facilityID;
+    }
+
+    public void setFacilityID(String facilityID) {
+        this.facilityID = facilityID;
     }
 }

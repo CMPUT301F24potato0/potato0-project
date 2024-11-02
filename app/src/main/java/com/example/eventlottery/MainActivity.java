@@ -4,15 +4,20 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public FirebaseFirestore db;
     public CollectionReference userRef;
+    public CollectionReference facilitiesRef;
     private CurrentUser curUser;
     private String androidIDStr;
 
@@ -56,9 +62,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
-        curUser = new CurrentUser("", "", "","", false, androidIDStr);
+        curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
 
         userRef = db.collection("users");
+        facilitiesRef = db.collection("facilities");
 
         userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -74,11 +81,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         String f_name = doc.getString("f_name");
                         String l_name = doc.getString("l_name");
                         String phone = doc.getString("phone");
+                        boolean isAdmin = doc.getBoolean("isAdmin");
+                        String facilityID = doc.getString("facilityID");
                         if (userID.equals(androidIDStr)) {
                             curUser.setEmail(email);
                             curUser.setfName(f_name);
                             curUser.setlName(l_name);
                             curUser.setPhone(phone);
+                            curUser.setIsAdmin(isAdmin);
+                            curUser.setFacilityID(facilityID);
                             return;
                         }
                     }
@@ -128,6 +139,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
+                userRef.document(curUser.getiD()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            String facilityID = documentSnapshot.getString("facilityID");
+                            if (facilityID == "") {
+                                Toast.makeText(MainActivity.this, "Empty", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, "Exists", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
                 new CreateEventFragment(curUser).show(getSupportFragmentManager(), "Create Event");
 //                getSupportFragmentManager()
 //                        .beginTransaction()
