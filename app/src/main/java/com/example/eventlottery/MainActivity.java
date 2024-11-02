@@ -128,10 +128,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment())
-                        .commit();
+                new CreateEventFragment(curUser).show(getSupportFragmentManager(), "Create Event");
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.flFragment, new CreateEventFragment())
+//                        .commit();
                 return true;
             case R.id.waitlist:
                 getSupportFragmentManager()
