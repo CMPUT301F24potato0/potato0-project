@@ -19,6 +19,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
 
     FirebaseFirestore db;
     CurrentUser user;
+    Boolean facilityDne;
 
     public FacilityDetailsDialogueFragment() {
         super();
@@ -27,6 +28,12 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
     public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser user) {
         this.db = db;
         this.user = user;
+    }
+
+    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne) {
+        this.db = db;
+        this.user = user;
+        this.facilityDne = facilityDne;
     }
 
     @NonNull
@@ -61,6 +68,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                 db.collection("facilities").document(user.getiD()).set(new FacilityModel(facilityName, facilityLocation, facilityPhone, facilityEmail, facilityCapacity, user.getiD()));
                 user.setFacilityID(user.getiD());
                 db.collection("users").document(user.getiD()).set(user);
+                facilityDne = false;
                 dismiss();
             }
         });
@@ -72,18 +80,6 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
             }
         });
 
-        return builder
-//                .setTitle("Facility Details")
-//                .setView(rootView)
-//                .setPositiveButton("Confirm", (b, which) -> {
-//                    String facilityName = facilityNameEditText.getText().toString();
-//                    String facilityLocation = facilityLocationEditText.getText().toString();
-//                    String facilityPhone = facilityPhoneEditText.getText().toString();
-//                    String facilityEmail = facilityEmailEditText.getText().toString();
-//                    Integer facilityCapacity = Integer.parseInt(facilityCapacityEditText.getText().toString());
-//                    String userID = user.getiD();
-//                })
-//                .setNegativeButton("Cancel", null)
-                .create();
+        return builder.create();
     }
 }

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -116,35 +115,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-
                 if (curUser.getFacilityID().equals("")) {
                     Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
-//                    createFacility(androidIDStr);
                     new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
                 }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment(db, curUser))
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, (Boolean) curUser.getFacilityID().equals("")))
                         .commit();
-
-//                userRef.document(curUser.getiD()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        if (documentSnapshot.exists()) {
-//                            String facilityID = documentSnapshot.getString("facilityID");
-//                            if (facilityID == null) {
-//                                Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
-//                                createFacility(androidIDStr);
-//                                new FacilityDetailsDialogueFragment().show(getSupportFragmentManager(), "Create facility");
-//                            }
-//                            else {
-//                                Toast.makeText(MainActivity.this, "Exists", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//                });
-
-//                new CreateEventFragment(curUser).show(getSupportFragmentManager(), "Create Event");
                 return true;
             case R.id.waitlist:
                 getSupportFragmentManager()
