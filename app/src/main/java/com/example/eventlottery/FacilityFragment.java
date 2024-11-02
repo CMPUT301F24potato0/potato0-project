@@ -25,11 +25,12 @@ public class FacilityFragment extends Fragment {
     private Boolean facility_dne;
     private CurrentUser curUser;
     private FirebaseFirestore db;
-
-    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facility_dne) {
+    private FacilityModel facility;
+    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facility_dne, FacilityModel facility) {
         this.db = db;
         this.curUser = curUser;
         this.facility_dne = facility_dne;
+        this.facility = facility;
     }
 
     /**
@@ -57,7 +58,7 @@ public class FacilityFragment extends Fragment {
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FacilityDetailsDialogueFragment(db, curUser, facility_dne).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facility).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
                 checkFacility(createFacilityFirstPage, facilityPage);
             }
         });
@@ -66,14 +67,15 @@ public class FacilityFragment extends Fragment {
         editFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FacilityDetailsDialogueFragment(db, curUser, facility_dne).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facility).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+                checkFacility(createFacilityFirstPage, facilityPage);
             }
         });
 
         return rootview;
     }
     public void checkFacility(ConstraintLayout createFacilityFirstPage, ConstraintLayout facilityPage){
-        if(facility_dne){
+        if(facility.getCapacity() == 0){
             createFacilityFirstPage.setVisibility(View.VISIBLE);
             facilityPage.setVisibility(View.GONE);
         } else {

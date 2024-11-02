@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public CollectionReference facilitiesRef;
     private CurrentUser curUser;
     private String androidIDStr;
+    private FacilityModel facility;
 
     /**
      * This method is called when opening the app.
@@ -56,9 +57,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
         curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
+        facility = new FacilityModel("", "", "", "", 0, androidIDStr);
 
         userRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
+
+        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
+
+        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        facility = document.toObject(FacilityModel.class);
+                        curUser.setFacilityID(facility.getUserID());
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Log.d("Firestore", "get failed with ", task.getException());
+                }
+            }
+        });
 
         DocumentReference currentUserReference = userRef.document(androidIDStr);
 
@@ -121,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, (Boolean) curUser.getFacilityID().equals("")))
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, (Boolean) curUser.getFacilityID().equals(""), facility))
                         .commit();
                 return true;
             case R.id.waitlist:

@@ -20,6 +20,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
     FirebaseFirestore db;
     CurrentUser user;
     Boolean facilityDne;
+    FacilityModel facility;
 
     public FacilityDetailsDialogueFragment() {
         super();
@@ -30,10 +31,11 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         this.user = user;
     }
 
-    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne) {
+    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne, FacilityModel facility) {
         this.db = db;
-        this.user = user;
+        this.user = curUser;
         this.facilityDne = facilityDne;
+        this.facility = facility;
     }
 
     @NonNull
@@ -54,7 +56,6 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         Button confirmButton = rootView.findViewById(R.id.facility_details_confirm_button);
         Button cancelButton = rootView.findViewById(R.id.facility_details_cancel_button);
 
-        // TODO: location in part 4
         facilityPhoneEditText.setText(user.getPhone());
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
