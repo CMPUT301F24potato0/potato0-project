@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,14 +16,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
 
 /**
  * This is the MainActivity class
@@ -67,51 +61,81 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         userRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
 
-        userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        DocumentReference currentUserReference = userRef.document(androidIDStr);
+
+        currentUserReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-                        String userID = doc.getId();
-                        String email = doc.getString("email");
-                        String f_name = doc.getString("f_name");
-                        String l_name = doc.getString("l_name");
-                        String phone = doc.getString("phone");
-                        boolean isAdmin = doc.getBoolean("isAdmin");
-                        String facilityID = doc.getString("facilityID");
-                        if (userID.equals(androidIDStr)) {
-                            curUser.setEmail(email);
-                            curUser.setfName(f_name);
-                            curUser.setlName(l_name);
-                            curUser.setPhone(phone);
-                            curUser.setIsAdmin(isAdmin);
-                            curUser.setFacilityID(facilityID);
-                            return;
-                        }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        curUser = document.toObject(CurrentUser.class);
+                        Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
+                        Toast.makeText(MainActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        newUser(curUser);
+                        Toast.makeText(MainActivity.this, "Document doesn't exist", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Log.d("Firestore", "get failed with ", task.getException());
                 }
-                newUser();
             }
         });
+
+//        userRef.document(androidIDStr).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                userRef.document(androidIDStr)
+//            }
+//        });
+//
+//        userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.e("Firestore", error.toString());
+//                    return;
+//                }
+//                if (querySnapshots != null) {
+//                    for (QueryDocumentSnapshot doc: querySnapshots) {
+//                        String userID = doc.getId();
+////                        String email = doc.getString("email");
+////                        String f_name = doc.getString("f_name");
+////                        String l_name = doc.getString("l_name");
+////                        String phone = doc.getString("phone");
+////                        boolean isAdmin = Boolean.TRUE.equals(doc.getBoolean("isAdmin"));
+////                        String facilityID = doc.getString("facilityID");
+//                        if (userID.equals(androidIDStr)) {
+//
+////                            curUser.setEmail(email);
+////                            curUser.setfName(f_name);
+////                            curUser.setlName(l_name);
+////                            curUser.setPhone(phone);
+////                            curUser.setIsAdmin(isAdmin);
+////                            curUser.setFacilityID(facilityID);
+//                            return;
+//                        }
+//                    }
+//                }
+//                newUser(curUser);
+//            }
+//        });
     }
 
     /**
      * This method is to add a new user to the database
      */
-    public void newUser() {
+    public void newUser(CurrentUser cUser) {
         // Adding a new User
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("android_id", curUser.getiD());
-        data.put("email", curUser.getEmail());
-        data.put("f_name", curUser.getfName());
-        data.put("l_name", curUser.getlName());
-        data.put("isAdmin", curUser.getIsAdmin());
-        data.put("phone", curUser.getPhone());
-        userRef.document(curUser.getiD()).set(data);
+//        HashMap<String, Object> data = new HashMap<>();
+//        data.put("android_id", curUser.getiD());
+//        data.put("email", curUser.getEmail());
+//        data.put("f_name", curUser.getfName());
+//        data.put("l_name", curUser.getlName());
+//        data.put("isAdmin", curUser.getIsAdmin());
+//        data.put("phone", curUser.getPhone());
+//        data.put("facilityID", curUser.getFacilityID());
+        userRef.document(androidIDStr).set(cUser);
     }
 
     /**
@@ -144,8 +168,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             String facilityID = documentSnapshot.getString("facilityID");
-                            if (facilityID == "") {
-                                Toast.makeText(MainActivity.this, "Empty", Toast.LENGTH_SHORT).show();
+                            if (facilityID == null) {
+                                Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
+                                createFacility(androidIDStr);
+                                new FacilityDetailsDialogueFragment().show(getSupportFragmentManager(), "Create facility");
                             }
                             else {
                                 Toast.makeText(MainActivity.this, "Exists", Toast.LENGTH_SHORT).show();
@@ -176,5 +202,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
         }
         return false; // if nothing was found then return false
+    }
+
+    public void createFacility(String userID) {
+        userRef.document(androidIDStr).update("facilityID", userID);
     }
 }

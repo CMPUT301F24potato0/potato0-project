@@ -11,11 +11,21 @@ import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class FacilityDetailsDialogueFragment extends DialogFragment {
 
-        public FacilityDetailsDialogueFragment() {
-            super();
-        }
+    public FacilityDetailsDialogueFragment() {
+        super();
+    }
+
+    private FirebaseFirestore db;
+    private CurrentUser curUser;
+
+    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser) {
+        this.db = db;
+        this.curUser = curUser;
+    }
 
     @NonNull
     @Override

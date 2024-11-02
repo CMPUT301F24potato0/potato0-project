@@ -11,6 +11,7 @@ public class CurrentUser {
     private boolean isAdmin;
     private String facilityID;
     private String iD;
+    private String userPhoto;
 
     /**
      * Constructor that updates the local variables
@@ -30,6 +31,8 @@ public class CurrentUser {
         this.phone = phone;
         this.iD = iD;
     }
+
+    public CurrentUser() {}
 
     /**
      * Getting First name
