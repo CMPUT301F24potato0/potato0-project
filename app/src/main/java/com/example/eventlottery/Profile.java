@@ -66,7 +66,6 @@ public class Profile extends Fragment {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection("users");
 
-
         EditText f_name = (EditText) rootView.findViewById(R.id.fNameEditText);
         EditText l_name = (EditText) rootView.findViewById(R.id.lNameEditText);
         EditText email = (EditText) rootView.findViewById(R.id.emailEditText);
