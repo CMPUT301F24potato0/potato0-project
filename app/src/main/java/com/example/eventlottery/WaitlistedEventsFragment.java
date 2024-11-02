@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,14 +29,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class WaitlistedEventsFragment extends Fragment{
 
     private String token_m;
-    private Button button;
+    private Button subscribe;
     private TextView textView;
     private Button notification_btn;
     public WaitlistedEventsFragment(){
         // require a empty public constructor
     }
-
-
 
     /**
      *
@@ -53,38 +52,26 @@ public class WaitlistedEventsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_waitlisted_events, container, false);
-        button = (Button) rootview.findViewById(R.id.Button_id);
-        textView = (TextView) rootview.findViewById(R.id.textview_id);
         notification_btn = (Button) rootview.findViewById(R.id.notification_button_id);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        Log.e("token","" + task.getResult());
-                        textView.setText(task.getResult());
-                        token_m = task.getResult();
-
-                    }
-                });
-
-            }
-        });
+        subscribe = (Button) rootview.findViewById(R.id.Button_id);
 
         notification_btn.setOnClickListener(view -> {
+//            if (test_context == null)
+//                {Log.e("Context","It's null");}
+
+
+            // CAlLS SendNotification
             Context test_context = requireContext();
-            if (test_context == null){Log.e("Context","It's null");}
-            FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
-                    token_m,
-                    "This is the test Title","Testing message", test_context, "testTopic"
-            );
-            fcmNotificationSender.SendNotifications();
+            SendNotification sendNotification = new SendNotification(test_context);
+            sendNotification.popup();
+            // CALLS
+
 
         });
-
-        FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
+        subscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -97,9 +84,20 @@ public class WaitlistedEventsFragment extends Fragment{
                     }
                 });
 
-
-
-
+            }
+        });
+//        FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        String msg = "Subscribed";
+//                        if (!task.isSuccessful()) {
+//                            msg = "Subscribe failed";
+//                        }
+//                        Log.d("Notification subscription", msg);
+//                        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
         return rootview;
     }

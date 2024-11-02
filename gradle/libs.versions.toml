@@ -1,5 +1,7 @@
 [versions]
 agp = "8.6.0"
+core = "1.15.0"
+coreKtx = "2.2.0"
 firebaseBom = "33.5.1"
 googleAuthLibraryOauth2Http = "1.19.0"
 junit = "4.13.2"
@@ -16,6 +18,8 @@ volley = "1.2.1"
 
 [libraries]
 com-google-firebase-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+core = { module = "androidx.core:core", version.ref = "core" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }

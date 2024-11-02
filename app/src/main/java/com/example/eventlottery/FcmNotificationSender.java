@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class FcmNotificationSender {
 
-    private final String userFcmToken;
+//    private final String userFcmToken;
 
     private final String title;
 
@@ -30,12 +30,14 @@ public class FcmNotificationSender {
 
     private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery/messages:send";
 
-    public FcmNotificationSender(String userFcmToken, String title, String body, Context context, String topic){
-        this.userFcmToken = userFcmToken;
+    public FcmNotificationSender (String title, String body, Context context, String topic){
+
         this.title = title;
         this.body = body;
         this.context = context;
         this.topic = topic;
+        Log.d("Title",title);
+        Log.d("Body",body);
     }
 
     public void SendNotifications(){
@@ -43,21 +45,21 @@ public class FcmNotificationSender {
         JSONObject mainObj = new JSONObject();
         try{
             JSONObject messageObject = new JSONObject();
-
             JSONObject notificationObject = new JSONObject();
+
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
             messageObject.put("topic", topic);
-            // messageObject.put("token", userFcmToken);
             messageObject.put("notification", notificationObject);
 
             mainObj.put("message", messageObject);
 
-                Log.d("Notificaiton Sender: ", "First");
+            Log.d("Notificaiton Sender: ", "First");
             Log.d("Notification sent:", mainObj.toString());
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, response -> {
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST, postUrl, mainObj, response -> {
                 // code run got response
             }, volleyError -> {
                 // code run error
