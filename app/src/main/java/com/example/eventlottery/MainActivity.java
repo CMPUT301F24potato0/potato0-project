@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public FirebaseFirestore db;
     public CollectionReference userRef;
-    private CollectionReference photosRef;
-    protected AndroidID androidID;
     private CurrentUser curUser;
 
     private String androidIDStr;
