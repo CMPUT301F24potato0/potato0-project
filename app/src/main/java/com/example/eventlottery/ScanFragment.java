@@ -1,7 +1,9 @@
 package com.example.eventlottery;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.metrics.Event;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,11 +121,16 @@ public class ScanFragment extends Fragment {
                         String eventId = doc.getId();
                         if (eventId.equals(event)) {
                             // Start the new event fragment and pass in the event id
-                            requireActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.flFragment, new EventEntrantFragment(db, event))
-                                    .commit();
+//                            requireActivity().getSupportFragmentManager()
+//                                    .beginTransaction()
+//                                    .replace(R.id.flFragment, new EventEntrantFragment(db, event))
+//                                    .commit();
                             eventFound = true;
+
+                            Intent i = new Intent(getActivity(), EventEntrantActivity.class);
+                            i.putExtra("event_id", eventId);
+                            i.putExtra("user_id", userId);
+                            startActivity(i);
                             break;
                         }
                     }

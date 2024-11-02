@@ -1,8 +1,10 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
@@ -17,14 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 
 public class EventEntrantFragment extends Fragment {
@@ -34,7 +41,7 @@ public class EventEntrantFragment extends Fragment {
     private FirebaseFirestore db;
     private TextView organizerName;
     private DocumentReference facilityRef;
-    private DocumentReference organizerRef;
+    private String organizer;
     // Event stuff
     private String eventID;
     private EventModel event;
@@ -77,58 +84,82 @@ public class EventEntrantFragment extends Fragment {
         linearLayout = rootView.findViewById(R.id.linearLayout);
 
         // getting event information from Firestore
-        DocumentReference eventRef = db.collection("events").document(eventID);
+        final DocumentReference eventRef = db.collection("events").document(eventID);
 
-        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("Firebase_Data", "Document data: " + document.getData());
-                        eventTitle.setText(document.getString("title"));
-                        eventLocation.setText(document.getString("location_string"));
-                        Date javaDate = document.getTimestamp("join_deadline").toDate();
-                        eventDate.setText(javaDate.toString());
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Firebase Error", "Listen failed.", e);
+                    return;
+                }
 
-                        organizerRef = document.getDocumentReference("organizer");
-                        assert organizerRef != null;
-                        organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                progressBar.setVisibility(View.GONE); // Hide Progress bar
-                                linearLayout.setVisibility(View.VISIBLE);
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot userDoc = task.getResult();
-                                    if (userDoc.exists()) {
-                                        organizerName.setText(userDoc.getString("f_name") + " " + userDoc.getString("l_name"));
-                                    }
-                                }
-                            }
-                        });
-                        eventDescription.setText(document.getString("description"));
-                    } else {
-                        Log.d("Firebase_Data", "No such document");
-                    }
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("Firebase Data", "Current data: " + snapshot.getData());
+                    eventTitle.setText(snapshot.getString("title"));
+                    eventLocation.setText(snapshot.getString("location_string"));
+                    Date javaDate = snapshot.getTimestamp("join_deadline").toDate();
+                    eventDate.setText(javaDate.toString());
+                    organizer = snapshot.getString("organizer");
+                    organizerName.setText(organizer);
+                    eventDescription.setText(snapshot.getString("description"));
+                    progressBar.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
                 } else {
-                    Log.d("Firebase_Data", "get failed with ", task.getException());
+                    Log.d("Firebase data", "Current data: null");
                 }
             }
         });
+//        organizerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                progressBar.setVisibility(View.GONE); // Hide Progress bar
+//                linearLayout.setVisibility(View.VISIBLE);
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot userDoc = task.getResult();
+//                    if (userDoc.exists()) {
+//                        organizerName.setText(userDoc.getString("f_name") + " " + userDoc.getString("l_name"));
+//                    }
+//                }
+//            }
+//        });
+
+//        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Log.d("Firebase_Data", "Document data: " + document.getData());
+//                        eventTitle.setText(document.getString("title"));
+//                        eventLocation.setText(document.getString("location_string"));
+//                        Date javaDate = document.getTimestamp("join_deadline").toDate();
+//                        eventDate.setText(javaDate.toString());
+//
+//                        organizerRef = document.getDocumentReference("organizer");
+//
+//                        eventDescription.setText(document.getString("description"));
+//                    } else {
+//                        Log.d("Firebase_Data", "No such document");
+//                    }
+//                } else {
+//                    Log.d("Firebase_Data", "get failed with ", task.getException());
+//                }
+//            }
+//        });
 
         // TODO: add functionality to join button
+        // TODO: add functionality to unjoin button
+        // TODO: 1) check if user already joined
+        // TODO: 2) if joined, change text in button to "Unjoin"
+        // TODO: 3) add functionality to unjoin the event
         joinUnjoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 eventRef.update("waiting_list", FieldValue.arrayUnion(Settings.Secure.getString(requireActivity().getContentResolver(), Settings.Secure.ANDROID_ID)));
             }
         });
-        // TODO: add functionality to unjoin button
-        // TODO: 1) check if user already joined
-        // TODO: 2) if joined, change text in button to "Unjoin"
-        // TODO: 3) add functionality to unjoin the event
-
-
         return rootView;
     }
 
