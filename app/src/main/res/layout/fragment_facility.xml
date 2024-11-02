@@ -3,12 +3,118 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FacilityFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/facility_page_text"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Facility"
+                android:textSize="29sp"/>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/rounded_corner_background"
+            android:backgroundTint="@color/gray3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/facility_page_text">
+
+            <LinearLayout
+                android:id="@+id/facility_page_facility_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Facility:" />
+
+                <TextView
+                    android:id="@+id/facility_page_facility_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/rounded_corner_background"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:text="Sample Facility Name" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/facility_page_facility_events_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Your Facility's Events:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/facility_page_facility_details" />
+
+            <ListView
+                android:id="@+id/facility_page_events_listview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10sp"
+                app:layout_constraintBottom_toTopOf="@id/facility_page_edit_facility_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/facility_page_facility_events_text" />
+
+            <Button
+                android:id="@+id/facility_page_edit_facility_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/green1"
+                android:text="Edit Facility"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="1.5dp" />
+
+            <Button
+                android:id="@+id/facility_page_add_event_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/green1"
+                android:text="Add Event"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="1.5dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
