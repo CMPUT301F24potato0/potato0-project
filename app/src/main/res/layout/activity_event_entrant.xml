@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventEntrantActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-28dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/fab_back_event_activity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_media_previous" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:id="@+id/event_entrant_page_event_poster1"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@color/black" />
+
+            <TextView
+                android:id="@+id/event_entrant_page_event_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Event Title"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/event_entrant_page_event_location1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Location"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/event_entrant_page_event_date1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Event Date"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/event_entrant_page_join_button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                android:text="Join"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/event_entrant_page_unjoin_button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                android:text="Unjoin"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp">
+
+                <ImageView
+                    android:id="@+id/event_entrant_page_profile_picture1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@mipmap/ic_person"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/event_entrant_page_organizer_name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="Organizer name"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#D9D9D9"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Event Details:"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/event_entrant_page_event_details1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/event_details" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/view_qr_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:text="QR code"/>
+        </LinearLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

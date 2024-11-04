@@ -7,6 +7,11 @@ import java.util.Random;
 public class EventModel {
     private String facilityID;
     private String eventID;
+    // each of the following list contains user ID's formatted as Strings
+    private ArrayList<String> waitingList;
+    private ArrayList<String> invitedList;
+    private ArrayList<String> cancelledList;
+    private ArrayList<String> enrolledList;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -14,12 +19,13 @@ public class EventModel {
     private String eventStrLocation;
     private String eventTitle;
     private String hashQR; // TODO: part 4
+
     private ArrayList<UsersList> waitingList;
     private ArrayList<UsersList> invitedList;
     private ArrayList<UsersList> cancelledList;
     private ArrayList<UsersList> enrolledList;
     // TODO: part 4 - poster image
-
+  
     public EventModel() {
         // default values
         facilityID = "";
@@ -36,14 +42,15 @@ public class EventModel {
         cancelledList = new ArrayList<>();
         enrolledList = new ArrayList<>();
     }
-
     public EventModel(String facilityID,
                       Boolean geolocationRequired,
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle) {
+
         this();
+
         this.facilityID = facilityID;
         this.eventID = eventID;
         this.geolocationRequired = geolocationRequired;
@@ -51,6 +58,11 @@ public class EventModel {
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
+        this.waitingList = new ArrayList<String>();
+        this.invitedList = new ArrayList<String>();
+        this.cancelledList = new ArrayList<String>();
+        this.enrolledList = new ArrayList<String>();
+
     }
 
     public EventModel(String facilityID,
