@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private String androidIDStr;
     private CurrentUser curUser;
     public CollectionReference facilitiesRef;
-    private CurrentUser curUser;
-    private String androidIDStr;
     private FacilityModel facility;
 
 
