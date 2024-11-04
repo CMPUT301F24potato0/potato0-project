@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 public class EventOrganizerActivity extends AppCompatActivity {
 
@@ -24,7 +25,10 @@ public class EventOrganizerActivity extends AppCompatActivity {
         waitlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.activity_event_organizer_id,new event_waitlist());
+                event_waitlist eventWaitlist = new event_waitlist();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.activity_event_organizer_id,eventWaitlist);
+                transaction.commit();
             }
         });
 
