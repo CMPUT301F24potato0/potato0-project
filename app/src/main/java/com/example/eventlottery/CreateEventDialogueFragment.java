@@ -177,7 +177,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         capacity,
                         joinDeadline,
                         strLocation,
-                        eventTitle
+                        eventTitle,
+                        eventDescription
                 );
                 Task<DocumentReference> eventRef = db.collection("events").add(event);
                 eventRef.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

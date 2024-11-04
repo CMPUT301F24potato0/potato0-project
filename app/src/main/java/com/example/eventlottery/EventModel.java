@@ -20,6 +20,7 @@ public class EventModel {
     private Date joinDeadline;
     private String eventStrLocation;
     private String eventTitle;
+    private String eventDescription;
     private String hashQR; // TODO: part 4
 
     // TODO: part 4 - poster image
@@ -34,6 +35,7 @@ public class EventModel {
         joinDeadline = new Date();
         eventStrLocation = "";
         eventTitle = "";
+        eventDescription = "";
         hashQR = "";
         waitingList = new ArrayList<UsersList>();
         invitedList = new ArrayList<UsersList>();
@@ -45,7 +47,8 @@ public class EventModel {
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
-                      String eventTitle) {
+                      String eventTitle,
+                      String eventDescription) {
 
         this();
 
@@ -56,6 +59,7 @@ public class EventModel {
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
         this.waitingList = new ArrayList<UsersList>();
         this.invitedList = new ArrayList<UsersList>();
         this.cancelledList = new ArrayList<UsersList>();
@@ -69,8 +73,9 @@ public class EventModel {
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
-                      String eventTitle) {
-        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle);
+                      String eventTitle,
+                      String eventDescription) {
+        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription);
         this.eventID = eventID;
     }
 
@@ -208,6 +213,14 @@ public class EventModel {
 
     public void setHashQR(String hashQR) {
         this.hashQR = hashQR;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 
     public ArrayList<UsersList> getWaitingList() {
