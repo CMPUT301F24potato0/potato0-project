@@ -47,10 +47,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private String androidIDStr;
     private CurrentUser curUser;
     public CollectionReference facilitiesRef;
-    private CurrentUser curUser;
-    private String androidIDStr;
     private FacilityModel facility;
-
 
     // Declare the launcher at the top of your Activity/Fragment:
     private final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -90,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        askNotificationPermission();
+//        askNotificationPermission();
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
