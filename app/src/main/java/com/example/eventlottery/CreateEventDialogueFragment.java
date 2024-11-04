@@ -177,20 +177,31 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         capacity,
                         joinDeadline,
                         strLocation,
-                        eventTitle
+                        eventTitle,
+                        eventDescription
                 );
-                Task<DocumentReference> eventRef = db.collection("events").add(event);
-                eventRef.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
+                        if (task.isSuccessful()){
                             DocumentReference documentReference = task.getResult();
                             String eventID = documentReference.getId();
                             event.setEventID(eventID);
-                            db.collection("events").document(eventID).update("eventID", eventID);
+                            db.collection("events").document(eventID).set(event);
                         }
                     }
                 });
+//                eventRef.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentReference documentReference = task.getResult();
+//                            String eventID = documentReference.getId();
+//                            event.setEventID(eventID);
+//                            db.collection("events").document(eventID).update("eventID", eventID);
+//                        }
+//                    }
+//                });
                 dismiss();
                 break;
         }

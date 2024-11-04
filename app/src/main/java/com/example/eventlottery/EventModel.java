@@ -20,7 +20,9 @@ public class EventModel {
     private Date joinDeadline;
     private String eventStrLocation;
     private String eventTitle;
-    private String hashQR; // TODO: part 4
+    private String hashQR;
+    private String eventDescription;
+    // TODO: part 4
 
     // TODO: part 4 - poster image
   
@@ -35,6 +37,7 @@ public class EventModel {
         eventStrLocation = "";
         eventTitle = "";
         hashQR = "";
+        eventDescription = "";
         waitingList = new ArrayList<UsersList>();
         invitedList = new ArrayList<UsersList>();
         cancelledList = new ArrayList<UsersList>();
@@ -45,7 +48,8 @@ public class EventModel {
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
-                      String eventTitle) {
+                      String eventTitle,
+                      String eventDescription) {
 
         this();
 
@@ -56,6 +60,7 @@ public class EventModel {
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
         this.waitingList = new ArrayList<UsersList>();
         this.invitedList = new ArrayList<UsersList>();
         this.cancelledList = new ArrayList<UsersList>();
@@ -69,8 +74,9 @@ public class EventModel {
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
-                      String eventTitle) {
-        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle);
+                      String eventTitle,
+                      String eventDescription) {
+        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription);
         this.eventID = eventID;
     }
 
