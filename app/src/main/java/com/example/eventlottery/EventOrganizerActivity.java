@@ -92,9 +92,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 event = document.toObject(EventModel.class);
                                 eventTitle.setText(event.getEventTitle());
-                                eventDescription.setText(document.getString("description"));
-                                eventPoster.setImageResource(R.drawable.ic_facility_background);
-                                organizerName.setText(document.getString("organizer"));
+                                eventDescription.setText(event.getEventDescription());
+//                                eventPoster.setImageResource(R.drawable.ic_facility_background);
+//                                organizerName.setText(document.getString("organizer"));
                                 progessBar.setVisibility(View.GONE);
                                 eventView.setVisibility(View.VISIBLE);
                             }
