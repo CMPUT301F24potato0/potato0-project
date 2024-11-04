@@ -8,10 +8,10 @@ public class EventModel {
     private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings
-    private ArrayList<String> waitingList;
-    private ArrayList<String> invitedList;
-    private ArrayList<String> cancelledList;
-    private ArrayList<String> enrolledList;
+    private ArrayList<UsersList> waitingList;
+    private ArrayList<UsersList> invitedList;
+    private ArrayList<UsersList> cancelledList;
+    private ArrayList<UsersList> enrolledList;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -20,10 +20,6 @@ public class EventModel {
     private String eventTitle;
     private String hashQR; // TODO: part 4
 
-    private ArrayList<UsersList> waitingList;
-    private ArrayList<UsersList> invitedList;
-    private ArrayList<UsersList> cancelledList;
-    private ArrayList<UsersList> enrolledList;
     // TODO: part 4 - poster image
   
     public EventModel() {
@@ -58,10 +54,10 @@ public class EventModel {
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
-        this.waitingList = new ArrayList<String>();
-        this.invitedList = new ArrayList<String>();
-        this.cancelledList = new ArrayList<String>();
-        this.enrolledList = new ArrayList<String>();
+        this.waitingList = new ArrayList<UsersList>();
+        this.invitedList = new ArrayList<UsersList>();
+        this.cancelledList = new ArrayList<UsersList>();
+        this.enrolledList = new ArrayList<UsersList>();
 
     }
 
