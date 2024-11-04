@@ -20,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
@@ -52,6 +54,7 @@ public class WaitlistedEventsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_waitlisted_events, container, false);
+
         notification_btn = (Button) rootview.findViewById(R.id.notification_button_id);
         subscribe = (Button) rootview.findViewById(R.id.Button_id);
 
@@ -62,8 +65,8 @@ public class WaitlistedEventsFragment extends Fragment{
 
             // CAlLS SendNotification
             this.context = requireContext();
-            SendNotification sendNotification = new SendNotification(context);
-            sendNotification.popup();
+//            SendNotification sendNotification = new SendNotification(context,topic);
+//            sendNotification.popup();
             // CALLS
 
 

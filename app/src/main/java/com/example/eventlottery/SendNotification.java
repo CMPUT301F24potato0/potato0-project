@@ -15,8 +15,9 @@ public class SendNotification {
     private String topic;
     private Context context;
 
-    public  SendNotification(Context context){
+    public  SendNotification(Context context, String topic){
         this.context = context;
+        this.topic = topic;
     }
     public void setTitlesetBody(String title, String body){
         this.title = title;
@@ -32,7 +33,7 @@ public class SendNotification {
         EditText body = (EditText) dialog.findViewById(R.id.body);
 
 
-        this.topic = "testTopic";
+//        this.topic = "testTopic";
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override

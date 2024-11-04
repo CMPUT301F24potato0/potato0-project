@@ -124,6 +124,10 @@ public class EventEntrantActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 eventRef.update("waiting_list", FieldValue.arrayRemove(userID));
+                                String topic = eventRef + "_waitlist";
+                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+                                subscribeToTopic.subscribe();
+
                             }
                         });
                     } else {
