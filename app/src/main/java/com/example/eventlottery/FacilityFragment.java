@@ -1,12 +1,10 @@
 package com.example.eventlottery;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -46,8 +44,6 @@ public class FacilityFragment extends Fragment {
     private ListView eventListView;
     private EventsArrayAdapter eventsAdapter;
     private ArrayList<EventModel> events;
-
-    private EventModel eventClicked;
 
 
     public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
@@ -90,10 +86,7 @@ public class FacilityFragment extends Fragment {
         eventsAdapter = new EventsArrayAdapter(requireContext(), events);
         eventListView.setAdapter(eventsAdapter);
 
-//        EventModel temp = new EventModel(curUser.getFacilityID(),false,100,new Date(),"No location","Example Title");
         CollectionReference eventsRef = db.collection("events");
-
-//        eventsRef.document("test_event").set(temp);
 
         // https://firebase.google.com/docs/firestore/query-data/listen
         eventsRef
@@ -115,19 +108,6 @@ public class FacilityFragment extends Fragment {
 //                        Log.d("Firebase Events", "Current cites in CA: " + events.size());
                     }
                 });
-
-        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (eventListView.getAdapter().getItem(position) != null) {
-                    eventClicked = (EventModel) eventListView.getAdapter().getItem(position);
-                    Intent i = new Intent(getActivity(), EventOrganizerActivity.class);
-                    i.putExtra("event_id", eventClicked.getEventID());
-                    startActivity(i);
-                }
-            }
-        });
-
         Button createFacilityBtn = rootview.findViewById(R.id.create_facility_button);
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override

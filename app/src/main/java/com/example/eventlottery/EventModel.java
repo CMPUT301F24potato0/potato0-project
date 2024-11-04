@@ -20,9 +20,8 @@ public class EventModel {
     private Date joinDeadline;
     private String eventStrLocation;
     private String eventTitle;
-    private String hashQR;
     private String eventDescription;
-    // TODO: part 4
+    private String hashQR; // TODO: part 4
 
     // TODO: part 4 - poster image
   
@@ -36,8 +35,8 @@ public class EventModel {
         joinDeadline = new Date();
         eventStrLocation = "";
         eventTitle = "";
-        hashQR = "";
         eventDescription = "";
+        hashQR = "";
         waitingList = new ArrayList<UsersList>();
         invitedList = new ArrayList<UsersList>();
         cancelledList = new ArrayList<UsersList>();
@@ -214,6 +213,14 @@ public class EventModel {
 
     public void setHashQR(String hashQR) {
         this.hashQR = hashQR;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 
     public ArrayList<UsersList> getWaitingList() {

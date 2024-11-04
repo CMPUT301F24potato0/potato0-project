@@ -3,311 +3,309 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventOrganizerActivity">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/event_organizer_fab_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="Go back"
-        app:srcCompat="@android:drawable/ic_media_previous"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/progressBar2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <LinearLayout
-        android:id="@+id/event_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:id="@+id/activity_event_organizer_id">
 
-        <ImageView
-            android:id="@+id/event_organizer_event_poster"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:src="@color/gray4" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/event_organizer_fab_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="Go back"
+            app:srcCompat="@android:drawable/ic_media_previous"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="@color/gray1"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:paddingHorizontal="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/event_organizer_event_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Event Title Here"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/event_organizer_event_poster"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="170dp"
+                android:src="@color/gray4" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="@color/gray1"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="10dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/event_organizer_event_date"
+                    android:id="@+id/event_organizer_event_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="250dp"
-                    android:text="October 20, 2024"
-                    android:textSize="20sp"
+                    android:text="Event Title Here"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
                     android:maxLines="1"
-                    android:ellipsize="end"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:ellipsize="end" />
 
-                <Button
-                    android:id="@+id/event_organizer_edit_event_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:text="Edit Event"
-                    android:textColor="@color/black"
-                    android:backgroundTint="@color/gray2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@drawable/rounded_corner_background"
-                android:padding="10dp">
-
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/event_organizer_event_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Event Description:\n" />
-
-                    <TextView
-                        android:id="@+id/event_organizer_event_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/event_sample_description" />
-                </LinearLayout>
-            </ScrollView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Organizer:"
-                        android:textSize="20sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp">
-
-                        <ImageView
-                            android:id="@+id/event_organizer_organizer_profile_picture"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/ic_facility_background" />
-
-                        <TextView
-                            android:id="@+id/event_organizer_organizer_and_facility_names"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="James Dough \nfrom Facility C"
-                            android:textSize="15sp"
-                            android:paddingLeft="10dp"
-                            android:layout_gravity="center"
-                            android:maxLines="3"
-                            android:ellipsize="end" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Geolocation Required: "
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/event_organizer_geolocation_required"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Yes"
-                            android:textColor="@color/gray4"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Event Capacity: "
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/event_organizer_event_capacity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="100"
-                            android:textColor="@color/gray4"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Waiting List Limit: "
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/event_organizer_waiting_list_limit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="No Limit"
-                            android:textColor="@color/gray4"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent">
+                        android:maxWidth="250dp"
+                        android:text="October 20, 2024"
+                        android:textSize="20sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/event_organizer_QR_code_view_button"
+                        android:id="@+id/event_organizer_edit_event_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/gray2"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
-                        android:text="View QR\nCode"
+                        android:text="Edit Event"
                         android:textColor="@color/black"
-                        android:textSize="10sp" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:backgroundTint="@color/gray2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@drawable/rounded_corner_background"
+                    android:padding="10dp">
 
-                <Button
-                    android:id="@+id/event_organizer_invited_button"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Event Description:\n" />
+
+                        <TextView
+                            android:id="@+id/event_organizer_event_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/event_sample_description" />
+                    </LinearLayout>
+                </ScrollView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minWidth="150dp"
-                    android:minHeight="0dp"
-                    android:backgroundTint="@color/gray2"
-                    android:text="Invited: 12"
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginVertical="10dp">
 
-                <Button
-                    android:id="@+id/event_organizer_cancelled_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="150dp"
-                    android:minHeight="0dp"
-                    android:backgroundTint="@color/gray2"
-                    android:text="Cancelled: 3"
-                    android:textColor="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                <Button
-                    android:id="@+id/event_organizer_waitlist_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="150dp"
-                    android:minHeight="0dp"
-                    android:backgroundTint="@color/gray2"
-                    android:text="Waitlist: 543"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/event_organizer_invited_button" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Organizer:"
+                            android:textSize="20sp" />
 
-                <Button
-                    android:id="@+id/event_organizer_enrolled_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="150dp"
-                    android:minHeight="0dp"
-                    android:backgroundTint="@color/gray2"
-                    android:text="Enrolled: 7"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/event_organizer_cancelled_button" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/event_organizer_organizer_profile_picture"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:src="@drawable/ic_facility_background" />
+
+                            <TextView
+                                android:id="@+id/event_organizer_organizer_and_facility_names"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="James Dough \nfrom Facility C"
+                                android:textSize="15sp"
+                                android:paddingLeft="10dp"
+                                android:layout_gravity="center"
+                                android:maxLines="3"
+                                android:ellipsize="end" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Geolocation Required: "
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/event_organizer_geolocation_required"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Yes"
+                                android:textColor="@color/gray4"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Event Capacity: "
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/event_organizer_event_capacity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100"
+                                android:textColor="@color/gray4"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Waiting List Limit: "
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/event_organizer_waiting_list_limit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="No Limit"
+                                android:textColor="@color/gray4"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:id="@+id/event_organizer_QR_code_image"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_facility_background" />
+
+                        <Button
+                            android:id="@+id/event_organizer_QR_code_view_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray2"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:text="View QR\nCode"
+                            android:textColor="@color/black"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/event_organizer_invited_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:minHeight="0dp"
+                        android:backgroundTint="@color/gray2"
+                        android:text="Invited: 12"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/event_organizer_cancelled_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:minHeight="0dp"
+                        android:backgroundTint="@color/gray2"
+                        android:text="Cancelled: 3"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/event_organizer_waitlist_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:minHeight="0dp"
+                        android:backgroundTint="@color/gray2"
+                        android:text="Waitlist: 543"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/event_organizer_invited_button" />
+
+                    <Button
+                        android:id="@+id/event_organizer_enrolled_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:minHeight="0dp"
+                        android:backgroundTint="@color/gray2"
+                        android:text="Enrolled: 7"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/event_organizer_cancelled_button" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 
 
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
 
 
-
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
