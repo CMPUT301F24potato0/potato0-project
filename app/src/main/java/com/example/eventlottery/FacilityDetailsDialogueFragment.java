@@ -72,7 +72,6 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                 db.collection("facilities").document(user.getiD()).set(new FacilityModel(facilityName, facilityLocation, facilityPhone, facilityEmail, facilityCapacity, user.getiD()));
                 user.setFacilityID(user.getiD());
                 db.collection("users").document(user.getiD()).set(user);
-                user.setFacilityID(user.getiD());
                 facilityFragment.changeView(1);
                 dismiss();
             }

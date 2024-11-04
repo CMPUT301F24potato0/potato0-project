@@ -9,13 +9,23 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -37,6 +47,8 @@ public class FacilityFragment extends Fragment {
     private FacilityModel facilityModel;
 
     private ListView eventListView;
+    private EventsArrayAdapter eventsAdapter;
+    private ArrayList<EventModel> events;
 
 
     public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
@@ -74,7 +86,35 @@ public class FacilityFragment extends Fragment {
         else {
             changeView(1);
         }
+        // TODO get events
+        events = new ArrayList<EventModel>();
+        eventsAdapter = new EventsArrayAdapter(requireContext(), events);
+        eventListView.setAdapter(eventsAdapter);
 
+        EventModel temp = new EventModel(curUser.getFacilityID(),false,100,new Date(),"No location","Example Title");
+        CollectionReference eventsRef = db.collection("events");
+
+        eventsRef.document("test_event").set(temp);
+
+        // https://firebase.google.com/docs/firestore/query-data/listen
+        eventsRef
+                .whereEqualTo("facilityID", curUser.getiD())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Firebase Events", "Listen failed.", e);
+                            return;
+                        }
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("eventTitle") != null) {
+                                events.add(doc.toObject(EventModel.class));
+                                eventsAdapter.notifyDataSetChanged();
+                            }
+                        }
+//                        Log.d("Firebase Events", "Current cites in CA: " + events.size());
+                    }
+                });
         Button createFacilityBtn = rootview.findViewById(R.id.create_facility_button);
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,16 +133,6 @@ public class FacilityFragment extends Fragment {
 
         return rootview;
     }
-    public void checkFacility(ConstraintLayout createFacilityFirstPage, ConstraintLayout facilityPage){
-        if(curUser.getFacilityID().equals("")){
-            createFacilityFirstPage.setVisibility(View.VISIBLE);
-            facilityPage.setVisibility(View.GONE);
-        } else {
-            createFacilityFirstPage.setVisibility(View.GONE);
-            facilityPage.setVisibility(View.VISIBLE);
-        }
-    }
-
     public void changeView(int fac){
         if (fac == 0) {
             createFacilityFirstPage.setVisibility(View.VISIBLE);

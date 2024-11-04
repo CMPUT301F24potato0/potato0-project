@@ -16,6 +16,8 @@ public class EventModel {
     private Integer waitingListLimit;
     private Integer capacity;
 
+    public EventModel() {}
+
     public String getFacilityID() {
         return facilityID;
     }
