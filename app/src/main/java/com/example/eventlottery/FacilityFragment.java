@@ -65,27 +65,35 @@ public class FacilityFragment extends Fragment {
         facilityPage = rootview.findViewById(R.id.FacilityPage);
         progressBar = rootview.findViewById(R.id.progressBar);
 
-        db.collection("users").document(curUser.getiD()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        curUser = document.toObject(CurrentUser.class);
-                        if (curUser.getFacilityID().equals("")) {
-                            changeView(0);
-                        } else {
-                            changeView(1);
-                        }
-                    } else {
-                        Log.d("Firestore", "No such document");
-                    }
-                } else {
-                    Log.d("Firestore", "get failed with ", task.getException());
-                }
-            }
-        });
+        progressBar.setVisibility(View.GONE);
+        if (curUser.getFacilityID().equals("")) {
+            changeView(0);
+        }
+        else {
+            changeView(1);
+        }
+
+//        db.collection("users").document(curUser.getiD()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    progressBar.setVisibility(View.GONE);
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        curUser = document.toObject(CurrentUser.class);
+//                        if (curUser.getFacilityID().equals("")) {
+//                            changeView(0);
+//                        } else {
+//                            changeView(1);
+//                        }
+//                    } else {
+//                        Log.d("Firestore", "No such document");
+//                    }
+//                } else {
+//                    Log.d("Firestore", "get failed with ", task.getException());
+//                }
+//            }
+//        });
 
 //        if (facility_dne) {
 //            changeView(0);
