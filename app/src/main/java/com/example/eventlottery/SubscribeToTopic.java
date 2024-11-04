@@ -32,6 +32,7 @@ public class SubscribeToTopic {
                             msg = "Subscribe failed";
                         }
                         Log.d("Notification subscription", msg);
+                        Log.d("Topic",topic);
 //                        Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
