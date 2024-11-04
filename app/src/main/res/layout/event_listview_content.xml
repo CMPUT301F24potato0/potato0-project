@@ -25,7 +25,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Swimming Lessons"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/event_listview_facility"
@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="University of Alberta"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/event_listview_date"
@@ -43,7 +43,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="October 11, 2024"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <ImageView
@@ -55,7 +55,9 @@
         android:src="@drawable/ic_facility_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toEndOf="@id/event_information"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

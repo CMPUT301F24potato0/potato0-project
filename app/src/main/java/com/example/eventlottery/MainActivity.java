@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -42,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     BottomNavigationView bottomNavigationView;
 
     public FirebaseFirestore db;
-    public CollectionReference userRef;
+    public CollectionReference usersRef;
+    public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
     private CurrentUser curUser;
-    public CollectionReference facilitiesRef;
     private FacilityModel facility;
+    ConstraintLayout mainActivityView;
+    ConstraintLayout mainActivityProgressBar;
 
 
     // Declare the launcher at the top of your Activity/Fragment:
@@ -103,34 +108,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
 
+        mainActivityView = findViewById(R.id.main_activity_view);
+        mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
+
         curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
 
-        userRef = db.collection("users");
+        usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
 
-        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
-
-        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        facility = document.toObject(FacilityModel.class);
-                        curUser.setFacilityID(facility.getUserID());
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    Log.d("Firestore", "get failed with ", task.getException());
-                }
-            }
-        });
-
-        DocumentReference currentUserReference = userRef.document(androidIDStr);
+        DocumentReference currentUserReference = usersRef.document(androidIDStr);
 
         currentUserReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -139,14 +126,36 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         curUser = document.toObject(CurrentUser.class);
-                        Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
-                        Toast.makeText(MainActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
+                        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
+                        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    mainActivityView.setVisibility(View.VISIBLE);
+                                    mainActivityProgressBar.setVisibility(View.GONE);
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        facility = document.toObject(FacilityModel.class);
+                                        curUser.setFacilityID(facility.getUserID());
+                                    }
+                                    else {
+                                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else {
+                                    Log.d("Firestore", "get failed with ", task.getException());
+                                    throw new RuntimeException(task.getException().toString());
+                                }
+                            }
+                        });
                     } else {
                         newUser(curUser);
-                        Toast.makeText(MainActivity.this, "Document doesn't exist", Toast.LENGTH_SHORT).show();
+                        mainActivityView.setVisibility(View.VISIBLE);
+                        mainActivityProgressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
+                    throw new RuntimeException(task.getException().toString());
                 }
             }
         });
@@ -157,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     public void newUser(CurrentUser cUser) {
         // Adding a new User
-        userRef.document(androidIDStr).set(cUser);
+        usersRef.document(androidIDStr).set(cUser);
     }
 
     /**
@@ -189,13 +198,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-                if (curUser.getFacilityID().equals("")) {
-                    Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
-                    new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
-                }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, (Boolean) curUser.getFacilityID().equals(""), facility))
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, facility))
                         .commit();
                 return true;
             case R.id.waitlist:
@@ -209,15 +214,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.flFragment, new Profile(db, curUser))
-                        //.replace(R.id.flFragment, new Profile(db, profileFragment))
                         .commit();
                 return true;
         }
         return false; // if nothing was found then return false
-    }
-
-    public void createFacility(String userID) {
-        curUser.setFacilityID(androidIDStr);
-        userRef.document(userID).set(curUser);
     }
 }

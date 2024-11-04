@@ -1,16 +1,27 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 
 /**
  * This class is the facility fragment
@@ -22,17 +33,27 @@ public class FacilityFragment extends Fragment {
     public FacilityFragment(){
         // require a empty public constructor
     }
+
+    FacilityFragment currentFragment = this;
+
     private Boolean facility_dne;
     private CurrentUser curUser;
     private FirebaseFirestore db;
-    private FacilityModel facility;
-    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facility_dne, FacilityModel facility) {
+    private FacilityModel facilityModel;
+
+    private ListView eventListView;
+    private EventsArrayAdapter eventsAdapter;
+    private ArrayList<EventModel> events;
+
+
+    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
         this.db = db;
         this.curUser = curUser;
-        this.facility_dne = facility_dne;
-        this.facility = facility;
+        this.facility_dne = curUser.getFacilityID().equals("");
+        this.facilityModel = facility;
     }
-
+    private ConstraintLayout createFacilityFirstPage;
+    private ConstraintLayout facilityPage;
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -49,33 +70,75 @@ public class FacilityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_facility, container, false);
+        createFacilityFirstPage = rootview.findViewById(R.id.createFacilityFirstPage);
+        facilityPage = rootview.findViewById(R.id.FacilityPage);
 
-        ConstraintLayout createFacilityFirstPage = rootview.findViewById(R.id.createFacilityFirstPage);
-        ConstraintLayout facilityPage = rootview.findViewById(R.id.FacilityPage);
-        checkFacility(createFacilityFirstPage, facilityPage);
+        eventListView = rootview.findViewById(R.id.facility_page_events_listview);
 
-        Button createFacilityBtn = (Button) rootview.findViewById(R.id.create_facility_button);
+        if (curUser.getFacilityID().equals("")) {
+            changeView(0);
+        }
+        else {
+            changeView(1);
+        }
+        // TODO get events
+        events = new ArrayList<EventModel>();
+        eventsAdapter = new EventsArrayAdapter(requireContext(), events);
+        eventListView.setAdapter(eventsAdapter);
+
+        EventModel temp = new EventModel(curUser.getFacilityID(),false,100,new Date(),"No location","Example Title");
+        CollectionReference eventsRef = db.collection("events");
+
+        eventsRef.document("test_event").set(temp);
+
+        // https://firebase.google.com/docs/firestore/query-data/listen
+        eventsRef
+                .whereEqualTo("facilityID", curUser.getiD())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Firebase Events", "Listen failed.", e);
+                            return;
+                        }
+                        eventsAdapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("eventTitle") != null) {
+                                events.add(doc.toObject(EventModel.class));
+                            }
+                        }
+                        eventsAdapter.notifyDataSetChanged();
+//                        Log.d("Firebase Events", "Current cites in CA: " + events.size());
+                    }
+                });
+        Button createFacilityBtn = rootview.findViewById(R.id.create_facility_button);
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facility).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
-                checkFacility(createFacilityFirstPage, facilityPage);
+                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facilityModel, currentFragment).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
             }
         });
 
-        Button editFacilityBtn = (Button) rootview.findViewById(R.id.facility_page_edit_facility_button);
+        Button editFacilityBtn = rootview.findViewById(R.id.facility_page_edit_facility_button);
         editFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facility).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
-                checkFacility(createFacilityFirstPage, facilityPage);
+                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facilityModel, currentFragment).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+            }
+        });
+
+        Button addEventBtn = rootview.findViewById(R.id.facility_page_add_event_button);
+        addEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CreateEventDialogueFragment(curUser, db).show(getFragmentManager(), "CreateEventDialogueFragment");
             }
         });
 
         return rootview;
     }
-    public void checkFacility(ConstraintLayout createFacilityFirstPage, ConstraintLayout facilityPage){
-        if(facility.getCapacity() == 0){
+    public void changeView(int fac){
+        if (fac == 0) {
             createFacilityFirstPage.setVisibility(View.VISIBLE);
             facilityPage.setVisibility(View.GONE);
         } else {
