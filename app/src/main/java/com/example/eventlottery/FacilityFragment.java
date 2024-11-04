@@ -8,15 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -25,7 +21,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -106,12 +101,13 @@ public class FacilityFragment extends Fragment {
                             Log.w("Firebase Events", "Listen failed.", e);
                             return;
                         }
+                        eventsAdapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("eventTitle") != null) {
                                 events.add(doc.toObject(EventModel.class));
-                                eventsAdapter.notifyDataSetChanged();
                             }
                         }
+                        eventsAdapter.notifyDataSetChanged();
 //                        Log.d("Firebase Events", "Current cites in CA: " + events.size());
                     }
                 });
@@ -128,6 +124,14 @@ public class FacilityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facilityModel, currentFragment).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+            }
+        });
+
+        Button addEventBtn = rootview.findViewById(R.id.facility_page_add_event_button);
+        addEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CreateEventDialogueFragment(curUser, db).show(getFragmentManager(), "CreateEventDialogueFragment");
             }
         });
 
