@@ -66,7 +66,6 @@ public class Profile extends Fragment {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection("users");
 
-
         EditText f_name = (EditText) rootView.findViewById(R.id.fNameEditText);
         EditText l_name = (EditText) rootView.findViewById(R.id.lNameEditText);
         EditText email = (EditText) rootView.findViewById(R.id.emailEditText);
@@ -82,6 +81,7 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View view) {
 
+                String id = curUser.getiD();
                 String f_nameStr = f_name.getText().toString();
                 String l_nameStr = l_name.getText().toString();
                 String emailStr = email.getText().toString();
@@ -92,14 +92,7 @@ public class Profile extends Fragment {
                 curUser.setEmail(emailStr);
                 curUser.setPhone(phoneStr);
 
-                HashMap<String, String> data = new HashMap<>();
-                data.put("android_id", curUser.getiD());
-                data.put("email", curUser.getEmail());
-                data.put("f_name", curUser.getfName());
-                data.put("l_name", curUser.getlName());
-
-                userRef.document(curUser.getiD()).set(data);
-
+                userRef.document(id).set(curUser);
             }
         });
 

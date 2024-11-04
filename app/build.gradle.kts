@@ -31,10 +31,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude ("META-INF/DEPENDENCIES")
+    }
 }
 
 dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation(platform(libs.firebase.bom))
     implementation ("com.google.android.material:material:1.2.0")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     //implementation(files("C:\\Users\\Chirayu Shah\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
@@ -46,4 +50,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.com.google.firebase.firebase.messaging)
+
+    implementation (libs.google.auth.library.oauth2.http)
+    implementation (libs.volley)
+
 }

@@ -6,6 +6,9 @@
     <string name="profile_page_first_name">First Name:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="event_details">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat.</string>
     <string name="fab_back_event_activity">Back to home page</string>
+
+    <string name="event_sample_description">Hello my name is James Dough. I am a 53 year old retired computing science professor.\nI am holding a computing science class for children to get them more interested in programming and computers.\n\nLorem ipsum odor amet, consectetuer adipiscing elit. Sem rhoncus integer hac dui facilisi venenatis nam. Convallis interdum semper semper duis  nostra gravida. </string>
 </resources>
