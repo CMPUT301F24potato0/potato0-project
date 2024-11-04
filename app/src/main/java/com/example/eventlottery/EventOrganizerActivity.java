@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -110,6 +111,16 @@ public class EventOrganizerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+            }
+        });
+
+        waitlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                event_waitlist eventWaitlist = new event_waitlist();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main,eventWaitlist);
+                transaction.commit();
             }
         });
     }
