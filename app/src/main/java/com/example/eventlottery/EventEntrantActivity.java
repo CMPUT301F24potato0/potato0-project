@@ -88,8 +88,6 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizerName = findViewById(R.id.event_entrant_page_organizer_name1);
         eventDescription = findViewById(R.id.event_entrant_page_event_details1);
 
-        // QR code button
-        Button qrBtn = findViewById(R.id.view_qr_button);
 
         progressBar = findViewById(R.id.progressBar1);
         linearLayout = findViewById(R.id.linearLayout1);
@@ -156,11 +154,5 @@ public class EventEntrantActivity extends AppCompatActivity {
             }
         });
 
-        qrBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
-            }
-        });
     }
 }
