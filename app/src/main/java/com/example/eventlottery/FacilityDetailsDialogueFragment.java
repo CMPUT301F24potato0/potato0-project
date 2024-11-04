@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,10 +18,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FacilityDetailsDialogueFragment extends DialogFragment {
 
-    FirebaseFirestore db;
-    CurrentUser user;
-    Boolean facilityDne;
-    FacilityModel facility;
+    private FirebaseFirestore db;
+    private CurrentUser user;
+    private Boolean facilityDne;
+    private FacilityModel facility;
+    private FacilityFragment facilityFragment;
 
     public FacilityDetailsDialogueFragment() {
         super();
@@ -31,11 +33,12 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         this.user = user;
     }
 
-    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne, FacilityModel facility) {
+    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne, FacilityModel facility, FacilityFragment facilityFragment) {
         this.db = db;
         this.user = curUser;
         this.facilityDne = facilityDne;
         this.facility = facility;
+        this.facilityFragment = facilityFragment;
     }
 
     @NonNull
@@ -69,7 +72,8 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                 db.collection("facilities").document(user.getiD()).set(new FacilityModel(facilityName, facilityLocation, facilityPhone, facilityEmail, facilityCapacity, user.getiD()));
                 user.setFacilityID(user.getiD());
                 db.collection("users").document(user.getiD()).set(user);
-                facilityDne = false;
+                user.setFacilityID(user.getiD());
+                facilityFragment.changeView(1);
                 dismiss();
             }
         });
