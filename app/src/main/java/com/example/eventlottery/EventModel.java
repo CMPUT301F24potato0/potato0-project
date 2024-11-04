@@ -1,5 +1,7 @@
 package com.example.eventlottery;
 
+import com.google.firebase.firestore.auth.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -33,10 +35,10 @@ public class EventModel {
         eventStrLocation = "";
         eventTitle = "";
         hashQR = "";
-        waitingList = new ArrayList<>();
-        invitedList = new ArrayList<>();
-        cancelledList = new ArrayList<>();
-        enrolledList = new ArrayList<>();
+        waitingList = new ArrayList<UsersList>();
+        invitedList = new ArrayList<UsersList>();
+        cancelledList = new ArrayList<UsersList>();
+        enrolledList = new ArrayList<UsersList>();
     }
     public EventModel(String facilityID,
                       Boolean geolocationRequired,
