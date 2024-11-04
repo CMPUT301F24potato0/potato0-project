@@ -52,6 +52,13 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
+        startActivity(i);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
