@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private CurrentUser curUser;
     private String androidIDStr;
     private FacilityModel facility;
+    ConstraintLayout mainActivityView;
+    ConstraintLayout mainActivityProgressBar;
 
     /**
      * This method is called when opening the app.
@@ -43,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);;
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView
                 .setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.scanQR);
+
+        mainActivityView = findViewById(R.id.main_activity_view);
+        mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
 
         curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
@@ -76,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
+                                    mainActivityView.setVisibility(View.VISIBLE);
+                                    mainActivityProgressBar.setVisibility(View.GONE);
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         facility = document.toObject(FacilityModel.class);
@@ -87,14 +95,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 }
                                 else {
                                     Log.d("Firestore", "get failed with ", task.getException());
+                                    throw new RuntimeException(task.getException().toString());
                                 }
                             }
                         });
                     } else {
                         newUser(curUser);
+                        mainActivityView.setVisibility(View.VISIBLE);
+                        mainActivityProgressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
+                    throw new RuntimeException(task.getException().toString());
                 }
             }
         });

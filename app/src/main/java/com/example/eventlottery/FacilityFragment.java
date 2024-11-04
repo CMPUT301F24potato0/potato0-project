@@ -35,7 +35,6 @@ public class FacilityFragment extends Fragment {
     private FirebaseFirestore db;
     private FacilityModel facilityModel;
 
-    ConstraintLayout progressBar;
 
     public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
         this.db = db;
@@ -63,9 +62,7 @@ public class FacilityFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_facility, container, false);
         createFacilityFirstPage = rootview.findViewById(R.id.createFacilityFirstPage);
         facilityPage = rootview.findViewById(R.id.FacilityPage);
-        progressBar = rootview.findViewById(R.id.progressBar);
 
-        progressBar.setVisibility(View.GONE);
         if (curUser.getFacilityID().equals("")) {
             changeView(0);
         }
