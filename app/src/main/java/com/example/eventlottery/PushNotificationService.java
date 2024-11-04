@@ -42,7 +42,7 @@ public class PushNotificationService extends FirebaseMessagingService {
                     NotificationManager.IMPORTANCE_HIGH);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
 
-//
+
             Intent action1 = new Intent(this,MyBroadcastReceiver.class);
             action1.setAction("first");
             PendingIntent pendingaction1 = PendingIntent.getBroadcast(this,1,action1,PendingIntent.FLAG_IMMUTABLE);

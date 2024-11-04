@@ -28,10 +28,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
  */
 public class WaitlistedEventsFragment extends Fragment{
 
-    private String token_m;
+
     private Button subscribe;
-    private TextView textView;
     private Button notification_btn;
+    private Context context;
     public WaitlistedEventsFragment(){
         // require a empty public constructor
     }
@@ -61,8 +61,8 @@ public class WaitlistedEventsFragment extends Fragment{
 
 
             // CAlLS SendNotification
-            Context test_context = requireContext();
-            SendNotification sendNotification = new SendNotification(test_context);
+            this.context = requireContext();
+            SendNotification sendNotification = new SendNotification(context);
             sendNotification.popup();
             // CALLS
 
@@ -71,33 +71,12 @@ public class WaitlistedEventsFragment extends Fragment{
         subscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Subscribe failed";
-                        }
-                        Log.d("Notification subscription", msg);
-                        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                String topic = "testTopic";
+                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,context);
+                subscribeToTopic.subscribe();
             }
         });
-//        FirebaseMessaging.getInstance().subscribeToTopic("testTopic")
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        String msg = "Subscribed";
-//                        if (!task.isSuccessful()) {
-//                            msg = "Subscribe failed";
-//                        }
-//                        Log.d("Notification subscription", msg);
-//                        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+
 
         return rootview;
     }

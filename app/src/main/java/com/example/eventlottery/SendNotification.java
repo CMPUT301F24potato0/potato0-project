@@ -58,12 +58,6 @@ public class SendNotification {
     }
 
 
-//    public SendNotification(String title, String body, String topic, Context context) {
-//        this.title = title;
-//        this.body = body;
-//        this.topic = topic;
-//        this.context = context;
-//    }
 
     public void NotificationCreate (){
 
