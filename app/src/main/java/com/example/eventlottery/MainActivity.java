@@ -145,10 +145,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-//                if (curUser.getFacilityID().equals("")) {
-//                    Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
-//                    new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
-//                }
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.flFragment, new FacilityFragment(db, curUser, facility))
@@ -165,15 +161,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.flFragment, new Profile(db, curUser))
-                        //.replace(R.id.flFragment, new Profile(db, profileFragment))
                         .commit();
                 return true;
         }
         return false; // if nothing was found then return false
-    }
-
-    public void createFacility(String userID) {
-        curUser.setFacilityID(androidIDStr);
-        usersRef.document(userID).set(curUser);
     }
 }

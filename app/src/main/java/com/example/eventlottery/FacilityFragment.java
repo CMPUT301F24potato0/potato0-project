@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -35,6 +36,8 @@ public class FacilityFragment extends Fragment {
     private FirebaseFirestore db;
     private FacilityModel facilityModel;
 
+    private ListView eventListView;
+
 
     public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
         this.db = db;
@@ -63,39 +66,14 @@ public class FacilityFragment extends Fragment {
         createFacilityFirstPage = rootview.findViewById(R.id.createFacilityFirstPage);
         facilityPage = rootview.findViewById(R.id.FacilityPage);
 
+        eventListView = rootview.findViewById(R.id.facility_page_events_listview);
+
         if (curUser.getFacilityID().equals("")) {
             changeView(0);
         }
         else {
             changeView(1);
         }
-
-//        db.collection("users").document(curUser.getiD()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    progressBar.setVisibility(View.GONE);
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        curUser = document.toObject(CurrentUser.class);
-//                        if (curUser.getFacilityID().equals("")) {
-//                            changeView(0);
-//                        } else {
-//                            changeView(1);
-//                        }
-//                    } else {
-//                        Log.d("Firestore", "No such document");
-//                    }
-//                } else {
-//                    Log.d("Firestore", "get failed with ", task.getException());
-//                }
-//            }
-//        });
-
-//        if (facility_dne) {
-//            changeView(0);
-//        }
-//        checkFacility(createFacilityFirstPage, facilityPage);
 
         Button createFacilityBtn = rootview.findViewById(R.id.create_facility_button);
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
