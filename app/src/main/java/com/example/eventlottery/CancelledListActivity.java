@@ -42,7 +42,7 @@ public class CancelledListActivity extends AppCompatActivity {
 
 
         cancelledList = findViewById(R.id.cancelled_list);
-        cancelAdapter = new UserListviewAdapter(this, userCancelList);
+        cancelAdapter = new UserListviewAdapter(this, 0, userCancelList, "cancelled");
         cancelledList.setAdapter(cancelAdapter);
     }
 }

@@ -11,14 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class UserListviewAdapter extends ArrayAdapter<UsersList> {
     private String state;
-    public UserListviewAdapter(@NonNull Context context, int resource) {
-        super(context, resource);
+    public UserListviewAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list) {
+        super(context, resource, list);
     }
 
-    public UserListviewAdapter(@NonNull Context context, int resource, String state) {
-        super(context, resource);
+    public UserListviewAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, String state) {
+        super(context, resource, list);
         this.state = state;
     }
 
@@ -39,6 +41,8 @@ public class UserListviewAdapter extends ArrayAdapter<UsersList> {
         Button removeButton = view.findViewById(R.id.listview_remove_button);
         if (state == "waitlist" || state == "invite") {
             sendInviteButton.setVisibility(View.GONE);
+        } else if (state == "chosen") {
+
         } else {
             sendInviteButton.setVisibility(View.GONE);
             removeButton.setVisibility(View.GONE);
