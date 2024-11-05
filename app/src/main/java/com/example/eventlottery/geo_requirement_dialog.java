@@ -13,17 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class geo_requirement_dialog extends DialogFragment {
 
     private UsersList user;
-    private DocumentReference eventRef;
+    private EventModel event;
+    private FirebaseFirestore db;
 
-    public geo_requirement_dialog(UsersList user, DocumentReference eventRef) {
+    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
         this.user = user;
-        this.eventRef = eventRef;
+        this.event = event;
+//        this.eventRef = eventRef;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @Nullable
@@ -37,7 +42,12 @@ public class geo_requirement_dialog extends DialogFragment {
                 .setTitle("Geo location required")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    eventRef.update("waiting_list", FieldValue.arrayUnion(user));
+                    try {
+                        event.queueWaitingList(user);
+                        db.collection("events").document(event.getEventID()).set(event);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 })
                 .create();
     }
