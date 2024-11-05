@@ -273,8 +273,8 @@
 
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -479,7 +479,7 @@
                         android:textSize="15dp"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
-                        android:text="Notify Waitlisted Entrants">
+                        android:text="Notify">
                     </Button>
                     <TextView
                         android:layout_width="wrap_content"
@@ -512,12 +512,12 @@
                     </TextView>
 
                 </LinearLayout>
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/event_waitlist_id">
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/waitList_listview">
 
-                </ListView>
+                    </ListView>
             </LinearLayout>
 
         </LinearLayout>

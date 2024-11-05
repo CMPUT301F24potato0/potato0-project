@@ -33,7 +33,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
             event = (EventModel) extra.getSerializable("eventModel");
         }
         notify = findViewById(R.id.notify_btn_id);
-        waitlist = findViewById(R.id.event_waitlist_id);
+        waitlist = findViewById(R.id.waitList_listview);
 
     }
 }

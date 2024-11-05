@@ -77,7 +77,7 @@ public class EventEntrantActivity extends AppCompatActivity {
             eventID = extras.getString("event_id");
             userID = extras.getString("user_id");
             userName = extras.getString("user_name");
-            currentUser = extras.getParcelable("userModel");
+            currentUser = (CurrentUser) extras.getSerializable("userModel");
             userList = new UsersList(userID, userName);
         }
 
