@@ -17,6 +17,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button notify;
     private ListView waitlist;
     private EventModel event;
+    private UserListviewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class EventWaitlistActivity extends AppCompatActivity {
         }
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
+
+        adapter = new UserListviewAdapter(this, R.layout.user_listview_content, "waitlist");
 
     }
 }

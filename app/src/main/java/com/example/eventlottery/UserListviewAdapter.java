@@ -12,9 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class UserListviewAdapter extends ArrayAdapter<UsersList> {
-
+    private String state;
     public UserListviewAdapter(@NonNull Context context, int resource) {
         super(context, resource);
+    }
+
+    public UserListviewAdapter(@NonNull Context context, int resource, String state) {
+        super(context, resource);
+        this.state = state;
     }
 
     @NonNull
@@ -32,8 +37,12 @@ public class UserListviewAdapter extends ArrayAdapter<UsersList> {
         userName.setText(user.getName());
         Button sendInviteButton = view.findViewById(R.id.listview_send_invite_button);
         Button removeButton = view.findViewById(R.id.listview_remove_button);
-        sendInviteButton.setVisibility(View.GONE);
-        removeButton.setVisibility(View.GONE);
+        if (state == "waitlist" || state == "invite") {
+            sendInviteButton.setVisibility(View.GONE);
+        } else {
+            sendInviteButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.GONE);
+        }
         return view;
     }
 }
