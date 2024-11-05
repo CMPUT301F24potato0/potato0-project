@@ -135,5 +135,28 @@ public class EventOrganizerActivity extends AppCompatActivity {
 //                transaction.commit();
             }
         });
+
+        cancelled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+            }
+        });
+
+        invited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+            }
+        });
+
+        enrolled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+            }
+        });
     }
 }

@@ -13,6 +13,9 @@
         android:theme="@style/Theme.EventLottery"
         tools:targetApi="31">
         <activity
+            android:name=".InvitedListActivity"
+            android:exported="false" />
+        <activity
             android:name=".EventWaitlistActivity"
             android:exported="false" />
         <activity
