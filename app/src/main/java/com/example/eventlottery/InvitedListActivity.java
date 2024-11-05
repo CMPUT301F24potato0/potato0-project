@@ -38,7 +38,7 @@ public class InvitedListActivity extends AppCompatActivity {
             event = (EventModel) e.getSerializable("eventModel");
         }
 
-        userInvitedList = event.getCancelledList();
+        userInvitedList = event.getInvitedList();
 
         invitedList = findViewById(R.id.invited_list);
         invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite");
