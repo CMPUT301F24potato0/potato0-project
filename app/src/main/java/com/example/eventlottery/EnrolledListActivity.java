@@ -42,7 +42,7 @@ public class EnrolledListActivity extends AppCompatActivity {
 
 
         enrollList = findViewById(R.id.enroll_list);
-        enrollAdapter = new UserListviewAdapter(this, 0, userEnrollList, "cancelled");
+        enrollAdapter = new UserListviewAdapter(this, 0, userEnrollList, "enrolled");
         enrollList.setAdapter(enrollAdapter);
     }
 }
