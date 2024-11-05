@@ -1,6 +1,8 @@
 package com.example.eventlottery;
 
-public class UsersList {
+import java.io.Serializable;
+
+public class UsersList implements Serializable {
     private String iD;
     private String name;
 
