@@ -1,6 +1,5 @@
 package com.example.eventlottery;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.EventLogTags;
@@ -20,6 +19,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button notify;
     private ListView waitlist;
     private EventModel event;
+    private UserListviewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,8 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 sendNotification.popup();
             }
         });
+
+        adapter = new UserListviewAdapter(this, R.layout.user_listview_content, "waitlist");
 
     }
 }

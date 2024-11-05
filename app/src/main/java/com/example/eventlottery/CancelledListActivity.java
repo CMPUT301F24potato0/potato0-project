@@ -1,7 +1,7 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,9 +10,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class CancelledListActivity extends AppCompatActivity {
 
-    private Button notify;
+    private ArrayList<UsersList> userCancelList;
+    private ListView cancelledList;
+    private ArrayAdapter<UsersList> cancelAdapter;
     private EventModel event;
 
     @Override
@@ -26,5 +30,19 @@ public class CancelledListActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        userCancelList = new ArrayList<UsersList>();
+
+        Bundle e = getIntent().getExtras();
+        if (e != null) {
+            event = (EventModel) e.getSerializable("eventModel");
+        }
+
+        userCancelList = event.getCancelledList();
+
+
+        cancelledList = findViewById(R.id.cancelled_list);
+        cancelAdapter = new UserListviewAdapter(this, userCancelList);
+
     }
 }
