@@ -120,6 +120,12 @@ public class EventEntrantActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
+                    // eventRef = eventID
+                    String topic = eventRef + "_waitlist";
+                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
+                    unsubscribeFromTopic.unsubscribe();
+
+
                 }
             });
         } else {
@@ -130,11 +136,21 @@ public class EventEntrantActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (event.getGeolocationRequired()) {
                         new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                        // eventRef = eventID
+                        String topic = eventRef + "_waitlist";
+                        SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+                        subscribeToTopic.subscribe();
+
                     }
                     else {
                         try {
 //                            Toast.makeText(EventEntrantActivity.this, "Calling queueWaitingList", Toast.LENGTH_SHORT).show();
                             event.queueWaitingList(userList);
+                            // eventRef = eventID
+                            String topic = eventRef + "_waitlist";
+                            SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+                            subscribeToTopic.subscribe();
+
                         } catch (Exception e) {
                             Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
                         }

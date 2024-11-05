@@ -1,7 +1,10 @@
 package com.example.eventlottery;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.EventLogTags;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +37,15 @@ public class EventWaitlistActivity extends AppCompatActivity {
         }
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
+
+        notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String topic = event.getEventID() + "_waitlist";
+                SendNotification sendNotification = new SendNotification(getApplicationContext(),topic);
+                sendNotification.popup();
+            }
+        });
 
     }
 }
