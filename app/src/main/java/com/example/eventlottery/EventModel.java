@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class EventModel {
+public class EventModel implements java.io.Serializable {
     private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings

@@ -1,5 +1,6 @@
 package com.example.eventlottery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -117,10 +118,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
         waitlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                event_waitlist eventWaitlist = new event_waitlist();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.main,eventWaitlist);
-                transaction.commit();
+                Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+//                event_waitlist eventWaitlist = new event_waitlist();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.main,eventWaitlist);
+//                transaction.commit();
             }
         });
     }

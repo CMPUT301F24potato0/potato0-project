@@ -32,6 +32,7 @@ public class event_waitlist extends Fragment {
             }
         });
 
+
         return rootView;
     }
 }
