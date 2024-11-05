@@ -38,7 +38,7 @@ public class EnrolledListActivity extends AppCompatActivity {
             event = (EventModel) e.getSerializable("eventModel");
         }
 
-        userEnrollList = event.getCancelledList();
+        userEnrollList = event.getEnrolledList();
 
 
         enrollList = findViewById(R.id.enroll_list);
