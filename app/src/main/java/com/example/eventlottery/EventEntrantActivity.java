@@ -110,27 +110,40 @@ public class EventEntrantActivity extends AppCompatActivity {
         eventDescription.setText(event.getEventDescription());
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
-        if (event.getWaitingList().contains(userList.getiD())) {
+        if (event.getWaitingList().contains(userList)) {
             unjoinBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             unjoinBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    try {
+                        event.unqueueWaitingList(userList);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
         } else {
             unjoinBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
-//            joinBtn.setOnClickListener();
+            joinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (event.getGeolocationRequired()) {
+                        new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                    }
+                    else {
+                        try {
+                            event.queueWaitingList(userList);
+                            db.collection("events").document(event.getEventID()).set(event);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
         }
 
-        if (event.getGeolocationRequired()) {
-
-        }
-        else {
-
-        }
 //        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
 //            @Override
 //            public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException error) {

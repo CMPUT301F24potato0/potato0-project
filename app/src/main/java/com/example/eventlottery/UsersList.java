@@ -9,6 +9,14 @@ public class UsersList implements Serializable {
     public UsersList() {
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public UsersList(String iD, String name) {
         this.iD = iD;
         this.name = name;
@@ -21,4 +29,5 @@ public class UsersList implements Serializable {
     public void setiD(String iD) {
         this.iD = iD;
     }
+
 }
