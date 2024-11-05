@@ -127,6 +127,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                                 String topic = eventRef + "_waitlist";
                                 SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
                                 subscribeToTopic.subscribe();
+                                Log.e("Subscribed to topic",topic);
 
                             }
                         });
@@ -136,6 +137,10 @@ public class EventEntrantActivity extends AppCompatActivity {
                         joinBtn.setOnClickListener(new View.OnClickListener() {
                            @Override
                            public void onClick(View view) {
+                               String topic = eventRef + "_waitlist";
+                               UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
+                               unsubscribeFromTopic.unsubscribe();
+                               Log.e("Unsubscribed to topic",topic);
                                if (geo) {
                                    new geo_requirement_dialog(userID, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
                                } else {

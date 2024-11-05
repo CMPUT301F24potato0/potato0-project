@@ -1,12 +1,17 @@
 package com.example.eventlottery;
 
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.service.credentials.Action;
 import android.util.Log;
 import android.widget.Toast;
@@ -37,12 +42,18 @@ public class PushNotificationService extends FirebaseMessagingService{
 
         final String channel_id = "notification_popup";
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            Boolean ismuted = WaitlistedEventsFragment.getIsmute();
+            Log.e("Ismuted", String.valueOf(ismuted));
+
             NotificationChannel channel = new NotificationChannel(
                     channel_id,
                     "Heads Up Notification", // We can put event name here
                     NotificationManager.IMPORTANCE_HIGH);
+
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
+
             NotificationCompat.Builder notification;
             if(topic.contains(check)) {
                 Intent action1 = new Intent(this, MyBroadcastReceiver.class);
@@ -75,7 +86,7 @@ public class PushNotificationService extends FirebaseMessagingService{
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setAutoCancel(true);
             }
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
 
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -88,9 +99,11 @@ public class PushNotificationService extends FirebaseMessagingService{
             }
 
 
-            NotificationManagerCompat.from(this).notify(1,notification.build());
-        }
+           if(!ismuted) {
+               NotificationManagerCompat.from(this).notify(1, notification.build());
+           }
 
         super.onMessageReceived(remoteMessage);
+        }
     }
 }

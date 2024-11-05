@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     Log.e("Permission","Granted");
                 } else {
                     // TODO: Inform user that that your app will not show notifications.
+                    Log.e("Permission","Not granted");
                 }
             });
 

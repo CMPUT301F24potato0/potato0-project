@@ -1,6 +1,10 @@
 package com.example.eventlottery;
 
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,10 +38,15 @@ public class WaitlistedEventsFragment extends Fragment{
     private Button subscribe;
     private Button notification_btn;
     private Context context;
+    private Button mute_btn;
+    private Button unmute_btn;
+    private static boolean ismuted = false;
     public WaitlistedEventsFragment(){
         // require a empty public constructor
     }
-
+    public static boolean getIsmute(){
+        return ismuted;
+    }
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -57,6 +66,8 @@ public class WaitlistedEventsFragment extends Fragment{
 
         notification_btn = (Button) rootview.findViewById(R.id.notification_button_id);
         subscribe = (Button) rootview.findViewById(R.id.Button_id);
+        mute_btn = (Button) rootview.findViewById(R.id.mute);
+        unmute_btn = (Button) rootview.findViewById(R.id.unmute);
 
         notification_btn.setOnClickListener(view -> {
 //            if (test_context == null)
@@ -78,6 +89,20 @@ public class WaitlistedEventsFragment extends Fragment{
                 String topic = "testTopic_signup";
                 SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,context);
                 subscribeToTopic.subscribe();
+            }
+        });
+        mute_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = true;
+                Toast.makeText(context,"muted",Toast.LENGTH_SHORT).show();
+            }
+        });
+        unmute_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = false;
+                Toast.makeText(context,"unmuted",Toast.LENGTH_SHORT).show();
             }
         });
 
