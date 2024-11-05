@@ -139,7 +139,10 @@ public class EventOrganizerActivity extends AppCompatActivity {
         cancelled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+                Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+
             }
         });
 
@@ -155,7 +158,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         enrolled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+                Intent i = new Intent(EventOrganizerActivity.this, EnrolledListActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
             }
         });
     }
