@@ -11,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class UserListviewAdapter extends ArrayAdapter<UsersList> {
 
-    public UserListviewAdapter(@NonNull Context context, int resource) {
-        super(context, resource);
+    public UserListviewAdapter(Context context, ArrayList<UsersList> events) {
+        super(context, 0, events);
     }
 
     @NonNull
