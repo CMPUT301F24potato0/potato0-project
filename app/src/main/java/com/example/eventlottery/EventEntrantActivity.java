@@ -37,11 +37,8 @@ public class EventEntrantActivity extends AppCompatActivity {
     private DocumentReference facilityRef;
     private String organizer;
     // Event stuff and user stuff
-    private String eventID;
-    private String userID;
-    private String userName;
     private UsersList userList;
-    private CurrentUser currentUser;
+    private EventModel event;
     // XML stuff
     private TextView eventDescription;
     private ImageView eventPoster;
@@ -74,11 +71,13 @@ public class EventEntrantActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            eventID = extras.getString("event_id");
-            userID = extras.getString("user_id");
-            userName = extras.getString("user_name");
-            currentUser = (CurrentUser) extras.getSerializable("userModel");
-            userList = new UsersList(userID, userName);
+//            eventID = extras.getString("event_id");
+//            userID = extras.getString("user_id");
+//            userName = extras.getString("user_name");
+//            currentUser = (CurrentUser) extras.getSerializable("userModel");
+//            userList = ;
+            event = (EventModel) extras.getSerializable("eventModel");
+            userList = (UsersList) extras.getSerializable("userList");
         }
 
         db = FirebaseFirestore.getInstance();
@@ -99,60 +98,105 @@ public class EventEntrantActivity extends AppCompatActivity {
         back = findViewById(R.id.floatingActionButton);
 
         // getting event information from Firestore
-        final DocumentReference eventRef = db.collection("events").document(eventID);
+        final DocumentReference eventRef = db.collection("events").document(event.getEventID());
 
-        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("Firebase Error", "Listen failed.", e);
-                    return;
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("Firebase Data", "Current data: " + snapshot.getData());
-                    eventTitle.setText(snapshot.getString("eventTitle"));
-                    eventLocation.setText(snapshot.getString("eventStrLocation"));
-                    Date javaDate = snapshot.getTimestamp("joinDeadline").toDate();
-                    eventDate.setText(javaDate.toString());
-                    organizer = snapshot.getString("organizer");
-                    organizerName.setText(organizer);
-                    eventDescription.setText(snapshot.getString("eventDescription"));
-                    progressBar.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.VISIBLE);
-                    boolean geo = snapshot.getBoolean("geolocationRequired");
-                    if (((List<String>) snapshot.get("waitingList")).contains(userID)) {
-                        unjoinBtn.setVisibility(View.VISIBLE);
-                        joinBtn.setVisibility(View.GONE);
-                        unjoinBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                eventRef.update("waitingList", FieldValue.arrayRemove(userID));
-                                String topic = eventRef + "_waitlist";
-                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
-                                subscribeToTopic.subscribe();
 
-                            }
-                        });
-                    } else {
-                        unjoinBtn.setVisibility(View.GONE);
-                        joinBtn.setVisibility(View.VISIBLE);
-                        joinBtn.setOnClickListener(new View.OnClickListener() {
-                           @Override
-                           public void onClick(View view) {
-                               if (geo) {
-                                   new geo_requirement_dialog(userList, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                               } else {
-                                   eventRef.update("waitingList", FieldValue.arrayUnion(userList));
-                               }
-                           }
-                        });
-                    }
-                } else {
-                    Log.d("Firebase data", "Current data: null");
+        eventTitle.setText(event.getEventTitle());
+        eventLocation.setText(event.getEventStrLocation());
+        Date javaDate = event.getJoinDeadline();
+        eventDate.setText(javaDate.toString());
+        organizer = event.getOrganizer();
+        organizerName.setText(organizer);
+        eventDescription.setText(event.getEventDescription());
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+        if (event.getWaitingList().contains(userList.getiD())) {
+            unjoinBtn.setVisibility(View.VISIBLE);
+            joinBtn.setVisibility(View.GONE);
+            unjoinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
-            }
-        });
+            });
+        } else {
+            unjoinBtn.setVisibility(View.GONE);
+            joinBtn.setVisibility(View.VISIBLE);
+            joinBtn.setOnClickListener();
+        }
+
+        if (event.getGeolocationRequired()) {
+
+        }
+        else {
+
+        }
+//        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException error) {
+//                if (error != null) {
+//                    Log.w("Firebase Error", "Listen failed.", error);
+//                    return;
+//                }
+//                if (document != null && document.exists()) {
+//                    Log.d("Firebase Data", "Current data: " + document.getData());
+//
+//                }
+//            }
+//        });
+
+//        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot snapshot,
+//                                @Nullable FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    Log.w("Firebase Error", "Listen failed.", e);
+//                    return;
+//                }
+//                if (snapshot != null && snapshot.exists()) {
+//                    Log.d("Firebase Data", "Current data: " + snapshot.getData());
+//                    eventTitle.setText(snapshot.getString("eventTitle"));
+//                    eventLocation.setText(snapshot.getString("eventStrLocation"));
+//                    Date javaDate = snapshot.getTimestamp("joinDeadline").toDate();
+//                    eventDate.setText(javaDate.toString());
+//                    organizer = snapshot.getString("organizer");
+//                    organizerName.setText(organizer);
+//                    eventDescription.setText(snapshot.getString("eventDescription"));
+//                    progressBar.setVisibility(View.GONE);
+//                    linearLayout.setVisibility(View.VISIBLE);
+//                    boolean geo = snapshot.getBoolean("geolocationRequired");
+//                    if (((List<String>) snapshot.get("waitingList")).contains(userID)) {
+//                        unjoinBtn.setVisibility(View.VISIBLE);
+//                        joinBtn.setVisibility(View.GONE);
+//                        unjoinBtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                eventRef.update("waitingList", FieldValue.arrayRemove(userList));
+//                                String topic = eventRef + "_waitlist";
+//                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+//                                subscribeToTopic.subscribe();
+//
+//                            }
+//                        });
+//                    } else {
+//                        unjoinBtn.setVisibility(View.GONE);
+//                        joinBtn.setVisibility(View.VISIBLE);
+//                        joinBtn.setOnClickListener(new View.OnClickListener() {
+//                           @Override
+//                           public void onClick(View view) {
+//                               if (geo) {
+//                                   new geo_requirement_dialog(userList, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
+//                               } else {
+//                                   eventRef.update("waitingList", FieldValue.arrayUnion(userList));
+//                               }
+//                           }
+//                        });
+//                    }
+//                } else {
+//                    Log.d("Firebase data", "Current data: null");
+//                }
+//            }
+//        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
