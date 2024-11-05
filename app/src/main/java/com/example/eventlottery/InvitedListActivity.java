@@ -10,7 +10,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class InvitedListActivity extends AppCompatActivity {
 
@@ -18,6 +21,7 @@ public class InvitedListActivity extends AppCompatActivity {
     private ListView invitedList;
     private ArrayAdapter<UsersList> invitedAdapter;
     private EventModel event;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class InvitedListActivity extends AppCompatActivity {
         userInvitedList = event.getInvitedList();
 
         invitedList = findViewById(R.id.invited_list);
-        invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite");
+        invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite", event, db);
         invitedList.setAdapter(invitedAdapter);
     }
 }

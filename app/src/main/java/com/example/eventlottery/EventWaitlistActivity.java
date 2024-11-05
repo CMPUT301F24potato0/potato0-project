@@ -1,18 +1,23 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.EventLogTags;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.ArrayList;
 
 public class EventWaitlistActivity extends AppCompatActivity {
 
@@ -20,6 +25,10 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private ListView waitlist;
     private EventModel event;
     private UserListviewAdapter adapter;
+    private Button remove;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private ArrayList<UsersList> userWaitList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +55,28 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 sendNotification.popup();
             }
         });
+        userWaitList = new ArrayList<UsersList>();
+        userWaitList = event.getWaitingList();
+        adapter = new UserListviewAdapter(this, R.layout.user_listview_content, userWaitList, "waitlist", event, db);
 
-        adapter = new UserListviewAdapter(this, R.layout.user_listview_content, "waitlist");
-
+        db.collection("events").
+                document(event.getEventID()).
+                addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                if (doc != null && doc.exists()) {
+                    userWaitList.clear();
+                    for(UsersList u : doc.toObject(EventModel.class).getWaitingList()) {
+                        userWaitList.add(u);
+                        adapter.notifyDataSetChanged();
+                    }
+//                    userWaitList = (ArrayList<UsersList>) doc.get("waitingList");
+                }
+            }
+        });
+        waitlist.setAdapter(adapter);
     }
 }

@@ -104,7 +104,7 @@ public class ScanFragment extends Fragment {
     /**
      * This function gets the events collection and then loops through to find the event that was scanned.
      * If event is not found it creates a new toast displaying error message.
-     * @param event The eventID scanned from the qr code
+     * @param eventID The eventID scanned from the qr code
      */
     private void checkEvent(String eventID, String userId) {
         CollectionReference eventRef = db.collection("events");
@@ -124,7 +124,8 @@ public class ScanFragment extends Fragment {
                             eventFound = true;
                             EventModel temp = doc.toObject(EventModel.class);
                             Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-                            i.putExtra("userList", new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName()));
+                            UsersList userList = new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName());
+                            i.putExtra("userList", userList);
                             i.putExtra("eventModel", temp);
                             startActivity(i);
                             break;

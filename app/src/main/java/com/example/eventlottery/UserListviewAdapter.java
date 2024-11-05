@@ -11,17 +11,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
 import java.util.ArrayList;
 
 public class UserListviewAdapter extends ArrayAdapter<UsersList> {
     private String state;
+    private ArrayList<UsersList> list;
+    private EventModel event;
+    private FirebaseFirestore db;
+
     public UserListviewAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list) {
         super(context, resource, list);
     }
 
-    public UserListviewAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, String state) {
+    public UserListviewAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, String state, EventModel event, FirebaseFirestore db) {
         super(context, resource, list);
+        this.list = list;
         this.state = state;
+        this.event = event;
+        this.db = db;
     }
 
     @NonNull
@@ -39,14 +51,32 @@ public class UserListviewAdapter extends ArrayAdapter<UsersList> {
         userName.setText(user.getName());
         Button sendInviteButton = view.findViewById(R.id.listview_send_invite_button);
         Button removeButton = view.findViewById(R.id.listview_remove_button);
-        if (state == "waitlist" || state == "invite") {
+        if (state == "waitlist") {
             sendInviteButton.setVisibility(View.GONE);
+            removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    event.unqueueWaitingList(user);
+                    removeFromList(user, list);
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+            });
         } else if (state == "chosen") {
-
-        } else {
+            sendInviteButton.setVisibility(View.VISIBLE);
+            removeButton.setVisibility(View.GONE);
+        } else if (state == "cancelled") {
             sendInviteButton.setVisibility(View.GONE);
             removeButton.setVisibility(View.GONE);
         }
+
         return view;
+    }
+    private void removeFromList(UsersList user, ArrayList<UsersList> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(user.getName())) {
+                list.remove(i);
+                notifyDataSetChanged();
+            }
+        }
     }
 }

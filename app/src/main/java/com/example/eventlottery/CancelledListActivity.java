@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class CancelledListActivity extends AppCompatActivity {
@@ -18,6 +20,7 @@ public class CancelledListActivity extends AppCompatActivity {
     private ListView cancelledList;
     private ArrayAdapter<UsersList> cancelAdapter;
     private EventModel event;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class CancelledListActivity extends AppCompatActivity {
 
 
         cancelledList = findViewById(R.id.cancelled_list);
-        cancelAdapter = new UserListviewAdapter(this, 0, userCancelList, "cancelled");
+        cancelAdapter = new UserListviewAdapter(this, 0, userCancelList, "cancelled", event, db);
         cancelledList.setAdapter(cancelAdapter);
     }
 }
