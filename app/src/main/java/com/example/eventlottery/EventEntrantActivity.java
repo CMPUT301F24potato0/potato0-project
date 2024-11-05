@@ -39,6 +39,8 @@ public class EventEntrantActivity extends AppCompatActivity {
     // Event stuff and user stuff
     private String eventID;
     private String userID;
+    private String userName;
+    private UsersList userList;
     // XML stuff
     private TextView eventDescription;
     private ImageView eventPoster;
@@ -50,7 +52,6 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -74,6 +75,8 @@ public class EventEntrantActivity extends AppCompatActivity {
         if (extras != null) {
             eventID = extras.getString("event_id");
             userID = extras.getString("user_id");
+            userName = extras.getString("user_name");
+            userList = new UsersList(userID, userName);
         }
 
         db = FirebaseFirestore.getInstance();
@@ -137,9 +140,9 @@ public class EventEntrantActivity extends AppCompatActivity {
                            @Override
                            public void onClick(View view) {
                                if (geo) {
-                                   new geo_requirement_dialog(userID, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                                   new geo_requirement_dialog(userList, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
                                } else {
-                                   eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
+                                   eventRef.update("waiting_list", FieldValue.arrayUnion(userList));
                                }
                            }
                         });

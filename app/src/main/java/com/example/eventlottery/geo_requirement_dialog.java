@@ -18,11 +18,11 @@ import com.google.firebase.firestore.FieldValue;
 
 public class geo_requirement_dialog extends DialogFragment {
 
-    private String userID;
+    private UsersList user;
     private DocumentReference eventRef;
 
-    public geo_requirement_dialog(String userID, DocumentReference eventRef) {
-        this.userID = userID;
+    public geo_requirement_dialog(UsersList user, DocumentReference eventRef) {
+        this.user = user;
         this.eventRef = eventRef;
     }
 
@@ -37,7 +37,7 @@ public class geo_requirement_dialog extends DialogFragment {
                 .setTitle("Geo location required")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
+                    eventRef.update("waiting_list", FieldValue.arrayUnion(user));
                 })
                 .create();
     }
