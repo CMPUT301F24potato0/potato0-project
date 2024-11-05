@@ -122,7 +122,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         } else {
             unjoinBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
-            joinBtn.setOnClickListener();
+//            joinBtn.setOnClickListener();
         }
 
         if (event.getGeolocationRequired()) {
