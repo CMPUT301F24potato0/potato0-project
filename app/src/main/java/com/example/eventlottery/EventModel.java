@@ -15,6 +15,7 @@ public class EventModel implements Serializable {
     private ArrayList<UsersList> invitedList;
     private ArrayList<UsersList> cancelledList;
     private ArrayList<UsersList> enrolledList;
+    private ArrayList<UsersList> chosenList;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -44,7 +45,9 @@ public class EventModel implements Serializable {
         invitedList = new ArrayList<UsersList>();
         cancelledList = new ArrayList<UsersList>();
         enrolledList = new ArrayList<UsersList>();
+        chosenList = new ArrayList<UsersList>();
     }
+
     public EventModel(String facilityID,
                       Boolean geolocationRequired,
                       Integer waitingListLimit,
@@ -67,11 +70,6 @@ public class EventModel implements Serializable {
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.organizer = organizer;
-        this.waitingList = new ArrayList<UsersList>();
-        this.invitedList = new ArrayList<UsersList>();
-        this.cancelledList = new ArrayList<UsersList>();
-        this.enrolledList = new ArrayList<UsersList>();
-
     }
 
     public EventModel(String facilityID,
@@ -91,14 +89,14 @@ public class EventModel implements Serializable {
     /**
      * This function adds another user to the waiting list only if the waiting list
      * has not reached its limit, and if the user has not been added yet.
-     * @param userID The entrant's unique user ID
+     * @param user The entrant's unique user
      * @throws Exception Throws an exception if the waiting list is full
      */
-    public void queueWaitingList(UsersList userID) throws Exception {
+    public void queueWaitingList(UsersList user) throws Exception {
         if (waitingListIsFull()) {
             throw new Exception("The waiting list for this event is full!");
         }
-        waitingList.add(userID);
+        waitingList.add(user);
 //        if (this.checkUserInList(userID, waitingList)) {
 //            waitingList.add(userID);
 //        }
@@ -106,12 +104,12 @@ public class EventModel implements Serializable {
 
     /**
      * This function removes the provided user from the waiting list.
-     * @param userID The entrant's unique user ID
+     * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the waiting list
      */
-    public void unqueueWaitingList(UsersList userID){
+    public void unqueueWaitingList(UsersList user){
         for (int i = 0; i < waitingList.size(); i++) {
-            if (waitingList.get(i).getiD().equals(userID.getiD())) {
+            if (waitingList.get(i).getiD().equals(user.getiD())) {
                 waitingList.remove(i);
             }
         }
@@ -129,29 +127,33 @@ public class EventModel implements Serializable {
     }
 
     // TODO: this function
-    public void queueInvitedList(UsersList userID) {
+    public void queueInvitedList(UsersList user) {
         return;
     }
 
     // TODO: this function
-    public void unqueueInvitedList(UsersList userID){
+    public void unqueueInvitedList(UsersList user){
         return;
     }
 
     // TODO: this function
-    public void queueCancelledList(UsersList userID) {
+    public void queueCancelledList(UsersList user) {
         return;
     }
 
     // TODO: this function
-    public void queueEnrolledList(UsersList userID) {
+    public void queueEnrolledList(UsersList user) {
         return;
     }
 
-    // TODO: customize to generate a unique ID to store as the event's document name in Firestore
-    private String generateID() {
-        Random rand = new Random();
-        return Integer.toString(rand.nextInt(100000));
+    // TODO: this function
+    public void queueChosenList(UsersList user) {
+        return;
+    }
+
+    // TODO: this function
+    public void unqueueChosenList(UsersList user) {
+        return;
     }
 
     public String getFacilityID() {
@@ -272,6 +274,14 @@ public class EventModel implements Serializable {
 
     public void setEnrolledList(ArrayList<UsersList> enrolledList) {
         this.enrolledList = enrolledList;
+    }
+
+    public ArrayList<UsersList> getChosenList() {
+        return chosenList;
+    }
+
+    public void setChosenList(ArrayList<UsersList> chosenList) {
+        this.chosenList = chosenList;
     }
 
     public boolean checkUserInList(UsersList user, ArrayList<UsersList> list) {
