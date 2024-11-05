@@ -146,7 +146,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         invited.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
+                Intent i = new Intent(EventOrganizerActivity.this, InvitedListActivity.class);
                 i.putExtra("eventModel", event);
                 startActivity(i);
             }
