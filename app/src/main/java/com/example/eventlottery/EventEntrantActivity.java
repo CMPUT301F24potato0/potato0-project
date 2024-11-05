@@ -110,23 +110,23 @@ public class EventEntrantActivity extends AppCompatActivity {
                 }
                 if (snapshot != null && snapshot.exists()) {
                     Log.d("Firebase Data", "Current data: " + snapshot.getData());
-                    eventTitle.setText(snapshot.getString("title"));
-                    eventLocation.setText(snapshot.getString("location_string"));
-                    Date javaDate = snapshot.getTimestamp("join_deadline").toDate();
+                    eventTitle.setText(snapshot.getString("eventTitle"));
+                    eventLocation.setText(snapshot.getString("eventStrLocation"));
+                    Date javaDate = snapshot.getTimestamp("joinDeadline").toDate();
                     eventDate.setText(javaDate.toString());
                     organizer = snapshot.getString("organizer");
                     organizerName.setText(organizer);
-                    eventDescription.setText(snapshot.getString("description"));
+                    eventDescription.setText(snapshot.getString("eventDescription"));
                     progressBar.setVisibility(View.GONE);
                     linearLayout.setVisibility(View.VISIBLE);
-                    boolean geo = snapshot.getBoolean("geolocation_required");
-                    if (((List<String>) snapshot.get("waiting_list")).contains(userID)) {
+                    boolean geo = snapshot.getBoolean("geolocationRequired");
+                    if (((List<String>) snapshot.get("waitingList")).contains(userID)) {
                         unjoinBtn.setVisibility(View.VISIBLE);
                         joinBtn.setVisibility(View.GONE);
                         unjoinBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                eventRef.update("waiting_list", FieldValue.arrayRemove(userID));
+                                eventRef.update("waitingList", FieldValue.arrayRemove(userID));
                                 String topic = eventRef + "_waitlist";
                                 SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
                                 subscribeToTopic.subscribe();
@@ -142,7 +142,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                                if (geo) {
                                    new geo_requirement_dialog(userList, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
                                } else {
-                                   eventRef.update("waiting_list", FieldValue.arrayUnion(userList));
+                                   eventRef.update("waitingList", FieldValue.arrayUnion(userList));
                                }
                            }
                         });

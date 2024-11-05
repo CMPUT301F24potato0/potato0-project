@@ -22,6 +22,7 @@ public class EventModel implements java.io.Serializable {
     private String eventTitle;
     private String eventDescription;
     private String hashQR; // TODO: part 4
+    private String organizer;
 
     // TODO: part 4 - poster image
   
@@ -37,6 +38,7 @@ public class EventModel implements java.io.Serializable {
         eventTitle = "";
         eventDescription = "";
         hashQR = "";
+        organizer = "";
         waitingList = new ArrayList<UsersList>();
         invitedList = new ArrayList<UsersList>();
         cancelledList = new ArrayList<UsersList>();
@@ -48,7 +50,8 @@ public class EventModel implements java.io.Serializable {
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle,
-                      String eventDescription) {
+                      String eventDescription,
+                      String organizer) {
 
         this();
 
@@ -60,6 +63,7 @@ public class EventModel implements java.io.Serializable {
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
+        this.organizer = organizer;
         this.waitingList = new ArrayList<UsersList>();
         this.invitedList = new ArrayList<UsersList>();
         this.cancelledList = new ArrayList<UsersList>();
@@ -74,8 +78,9 @@ public class EventModel implements java.io.Serializable {
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle,
-                      String eventDescription) {
-        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription);
+                      String eventDescription,
+                      String organizer) {
+        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription, organizer);
         this.eventID = eventID;
     }
 
@@ -221,6 +226,14 @@ public class EventModel implements java.io.Serializable {
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
+    }
+
+    public String getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(String organizer) {
+        this.organizer = organizer;
     }
 
     public ArrayList<UsersList> getWaitingList() {

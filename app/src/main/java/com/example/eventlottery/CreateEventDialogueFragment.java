@@ -178,7 +178,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         joinDeadline,
                         strLocation,
                         eventTitle,
-                        eventDescription
+                        eventDescription,
+                        organizer.getfName() + " " + organizer.getlName()
                 );
                 db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
