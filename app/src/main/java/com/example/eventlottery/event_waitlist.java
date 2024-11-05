@@ -28,7 +28,7 @@ public class event_waitlist extends Fragment {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // need eventID
             }
         });
 

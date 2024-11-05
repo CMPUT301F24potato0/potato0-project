@@ -65,8 +65,9 @@ public class WaitlistedEventsFragment extends Fragment{
 
             // CAlLS SendNotification
             this.context = requireContext();
-//            SendNotification sendNotification = new SendNotification(context,topic);
-//            sendNotification.popup();
+            String topic = "testTopic_signup";
+            SendNotification sendNotification = new SendNotification(context,topic);
+            sendNotification.popup();
             // CALLS
 
 
@@ -74,7 +75,7 @@ public class WaitlistedEventsFragment extends Fragment{
         subscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String topic = "testTopic";
+                String topic = "testTopic_signup";
                 SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,context);
                 subscribeToTopic.subscribe();
             }
