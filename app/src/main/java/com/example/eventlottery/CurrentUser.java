@@ -1,9 +1,11 @@
 package com.example.eventlottery;
 
+import java.io.Serializable;
+
 /**
  * This Class stores the current user's information
  */
-public class CurrentUser {
+public class CurrentUser implements Serializable {
     private String fName;
     private String lName;
     private String email;

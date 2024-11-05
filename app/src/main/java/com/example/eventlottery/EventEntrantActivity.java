@@ -41,6 +41,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private String userID;
     private String userName;
     private UsersList userList;
+    private CurrentUser currentUser;
     // XML stuff
     private TextView eventDescription;
     private ImageView eventPoster;
@@ -76,6 +77,7 @@ public class EventEntrantActivity extends AppCompatActivity {
             eventID = extras.getString("event_id");
             userID = extras.getString("user_id");
             userName = extras.getString("user_name");
+            currentUser = extras.getParcelable("userModel");
             userList = new UsersList(userID, userName);
         }
 
@@ -90,7 +92,6 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizerProfilePicture = findViewById(R.id.event_entrant_page_profile_picture1);
         organizerName = findViewById(R.id.event_entrant_page_organizer_name1);
         eventDescription = findViewById(R.id.event_entrant_page_event_details1);
-
 
         progressBar = findViewById(R.id.progressBar1);
         linearLayout = findViewById(R.id.linearLayout1);

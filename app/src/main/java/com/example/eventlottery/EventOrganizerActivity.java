@@ -78,34 +78,42 @@ public class EventOrganizerActivity extends AppCompatActivity {
         waitlist = findViewById(R.id.event_organizer_waitlist_button);
         enrolled = findViewById(R.id.event_organizer_enrolled_button);
         eventView = findViewById(R.id.event_view);
+        progessBar = findViewById(R.id.progressBar2);
 
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             eventID = extra.getString("event_id");
+            event = (EventModel) extra.getSerializable("eventModel");
         }
-        progessBar = findViewById(R.id.progressBar2);
-        db.collection("events").document(eventID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                event = document.toObject(EventModel.class);
-                                eventTitle.setText(event.getEventTitle());
-                                eventDescription.setText(event.getEventDescription());
-//                                eventPoster.setImageResource(R.drawable.ic_facility_background);
-//                                organizerName.setText(document.getString("organizer"));
-                                progessBar.setVisibility(View.GONE);
-                                eventView.setVisibility(View.VISIBLE);
-                            }
-                        }
-                        else {
-                            Log.d("Firebase error", "Cached get failed: ", task.getException());
-                        }
-                    }
-                });
+        eventDescription.setText(event.getEventDescription());
+        eventTitle.setText(event.getEventTitle());
+        eventDate.setText(event.getJoinDeadline().toString());
+//        eventPoster.setImageResource(R.drawable.ic_facility_background);
+        organizerName.setText(event.getOrganizer());
+        progessBar.setVisibility(View.GONE);
+        eventView.setVisibility(View.VISIBLE);
+//        db.collection("events").document(eventID)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            if (document.exists()) {
+//                                event = document.toObject(EventModel.class);
+//                                eventTitle.setText(event.getEventTitle());
+//                                eventDescription.setText(event.getEventDescription());
+////                                eventPoster.setImageResource(R.drawable.ic_facility_background);
+////                                organizerName.setText(document.getString("organizer"));
+//                                progessBar.setVisibility(View.GONE);
+//                                eventView.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                        else {
+//                            Log.d("Firebase error", "Cached get failed: ", task.getException());
+//                        }
+//                    }
+//                });
 
 
         QRCode.setOnClickListener(new View.OnClickListener() {

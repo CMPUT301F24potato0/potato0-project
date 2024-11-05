@@ -130,6 +130,7 @@ public class ScanFragment extends Fragment {
                             Intent i = new Intent(getActivity(), EventEntrantActivity.class);
                             i.putExtra("event_id", eventId);
                             i.putExtra("user_id", userId);
+                            i.putExtra("userModel", curUser);
                             startActivity(i);
                             break;
                         }

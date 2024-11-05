@@ -2,11 +2,12 @@ package com.example.eventlottery;
 
 import com.google.firebase.firestore.auth.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class EventModel implements java.io.Serializable {
+public class EventModel implements Serializable {
     private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings

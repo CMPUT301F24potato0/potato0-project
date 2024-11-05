@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
+import android.util.EventLogTags;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         });
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
-            event = extra.getParcelable("eventModel");
+            event = (EventModel) extra.getSerializable("eventModel");
         }
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.event_waitlist_id);
