@@ -52,8 +52,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
         // initial values
         eventTitle = "";
         capacity = 0;
-        waitListLimit = 0;
-        joinDeadline = null;
+        waitListLimit = -1;
+        joinDeadline = new Date();
         strLocation = "";
         geolocationRequired = Boolean.FALSE;
         eventDescription = "";
@@ -93,7 +93,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_create_event, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-
         dialogState = 1; // initial state of the fragment
 
         frameLayout = rootView.findViewById(R.id.create_event_frameLayout);
@@ -106,14 +105,19 @@ public class CreateEventDialogueFragment extends DialogFragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogStateGetInfo();
-                dialogState += 1;
-                dialogStateSwitch();
-                if (dialogState > 1) {
-                    backButton.setText("Go back");
+                Boolean validInput = dialogStateGetInfo();
+                if (validInput) {
+                    dialogState += 1;
+                    dialogStateSwitch();
+                    if (dialogState > 1) {
+                        backButton.setText("Go back");
+                    }
+                    if (dialogState == 3) {
+                        nextButton.setText("Confirm");
+                    }
                 }
-                if (dialogState == 3) {
-                    nextButton.setText("Confirm");
+                else {
+                    Toast.makeText(getContext(), "Invalid input", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -162,7 +166,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 Switch geolocationRequiredSwitch = stateView.findViewById(R.id.create_event_switch_geolocation_required);
                 Button joinDeadlineButton = stateView.findViewById(R.id.create_event_join_deadline_button);
                 capacityEditText.setText(capacity.toString());
-                waitListLimitEditText.setText(waitListLimit.toString());
+                if (waitListLimit.equals(-1)) {
+                    waitListLimitEditText.setText("");
+                }
+                else {
+                    waitListLimitEditText.setText(waitListLimit.toString());
+                }
                 strLocationEditText.setText(strLocation);
                 geolocationRequiredSwitch.setChecked(geolocationRequired);
                 if (joinDeadline == null) {
@@ -212,28 +221,21 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         }
                     }
                 });
-//                eventRef.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentReference> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentReference documentReference = task.getResult();
-//                            String eventID = documentReference.getId();
-//                            event.setEventID(eventID);
-//                            db.collection("events").document(eventID).update("eventID", eventID);
-//                        }
-//                    }
-//                });
                 dismiss();
                 break;
         }
     }
 
-    private void dialogStateGetInfo() {
+    private Boolean dialogStateGetInfo() {
         assert (1 <= dialogState) && (dialogState <= 3);
+        Boolean validInput = Boolean.FALSE;
         switch (dialogState) {
             case 1: // get input from state 1
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
-                eventTitle = eventTitleEditText.getText().toString();
+                if (isValidString(eventTitleEditText.getText().toString())) {
+                    eventTitle = eventTitleEditText.getText().toString();
+                    validInput = Boolean.TRUE;
+                }
                 break;
             case 2: // get input from state 2
                 EditText capacityEditText = stateView.findViewById(R.id.create_event_edittext_event_capacity);
@@ -241,19 +243,38 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 EditText strLocationEditText = stateView.findViewById(R.id.create_event_edittext_event_location);
                 Switch geolocationRequiredSwitch = stateView.findViewById(R.id.create_event_switch_geolocation_required);
                 Button joinDeadlineButton = stateView.findViewById(R.id.create_event_join_deadline_button);
-                capacity = Integer.parseInt(capacityEditText.getText().toString());
-                waitListLimit = Integer.parseInt(waitListLimitEditText.getText().toString());
-                strLocation = strLocationEditText.getText().toString();
-                geolocationRequired = geolocationRequiredSwitch.isChecked();
-                // joinDeadline's value is set from inside initDatePicker onDateSet
+
+                String capacity_before_validation = capacityEditText.getText().toString();
+                String waitListLimit_before_validation = waitListLimitEditText.getText().toString();
+                String strLocation_before_validation = strLocationEditText.getText().toString();
+
+                if (isValidNumber(capacity_before_validation) && isValidString(strLocation_before_validation)) {
+                    if (isValidNumber(waitListLimit_before_validation)) {
+                        waitListLimit = Integer.parseInt(waitListLimit_before_validation);
+                    }
+                    else if (waitListLimit_before_validation.equals("")) {
+                        waitListLimit = -1; // default value for no limit on waiting list
+                    }
+                    else {
+                        break;
+                    }
+                    capacity = Integer.parseInt(capacity_before_validation);
+                    strLocation = strLocation_before_validation;
+                    geolocationRequired = geolocationRequiredSwitch.isChecked();
+                    // joinDeadline's value is set from inside initDatePicker onDateSet
+                    validInput = Boolean.TRUE;
+                }
                 break;
             case 3: // get input from state 3
                 EditText eventDescriptionEditText = stateView.findViewById(R.id.create_event_edittext_event_description);
-                eventDescription = eventDescriptionEditText.getText().toString();
+                if (isValidString(eventDescriptionEditText.getText().toString())) {
+                    eventDescription = eventDescriptionEditText.getText().toString();
+                    validInput = Boolean.TRUE;
+                }
                 break;
         }
+        return validInput;
     }
-
 
     // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
     private void initDatePicker(Button joinDeadlineButton, int year, int month, int day) {
@@ -329,5 +350,27 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 break;
         }
         return monthStr;
+    }
+
+    private Boolean isValidString(String str) {
+        // checks to make sure it is not an empty string
+        return !str.equals("");
+    }
+
+    private Boolean isValidNumber(String str) {
+        // checks to make sure it is a nonnegative number
+        if (!isValidString(str)) {
+            return Boolean.FALSE;
+        }
+        try {
+            Integer number = Integer.parseInt(str);
+            if (number < 0) {
+                return Boolean.FALSE;
+            }
+        }
+        catch(NumberFormatException e) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 }
