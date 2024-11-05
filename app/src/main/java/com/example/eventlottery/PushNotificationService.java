@@ -24,6 +24,9 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class PushNotificationService extends FirebaseMessagingService{
+
+    // https://medium.com/@Codeible/android-notifications-with-firebase-cloud-messaging-914623716dea
+
     /**
      * @param remoteMessage Remote message that has been received.
      */
@@ -44,7 +47,7 @@ public class PushNotificationService extends FirebaseMessagingService{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            Boolean ismuted = WaitlistedEventsFragment.getIsmute();
+            Boolean ismuted = Profile.getIsmute();
             Log.e("Ismuted", String.valueOf(ismuted));
 
             NotificationChannel channel = new NotificationChannel(

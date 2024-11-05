@@ -96,6 +96,7 @@ public class WaitlistedEventsFragment extends Fragment{
             public void onClick(View view) {
                 ismuted = true;
                 Toast.makeText(context,"muted",Toast.LENGTH_SHORT).show();
+
             }
         });
         unmute_btn.setOnClickListener(new View.OnClickListener() {

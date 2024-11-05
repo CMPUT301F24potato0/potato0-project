@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -26,6 +27,10 @@ public class Profile extends Fragment {
     public CollectionReference userRef;
 
     private Button editUser;
+    private Button on_notification;
+    private Button off_notification;
+    private static boolean ismuted = false;
+
 
     /**
      * Empty Constructor
@@ -42,6 +47,14 @@ public class Profile extends Fragment {
     public Profile(FirebaseFirestore db, CurrentUser curUser) {
         this.db = db;
         this.curUser = curUser;
+    }
+
+    /**
+     * This method is called when sending a notification.
+     * @return It returns the boolean ismuted, returns either true or false, depending whether wants to receive notifications or not.
+     */
+    public static boolean getIsmute(){
+        return ismuted;
     }
 
     /**
@@ -93,6 +106,41 @@ public class Profile extends Fragment {
                 curUser.setPhone(phoneStr);
 
                 userRef.document(id).set(curUser);
+            }
+        });
+
+
+        // Notifications
+        on_notification = (Button) rootView.findViewById(R.id.on_notifications);
+        off_notification = (Button) rootView.findViewById(R.id.off_notifications);
+
+        if(getIsmute() == true){
+            on_notification.setVisibility(View.GONE);
+            off_notification.setVisibility(View.VISIBLE);
+        } else if (getIsmute() == false) {
+            off_notification.setVisibility(View.GONE);
+            on_notification.setVisibility(View.VISIBLE);
+        }
+        on_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = true;
+                Toast.makeText(getActivity(),"Notifications: Off",Toast.LENGTH_SHORT).show();
+                on_notification.setVisibility(View.GONE);
+                off_notification.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        off_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = false;
+                Toast.makeText(getActivity(),"Notifications: On",Toast.LENGTH_SHORT).show();
+                off_notification.setVisibility(View.GONE);
+                on_notification.setVisibility(View.VISIBLE);
+
+
             }
         });
 

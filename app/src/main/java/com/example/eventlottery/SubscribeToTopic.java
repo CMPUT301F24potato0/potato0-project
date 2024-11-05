@@ -12,6 +12,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SubscribeToTopic {
 
+    //https://firebase.google.com/docs/cloud-messaging/android/topic-messaging
+
 
     private final String topic;
     private final Context context;
