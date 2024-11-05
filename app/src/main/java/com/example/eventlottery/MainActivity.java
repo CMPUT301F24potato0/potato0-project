@@ -104,10 +104,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView
                 = findViewById(R.id.bottomNavigationView);
 
-        bottomNavigationView
-                .setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.scanQR);
-
         mainActivityView = findViewById(R.id.main_activity_view);
         mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
 
@@ -131,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    mainActivityView.setVisibility(View.VISIBLE);
-                                    mainActivityProgressBar.setVisibility(View.GONE);
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         facility = document.toObject(FacilityModel.class);
@@ -150,8 +144,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         });
                     } else {
                         newUser(curUser);
-                        mainActivityView.setVisibility(View.VISIBLE);
-                        mainActivityProgressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
@@ -159,6 +151,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
             }
         });
+        bottomNavigationView
+                .setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.scanQR);
+        mainActivityView.setVisibility(View.VISIBLE);
+        mainActivityProgressBar.setVisibility(View.GONE);
+
     }
 
     /**

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,10 +45,28 @@ public class geo_requirement_dialog extends DialogFragment {
                 .setPositiveButton("Accept", (dialog, which) -> {
                     try {
                         event.queueWaitingList(user);
-                        db.collection("events").document(event.getEventID()).set(event);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    db.collection("events").document(event.getEventID()).set(event);
+
+//                    if (event.checkUserInList(user, event.getWaitingList())) {
+//                        db.collection("events").document(event.getEventID()).set(event);
+//                    } else {
+//                        try {
+//                            event.queueWaitingList(user);
+//                            db.collection("events").document(event.getEventID()).set(event);
+//                        } catch (Exception e) {
+//                            Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+                    //
+//                    try {
+//                        event.queueWaitingList(user);
+//                        db.collection("events").document(event.getEventID()).set(event);
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
                 })
                 .create();
     }
