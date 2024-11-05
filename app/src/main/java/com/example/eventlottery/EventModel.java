@@ -46,6 +46,7 @@ public class EventModel implements java.io.Serializable {
     }
     public EventModel(String facilityID,
                       Boolean geolocationRequired,
+                      Integer waitingListLimit,
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
@@ -58,6 +59,7 @@ public class EventModel implements java.io.Serializable {
         this.facilityID = facilityID;
         this.eventID = eventID;
         this.geolocationRequired = geolocationRequired;
+        this.waitingListLimit = waitingListLimit;
         this.capacity = capacity;
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
@@ -74,13 +76,14 @@ public class EventModel implements java.io.Serializable {
     public EventModel(String facilityID,
                       String eventID,
                       Boolean geolocationRequired,
+                      Integer waitingListLimit,
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle,
                       String eventDescription,
                       String organizer) {
-        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription, organizer);
+        this(facilityID, geolocationRequired, waitingListLimit, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription, organizer);
         this.eventID = eventID;
     }
 
