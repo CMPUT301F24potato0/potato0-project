@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -110,17 +111,15 @@ public class EventEntrantActivity extends AppCompatActivity {
         eventDescription.setText(event.getEventDescription());
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
-        if (event.getWaitingList().contains(userList)) {
+
+        if (event.checkUserInList(userList, event.getWaitingList())) {
             unjoinBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             unjoinBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        event.unqueueWaitingList(userList);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    event.unqueueWaitingList(userList);
+                    db.collection("events").document(event.getEventID()).set(event);
                 }
             });
         } else {
@@ -134,11 +133,12 @@ public class EventEntrantActivity extends AppCompatActivity {
                     }
                     else {
                         try {
+//                            Toast.makeText(EventEntrantActivity.this, "Calling queueWaitingList", Toast.LENGTH_SHORT).show();
                             event.queueWaitingList(userList);
-                            db.collection("events").document(event.getEventID()).set(event);
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
                         }
+                        db.collection("events").document(event.getEventID()).set(event);
                     }
                 }
             });

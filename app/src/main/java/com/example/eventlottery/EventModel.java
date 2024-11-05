@@ -98,9 +98,10 @@ public class EventModel implements Serializable {
         if (waitingListIsFull()) {
             throw new Exception("The waiting list for this event is full!");
         }
-        if (!waitingList.contains(userID)) {
-            waitingList.add(userID);
-        }
+        waitingList.add(userID);
+//        if (this.checkUserInList(userID, waitingList)) {
+//            waitingList.add(userID);
+//        }
     }
 
     /**
@@ -108,11 +109,12 @@ public class EventModel implements Serializable {
      * @param userID The entrant's unique user ID
      * @throws Exception Throws an exception if the user is not in the waiting list
      */
-    public void unqueueWaitingList(UsersList userID) throws Exception {
-        if (!waitingList.contains(userID)) {
-            throw new Exception("User has not joined the waiting list for this event yet!");
+    public void unqueueWaitingList(UsersList userID){
+        for (int i = 0; i < waitingList.size(); i++) {
+            if (waitingList.get(i).getiD().equals(userID.getiD())) {
+                waitingList.remove(i);
+            }
         }
-        waitingList.remove(userID);
     }
 
     /**
@@ -270,5 +272,14 @@ public class EventModel implements Serializable {
 
     public void setEnrolledList(ArrayList<UsersList> enrolledList) {
         this.enrolledList = enrolledList;
+    }
+
+    public boolean checkUserInList(UsersList user, ArrayList<UsersList> list) {
+        for (UsersList u : list) {
+            if (u.getiD().equals(user.getiD())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
