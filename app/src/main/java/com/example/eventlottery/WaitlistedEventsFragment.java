@@ -40,13 +40,11 @@ public class WaitlistedEventsFragment extends Fragment{
     private Context context;
     private Button mute_btn;
     private Button unmute_btn;
-    private static boolean ismuted = false;
+
     public WaitlistedEventsFragment(){
         // require a empty public constructor
     }
-    public static boolean getIsmute(){
-        return ismuted;
-    }
+
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -72,15 +70,12 @@ public class WaitlistedEventsFragment extends Fragment{
         notification_btn.setOnClickListener(view -> {
 //            if (test_context == null)
 //                {Log.e("Context","It's null");}
-
-
             // CAlLS SendNotification
             this.context = requireContext();
             String topic = "testTopic_signup";
             SendNotification sendNotification = new SendNotification(context,topic);
             sendNotification.popup();
             // CALLS
-
 
         });
         subscribe.setOnClickListener(new View.OnClickListener() {
@@ -91,21 +86,7 @@ public class WaitlistedEventsFragment extends Fragment{
                 subscribeToTopic.subscribe();
             }
         });
-        mute_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ismuted = true;
-                Toast.makeText(context,"muted",Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        unmute_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ismuted = false;
-                Toast.makeText(context,"unmuted",Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
         return rootview;
