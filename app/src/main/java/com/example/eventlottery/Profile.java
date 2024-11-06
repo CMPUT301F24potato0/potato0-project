@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,9 +28,12 @@ public class Profile extends Fragment {
     public CollectionReference userRef;
 
     private Button editUser;
-    private Button on_notification;
-    private Button off_notification;
-    private static boolean ismuted = false;
+//    private Button on_notification;
+//    private Button off_notification;
+    private static boolean ismuted;
+
+    FloatingActionButton on_notifications;
+    FloatingActionButton off_notifications;
 
 
     /**
@@ -111,36 +115,36 @@ public class Profile extends Fragment {
 
 
         // Notifications
-        on_notification = (Button) rootView.findViewById(R.id.on_notifications);
-        off_notification = (Button) rootView.findViewById(R.id.off_notifications);
+        on_notifications = (FloatingActionButton) rootView.findViewById(R.id.on_notification);
+        off_notifications = (FloatingActionButton) rootView.findViewById(R.id.off_notification);
+        ismuted = curUser.isMuted();
+
 
         if(getIsmute() == true){
-            on_notification.setVisibility(View.GONE);
-            off_notification.setVisibility(View.VISIBLE);
+            on_notifications.setVisibility(View.GONE);
+            off_notifications.setVisibility(View.VISIBLE);
         } else if (getIsmute() == false) {
-            off_notification.setVisibility(View.GONE);
-            on_notification.setVisibility(View.VISIBLE);
+            on_notifications.setVisibility(View.VISIBLE);
+            off_notifications.setVisibility(View.GONE);
         }
-        on_notification.setOnClickListener(new View.OnClickListener() {
+        on_notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ismuted = true;
                 Toast.makeText(getActivity(),"Notifications: Off",Toast.LENGTH_SHORT).show();
-                on_notification.setVisibility(View.GONE);
-                off_notification.setVisibility(View.VISIBLE);
+                on_notifications.setVisibility(View.GONE);
+                off_notifications.setVisibility(View.VISIBLE);
 
             }
         });
 
-        off_notification.setOnClickListener(new View.OnClickListener() {
+        off_notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ismuted = false;
                 Toast.makeText(getActivity(),"Notifications: On",Toast.LENGTH_SHORT).show();
-                off_notification.setVisibility(View.GONE);
-                on_notification.setVisibility(View.VISIBLE);
-
-
+                on_notifications.setVisibility(View.VISIBLE);
+                off_notifications.setVisibility(View.GONE);
             }
         });
 

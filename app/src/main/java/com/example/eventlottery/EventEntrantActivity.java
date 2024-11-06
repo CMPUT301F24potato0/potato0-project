@@ -111,13 +111,6 @@ public class EventEntrantActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -162,11 +155,14 @@ public class EventEntrantActivity extends AppCompatActivity {
             unjoinBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Unjoining
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
                     String topic = eventRef + "_waitlist";
                     UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
                     unsubscribeFromTopic.unsubscribe();
+
+
 
 
                 }
@@ -178,15 +174,21 @@ public class EventEntrantActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (event.getGeolocationRequired()) {
+                        // Joining
                         new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
                         // eventRef = eventID
                         String topic = eventRef + "_waitlist";
                         SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
                         subscribeToTopic.subscribe();
 
+
+                        askNotificationPermission();
+
+
                     }
                     else {
                         try {
+                            // also joining
                             event.queueWaitingList(userList);
                             String topic = eventRef + "_waitlist";
                             SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
