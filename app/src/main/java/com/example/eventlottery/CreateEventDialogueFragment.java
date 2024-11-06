@@ -71,7 +71,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     // for editing an existing event (event information required, organizer information not required)
     public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
-        Log.d("TESTING", "Dialog Start");
         this.eventTitle = event.getEventTitle();
         this.capacity = event.getCapacity();
         this.waitListLimit = event.getWaitingListLimit();
@@ -231,9 +230,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     event.setJoinDeadline(joinDeadline);
                     event.setEventDescription(eventDescription);
                     db.collection("events").document(event.getEventID()).set(event);
+                    eventActivity.updateViews();
                 }
-                Log.d("TESTING", "Dialog end");
-                eventActivity.updateViews();
                 dismiss();
                 break;
         }
