@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.Manifest;
 
+import java.util.ArrayList;
+
 /**
  * This is the MainActivity class
  * This class currently handles checking the user in the database, if the user exists then updating the current instance of the user
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mainActivityView = findViewById(R.id.main_activity_view);
         mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
 
-        curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
+        curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         curUser = document.toObject(CurrentUser.class);
-
                     } else {
                         newUser(curUser);
                     }
