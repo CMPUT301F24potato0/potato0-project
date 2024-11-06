@@ -65,3 +65,7 @@ proguard-rules.pro
 # Android NDK
 ndkBuild/
 local.properties
+
+
+# Acces Token
+app/src/main/java/com/example/eventlottery/AccessToken.java
