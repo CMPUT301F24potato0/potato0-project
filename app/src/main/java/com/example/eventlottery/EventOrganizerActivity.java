@@ -23,13 +23,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+import java.util.Map;
+
 public class EventOrganizerActivity extends AppCompatActivity {
-    /*
-        Getting the views from the layout file
-     */
 
     private FirebaseFirestore db;
-
     private Button editEvent;
     private FloatingActionButton back;
     private TextView eventTitle;
@@ -46,7 +45,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
-    private CurrentUser curUser;  // Ensure this is initialized correctly
+    private CurrentUser curUser;
     private ConstraintLayout progessBar;
 
     @Override
@@ -61,11 +60,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
             return insets;
         });
 
-        /*
-            Initializing the views
-         */
         editEvent = findViewById(R.id.event_organizer_edit_event_button);
-        back = findViewById(R.id.back_button);
+        // back = findViewById(R.id.back_button);
         eventTitle = findViewById(R.id.event_organizer_event_title);
         eventDate = findViewById(R.id.event_organizer_event_date);
         eventDescription = findViewById(R.id.event_organizer_event_description);
@@ -83,7 +79,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         if (extra != null) {
             eventID = extra.getString("event_id");
             event = (EventModel) extra.getSerializable("eventModel");
-            curUser = (CurrentUser) extra.getSerializable("currentUser");  // Ensure curUser is passed from the intent
+            curUser = (CurrentUser) extra.getSerializable("currentUser");
         }
 
         eventDescription.setText(event.getEventDescription());
@@ -136,7 +132,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
-        // Set up edit event button functionality
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,10 +144,76 @@ public class EventOrganizerActivity extends AppCompatActivity {
                         event.getEventStrLocation(),
                         event.getGeolocationRequired(),
                         event.getEventDescription(),
-                        curUser,                        // Pass the current user or organizer
-                        db                              // Firebase database reference
+                        curUser,
+                        db
                 );
                 editDialog.show(getSupportFragmentManager(), "edit_event");
+            }
+        });
+
+        // Fetch and display counts
+        fetchWaitlistCount();
+        fetchInvitedCount();
+        fetchCancelledCount();
+        fetchEnrolledCount();
+    }
+
+    private void fetchWaitlistCount() {
+        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<Map<String, Object>> waitlistArray = (List<Map<String, Object>>) document.get("waitingList");
+                        waitlist.setText("Waitlist: " + (waitlistArray != null ? waitlistArray.size() : 0));
+                    }
+                }
+            }
+        });
+    }
+
+    private void fetchInvitedCount() {
+        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<Map<String, Object>> invitedArray = (List<Map<String, Object>>) document.get("invitedList");
+                        invited.setText("Invited: " + (invitedArray != null ? invitedArray.size() : 0));
+                    }
+                }
+            }
+        });
+    }
+
+    private void fetchCancelledCount() {
+        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<Map<String, Object>> cancelledArray = (List<Map<String, Object>>) document.get("cancelledList");
+                        cancelled.setText("Cancelled: " + (cancelledArray != null ? cancelledArray.size() : 0));
+                    }
+                }
+            }
+        });
+    }
+
+    private void fetchEnrolledCount() {
+        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<Map<String, Object>> enrolledArray = (List<Map<String, Object>>) document.get("enrolledList");
+                        enrolled.setText("Enrolled: " + (enrolledArray != null ? enrolledArray.size() : 0));
+                    }
+                }
             }
         });
     }
