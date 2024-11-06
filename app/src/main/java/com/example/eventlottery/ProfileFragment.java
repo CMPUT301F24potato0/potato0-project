@@ -129,6 +129,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ismuted = true;
+                curUser.setMuted(ismuted);
+                db.collection("users").document(curUser.getiD()).set(curUser);
                 Toast.makeText(getActivity(),"Notifications: Off",Toast.LENGTH_SHORT).show();
                 on_notifications.setVisibility(View.GONE);
                 off_notifications.setVisibility(View.VISIBLE);
@@ -140,6 +142,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ismuted = false;
+
+                curUser.setMuted(ismuted);
+                db.collection("users").document(curUser.getiD()).set(curUser);
+
                 Toast.makeText(getActivity(),"Notifications: On",Toast.LENGTH_SHORT).show();
                 on_notifications.setVisibility(View.VISIBLE);
                 off_notifications.setVisibility(View.GONE);
