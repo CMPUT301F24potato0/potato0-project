@@ -31,6 +31,8 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
     private ArrayList<UsersList> userWaitList;
 
+
+    private Button drawSample;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
+        drawSample = findViewById(R.id.draw_sample_button);
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +110,15 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     }
 //                    userWaitList = (ArrayList<UsersList>) doc.get("waitingList");
                 }
+            }
+        });
+
+        drawSample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventWaitlistActivity.this, ChosenUserActivity.class);
+                intent.putExtra("eventModel", event);
+                startActivity(intent);
             }
         });
     }

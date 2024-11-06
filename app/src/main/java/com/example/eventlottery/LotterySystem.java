@@ -34,11 +34,6 @@ public class LotterySystem {
                 ++i;
             }
         }
-
-
         return winnerList;
     }
-
-
-
 }
