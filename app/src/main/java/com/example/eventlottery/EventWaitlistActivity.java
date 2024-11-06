@@ -58,7 +58,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         userWaitList = new ArrayList<UsersList>();
         userWaitList = event.getWaitingList();
         adapter = new UserListviewAdapter(this, R.layout.user_listview_content, userWaitList, "waitlist", event, db);
-
+        waitlist.setAdapter(adapter);
         db.collection("events").
                 document(event.getEventID()).
                 addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -77,6 +77,5 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 }
             }
         });
-        waitlist.setAdapter(adapter);
     }
 }
