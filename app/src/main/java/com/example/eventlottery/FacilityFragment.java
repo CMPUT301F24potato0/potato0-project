@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -43,6 +44,7 @@ public class FacilityFragment extends Fragment {
     private FirebaseFirestore db;
     private FacilityModel facilityModel;
 
+    private TextView facilityNameTextView;
     private ListView eventListView;
     private EventsArrayAdapter eventsAdapter;
     private ArrayList<EventModel> events;
@@ -77,6 +79,7 @@ public class FacilityFragment extends Fragment {
         createFacilityFirstPage = rootview.findViewById(R.id.createFacilityFirstPage);
         facilityPage = rootview.findViewById(R.id.FacilityPage);
 
+        facilityNameTextView =  rootview.findViewById(R.id.facility_page_facility_name);
         eventListView = rootview.findViewById(R.id.facility_page_events_listview);
 
         if (curUser.getFacilityID().equals("")) {
@@ -84,6 +87,7 @@ public class FacilityFragment extends Fragment {
         }
         else {
             changeView(1);
+            updateViews();
         }
         // TODO get events
         events = new ArrayList<EventModel>();
@@ -163,5 +167,9 @@ public class FacilityFragment extends Fragment {
             createFacilityFirstPage.setVisibility(View.GONE);
             facilityPage.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void updateViews(){
+        facilityNameTextView.setText(facilityModel.getName());
     }
 }
