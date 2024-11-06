@@ -25,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Create Event Dialogue Fragment
+ */
 public class CreateEventDialogueFragment extends DialogFragment {
 
     private FrameLayout frameLayout;
@@ -46,11 +49,19 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private boolean isEditing = false;  // Flag to determine if we are editing an event
     private String eventId;  // Store event ID if editing
 
+    /**
+     * Default constructor for creating a new event
+     */
     // Default constructor for creating a new event
     public CreateEventDialogueFragment() {
         initializeDefaults();
     }
 
+    /**
+     * Constructor for creating a new event with organizer and database references
+     * @param organizer The organizer of the event
+     * @param db The Firebase Firestore database
+     */
     // Constructor for creating a new event with organizer and database references
     public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
         this();
@@ -58,6 +69,19 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.db = db;
     }
 
+    /**
+     * Constructor for editing an existing event
+     * @param eventId The ID of the event to be edited
+     * @param eventTitle The title of the event
+     * @param capacity The capacity of the event
+     * @param waitListLimit The waitlist limit of the event
+     * @param joinDeadline The deadline for joining the event
+     * @param strLocation The location of the event
+     * @param geolocationRequired Whether geolocation is required for the event
+     * @param eventDescription The description of the event
+     * @param organizer The organizer of the event
+     * @param db The Firebase Firestore database
+     */
     // Constructor for editing an existing event
     public CreateEventDialogueFragment(String eventId,
                                        String eventTitle,
@@ -81,6 +105,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.eventDescription = eventDescription;
     }
 
+    /**
+     * Initialize default values for the event
+     */
     private void initializeDefaults() {
         eventTitle = "";
         capacity = 0;
@@ -91,6 +118,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
+    /**
+     * Called when creating the dialog fragment.
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return A new Dialog instance to be displayed by the Fragment.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -147,6 +181,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Switch between dialog states
+     */
     private void dialogStateSwitch() {
         assert (0 <= dialogState) && (dialogState <= 4);
         LayoutInflater inflater = getLayoutInflater();
@@ -195,6 +232,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Create event in database
+     */
     private void createEventInDatabase() {
         EventModel event = new EventModel(
                 organizer.getFacilityID(),
@@ -217,6 +257,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         });
     }
 
+    /**
+     * Update event in database
+     */
     private void updateEventInDatabase() {
         db.collection("events").document(eventId).update(
                 "eventTitle", eventTitle,
@@ -233,6 +276,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
         });
     }
 
+    /**
+     * Get information from the current dialog state
+     * @return Whether the information is valid
+     */
     private Boolean dialogStateGetInfo() {
         assert (1 <= dialogState) && (dialogState <= 3);
         Boolean validInput = Boolean.FALSE;
@@ -279,6 +326,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return validInput;
     }
 
+    /**
+     * Initialize date picker
+     * @param joinDeadlineButton The button to display the date picker
+     * @param year The year of the date
+     * @param month The month of the date
+     * @param day The day of the date
+     */
     private void initDatePicker(Button joinDeadlineButton, int year, int month, int day) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -297,6 +351,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
+    /**
+     * Get month name
+     * @param month The month
+     * @return The month name
+     */
     private String getMonth(int month) {
         switch (month) {
             case 1: return "Jan.";
@@ -315,10 +374,20 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return "";
     }
 
+    /**
+     * Check if string is valid
+     * @param str The string to check
+     * @return Whether the string is valid
+     */
     private Boolean isValidString(String str) {
         return !str.equals("");
     }
 
+    /**
+     * Check if string is a valid number
+     * @param str The string to check
+     * @return Whether the string is valid
+     */
     private Boolean isValidNumber(String str) {
         if (!isValidString(str)) {
             return Boolean.FALSE;
