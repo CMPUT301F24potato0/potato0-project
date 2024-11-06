@@ -68,9 +68,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     sendNotification.popup();
 
                 }
-
-
-
             }
         });
 

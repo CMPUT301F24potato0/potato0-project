@@ -20,13 +20,24 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.EventObject;
 
 public class PushNotificationService extends FirebaseMessagingService{
 
     // https://medium.com/@Codeible/android-notifications-with-firebase-cloud-messaging-914623716dea
-
+    FirebaseFirestore db;
     /**
      * @param remoteMessage Remote message that has been received.
      */
@@ -36,12 +47,27 @@ public class PushNotificationService extends FirebaseMessagingService{
         // TESTING
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
+        String eventID = remoteMessage.getData().get("eventID");
+//        EventModel = remoteMessage.getNotification().
         // topic should be "eventID userID"
         String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
         String check = "signup";
         Log.d("Recieved notification", title);
         Log.d("Recieved notification", text);
         Log.d("Topic",topic);
+        Log.d("eventId",eventID);
+        db = FirebaseFirestore.getInstance();
+        Task<DocumentSnapshot> t = db.collection("events").document(eventID).get();
+        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    ArrayList<String> list = (ArrayList<String>) documentSnapshot.get("waitList");
+                    list.add("rayu_phone");
+                    db.collection("events").document(eventID).update("waitList", list);
+                }
+            }
+        });
         // TESTING
 
         final String channel_id = "notification_popup";
@@ -104,9 +130,22 @@ public class PushNotificationService extends FirebaseMessagingService{
             }
 
 
+
            if(!ismuted) {
                Log.e("Ismuted??",""+ismuted);
-               NotificationManagerCompat.from(this).notify(1, notification.build());
+//               PendingIntent intent = PendingIntent.getActivity(this,0,
+//                       new Intent(this,MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+//               notification.setContentIntent(intent);
+//               NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+//               notification.notify(notificationManager);
+
+               Intent notificationIntent = new Intent(this, MainActivity.class);
+               PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+               NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+               notificationManager.notify(1, notification.build());
+
+
+//               NotificationManagerCompat.from(this).notify(1, notification.build());
            }
 
         super.onMessageReceived(remoteMessage);

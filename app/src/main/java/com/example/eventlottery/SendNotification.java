@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class SendNotification {
 
     private String title;
@@ -66,7 +68,8 @@ public class SendNotification {
                 title,
                 body,
                 context,
-                topic
+                topic,
+                "idtest"
         );
         fcmNotificationSender.SendNotifications();
 

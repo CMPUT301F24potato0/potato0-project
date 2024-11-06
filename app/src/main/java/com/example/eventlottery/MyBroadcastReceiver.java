@@ -11,6 +11,9 @@ import androidx.core.app.NotificationManagerCompat;
 public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+
+
+
         Log.e("Notification","Button");
         String action = intent.getAction();
         if(action.equals("first")){
@@ -22,11 +25,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         NotificationManagerCompat.from(context.getApplicationContext()).cancelAll();
 
     }
-    public void action1(Context context){
+    public void action1(Context context){ //Cancel
         Toast.makeText(context ,"Cancel",Toast.LENGTH_LONG).show();
     }
-    public void action2(Context context){
+    public void action2(Context context){ // Sign up
         Toast.makeText(context ,"Signed up",Toast.LENGTH_LONG).show();
+
     }
 }
 
