@@ -1,7 +1,6 @@
 package com.example.eventlottery;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * This Class stores the current user's information
@@ -15,8 +14,6 @@ public class CurrentUser implements Serializable {
     private String facilityID;
     private String iD;
     private String userPhoto;
-    private boolean isMuted = false;
-    private ArrayList<String> topics;
 
     /**
      * Constructor that updates the local variables
@@ -27,7 +24,7 @@ public class CurrentUser implements Serializable {
      * @param phone Phone number
      * @param iD Android ID
      */
-    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD, boolean isMuted, ArrayList<String> topics) {
+    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
@@ -35,8 +32,6 @@ public class CurrentUser implements Serializable {
         this.facilityID = facilityID;
         this.phone = phone;
         this.iD = iD;
-        this.isMuted = isMuted;
-        this.topics = topics;
     }
 
     public CurrentUser() {}
@@ -120,41 +115,5 @@ public class CurrentUser implements Serializable {
 
     public void setFacilityID(String facilityID) {
         this.facilityID = facilityID;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
-    public void setiD(String iD) {
-        this.iD = iD;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    public boolean isMuted() {
-        return isMuted;
-    }
-
-    public void setMuted(boolean muted) {
-        isMuted = muted;
-    }
-
-    public ArrayList<String> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(ArrayList<String> topics) {
-        this.topics = topics;
     }
 }
