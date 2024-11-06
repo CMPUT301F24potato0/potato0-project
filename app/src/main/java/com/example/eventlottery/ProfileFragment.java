@@ -15,13 +15,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-
 /**
  * This class is the profile fragment.
  * This class is called when the user clicks the profile button on the bottom.
  */
-public class Profile extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private CurrentUser curUser;
     private FirebaseFirestore db;
@@ -39,7 +37,7 @@ public class Profile extends Fragment {
     /**
      * Empty Constructor
      */
-    public Profile(){
+    public ProfileFragment(){
         // require a empty public constructor
     }
 
@@ -48,7 +46,7 @@ public class Profile extends Fragment {
      * @param db This is the database instance
      * @param curUser This is the information about current user which is passed from MainActivity
      */
-    public Profile(FirebaseFirestore db, CurrentUser curUser) {
+    public ProfileFragment(FirebaseFirestore db, CurrentUser curUser) {
         this.db = db;
         this.curUser = curUser;
     }

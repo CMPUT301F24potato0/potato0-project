@@ -3,18 +3,13 @@ package com.example.eventlottery;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,17 +24,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.Manifest;
-
-import org.w3c.dom.Document;
-
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * This is the MainActivity class
@@ -188,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.profile:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new Profile(db, curUser))
+                        .replace(R.id.flFragment, new ProfileFragment(db, curUser))
                         .commit();
                 return true;
         }
