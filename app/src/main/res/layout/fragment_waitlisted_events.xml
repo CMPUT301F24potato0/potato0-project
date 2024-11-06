@@ -30,5 +30,22 @@
         android:textSize="30dp">
 
     </Button>
+    <Button
+        android:id="@+id/mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Mute"
+        android:textSize="25dp">
+    </Button>
+    <Button
+        android:id="@+id/unmute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Unmute"
+        android:textSize="25dp"
+        android:layout_gravity="right">
+    </Button>
 
 </FrameLayout>

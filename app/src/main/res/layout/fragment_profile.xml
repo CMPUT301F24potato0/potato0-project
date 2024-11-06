@@ -129,6 +129,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications:"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="40dp"
+            android:textSize="19dp"/>
+        <Button
+            android:id="@+id/on_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"
+            android:text="On"
+            android:padding="0dp"
+            android:minHeight="5dp"
+            android:minWidth="35dp"/>
+        <Button
+            android:id="@+id/off_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"
+            android:text="Off"
+            android:padding="0dp"
+            android:minHeight="5dp"
+            android:minWidth="35dp"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>
