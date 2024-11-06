@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".EventOrganizerActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressBar2"
         android:layout_width="match_parent"
@@ -22,6 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,8 +29,7 @@
             android:id="@+id/event_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/event_organizer_event_poster"
@@ -47,14 +46,6 @@
                 android:layout_marginHorizontal="10dp"
                 android:paddingHorizontal="10dp"
                 android:orientation="vertical">
-
-                <!--            <Button-->
-                <!--                android:id="@+id/back_button"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:text="Back"-->
-                <!--                android:layout_margin="10dp"-->
-                <!--                android:backgroundTint="@color/gray4" />-->
 
                 <TextView
                     android:id="@+id/event_organizer_event_title"
@@ -157,7 +148,7 @@
                                 android:id="@+id/event_organizer_organizer_and_facility_names"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="James Dough \nfrom Facility C"
+                                android:text="Organizer Name\nFacility"
                                 android:textSize="15sp"
                                 android:paddingLeft="10dp"
                                 android:layout_gravity="center"
@@ -247,6 +238,7 @@
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <!-- Buttons for Invited, Cancelled, Waitlist, and Enrolled counters -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -256,9 +248,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="150dp"
-                        android:minHeight="0dp"
                         android:backgroundTint="@color/gray2"
-                        android:text="Invited: 12"
+                        android:text="Invited: 0"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -268,9 +259,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="150dp"
-                        android:minHeight="0dp"
                         android:backgroundTint="@color/gray2"
-                        android:text="Cancelled: 3"
+                        android:text="Cancelled: 0"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -280,9 +270,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="150dp"
-                        android:minHeight="0dp"
                         android:backgroundTint="@color/gray2"
-                        android:text="Waitlist: 543"
+                        android:text="Waitlist: 0"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -293,9 +282,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="150dp"
-                        android:minHeight="0dp"
                         android:backgroundTint="@color/gray2"
-                        android:text="Enrolled: 7"
+                        android:text="Enrolled: 0"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -303,14 +291,8 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

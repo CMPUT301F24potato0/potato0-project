@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -82,14 +83,15 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            return;
+                            Log.e("EventWaitlistActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
                             userWaitList.clear();
-                            for (UsersList u : doc.toObject(EventModel.class).getWaitingList()) {
+                            ArrayList<UsersList> userWaitListTemp = (ArrayList<UsersList>) doc.toObject(EventModel.class).getWaitingList();
+                            for (UsersList u : userWaitListTemp) {
                                 userWaitList.add(u);
-                                adapter.notifyDataSetChanged();
                             }
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -102,25 +104,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-        waitlist.setAdapter(adapter);
-        db.collection("events").
-                document(event.getEventID()).
-                addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    return;
-                }
-                if (doc != null && doc.exists()) {
-                    userWaitList.clear();
-                    for(UsersList u : doc.toObject(EventModel.class).getWaitingList()) {
-                        userWaitList.add(u);
-                        adapter.notifyDataSetChanged();
-                    }
-//                    userWaitList = (ArrayList<UsersList>) doc.get("waitingList");
-                }
-            }
-        });
+
 
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override

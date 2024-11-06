@@ -40,10 +40,30 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         } else {
             view = convertView;
         }
+        Button remove = view.findViewById(R.id.listview_remove_button);
+        Button sendInvite = view.findViewById(R.id.listview_send_invite_button);
+        sendInvite.setVisibility(View.GONE);
         UsersList user = getItem(position);
         TextView userName = view.findViewById(R.id.listview_user_name);
         userName.setText(user.getName());
 
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event.unqueueWaitingList(user);
+                removeFromList(user, list);
+
+                db.collection("events").document(event.getEventID()).set(event);
+            }
+        });
         return view;
+    }
+    private void removeFromList(UsersList user, ArrayList<UsersList> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(user.getName())) {
+                list.remove(i);
+                notifyDataSetChanged();
+            }
+        }
     }
 }

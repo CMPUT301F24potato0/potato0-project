@@ -14,7 +14,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="User Name here"
-        android:textSize="25dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
