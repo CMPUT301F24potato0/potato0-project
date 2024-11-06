@@ -228,6 +228,8 @@ public class EventEntrantActivity extends AppCompatActivity {
                     }
                     else {
                         try {
+                            event.queueWaitingList(userList);
+
                             // also joining
 
                             String eventID = event.getEventID();
