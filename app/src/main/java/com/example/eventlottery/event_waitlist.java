@@ -30,16 +30,16 @@ public class event_waitlist extends Fragment {
             // Existing notify button logic
         });
 
-        // Back button functionality
-        backButton = rootView.findViewById(R.id.back_button);
-        backButton.setOnClickListener(view -> {
-            // Navigate back to EventOrganizerActivity
-            Intent intent = new Intent(getActivity(), EventOrganizerActivity.class);
-            startActivity(intent);
-            if (getActivity() != null) {
-                getActivity().finish();
-            }
-        });
+//        // Back button functionality
+//        backButton = rootView.findViewById(R.id.back_button);
+//        backButton.setOnClickListener(view -> {
+//            // Navigate back to EventOrganizerActivity
+//            Intent intent = new Intent(getActivity(), EventOrganizerActivity.class);
+//            startActivity(intent);
+//            if (getActivity() != null) {
+//                getActivity().finish();
+//            }
+//        });
 
         return rootView;
     }

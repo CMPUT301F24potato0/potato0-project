@@ -49,12 +49,12 @@ public class CancelledListActivity extends AppCompatActivity {
         cancelAdapter = new UserListviewAdapter(this, 0, userCancelList, "cancelled", event, db);
         cancelledList.setAdapter(cancelAdapter);
 
-        // Add back button functionality
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(CancelledListActivity.this, EventOrganizerActivity.class);
-            startActivity(intent);
-            finish();
-        });
+//        // Add back button functionality
+//        Button backButton = findViewById(R.id.back_button);
+//        backButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(CancelledListActivity.this, EventOrganizerActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
     }
 }
