@@ -1,9 +1,12 @@
 package com.example.eventlottery;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * This Class stores the current user's information
  */
-public class CurrentUser {
+public class CurrentUser implements Serializable {
     private String fName;
     private String lName;
     private String email;
@@ -12,6 +15,7 @@ public class CurrentUser {
     private String facilityID;
     private String iD;
     private String userPhoto;
+    private boolean isMuted = false;
 
     /**
      * Constructor that updates the local variables
@@ -30,6 +34,7 @@ public class CurrentUser {
         this.facilityID = facilityID;
         this.phone = phone;
         this.iD = iD;
+        this.isMuted = isMuted;
     }
 
     public CurrentUser() {}
@@ -113,5 +118,49 @@ public class CurrentUser {
 
     public void setFacilityID(String facilityID) {
         this.facilityID = facilityID;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public void setiD(String iD) {
+        this.iD = iD;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+//    public ArrayList<String> getTokens() {
+//        return tokens;
+//    }
+
+//    public void setTokens(ArrayList<String> tokens) {
+//        this.tokens = tokens;
+//    }
+
+//    public String getTopicID() {
+//        return topicID;
+//    }
+
+//    public void setTopicID(String topicID) {
+//        this.topicID = topicID;
+//    }
+
+    public boolean isMuted() {
+        return isMuted;
+    }
+
+    public void setMuted(boolean muted) {
+        isMuted = muted;
     }
 }

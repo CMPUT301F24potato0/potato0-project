@@ -2,11 +2,12 @@ package com.example.eventlottery;
 
 import com.google.firebase.firestore.auth.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class EventModel {
+public class EventModel implements Serializable {
     private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings
@@ -14,6 +15,7 @@ public class EventModel {
     private ArrayList<UsersList> invitedList;
     private ArrayList<UsersList> cancelledList;
     private ArrayList<UsersList> enrolledList;
+    private ArrayList<UsersList> chosenList;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -22,6 +24,7 @@ public class EventModel {
     private String eventTitle;
     private String eventDescription;
     private String hashQR; // TODO: part 4
+    private String organizer;
 
     // TODO: part 4 - poster image
   
@@ -37,73 +40,79 @@ public class EventModel {
         eventTitle = "";
         eventDescription = "";
         hashQR = "";
+        organizer = "";
         waitingList = new ArrayList<UsersList>();
         invitedList = new ArrayList<UsersList>();
         cancelledList = new ArrayList<UsersList>();
         enrolledList = new ArrayList<UsersList>();
+        chosenList = new ArrayList<UsersList>();
     }
+
     public EventModel(String facilityID,
                       Boolean geolocationRequired,
+                      Integer waitingListLimit,
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle,
-                      String eventDescription) {
+                      String eventDescription,
+                      String organizer) {
 
         this();
 
         this.facilityID = facilityID;
         this.eventID = eventID;
         this.geolocationRequired = geolocationRequired;
+        this.waitingListLimit = waitingListLimit;
         this.capacity = capacity;
         this.joinDeadline = joinDeadline;
         this.eventStrLocation = eventStrLocation;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
-        this.waitingList = new ArrayList<UsersList>();
-        this.invitedList = new ArrayList<UsersList>();
-        this.cancelledList = new ArrayList<UsersList>();
-        this.enrolledList = new ArrayList<UsersList>();
-
+        this.organizer = organizer;
     }
 
     public EventModel(String facilityID,
                       String eventID,
                       Boolean geolocationRequired,
+                      Integer waitingListLimit,
                       Integer capacity,
                       Date joinDeadline,
                       String eventStrLocation,
                       String eventTitle,
-                      String eventDescription) {
-        this(facilityID, geolocationRequired, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription);
+                      String eventDescription,
+                      String organizer) {
+        this(facilityID, geolocationRequired, waitingListLimit, capacity, joinDeadline, eventStrLocation, eventTitle, eventDescription, organizer);
         this.eventID = eventID;
     }
 
     /**
      * This function adds another user to the waiting list only if the waiting list
      * has not reached its limit, and if the user has not been added yet.
-     * @param userID The entrant's unique user ID
+     * @param user The entrant's unique user
      * @throws Exception Throws an exception if the waiting list is full
      */
-    public void queueWaitingList(UsersList userID) throws Exception {
+    public void queueWaitingList(UsersList user) throws Exception {
         if (waitingListIsFull()) {
             throw new Exception("The waiting list for this event is full!");
         }
-        if (!waitingList.contains(userID)) {
-            waitingList.add(userID);
-        }
+        waitingList.add(user);
+//        if (this.checkUserInList(userID, waitingList)) {
+//            waitingList.add(userID);
+//        }
     }
 
     /**
      * This function removes the provided user from the waiting list.
-     * @param userID The entrant's unique user ID
+     * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the waiting list
      */
-    public void unqueueWaitingList(UsersList userID) throws Exception {
-        if (!waitingList.contains(userID)) {
-            throw new Exception("User has not joined the waiting list for this event yet!");
+    public void unqueueWaitingList(UsersList user){
+        for (int i = 0; i < waitingList.size(); i++) {
+            if (waitingList.get(i).getiD().equals(user.getiD())) {
+                waitingList.remove(i);
+            }
         }
-        waitingList.remove(userID);
     }
 
     /**
@@ -118,29 +127,33 @@ public class EventModel {
     }
 
     // TODO: this function
-    public void queueInvitedList(UsersList userID) {
+    public void queueInvitedList(UsersList user) {
         return;
     }
 
     // TODO: this function
-    public void unqueueInvitedList(UsersList userID){
+    public void unqueueInvitedList(UsersList user){
         return;
     }
 
     // TODO: this function
-    public void queueCancelledList(UsersList userID) {
+    public void queueCancelledList(UsersList user) {
         return;
     }
 
     // TODO: this function
-    public void queueEnrolledList(UsersList userID) {
+    public void queueEnrolledList(UsersList user) {
         return;
     }
 
-    // TODO: customize to generate a unique ID to store as the event's document name in Firestore
-    private String generateID() {
-        Random rand = new Random();
-        return Integer.toString(rand.nextInt(100000));
+    // TODO: this function
+    public void queueChosenList(UsersList user) {
+        return;
+    }
+
+    // TODO: this function
+    public void unqueueChosenList(UsersList user) {
+        return;
     }
 
     public String getFacilityID() {
@@ -223,6 +236,14 @@ public class EventModel {
         this.eventDescription = eventDescription;
     }
 
+    public String getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(String organizer) {
+        this.organizer = organizer;
+    }
+
     public ArrayList<UsersList> getWaitingList() {
         return waitingList;
     }
@@ -253,5 +274,22 @@ public class EventModel {
 
     public void setEnrolledList(ArrayList<UsersList> enrolledList) {
         this.enrolledList = enrolledList;
+    }
+
+    public ArrayList<UsersList> getChosenList() {
+        return chosenList;
+    }
+
+    public void setChosenList(ArrayList<UsersList> chosenList) {
+        this.chosenList = chosenList;
+    }
+
+    public boolean checkUserInList(UsersList user, ArrayList<UsersList> list) {
+        for (UsersList u : list) {
+            if (u.getiD().equals(user.getiD())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

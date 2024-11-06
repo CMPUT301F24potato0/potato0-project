@@ -8,22 +8,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class geo_requirement_dialog extends DialogFragment {
 
-    private String userID;
-    private DocumentReference eventRef;
+    private UsersList user;
+    private EventModel event;
+    private FirebaseFirestore db;
 
-    public geo_requirement_dialog(String userID, DocumentReference eventRef) {
-        this.userID = userID;
-        this.eventRef = eventRef;
+    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
+        this.user = user;
+        this.event = event;
+//        this.eventRef = eventRef;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @Nullable
@@ -37,7 +43,30 @@ public class geo_requirement_dialog extends DialogFragment {
                 .setTitle("Geo location required")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
+                    try {
+                        event.queueWaitingList(user);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    db.collection("events").document(event.getEventID()).set(event);
+
+//                    if (event.checkUserInList(user, event.getWaitingList())) {
+//                        db.collection("events").document(event.getEventID()).set(event);
+//                    } else {
+//                        try {
+//                            event.queueWaitingList(user);
+//                            db.collection("events").document(event.getEventID()).set(event);
+//                        } catch (Exception e) {
+//                            Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+                    //
+//                    try {
+//                        event.queueWaitingList(user);
+//                        db.collection("events").document(event.getEventID()).set(event);
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
                 })
                 .create();
     }

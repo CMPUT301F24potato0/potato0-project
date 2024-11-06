@@ -7,9 +7,6 @@
     android:layout_height="match_parent">
 
 
-
-
-
     <LinearLayout
         android:layout_width="369dp"
         android:layout_height="610dp"
@@ -42,46 +39,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Invited Entrants:"
+                android:text="Number of cancelled:"
                 android:textColor="@color/black"
-                android:textSize="20sp">
+                android:textSize="15sp">
 
             </TextView>
 
             <TextView
-                android:id="@+id/invited_confirmed"
+                android:id="@+id/cancelled_confirmed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="##"
                 android:textColor="@color/black"
-                android:textSize="20sp">
+                android:textSize="15sp">
 
             </TextView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="/"
-                android:textColor="@color/black"
-                android:textSize="20sp">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/invited_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="##"
-                android:textColor="@color/black"
-                android:textSize="20sp">
-
-            </TextView>
 
             <Button
-                android:id="@+id/invited_notif_button"
+                android:id="@+id/cancelled_notif_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -109,7 +86,7 @@
             android:orientation="vertical">
 
             <ListView
-                android:id="@+id/invited_list"
+                android:id="@+id/cancelled_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout_editor_absoluteX="0dp"
@@ -120,11 +97,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/CancelledView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Invited Entrants"
+        android:text="Cancelled Entrants"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

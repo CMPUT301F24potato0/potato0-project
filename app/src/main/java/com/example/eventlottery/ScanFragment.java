@@ -104,10 +104,11 @@ public class ScanFragment extends Fragment {
     /**
      * This function gets the events collection and then loops through to find the event that was scanned.
      * If event is not found it creates a new toast displaying error message.
-     * @param event The eventID scanned from the qr code
+     * @param eventID The eventID scanned from the qr code
      */
-    private void checkEvent(String event, String userId) {
+    private void checkEvent(String eventID, String userId) {
         CollectionReference eventRef = db.collection("events");
+
         eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
@@ -119,17 +120,13 @@ public class ScanFragment extends Fragment {
                     boolean eventFound = false;
                     for (QueryDocumentSnapshot doc: querySnapshots) {
                         String eventId = doc.getId();
-                        if (eventId.equals(event)) {
-                            // Start the new event fragment and pass in the event id
-//                            requireActivity().getSupportFragmentManager()
-//                                    .beginTransaction()
-//                                    .replace(R.id.flFragment, new EventEntrantFragment(db, event))
-//                                    .commit();
+                        if (eventId.equals(eventID)) {
                             eventFound = true;
-
+                            EventModel temp = doc.toObject(EventModel.class);
                             Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-                            i.putExtra("event_id", eventId);
-                            i.putExtra("user_id", userId);
+                            UsersList userList = new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName());
+                            i.putExtra("userList", userList);
+                            i.putExtra("eventModel", temp);
                             startActivity(i);
                             break;
                         }

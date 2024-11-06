@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="210dp"
+            android:minWidth="200dp"
             android:text="Event Capacity:"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="210dp"
+            android:minWidth="200dp"
             android:text="Waiting List Limit (Optional):"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="210dp"
+            android:minWidth="200dp"
             android:text="Location:"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -109,7 +109,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="210dp"
+            android:minWidth="200dp"
             android:text="Geolocation Required:"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -130,7 +130,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="210dp"
+            android:minWidth="200dp"
             android:text="Join Deadline:"
             android:textSize="15sp"
             android:layout_gravity="center"/>
@@ -147,9 +147,6 @@
             android:text="Jan. 1, 2024"
             android:textColor="@color/black"
             android:maxLines="1" />
-            <!--
-            android:onClick="@{(view) -> CreateEventDialogueFragment.joinDeadlinePicker}"/>
-            -->
     </LinearLayout>
 
 

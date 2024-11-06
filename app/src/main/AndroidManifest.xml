@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventLottery"
         tools:targetApi="31">
+        <activity
+            android:name=".EnrolledListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CancelledListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InvitedListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EventWaitlistActivity"
+            android:exported="false" />
         <activity
             android:name=".EventOrganizerActivity"
             android:exported="false" />
@@ -28,43 +39,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_facility_background" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="Notification" />
-
-
-<!--        <service-->
-
-<!--            android:name="com.google.firebase.messaging.FirebaseMessagingService"-->
-<!--            android:exported="false"-->
-<!--            android:directBootAware="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>-->
-<!--                <action android:name="com.google.firebase.MESSAGIN_ID_EVENT"/>-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+            android:value="Notification" /> <!-- <service -->
+        <!-- android:name="com.google.firebase.messaging.FirebaseMessagingService" -->
+        <!-- android:exported="false" -->
+        <!-- android:directBootAware="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
+        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE"/> -->
+        <!-- <action android:name="com.google.firebase.MESSAGIN_ID_EVENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
         <service
-            android:name="com.example.eventlottery.PushNotificationService"
-            android:exported="false"
-            android:directBootAware="true">
+            android:name=".PushNotificationService"
+            android:directBootAware="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action android:name="com.google.firebase.MESSAGIN_ID_EVENT"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.MESSAGIN_ID_EVENT" />
             </intent-filter>
         </service>
+
         <receiver
             android:name=".MyBroadcastReceiver"
             android:exported="false">
@@ -72,7 +83,6 @@
                 <action android:name="MyBroadcastReceiver" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

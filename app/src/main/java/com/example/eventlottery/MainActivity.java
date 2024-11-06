@@ -73,24 +73,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         // Check this for Qr scanner in fragment
         // https://stackoverflow.com/questions/40725336/android-studio-start-qr-code-scanner-from-fragment
         // https://medium.com/@dev.jeevanyohan/zxing-qr-code-scanner-android-implementing-in-activities-fragment-custom-colors-faa68bfc761d
-
-        bottomNavigationView
-                = findViewById(R.id.bottomNavigationView);
-
-        bottomNavigationView
-                .setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.scanQR);
-
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         mainActivityView = findViewById(R.id.main_activity_view);
         mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
 
         curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
-
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
 
         DocumentReference currentUserReference = usersRef.document(androidIDStr);
+        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
 
         currentUserReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -99,32 +92,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         curUser = document.toObject(CurrentUser.class);
-                        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
-                        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    mainActivityView.setVisibility(View.VISIBLE);
-                                    mainActivityProgressBar.setVisibility(View.GONE);
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        facility = document.toObject(FacilityModel.class);
-                                        curUser.setFacilityID(facility.getUserID());
-                                    }
-                                    else {
-                                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                                else {
-                                    Log.d("Firestore", "get failed with ", task.getException());
-                                    throw new RuntimeException(task.getException().toString());
-                                }
-                            }
-                        });
+
                     } else {
                         newUser(curUser);
-                        mainActivityView.setVisibility(View.VISIBLE);
-                        mainActivityProgressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
@@ -132,6 +102,30 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
             }
         });
+        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        facility = document.toObject(FacilityModel.class);
+                        curUser.setFacilityID(facility.getUserID());
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Log.d("Firestore", "get failed with ", task.getException());
+                    throw new RuntimeException(task.getException().toString());
+                }
+            }
+        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.scanQR);
+        mainActivityView.setVisibility(View.VISIBLE);
+        mainActivityProgressBar.setVisibility(View.GONE);
+
     }
 
     /**

@@ -1,10 +1,20 @@
 package com.example.eventlottery;
 
-public class UsersList {
+import java.io.Serializable;
+
+public class UsersList implements Serializable {
     private String iD;
     private String name;
 
     public UsersList() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public UsersList(String iD, String name) {
@@ -19,4 +29,5 @@ public class UsersList {
     public void setiD(String iD) {
         this.iD = iD;
     }
+
 }

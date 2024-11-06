@@ -32,7 +32,7 @@ public class EventsArrayAdapter extends ArrayAdapter<EventModel> {
         TextView eventFacility = view.findViewById(R.id.event_listview_facility);
         TextView eventDate = view.findViewById(R.id.event_listview_date);
         eventTitle.setText(event.getEventTitle());
-        eventFacility.setText(event.getFacilityID());
+        eventFacility.setText(event.getEventStrLocation());
         eventDate.setText(event.getJoinDeadline().toString());
 
         return view;

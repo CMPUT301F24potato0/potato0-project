@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -43,8 +44,8 @@ public class EventEntrantActivity extends AppCompatActivity {
     private DocumentReference facilityRef;
     private String organizer;
     // Event stuff and user stuff
-    private String eventID;
-    private String userID;
+    private UsersList userList;
+    private EventModel event;
     // XML stuff
     private TextView eventDescription;
     private ImageView eventPoster;
@@ -56,7 +57,6 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -121,8 +121,8 @@ public class EventEntrantActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            eventID = extras.getString("event_id");
-            userID = extras.getString("user_id");
+            event = (EventModel) extras.getSerializable("eventModel");
+            userList = (UsersList) extras.getSerializable("userList");
         }
 
         db = FirebaseFirestore.getInstance();
@@ -137,73 +137,70 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizerName = findViewById(R.id.event_entrant_page_organizer_name1);
         eventDescription = findViewById(R.id.event_entrant_page_event_details1);
 
-
         progressBar = findViewById(R.id.progressBar1);
         linearLayout = findViewById(R.id.linearLayout1);
 
         back = findViewById(R.id.floatingActionButton);
 
         // getting event information from Firestore
-        final DocumentReference eventRef = db.collection("events").document(eventID);
+        final DocumentReference eventRef = db.collection("events").document(event.getEventID());
 
-        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("Firebase Error", "Listen failed.", e);
-                    return;
+
+        eventTitle.setText(event.getEventTitle());
+        eventLocation.setText(event.getEventStrLocation());
+        Date javaDate = event.getJoinDeadline();
+        eventDate.setText(javaDate.toString());
+        organizer = event.getOrganizer();
+        organizerName.setText(organizer);
+        eventDescription.setText(event.getEventDescription());
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+
+        if (event.checkUserInList(userList, event.getWaitingList())) {
+            unjoinBtn.setVisibility(View.VISIBLE);
+            joinBtn.setVisibility(View.GONE);
+            unjoinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    event.unqueueWaitingList(userList);
+                    db.collection("events").document(event.getEventID()).set(event);
+                    String topic = eventRef + "_waitlist";
+                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
+                    unsubscribeFromTopic.unsubscribe();
+
+
                 }
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("Firebase Data", "Current data: " + snapshot.getData());
-                    eventTitle.setText(snapshot.getString("title"));
-                    eventLocation.setText(snapshot.getString("location_string"));
-                    Date javaDate = snapshot.getTimestamp("join_deadline").toDate();
-                    eventDate.setText(javaDate.toString());
-                    organizer = snapshot.getString("organizer");
-                    organizerName.setText(organizer);
-                    eventDescription.setText(snapshot.getString("description"));
-                    progressBar.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.VISIBLE);
-                    boolean geo = snapshot.getBoolean("geolocation_required");
-                    if (((List<String>) snapshot.get("waiting_list")).contains(userID)) {
-                        unjoinBtn.setVisibility(View.VISIBLE);
-                        joinBtn.setVisibility(View.GONE);
-                        unjoinBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                eventRef.update("waiting_list", FieldValue.arrayRemove(userID));
-                                String topic = eventRef + "_waitlist";
-                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
-                                subscribeToTopic.subscribe();
-                                Log.e("Subscribed to topic",topic);
-                                askNotificationPermission();
+            });
+        } else {
+            unjoinBtn.setVisibility(View.GONE);
+            joinBtn.setVisibility(View.VISIBLE);
+            joinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (event.getGeolocationRequired()) {
+                        new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                        // eventRef = eventID
+                        String topic = eventRef + "_waitlist";
+                        SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+                        subscribeToTopic.subscribe();
 
-                            }
-                        });
-                    } else {
-                        unjoinBtn.setVisibility(View.GONE);
-                        joinBtn.setVisibility(View.VISIBLE);
-                        joinBtn.setOnClickListener(new View.OnClickListener() {
-                           @Override
-                           public void onClick(View view) {
-                               String topic = eventRef + "_waitlist";
-                               UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
-                               unsubscribeFromTopic.unsubscribe();
-                               Log.e("Unsubscribed to topic",topic);
-                               if (geo) {
-                                   new geo_requirement_dialog(userID, eventRef).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                               } else {
-                                   eventRef.update("waiting_list", FieldValue.arrayUnion(userID));
-                               }
-                           }
-                        });
                     }
-                } else {
-                    Log.d("Firebase data", "Current data: null");
+                    else {
+                        try {
+                            event.queueWaitingList(userList);
+                            String topic = eventRef + "_waitlist";
+                            SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+                            subscribeToTopic.subscribe();
+
+                        } catch (Exception e) {
+                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
+                        }
+                        db.collection("events").document(event.getEventID()).set(event);
+
+                    }
                 }
-            }
-        });
+            });
+        }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
