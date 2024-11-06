@@ -47,6 +47,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     private CurrentUser organizer;
     private FirebaseFirestore db;
+    private EventModel event;
+    private EventOrganizerActivity eventActivity;
 
     public CreateEventDialogueFragment() {
         // initial values
@@ -59,31 +61,28 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
-    // for creating a new event
+    // for creating a new event (organizer information required)
     public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
         this();
         this.organizer = organizer;
+        this.event = null;
         this.db = db;
     }
 
-    // for editing an existing event
-    public CreateEventDialogueFragment(String eventTitle,
-                                       Integer capacity,
-                                       Integer waitListLimit,
-                                       Date joinDeadline,
-                                       String strLocation,
-                                       Boolean geolocationRequired,
-                                       String eventDescription,
-                                       CurrentUser organizer,
-                                       FirebaseFirestore db) {
-        this(organizer, db);
-        this.eventTitle = eventTitle;
-        this.capacity = capacity;
-        this.waitListLimit = waitListLimit;
-        this.joinDeadline = joinDeadline;
-        this.strLocation = strLocation;
-        this.geolocationRequired = geolocationRequired;
-        this.eventDescription = eventDescription;
+    // for editing an existing event (event information required, organizer information not required)
+    public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
+        Log.d("TESTING", "Dialog Start");
+        this.eventTitle = event.getEventTitle();
+        this.capacity = event.getCapacity();
+        this.waitListLimit = event.getWaitingListLimit();
+        this.joinDeadline = event.getJoinDeadline();
+        this.strLocation = event.getEventStrLocation();
+        this.geolocationRequired = event.getGeolocationRequired();
+        this.eventDescription = event.getEventDescription();
+        this.organizer = null;
+        this.event = event;
+        this.db = db;
+        this.eventActivity = eventActivity;
     }
 
     @NonNull
@@ -199,28 +198,42 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 break;
             case 4: // user selects "confirm"
                 // pass info to database
-                EventModel event = new EventModel(
-                        organizer.getFacilityID(),
-                        geolocationRequired,
-                        waitListLimit,
-                        capacity,
-                        joinDeadline,
-                        strLocation,
-                        eventTitle,
-                        eventDescription,
-                        organizer.getfName() + " " + organizer.getlName()
-                );
-                db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()){
-                            DocumentReference documentReference = task.getResult();
-                            String eventID = documentReference.getId();
-                            event.setEventID(eventID);
-                            db.collection("events").document(eventID).set(event);
+                if (event == null && organizer != null) {  // creating a new event
+                    EventModel event = new EventModel(
+                            organizer.getFacilityID(),
+                            geolocationRequired,
+                            waitListLimit,
+                            capacity,
+                            joinDeadline,
+                            strLocation,
+                            eventTitle,
+                            eventDescription,
+                            organizer.getfName() + " " + organizer.getlName()
+                    );
+                    db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()){
+                                DocumentReference documentReference = task.getResult();
+                                String eventID = documentReference.getId();
+                                event.setEventID(eventID);
+                                db.collection("events").document(eventID).set(event);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                else {  // editing (updating) an existing event)
+                    event.setEventTitle(eventTitle);
+                    event.setCapacity(capacity);
+                    event.setWaitingListLimit(waitListLimit);
+                    event.setEventStrLocation(strLocation);
+                    event.setGeolocationRequired(geolocationRequired);
+                    event.setJoinDeadline(joinDeadline);
+                    event.setEventDescription(eventDescription);
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+                Log.d("TESTING", "Dialog end");
+                eventActivity.updateViews();
                 dismiss();
                 break;
         }
