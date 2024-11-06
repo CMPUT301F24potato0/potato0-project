@@ -133,28 +133,28 @@
                             android:text="Organizer:"
                             android:textSize="20sp" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:paddingTop="10dp">-->
 
-                            <ImageView
-                                android:id="@+id/event_organizer_organizer_profile_picture"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_facility_background" />
+<!--                            <ImageView-->
+<!--                                android:id="@+id/event_organizer_organizer_profile_picture"-->
+<!--                                android:layout_width="50dp"-->
+<!--                                android:layout_height="50dp"-->
+<!--                                android:src="@drawable/ic_facility_background" />-->
 
-                            <TextView
-                                android:id="@+id/event_organizer_organizer_and_facility_names"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Organizer Name\nFacility"
-                                android:textSize="15sp"
-                                android:paddingLeft="10dp"
-                                android:layout_gravity="center"
-                                android:maxLines="3"
-                                android:ellipsize="end" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:id="@+id/event_organizer_organizer_and_facility_names"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Organizer Name\nFacility"-->
+<!--                                android:textSize="15sp"-->
+<!--                                android:paddingLeft="10dp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:maxLines="3"-->
+<!--                                android:ellipsize="end" />-->
+<!--                        </LinearLayout>-->
 
                         <LinearLayout
                             android:layout_width="wrap_content"
