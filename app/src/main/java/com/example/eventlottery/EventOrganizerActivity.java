@@ -17,14 +17,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 
 public class EventOrganizerActivity extends AppCompatActivity {
 
@@ -61,7 +58,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
 
         editEvent = findViewById(R.id.event_organizer_edit_event_button);
-        // back = findViewById(R.id.back_button);
         eventTitle = findViewById(R.id.event_organizer_event_title);
         eventDate = findViewById(R.id.event_organizer_event_date);
         eventDescription = findViewById(R.id.event_organizer_event_description);
@@ -89,132 +85,79 @@ public class EventOrganizerActivity extends AppCompatActivity {
         progessBar.setVisibility(View.GONE);
         eventView.setVisibility(View.VISIBLE);
 
-        QRCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
-            }
+        QRCode.setOnClickListener(v -> new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog"));
+
+        waitlist.setOnClickListener(view -> {
+            Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
+            i.putExtra("eventModel", event);
+            startActivity(i);
         });
 
-        waitlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
-                i.putExtra("eventModel", event);
-                startActivity(i);
-            }
+        cancelled.setOnClickListener(v -> {
+            Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
+            i.putExtra("eventModel", event);
+            startActivity(i);
         });
 
-        cancelled.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
-                i.putExtra("eventModel", event);
-                startActivity(i);
-            }
+        invited.setOnClickListener(v -> {
+            Intent i = new Intent(EventOrganizerActivity.this, InvitedListActivity.class);
+            i.putExtra("eventModel", event);
+            startActivity(i);
         });
 
-        invited.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventOrganizerActivity.this, InvitedListActivity.class);
-                i.putExtra("eventModel", event);
-                startActivity(i);
-            }
+        enrolled.setOnClickListener(v -> {
+            Intent i = new Intent(EventOrganizerActivity.this, EnrolledListActivity.class);
+            i.putExtra("eventModel", event);
+            startActivity(i);
         });
 
-        enrolled.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(EventOrganizerActivity.this, EnrolledListActivity.class);
-                i.putExtra("eventModel", event);
-                startActivity(i);
-            }
+        editEvent.setOnClickListener(v -> {
+            CreateEventDialogueFragment editDialog = new CreateEventDialogueFragment(
+                    event.getEventID(),
+                    event.getEventTitle(),
+                    event.getCapacity(),
+                    event.getWaitingListLimit(),
+                    event.getJoinDeadline(),
+                    event.getEventStrLocation(),
+                    event.getGeolocationRequired(),
+                    event.getEventDescription(),
+                    curUser,
+                    db
+            );
+            editDialog.show(getSupportFragmentManager(), "edit_event");
         });
 
-        editEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateEventDialogueFragment editDialog = new CreateEventDialogueFragment(
-                        event.getEventID(),
-                        event.getEventTitle(),
-                        event.getCapacity(),
-                        event.getWaitingListLimit(),
-                        event.getJoinDeadline(),
-                        event.getEventStrLocation(),
-                        event.getGeolocationRequired(),
-                        event.getEventDescription(),
-                        curUser,
-                        db
-                );
-                editDialog.show(getSupportFragmentManager(), "edit_event");
-            }
-        });
-
-        // Fetch and display counts
-        fetchWaitlistCount();
-        fetchInvitedCount();
-        fetchCancelledCount();
-        fetchEnrolledCount();
+        // Setup snapshot listeners for counters
+        setupSnapshotListeners();
     }
 
-    private void fetchWaitlistCount() {
-        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        List<Map<String, Object>> waitlistArray = (List<Map<String, Object>>) document.get("waitingList");
+    private void setupSnapshotListeners() {
+        db.collection("events").document(eventID)
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        Log.w("EventOrganizerActivity", "Listen failed.", e);
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        // Update Waitlist Count
+                        ArrayList<UsersList> waitlistArray = (ArrayList<UsersList>) documentSnapshot.get("waitingList");
                         waitlist.setText("Waitlist: " + (waitlistArray != null ? waitlistArray.size() : 0));
-                    }
-                }
-            }
-        });
-    }
 
-    private void fetchInvitedCount() {
-        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        List<Map<String, Object>> invitedArray = (List<Map<String, Object>>) document.get("invitedList");
+                        // Update Invited Count
+                        ArrayList<UsersList> invitedArray = (ArrayList<UsersList>) documentSnapshot.get("invitedList");
                         invited.setText("Invited: " + (invitedArray != null ? invitedArray.size() : 0));
-                    }
-                }
-            }
-        });
-    }
 
-    private void fetchCancelledCount() {
-        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        List<Map<String, Object>> cancelledArray = (List<Map<String, Object>>) document.get("cancelledList");
+                        // Update Cancelled Count
+                        ArrayList<UsersList> cancelledArray = (ArrayList<UsersList>) documentSnapshot.get("cancelledList");
                         cancelled.setText("Cancelled: " + (cancelledArray != null ? cancelledArray.size() : 0));
-                    }
-                }
-            }
-        });
-    }
 
-    private void fetchEnrolledCount() {
-        db.collection("events").document(eventID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        List<Map<String, Object>> enrolledArray = (List<Map<String, Object>>) document.get("enrolledList");
+                        // Update Enrolled Count
+                        ArrayList<UsersList> enrolledArray = (ArrayList<UsersList>) documentSnapshot.get("enrolledList");
                         enrolled.setText("Enrolled: " + (enrolledArray != null ? enrolledArray.size() : 0));
+                    } else {
+                        Log.d("EventOrganizerActivity", "Current data: null");
                     }
-                }
-            }
-        });
+                });
     }
 }
