@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -57,9 +58,20 @@ public class EventWaitlistActivity extends AppCompatActivity {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String topic = event.getEventID() + "_waitlist";
-                SendNotification sendNotification = new SendNotification(getApplicationContext(), topic);
-                sendNotification.popup();
+
+                //Need to get arrayList of all UserID's
+
+                ArrayList<UsersList> userIDs = event.getWaitingList();
+                String eventID = event.getEventID();
+                for(int i = 0; i < userIDs.size(); i++){
+                    String topic = eventID + "_" + userIDs.get(i);
+                    SendNotification sendNotification = new SendNotification(getApplicationContext(), topic);
+                    sendNotification.popup();
+
+                }
+
+
+
             }
         });
 
