@@ -24,6 +24,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +34,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+
+import org.w3c.dom.Document;
 
 import java.util.Date;
 import java.util.List;
@@ -97,7 +101,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         }
     }
     // ****************************************************************************************************************
-
+    CurrentUser tempCurUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,10 +162,29 @@ public class EventEntrantActivity extends AppCompatActivity {
                     // Unjoining
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
-                    String topic = eventRef + "_waitlist";
+
+
+
+                    String eventID = event.getEventID();
+                    String userID = userList.getiD();
+                    String topic = eventID + "_" + userID;
+
+
+                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                                tempCurUser.removeTopics(topic);
+                                db.collection("users").document(userID).set(tempCurUser);
+                            }
+                        }
+                    });
+
+
                     UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
                     unsubscribeFromTopic.unsubscribe();
-
 
 
 
@@ -176,11 +199,28 @@ public class EventEntrantActivity extends AppCompatActivity {
                     if (event.getGeolocationRequired()) {
                         // Joining
                         new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                        // eventRef = eventID
-                        String topic = eventRef + "_waitlist";
-                        SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
-                        subscribeToTopic.subscribe();
+                        // Getting event specific topic
 
+                        String eventID = event.getEventID();
+                        String userID = userList.getiD();
+                        String topic = eventID + "_" + userID;
+
+
+
+                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                                    tempCurUser.addTopics(topic);
+                                    db.collection("users").document(userID).set(tempCurUser);
+                                }
+                            }
+                        });
+
+                        SubscribeToTopic subscribeToTopic_geo = new SubscribeToTopic(topic,getApplicationContext());
+                        subscribeToTopic_geo.subscribe();
 
                         askNotificationPermission();
 
@@ -189,10 +229,28 @@ public class EventEntrantActivity extends AppCompatActivity {
                     else {
                         try {
                             // also joining
-                            event.queueWaitingList(userList);
-                            String topic = eventRef + "_waitlist";
+
+                            String eventID = event.getEventID();
+                            String userID = userList.getiD();
+                            String topic = eventID + "_" + userID;
+
+
+                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists()) {
+                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                                        tempCurUser.addTopics(topic);
+                                        db.collection("users").document(userID).set(tempCurUser);
+                                    }
+                                }
+                            });
+
                             SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
                             subscribeToTopic.subscribe();
+
+
 
                         } catch (Exception e) {
                             Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();

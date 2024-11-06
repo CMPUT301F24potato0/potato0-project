@@ -157,4 +157,12 @@ public class CurrentUser implements Serializable {
     public void setTopics(ArrayList<String> topics) {
         this.topics = topics;
     }
+
+    public void addTopics(String topic) {
+        this.topics.add(topic);
+    }
+
+    public void removeTopics(String topic){
+        this.topics.remove(topic);
+    }
 }

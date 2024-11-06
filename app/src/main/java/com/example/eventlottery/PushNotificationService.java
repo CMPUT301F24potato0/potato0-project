@@ -36,6 +36,7 @@ public class PushNotificationService extends FirebaseMessagingService{
         // TESTING
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
+        // topic should be "eventID userID"
         String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
         String check = "signup";
         Log.d("Recieved notification", title);
