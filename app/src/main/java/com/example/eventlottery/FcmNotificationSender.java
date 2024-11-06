@@ -18,7 +18,9 @@ import java.util.Map;
 
 public class FcmNotificationSender {
 
-//    private final String userFcmToken;
+    //https://www.youtube.com/watch?v=o_PikvavsYY&ab_channel=CodingwithMukund
+
+    //    private final String userFcmToken;
 
     private final String title;
 
@@ -64,7 +66,7 @@ public class FcmNotificationSender {
             }, volleyError -> {
                 // code run error
                 volleyError.getCause();
-                Log.d("volleyError", volleyError.getMessage());
+                Log.d("volleyError", ""+volleyError.getMessage());
             }){
 
                 @NonNull
@@ -77,7 +79,7 @@ public class FcmNotificationSender {
                     header.put("Content-Type","application/json; UTF-8");
                     header.put("Authorization","Bearer " + accessKey);
 
-//                    Log.e("Notificaiton Sender: ", accessKey);
+                    Log.e("Notificaiton Sender: ", "" + accessKey);
 
                     return header;
                 }
