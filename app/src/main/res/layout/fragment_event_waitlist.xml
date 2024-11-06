@@ -8,6 +8,8 @@
     android:id="@+id/event_waitlist">
 
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:src="@color/gray2" />
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/gray4" />
 
 
         <LinearLayout

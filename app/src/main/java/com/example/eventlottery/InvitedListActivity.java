@@ -1,7 +1,9 @@
 package com.example.eventlottery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -47,5 +49,13 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedList = findViewById(R.id.invited_list);
         invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite", event, db);
         invitedList.setAdapter(invitedAdapter);
+
+        // Add back button functionality
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(InvitedListActivity.this, EventOrganizerActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }
