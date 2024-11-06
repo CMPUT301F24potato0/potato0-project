@@ -116,7 +116,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EventWaitlistActivity.this, ChosenUserActivity.class);
+                Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
                 intent.putExtra("eventModel", event);
                 startActivity(intent);
             }
