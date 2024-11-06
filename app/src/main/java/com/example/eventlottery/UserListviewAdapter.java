@@ -58,6 +58,7 @@ public class UserListviewAdapter extends ArrayAdapter<UsersList> {
                 public void onClick(View v) {
                     event.unqueueWaitingList(user);
                     removeFromList(user, list);
+
                     db.collection("events").document(event.getEventID()).set(event);
                 }
             });

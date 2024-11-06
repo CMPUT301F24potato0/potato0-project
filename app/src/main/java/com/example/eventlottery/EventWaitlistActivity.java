@@ -28,6 +28,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private UserListviewAdapter adapter;
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private ArrayList<UsersList> userWaitList;
 
     @Override
@@ -88,6 +89,25 @@ public class EventWaitlistActivity extends AppCompatActivity {
             Intent intent = new Intent(EventWaitlistActivity.this, EventOrganizerActivity.class);
             startActivity(intent);
             finish();
+        });
+        waitlist.setAdapter(adapter);
+        db.collection("events").
+                document(event.getEventID()).
+                addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                if (doc != null && doc.exists()) {
+                    userWaitList.clear();
+                    for(UsersList u : doc.toObject(EventModel.class).getWaitingList()) {
+                        userWaitList.add(u);
+                        adapter.notifyDataSetChanged();
+                    }
+//                    userWaitList = (ArrayList<UsersList>) doc.get("waitingList");
+                }
+            }
         });
     }
 }
