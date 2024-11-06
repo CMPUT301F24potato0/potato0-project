@@ -1,14 +1,20 @@
 package com.example.eventlottery;
 
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.service.credentials.Action;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -41,6 +47,7 @@ public class PushNotificationService extends FirebaseMessagingService{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+//            Boolean ismuted = Profile.getIsmute();
             Boolean ismuted = ProfileFragment.getIsmute();
             Log.e("Ismuted", String.valueOf(ismuted));
 
@@ -97,6 +104,7 @@ public class PushNotificationService extends FirebaseMessagingService{
 
 
            if(!ismuted) {
+               Log.e("Ismuted??",""+ismuted);
                NotificationManagerCompat.from(this).notify(1, notification.build());
            }
 
