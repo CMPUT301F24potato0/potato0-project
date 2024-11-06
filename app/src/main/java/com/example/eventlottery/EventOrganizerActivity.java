@@ -17,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class EventOrganizerActivity extends AppCompatActivity {
+    /*
+        Getting the views from the layout file
+     */
 
     private FirebaseFirestore db;
     private Button editEvent;
@@ -42,7 +47,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
-    private CurrentUser curUser;
+    private CurrentUser curUser;  // Ensure this is initialized correctly
     private ConstraintLayout progessBar;
 
     @Override
@@ -57,12 +62,16 @@ public class EventOrganizerActivity extends AppCompatActivity {
             return insets;
         });
 
+        /*
+            Initializing the views
+         */
         editEvent = findViewById(R.id.event_organizer_edit_event_button);
+//        back = findViewById(R.id.back_button);
         eventTitle = findViewById(R.id.event_organizer_event_title);
         eventDate = findViewById(R.id.event_organizer_event_date);
         eventDescription = findViewById(R.id.event_organizer_event_description);
         eventPoster = findViewById(R.id.event_organizer_event_poster);
-        organizerName = findViewById(R.id.event_organizer_organizer_and_facility_names);
+//        organizerName = findViewById(R.id.event_organizer_organizer_and_facility_names);
         QRCode = findViewById(R.id.event_organizer_QR_code_view_button);
         invited = findViewById(R.id.event_organizer_invited_button);
         cancelled = findViewById(R.id.event_organizer_cancelled_button);
@@ -81,34 +90,51 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventDescription.setText(event.getEventDescription());
         eventTitle.setText(event.getEventTitle());
         eventDate.setText(event.getJoinDeadline().toString());
-        organizerName.setText(event.getOrganizer());
+//        organizerName.setText(event.getOrganizer());
         progessBar.setVisibility(View.GONE);
         eventView.setVisibility(View.VISIBLE);
 
-        QRCode.setOnClickListener(v -> new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog"));
-
-        waitlist.setOnClickListener(view -> {
-            Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
-            i.putExtra("eventModel", event);
-            startActivity(i);
+        QRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+            }
         });
 
-        cancelled.setOnClickListener(v -> {
-            Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
-            i.putExtra("eventModel", event);
-            startActivity(i);
+        waitlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+            }
         });
 
-        invited.setOnClickListener(v -> {
-            Intent i = new Intent(EventOrganizerActivity.this, InvitedListActivity.class);
-            i.putExtra("eventModel", event);
-            startActivity(i);
+        cancelled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+            }
         });
 
-        enrolled.setOnClickListener(v -> {
-            Intent i = new Intent(EventOrganizerActivity.this, EnrolledListActivity.class);
-            i.putExtra("eventModel", event);
-            startActivity(i);
+        invited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventOrganizerActivity.this, InvitedListActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+            }
+        });
+
+        enrolled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventOrganizerActivity.this, EnrolledListActivity.class);
+                i.putExtra("eventModel", event);
+                startActivity(i);
+            }
         });
 
         editEvent.setOnClickListener(v -> {
