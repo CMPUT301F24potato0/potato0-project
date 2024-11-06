@@ -49,12 +49,12 @@ public class EnrolledListActivity extends AppCompatActivity {
         enrollAdapter = new UserListviewAdapter(this, 0, userEnrollList, "enrolled", event, db);
         enrollList.setAdapter(enrollAdapter);
 
-        // Add back button functionality
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(EnrolledListActivity.this, EventOrganizerActivity.class);
-            startActivity(intent);
-            finish();
-        });
+//        // Add back button functionality
+//        Button backButton = findViewById(R.id.back_button);
+//        backButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(EnrolledListActivity.this, EventOrganizerActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
     }
 }

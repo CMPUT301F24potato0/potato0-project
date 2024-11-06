@@ -50,12 +50,12 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite", event, db);
         invitedList.setAdapter(invitedAdapter);
 
-        // Add back button functionality
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(InvitedListActivity.this, EventOrganizerActivity.class);
-            startActivity(intent);
-            finish();
-        });
+//        // Add back button functionality
+//        Button backButton = findViewById(R.id.back_button);
+//        backButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(InvitedListActivity.this, EventOrganizerActivity.class);
+//            startActivity(intent);
+//            finish();
+//        });
     }
 }
