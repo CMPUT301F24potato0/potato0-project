@@ -97,14 +97,13 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                     facility.setEmail(facilityEmailEditText.getText().toString());
                     facility.setCapacity(Integer.parseInt(facilityCapacityEditText.getText().toString()));
                     db.collection("facilities").document(user.getiD()).set(facility);
-                    user.setFacilityID(user.getiD());
-                    db.collection("users").document(user.getiD()).set(user);
-                    if (user.getFacilityID().equals("")) {  // after creating a facility, change the view
+                    if (user.getFacilityID().equals("")) {  // after creating a facility, change the view and update user to have a faciltyID
                         facilityFragment.changeView(1);
+                        user.setFacilityID(user.getiD());
+                        db.collection("users").document(user.getiD()).set(user);
                     }
-                    else {  // after updating a facility, update the view
-                        facilityFragment.updateViews();
-                    }
+                    // after updating or creating a facility, update the view
+                    facilityFragment.updateViews();
                     dismiss();
                 }
                 else {
