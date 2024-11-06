@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,7 +36,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.Manifest;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This is the MainActivity class
@@ -55,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
     ConstraintLayout mainActivityProgressBar;
-
     /**
      * This method is called when opening the app.
      * This method gets the AndroidID creates a new user.
@@ -74,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         mainActivityView = findViewById(R.id.main_activity_view);
         mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
 
         curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
@@ -83,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         DocumentReference currentUserReference = usersRef.document(androidIDStr);
         DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
 
-        currentUserReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Task<DocumentSnapshot> task = currentUserReference.get();
+
+        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -93,36 +100,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     } else {
                         newUser(curUser);
                     }
+                    userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    facility = document.toObject(FacilityModel.class);
+                                    curUser.setFacilityID(facility.getUserID());
+                                }
+                                else {
+                                    Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else {
+                                Log.d("Firestore", "get failed with ", task.getException());
+                                throw new RuntimeException(task.getException().toString());
+                            }
+                        }
+                    });
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
                     throw new RuntimeException(task.getException().toString());
                 }
             }
         });
-        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        facility = document.toObject(FacilityModel.class);
-                        curUser.setFacilityID(facility.getUserID());
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    Log.d("Firestore", "get failed with ", task.getException());
-                    throw new RuntimeException(task.getException().toString());
-                }
-            }
-        });
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.scanQR);
-        mainActivityView.setVisibility(View.VISIBLE);
-        mainActivityProgressBar.setVisibility(View.GONE);
 
+        // https://stackoverflow.com/questions/66698325/how-to-wait-for-firebase-task-to-complete-to-get-result-as-an-await-function
+        task.onSuccessTask(task1 -> {
+            mainActivityProgressBar.setVisibility(View.GONE);
+            mainActivityView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            return null;
+        });
     }
 
     /**
