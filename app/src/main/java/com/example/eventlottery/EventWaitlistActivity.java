@@ -26,12 +26,14 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button notify;
     private ListView waitlist;
     private EventModel event;
-    private UserListviewAdapter adapter;
+    private WaitlistEventAdapter adapter;
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private ArrayList<UsersList> userWaitList;
 
+
+    private Button drawSample;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
+        drawSample = findViewById(R.id.draw_sample_button);
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +76,9 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
         userWaitList = new ArrayList<>();
         userWaitList = event.getWaitingList();
-        adapter = new UserListviewAdapter(this, R.layout.user_listview_content, userWaitList, "waitlist", event, db);
-
+        adapter = new WaitlistEventAdapter(this, 100, userWaitList,event,db);
+        waitlist.setAdapter(adapter);
+        // When user un joins the event its is now being showed in this 
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -93,7 +97,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     }
                 });
 
-        waitlist.setAdapter(adapter);
 
         // Add back button functionality
         Button backButton = findViewById(R.id.back_button);
@@ -119,6 +122,15 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     }
 //                    userWaitList = (ArrayList<UsersList>) doc.get("waitingList");
                 }
+            }
+        });
+
+        drawSample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
+                intent.putExtra("eventModel", event);
+                startActivity(intent);
             }
         });
     }
