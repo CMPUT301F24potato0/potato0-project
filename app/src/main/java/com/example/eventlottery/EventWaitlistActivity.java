@@ -1,10 +1,13 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,11 +46,12 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private ArrayList<UsersList> cancelList;
 
     private Button drawSample;
+    private EditText drawSampleEditText;
+    private int remaining_spots;
     private String title;
     private String body;
 
     private SendNotification sendNotification;
-
 
     /**
      * On create Override
@@ -75,6 +79,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
         drawSample = findViewById(R.id.draw_sample_button);
+        drawSampleEditText = findViewById(R.id.draw_sample_edittext);
 
 
 
@@ -142,44 +147,68 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     }
                 });
 
+        // calculate remaining spots for event and update edittext
+        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+        drawSampleEditText.setText(Integer.toString(remaining_spots));
 
-//        // Add back button functionality
-//        Button backButton = findViewById(R.id.back_button);
-//        backButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(EventWaitlistActivity.this, EventOrganizerActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
-
+        // Adapted from https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
+        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            event = (EventModel) result.getData().getSerializableExtra("eventModel");
+                        }
+                    }
+                }
+        );
 
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Draw random sample based on event capacity
-                ArrayList<UsersList> chosenEntrants = drawRandomSample(userWaitList, event.getCapacity());
-
-                // Pass chosen entrants to ChosenListActivity
-                Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
-                intent.putExtra("chosenEntrants", chosenEntrants);
-                intent.putExtra("eventModel", event);
-                startActivity(intent);
+                // Update remaining spots in case the organizer returns to this page and clicks draw sample button again
+                remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+                // Check for empty input
+                if (drawSampleEditText.getText().toString().equals("")) {
+                    Toast.makeText(EventWaitlistActivity.this, "Please enter a number.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Integer sample_amount = Integer.parseInt(drawSampleEditText.getText().toString());
+                    // Check for 0 sample_amount
+//                    if (sample_amount == 0) {
+//                        Toast.makeText(EventWaitlistActivity.this, "Cannot sample 0 entrants.", Toast.LENGTH_SHORT).show();
+//                    }
+                    // Check if the waiting list has enough people to sample
+                    if (remaining_spots < sample_amount) {
+                        Toast.makeText(EventWaitlistActivity.this, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (event.getWaitingList().size() < sample_amount) {
+                        Toast.makeText(EventWaitlistActivity.this, "Waiting list only has " + event.getWaitingList().size() + " entrants left!", Toast.LENGTH_SHORT).show();
+                    }
+                    // Check if organizer is trying to sample more than the remaining amount of spots available for the event
+                    else {
+                        Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
+                        intent.putExtra("sample_amount", sample_amount);
+                        intent.putExtra("remaining_spots", remaining_spots);
+                        intent.putExtra("eventModel", event);
+                        startActivityIntent.launch(intent);
+                    }
+                }
             }
         });
     }
 
+
     /**
-     * Draws a random sample from the waitlist based on the event's capacity.
-     * If the waitlist is smaller than the capacity, returns the entire waitlist.
-     *
-     * @param waitlist The list of users on the waitlist.
-     * @param capacity The maximum number of entrants to select.
-     * @return A randomly selected subset of the waitlist.
+     * Returns the EventModel object in an intent after modifications have been done to it
      */
-    private ArrayList<UsersList> drawRandomSample(ArrayList<UsersList> waitlist, int capacity) {
-        if (waitlist.size() <= capacity) {
-            return new ArrayList<>(waitlist); // Return full list if within capacity
-        }
-        Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
-        return new ArrayList<>(waitlist.subList(0, capacity)); // Return subset
+    @Override
+    public void finish() {
+        // Adapted from https://stackoverflow.com/questions/22549294/getting-intent-result-from-ondestroy
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("eventModel", event);
+        setResult(Activity.RESULT_OK, returnIntent);
+        super.finish();
     }
 }

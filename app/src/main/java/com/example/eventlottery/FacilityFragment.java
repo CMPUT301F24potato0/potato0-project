@@ -135,6 +135,7 @@ public class FacilityFragment extends Fragment {
                     Intent i = new Intent(getActivity(), EventOrganizerActivity.class);
                     i.putExtra("event_id", eventClicked.getEventID());
                     i.putExtra("eventModel", eventClicked);
+                    i.putExtra("currentUser", curUser);
                     startActivity(i);
                 }
             }
