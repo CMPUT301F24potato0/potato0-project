@@ -14,7 +14,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Invited List Array Adapter
+ */
 public class InvitedListArrayAdapter extends ArrayAdapter {
+    /**
+     * Constructor for InvitedListArrayAdapter
+     * @param context The context of the application
+     * @param resource resource
+     */
     public InvitedListArrayAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
@@ -23,6 +31,13 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
     private EventModel event;
     FirebaseFirestore db;
 
+    /**
+     * Constructor for InvitedListArrayAdapter
+     * @param context The context of the application
+     * @param entrants The list of users to be displayed
+     * @param event The event model
+     * @param db Firebase Firestore
+     */
     public InvitedListArrayAdapter(Context context, ArrayList<UsersList> entrants, EventModel event, FirebaseFirestore db) {
         super(context, 0, entrants);
         this.chosenEntrants = entrants;

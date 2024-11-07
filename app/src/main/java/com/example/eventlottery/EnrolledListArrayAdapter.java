@@ -14,12 +14,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Enrolled List Array Adapter
+ */
 public class EnrolledListArrayAdapter extends ArrayAdapter<UsersList> {
     private String state;
     private ArrayList<UsersList> list;
     private EventModel event;
     private FirebaseFirestore db;
 
+    /**
+     * Constructor for EnrolledListArrayAdapter
+     * @param context The context of the application
+     * @param resource resource
+     * @param list The list of users to be displayed
+     * @param state The state of the list (enrolled or waiting)
+     * @param event The event model
+     * @param db Firebase Firestore
+     */
     public EnrolledListArrayAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, String state, EventModel event, FirebaseFirestore db) {
         super(context, resource, list);
         this.list = list;
