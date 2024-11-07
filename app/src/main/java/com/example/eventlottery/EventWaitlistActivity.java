@@ -40,6 +40,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<UsersList> userWaitList;
+    private ArrayList<UsersList> cancelList;
 
     private Button drawSample;
     private String title;
@@ -111,7 +112,8 @@ public class EventWaitlistActivity extends AppCompatActivity {
         });
 
         userWaitList = event.getWaitingList();
-        adapter = new WaitlistEventAdapter(this, 100, userWaitList, event, db);
+        cancelList = event.getCancelledList();
+        adapter = new WaitlistEventAdapter(this, 100, userWaitList, cancelList, event, db);
         waitlist.setAdapter(adapter);
 
         // When user unjoins the event, it is now being shown in this
@@ -124,11 +126,17 @@ public class EventWaitlistActivity extends AppCompatActivity {
                             Log.e("EventWaitlistActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
+                            ArrayList<UsersList> temp = (ArrayList<UsersList>) userWaitList.clone();
                             userWaitList.clear();
                             ArrayList<UsersList> userWaitListTemp = (ArrayList<UsersList>) doc.toObject(EventModel.class).getWaitingList();
                             for (UsersList u : userWaitListTemp) {
                                 userWaitList.add(u);
+                                temp.remove(u);
                             }
+
+//                            for (UsersList u : temp) {
+//                                event.getCancelledList().add(u);
+//                            }
                             adapter.notifyDataSetChanged();
                         }
                     }

@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ public class CancelledListActivity extends AppCompatActivity {
     private ArrayAdapter<UsersList> cancelAdapter;
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Button notification_send;
 
     /**
      * Called when the activity is first created.
@@ -58,5 +60,17 @@ public class CancelledListActivity extends AppCompatActivity {
         cancelledList = findViewById(R.id.cancelled_list);
         cancelAdapter = new CancelledListArrayAdapter(this, 0, userCancelList, "cancelled", event, db);
         cancelledList.setAdapter(cancelAdapter);
+        cancelAdapter.notifyDataSetChanged();
+
+        notification_send = (Button) findViewById(R.id.cancelled_notif_button);
+        notification_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CancelledListActivity.this,SendNotificationActivity.class);
+                intent.putExtra("event",event);
+                intent.putExtra("Bool",0);
+                startActivity(intent);
+            }
+        });
     }
 }

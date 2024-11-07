@@ -95,7 +95,6 @@ public class PushNotificationService extends FirebaseMessagingService{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-//            Boolean ismuted = Profile.getIsmute();
             Boolean ismuted = ProfileFragment.getIsmute();
             Log.e("Ismuted", String.valueOf(ismuted));
 
