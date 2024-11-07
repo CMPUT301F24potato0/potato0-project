@@ -104,7 +104,15 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.geolocationRequired = geolocationRequired;
         this.eventDescription = eventDescription;
     }
-
+    private EventModel event;
+    public CreateEventDialogueFragment (EventModel event, FirebaseFirestore db, CurrentUser org) {
+        this(event.getEventID(), event.getEventTitle(), event.getCapacity(),
+                event.getWaitingListLimit(), event.getJoinDeadline(), event.getEventStrLocation(),
+                event.getGeolocationRequired(), event.getEventDescription(),
+                org, db);
+        this.event = event;
+        this.db = db;
+    }
     /**
      * Initialize default values for the event
      */
