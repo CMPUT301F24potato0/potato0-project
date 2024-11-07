@@ -41,12 +41,15 @@ public class WaitlistedEventsFragment extends Fragment{
     private Button mute_btn;
     private Button unmute_btn;
 
+    /**
+     * This is the empty constructor
+     */
     public WaitlistedEventsFragment(){
         // require a empty public constructor
     }
 
     /**
-     *
+     * oncreateview override
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -68,8 +71,6 @@ public class WaitlistedEventsFragment extends Fragment{
         unmute_btn = (Button) rootview.findViewById(R.id.unmute);
 
         notification_btn.setOnClickListener(view -> {
-//            if (test_context == null)
-//                {Log.e("Context","It's null");}
             // CAlLS SendNotification
             this.context = requireContext();
             String topic = "testTopic_signup";
@@ -86,9 +87,6 @@ public class WaitlistedEventsFragment extends Fragment{
                 subscribeToTopic.subscribe();
             }
         });
-
-
-
         return rootview;
     }
 
