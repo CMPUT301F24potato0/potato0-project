@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,22 +18,23 @@ import java.util.ArrayList;
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
 
-    private ArrayList<UsersList> chosenEntrants;
     private EventModel event;
-    FirebaseFirestore db;
+    private ArrayList<UsersList> entrantsListCopy;
+    private FirebaseFirestore db;
+    private ChosenListActivity chosenListActivity;
 
     /**
      * Constructor
      * @param context context
-     * @param entrants list of entrants
      * @param event event
      * @param db firebase firestore
      */
-    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrants, EventModel event, FirebaseFirestore db) {
-        super(context, 0, entrants);
-        this.chosenEntrants = entrants;
+    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrantsListCopy, EventModel event, FirebaseFirestore db, ChosenListActivity chosenListActivity) {
+        super(context, 0, event.getChosenList());
+        this.entrantsListCopy = entrantsListCopy;
         this.event = event;
         this.db = db;
+        this.chosenListActivity = chosenListActivity;
     }
 
     /**
@@ -56,7 +56,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.chosen_entrant_item, parent, false);
         }
 
-        UsersList entrant = chosenEntrants.get(position);
+        UsersList entrant = getItem(position);
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.entrant_name);
@@ -65,25 +65,27 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
         Button inviteButton = convertView.findViewById(R.id.send_invite_button);
         Button removeButton = convertView.findViewById(R.id.remove_button);
 
-        // Set up invite button functionality (optional, to be implemented later)
-        inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Code to send invite notification
-            }
-        });
+        inviteButton.setVisibility(View.GONE);
+        // Set up invite button functionality (optional, to be implemented later in part 4)
+//        inviteButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Code to send invite notification
+//            }
+//        });
 
         // Set up remove button functionality
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    entrantsListCopy.remove(entrant);  // removes the entrant from entrants list copy
                     event.unqueueWaitingList(entrant);
                     event.queueCancelledList(entrant);
-                    event.unqueueChosenList(entrant);
-                    chosenEntrants.remove(position);
+                    event.unqueueChosenList(entrant);  // equivalent to remove(entrant) because they are referencing the same ArrayList
                     notifyDataSetChanged();
                     db.collection("events").document(event.getEventID()).set(event);
+                    chosenListActivity.updateChosenCountAndRemainingSpotsLeft();
                 }
                 catch (Exception e) {
                     Log.e("Event Queue/Unqueue Error", "Error: " + e);

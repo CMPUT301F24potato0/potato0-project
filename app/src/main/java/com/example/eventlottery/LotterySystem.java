@@ -1,6 +1,8 @@
 package com.example.eventlottery;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -8,35 +10,19 @@ import java.util.Random;
  */
 public class LotterySystem {
 
-    private int end;
-    private int num;
-
     /**
-     * Constructor
-     * @param end The number of people in the waitlist
-     * @param num The number of people that will be "won" the lottery
+     * Draws a random sample from the waitlist based on the event's capacity.
+     * If there are fewer Userslist objects (entrants) than sample_amount, returns the entire waitlist.
+     * @param waitlist The list of users on the waitlist.
+     * @param sample_amount The number of entrants to select.
+     * @return A randomly selected subset of the waitlist.
      */
-    LotterySystem(int end, int num){
-        this.end = end-1; // since indexing from 0
-        this.num = num;
-    }
-
-    /**
-     *
-     * This method runs an algorithm that creates an array of randomly generated number which is the
-     * index of the people from the waitlist that "won" the lottery
-     * @return ArrayList<Integer> of index of users that "won" the lottery
-     */
-    public ArrayList<Integer> getwinnersList(){
-        ArrayList<Integer> winnerList = new ArrayList<Integer>(num);
-        for (int i = 0; i < num; ){
-            int temp_rand =(int)(Math.random() * end);
-            if(!winnerList.contains(temp_rand)){
-                // If random num isn't in the list then we +1 out of end needed numbers
-                winnerList.add(temp_rand);
-                ++i;
-            }
+    public static ArrayList<UsersList> sampleEntrants(ArrayList<UsersList> waitlist, Integer sample_amount) {
+        if (waitlist.size() <= sample_amount) {
+            return (ArrayList<UsersList>) waitlist.clone();
         }
-        return winnerList;
+        Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
+        return new ArrayList<>(waitlist.subList(0, sample_amount)); // Return subset
     }
+
 }

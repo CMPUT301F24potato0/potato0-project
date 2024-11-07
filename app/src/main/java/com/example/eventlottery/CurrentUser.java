@@ -220,6 +220,10 @@ public class CurrentUser implements Serializable {
      * @param topic topic
      */
     public void removeTopics(String topic){
-        this.topics.remove(topic);
+        for (String t : topics) {
+            if (t.equals(topic)) {
+                this.topics.remove(topic);
+            }
+        }
     }
 }
