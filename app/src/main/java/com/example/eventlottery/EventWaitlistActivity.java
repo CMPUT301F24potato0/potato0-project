@@ -43,9 +43,15 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<UsersList> userWaitList;
+    private ArrayList<UsersList> cancelList;
+
     private Button drawSample;
     private EditText drawSampleEditText;
     private int remaining_spots;
+    private String title;
+    private String body;
+
+    private SendNotification sendNotification;
 
     /**
      * On create Override
@@ -75,21 +81,44 @@ public class EventWaitlistActivity extends AppCompatActivity {
         drawSample = findViewById(R.id.draw_sample_button);
         drawSampleEditText = findViewById(R.id.draw_sample_edittext);
 
+
+
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<UsersList> userIDs = event.getWaitingList();
-                String eventID = event.getEventID();
-                for (int i = 0; i < userIDs.size(); i++) {
-                    String topic = eventID + "_" + userIDs.get(i);
-                    SendNotification sendNotification = new SendNotification(getApplicationContext(), topic);
-                    sendNotification.popup();
-                }
+
+                //Need to get arrayList of all UserID's
+
+//                ArrayList<UsersList> userIDs = event.getWaitingList();
+//                String eventID = event.getEventID();
+
+
+                Log.e("Array1","");
+                Log.e("Array2","");
+                Log.e("Array3","");
+                Log.e("Array4","");
+
+
+                // List of user ID's
+                ArrayList<UsersList> usersLists = event.getWaitingList();
+
+                // Event ID
+                String eventId = event.getEventID();
+
+
+
+                Intent intent1 = new Intent(EventWaitlistActivity.this,SendNotificationActivity.class);
+                intent1.putExtra("event", event);
+                intent1.putExtra("Bool",0);
+                startActivity(intent1);
+
+
             }
         });
 
-        userWaitList = new ArrayList<>(event.getWaitingList());
-        adapter = new WaitlistEventAdapter(this, 100, userWaitList, event, db);
+        userWaitList = event.getWaitingList();
+        cancelList = event.getCancelledList();
+        adapter = new WaitlistEventAdapter(this, 100, userWaitList, cancelList, event, db);
         waitlist.setAdapter(adapter);
 
         // When user unjoins the event, it is now being shown in this
@@ -102,11 +131,17 @@ public class EventWaitlistActivity extends AppCompatActivity {
                             Log.e("EventWaitlistActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
+                            ArrayList<UsersList> temp = (ArrayList<UsersList>) userWaitList.clone();
                             userWaitList.clear();
                             ArrayList<UsersList> userWaitListTemp = (ArrayList<UsersList>) doc.toObject(EventModel.class).getWaitingList();
                             for (UsersList u : userWaitListTemp) {
                                 userWaitList.add(u);
+                                temp.remove(u);
                             }
+
+//                            for (UsersList u : temp) {
+//                                event.getCancelledList().add(u);
+//                            }
                             adapter.notifyDataSetChanged();
                         }
                     }

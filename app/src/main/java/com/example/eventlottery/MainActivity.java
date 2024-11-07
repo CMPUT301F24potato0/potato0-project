@@ -3,6 +3,7 @@ package com.example.eventlottery;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -29,7 +30,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-
 /**
  * This is the MainActivity class
  * This class currently handles checking the user in the database, if the user exists then updating the current instance of the user
@@ -45,9 +45,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public DocumentReference userDocRef;
     private String androidIDStr;
     private CurrentUser curUser;
+//    public CollectionReference facilitiesRef;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
     ConstraintLayout mainActivityProgressBar;
+
     /**
      * This method is called when opening the app.
      * This method gets the AndroidID creates a new user.
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
