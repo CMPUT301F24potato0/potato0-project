@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class EnrolledListActivity extends AppCompatActivity {
     private ArrayAdapter<UsersList> enrollAdapter;
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Button notif_enrolled;
 
     /**
      * Overriding on create
@@ -58,5 +60,16 @@ public class EnrolledListActivity extends AppCompatActivity {
         enrollList = findViewById(R.id.enroll_list);
         enrollAdapter = new EnrolledListArrayAdapter(this, 0, userEnrollList, "enrolled", event, db);
         enrollList.setAdapter(enrollAdapter);
+
+        notif_enrolled = (Button) findViewById(R.id.enroll_notif_button);
+        notif_enrolled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EnrolledListActivity.this,SendNotificationActivity.class);
+                intent.putExtra("event",event);
+                intent.putExtra("Bool",0);
+                startActivity(intent);
+            }
+        });
     }
 }
