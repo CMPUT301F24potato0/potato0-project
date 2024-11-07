@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -19,6 +23,9 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
     private ArrayList<UsersList> list;
     private EventModel event;
     private FirebaseFirestore db;
+
+
+    private CurrentUser temp;
 
     public WaitlistEventAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -53,7 +60,25 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
                 event.unqueueWaitingList(user);
                 removeFromList(user, list);
 
-                db.collection("events").document(event.getEventID()).set(event);
+                Task<DocumentSnapshot> t = db.collection("users")
+                        .document(user.getiD())
+                        .get();
+                t.addOnSuccessListener
+                        (new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    temp = documentSnapshot.toObject(CurrentUser.class);
+                                }
+                            }
+                        });
+                t.onSuccessTask(t1 -> {
+                    db.collection("events").document(event.getEventID()).set(event);
+                    temp.removeTopics(event.getEventID() + "_" + temp.getiD());
+                    db.collection("users").document(temp.getiD()).set(temp);
+                    return null;
+                });
+//                return null;
             }
         });
         return view;
@@ -63,6 +88,7 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
             if (list.get(i).getName().equals(user.getName())) {
                 list.remove(i);
                 notifyDataSetChanged();
+
             }
         }
     }

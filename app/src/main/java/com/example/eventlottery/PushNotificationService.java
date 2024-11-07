@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.Objects;
 
 public class PushNotificationService extends FirebaseMessagingService{
 
@@ -45,29 +46,49 @@ public class PushNotificationService extends FirebaseMessagingService{
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         // TESTING
+
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
-        String eventID = remoteMessage.getData().get("eventID");
-//        EventModel = remoteMessage.getNotification().
-        // topic should be "eventID userID"
-        String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
+
+        String SignUP = remoteMessage.getData().get("SignUP");
+        String eventID = "";
+        if(Objects.equals(SignUP, "true")) {
+            eventID = remoteMessage.getData().get("eventID");
+        }
+
+
+
+        String topic = remoteMessage.getFrom();
+
+//        String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
+
         String check = "signup";
         Log.d("Recieved notification", title);
         Log.d("Recieved notification", text);
         Log.d("Topic",topic);
-        Log.d("eventId",eventID);
-        db = FirebaseFirestore.getInstance();
-        Task<DocumentSnapshot> t = db.collection("events").document(eventID).get();
-        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    ArrayList<String> list = (ArrayList<String>) documentSnapshot.get("waitList");
-                    list.add("rayu_phone");
-                    db.collection("events").document(eventID).update("waitList", list);
-                }
-            }
-        });
+        if(eventID != ""){
+            Log.d("eventId",eventID);
+        }
+
+
+
+        // Move to activity
+        // ************************************************************************************
+//        db = FirebaseFirestore.getInstance();
+//        Task<DocumentSnapshot> t = db.collection("events").document(eventID).get();
+//        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot.exists()) {
+//                    ArrayList<String> list = (ArrayList<String>) documentSnapshot.get("waitList");
+//                    list.add("rayu_phone");
+//                    db.collection("events").document(eventID).update("waitList", list);
+//                }
+//            }
+//        });
+        // ************************************************************************************
+
+
         // TESTING
 
         final String channel_id = "notification_popup";
@@ -86,37 +107,45 @@ public class PushNotificationService extends FirebaseMessagingService{
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
 
             NotificationCompat.Builder notification;
-            if(topic.contains(check)) {
-                Intent action1 = new Intent(this, MyBroadcastReceiver.class);
-                action1.setAction("first");
-                PendingIntent pendingaction1 = PendingIntent.getBroadcast(this, 1, action1, PendingIntent.FLAG_IMMUTABLE);
-                NotificationCompat.Action action = new NotificationCompat.Action.Builder
-                        (R.mipmap.ic_notifications, "Cancel", pendingaction1).build();
+//            if(topic.contains(check)) {
+//                Intent action1 = new Intent(this, MyBroadcastReceiver.class);
+//                action1.setAction("first");
+//                PendingIntent pendingaction1 = PendingIntent.getBroadcast(this, 1, action1, PendingIntent.FLAG_IMMUTABLE);
+//                NotificationCompat.Action action = new NotificationCompat.Action.Builder
+//                        (R.mipmap.ic_notifications, "Cancel", pendingaction1).build();
+//
+//                Intent action2 = new Intent(this, MyBroadcastReceiver.class);
+//                action2.setAction("second");
+//                PendingIntent pendingaction2 = PendingIntent.getBroadcast(this, 1, action2, PendingIntent.FLAG_IMMUTABLE);
+//                NotificationCompat.Action action2_2 = new NotificationCompat.Action.Builder
+//                        (R.mipmap.ic_notifications, "Sign up", pendingaction2).build();
+//
+//
+//                notification = new NotificationCompat.Builder(
+//                        this, channel_id)
+//                        .setContentTitle(title)
+//                        .setContentText(text)
+//                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                        .addAction(action)
+//                        .addAction(action2_2)
+//                        .setAutoCancel(true);
+//            }
+//            else {
+//                notification = new NotificationCompat.Builder(
+//                        this, channel_id)
+//                        .setContentTitle(title)
+//                        .setContentText(text)
+//                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                        .setAutoCancel(true);
+//            }
 
-                Intent action2 = new Intent(this, MyBroadcastReceiver.class);
-                action2.setAction("second");
-                PendingIntent pendingaction2 = PendingIntent.getBroadcast(this, 1, action2, PendingIntent.FLAG_IMMUTABLE);
-                NotificationCompat.Action action2_2 = new NotificationCompat.Action.Builder
-                        (R.mipmap.ic_notifications, "Sign up", pendingaction2).build();
+            notification = new NotificationCompat.Builder(
+                    this, channel_id)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setAutoCancel(true);
 
-
-                notification = new NotificationCompat.Builder(
-                        this, channel_id)
-                        .setContentTitle(title)
-                        .setContentText(text)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .addAction(action)
-                        .addAction(action2_2)
-                        .setAutoCancel(true);
-            }
-            else {
-                notification = new NotificationCompat.Builder(
-                        this, channel_id)
-                        .setContentTitle(title)
-                        .setContentText(text)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setAutoCancel(true);
-            }
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
 
                 // TODO: Consider calling
@@ -139,7 +168,12 @@ public class PushNotificationService extends FirebaseMessagingService{
 //               NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 //               notification.notify(notificationManager);
 
-               Intent notificationIntent = new Intent(this, MainActivity.class);
+
+
+
+               // CAlls activity when notification pressed
+               Intent notificationIntent = new Intent(this, SignUpActivity.class);
+               notificationIntent.putExtra("eventID", eventID);
                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                notificationManager.notify(1, notification.build());

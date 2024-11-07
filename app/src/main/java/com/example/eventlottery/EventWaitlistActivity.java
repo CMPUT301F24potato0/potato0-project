@@ -60,13 +60,27 @@ public class EventWaitlistActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Need to get arrayList of all UserID's
-
                 ArrayList<UsersList> userIDs = event.getWaitingList();
                 String eventID = event.getEventID();
+                SendNotification sendNotification = new SendNotification(EventWaitlistActivity.this,eventID,false);
+
+
+
+//                ArrayList<String> title_text = sendNotification.popup();
+
+//                sendNotification.popup();
+
+
+
+
+
+
+
+
+
                 for(int i = 0; i < userIDs.size(); i++){
                     String topic = eventID + "_" + userIDs.get(i);
-                    SendNotification sendNotification = new SendNotification(getApplicationContext(), topic);
-                    sendNotification.popup();
+                    sendNotification.NotificationCreate(title_text.get(0), title_text.get(1), topic);
 
                 }
             }

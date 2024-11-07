@@ -32,15 +32,18 @@ public class FcmNotificationSender {
 
     private String eventID;
 
+    private Boolean SignUp;
+
     private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery/messages:send";
 
-    public FcmNotificationSender (String title, String body, Context context, String topic, String eventID){
+    public FcmNotificationSender (String title, String body, Context context, String topic, String eventID, Boolean SignUp){
 
         this.title = title;
         this.body = body;
         this.context = context;
         this.topic = topic;
         this.eventID = eventID;
+        this.SignUp = SignUp;
         Log.d("Title",title);
         Log.d("Body",body);
     }
@@ -49,27 +52,28 @@ public class FcmNotificationSender {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject mainObj = new JSONObject();
         try{
+
             JSONObject messageObject = new JSONObject();
             JSONObject notificationObject = new JSONObject();
             JSONObject dataObject = new JSONObject();
 
 
-
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
-            dataObject.put("eventID",eventID);
+            dataObject.put("SignUP",SignUp.toString());
+            dataObject.put("eventID", eventID);
+
 
             messageObject.put("topic", topic);
 
-
-
             messageObject.put("notification", notificationObject);
-            messageObject.put("data",dataObject);
-
-
+            messageObject.put("data", dataObject);
 
             mainObj.put("message", messageObject);
+
+
+
 
 
 
