@@ -14,8 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,7 +30,7 @@ public class geo_requirement_dialog extends DialogFragment {
     private UsersList user;
     private EventModel event;
     private FirebaseFirestore db;
-
+    private CurrentUser cuUser;
     /**
      * Constructor
      * @param user User
@@ -62,7 +65,21 @@ public class geo_requirement_dialog extends DialogFragment {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
+                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                cuUser = documentSnapshot.toObject(CurrentUser.class);
+                            }
+                        }
+                    });
                     db.collection("events").document(event.getEventID()).set(event);
+                    task.onSuccessTask(t1 -> {
+                        cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+                        db.collection("users").document(user.getiD()).set(cuUser);
+                        return null;
+                    });
                 })
                 .create();
     }
