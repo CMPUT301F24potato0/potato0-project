@@ -243,38 +243,6 @@ public class EventEntrantActivity extends AppCompatActivity {
                             db.collection("users").document(userList.getiD()).set(tempTesting);
                             return null;
                         });
-//                        try {
-//                            event.queueWaitingList(userList);
-//
-//                            // also joining
-//
-//                            String eventID = event.getEventID();
-//                            String userID = userList.getiD();
-//                            String topic = eventID + "_" + userID;
-//
-//
-//                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-//                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                @Override
-//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                    if (documentSnapshot.exists()) {
-//                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-//                                        tempCurUser.addTopics(topic);
-//                                        db.collection("users").document(userID).set(tempCurUser);
-//                                    }
-//                                }
-//                            });
-//
-//                            SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
-//                            subscribeToTopic.subscribe();
-//
-//
-//
-//                        } catch (Exception e) {
-//                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
-//                        }
-//                        db.collection("events").document(event.getEventID()).set(event);
-
                     }
                 }
             });
