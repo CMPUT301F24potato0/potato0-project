@@ -41,6 +41,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation ("com.google.android.material:material:1.2.0")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    // https://developer.android.com/training/testing/espresso/intents#java
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     //implementation(files("C:\\Users\\Chirayu Shah\\AppData\\Local\\Android\\Sdk\\platforms\\android-34\\android.jar"))
     implementation(libs.appcompat)
     implementation(libs.material)
