@@ -175,6 +175,10 @@ public class PushNotificationService extends FirebaseMessagingService{
                notificationIntent.putExtra("eventID", eventID);
                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+               // TESTING **************************
+               notification.setContentIntent(pendingIntent);
+               // TESTING // TESTING **************************
+
                notificationManager.notify(1, notification.build());
 
 
