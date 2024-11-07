@@ -1,7 +1,5 @@
 package com.example.eventlottery;
 
-//public class geo_requirement_dialog {
-//}
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -29,19 +27,17 @@ public class geo_requirement_dialog extends DialogFragment {
 
     private UsersList user;
     private EventModel event;
-    private CurrentUser curUser;
     private FirebaseFirestore db;
-
+    private CurrentUser cuUser;
     /**
      * Constructor
      * @param user User
      * @param event Event Model
      * @param db Firebase Firestore
      */
-    public geo_requirement_dialog(UsersList user, CurrentUser curUser, EventModel event, FirebaseFirestore db ) {
+    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
         this.user = user;
         this.event = event;
-        this.curUser = curUser;
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -56,18 +52,6 @@ public class geo_requirement_dialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.geo_requirement_dialog, null);
 
-        Task<DocumentSnapshot> t = db.collection("users").document(user.getiD()).get();
-        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    curUser = documentSnapshot.toObject(CurrentUser.class);
-                }
-            }
-        });
-        t.onSuccessTask(t1 -> {
-            return null;
-        });
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -79,26 +63,21 @@ public class geo_requirement_dialog extends DialogFragment {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-
-                    String eventID = event.getEventID();
-                    String userID = user.getiD();
-                    String topic = eventID + "_" + userID;
-                    curUser.addTopics(topic);
-                    db.collection("users").document(userID).set(curUser);
-//                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                curUser.addTopics(topic);
-//                                db.collection("users").document(userID).set(curUser);
-//                            }
-//                        }
-//                    });
-
-                    SubscribeToTopic subscribeToTopic_geo = new SubscribeToTopic(topic,getContext());
-                    subscribeToTopic_geo.subscribe();
+                    Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
+                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                cuUser = documentSnapshot.toObject(CurrentUser.class);
+                            }
+                        }
+                    });
                     db.collection("events").document(event.getEventID()).set(event);
+                    task.onSuccessTask(t1 -> {
+                        cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+                        db.collection("users").document(user.getiD()).set(cuUser);
+                        return null;
+                    });
                 })
                 .create();
     }
