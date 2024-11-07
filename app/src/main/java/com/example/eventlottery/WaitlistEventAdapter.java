@@ -13,17 +13,30 @@ import androidx.annotation.Nullable;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * This class is the WaitlistEventAdapter
+ */
 public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
     private ArrayList<UsersList> list;
     private EventModel event;
     private FirebaseFirestore db;
 
+    /**
+     * This is the constructor for WaitlistEventAdapter
+     * @param context The context
+     * @param resource The resource
+     */
     public WaitlistEventAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
 
+    /**
+     * This is the constructor for WaitlistEventAdapter
+     * @param context The context
+     * @param resource The resource
+     * @param list The list
+     */
     public WaitlistEventAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, EventModel event, FirebaseFirestore db) {
         super(context, resource, list);
         this.list = list;
@@ -31,6 +44,12 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         this.db = db;
     }
 
+    /**
+     * getView override
+     * @param position The position
+     * @param convertView The convertView
+     * @param parent The parent
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -58,6 +77,12 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         });
         return view;
     }
+
+    /**
+     * removeFromList override
+     * @param user The user
+     * @param list The list
+     */
     private void removeFromList(UsersList user, ArrayList<UsersList> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getName().equals(user.getName())) {
