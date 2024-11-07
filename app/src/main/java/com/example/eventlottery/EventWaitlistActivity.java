@@ -18,9 +18,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * Event Waitlist Activity
@@ -33,10 +34,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private WaitlistEventAdapter adapter;
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private ArrayList<UsersList> userWaitList;
-
-
     private Button drawSample;
 
     /**
@@ -69,25 +67,21 @@ public class EventWaitlistActivity extends AppCompatActivity {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //Need to get arrayList of all UserID's
-
                 ArrayList<UsersList> userIDs = event.getWaitingList();
                 String eventID = event.getEventID();
-                for(int i = 0; i < userIDs.size(); i++){
+                for (int i = 0; i < userIDs.size(); i++) {
                     String topic = eventID + "_" + userIDs.get(i);
                     SendNotification sendNotification = new SendNotification(getApplicationContext(), topic);
                     sendNotification.popup();
-
                 }
             }
         });
 
-        userWaitList = new ArrayList<>();
-        userWaitList = event.getWaitingList();
-        adapter = new WaitlistEventAdapter(this, 100, userWaitList,event,db);
+        userWaitList = new ArrayList<>(event.getWaitingList());
+        adapter = new WaitlistEventAdapter(this, 100, userWaitList, event, db);
         waitlist.setAdapter(adapter);
-        // When user un joins the event its is now being showed in this 
+
+        // When user unjoins the event, it is now being shown in this
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -110,10 +104,31 @@ public class EventWaitlistActivity extends AppCompatActivity {
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Draw random sample based on event capacity
+                ArrayList<UsersList> chosenEntrants = drawRandomSample(userWaitList, event.getCapacity());
+
+                // Pass chosen entrants to ChosenListActivity
                 Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
+                intent.putExtra("chosenEntrants", chosenEntrants);
                 intent.putExtra("eventModel", event);
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Draws a random sample from the waitlist based on the event's capacity.
+     * If the waitlist is smaller than the capacity, returns the entire waitlist.
+     *
+     * @param waitlist The list of users on the waitlist.
+     * @param capacity The maximum number of entrants to select.
+     * @return A randomly selected subset of the waitlist.
+     */
+    private ArrayList<UsersList> drawRandomSample(ArrayList<UsersList> waitlist, int capacity) {
+        if (waitlist.size() <= capacity) {
+            return new ArrayList<>(waitlist); // Return full list if within capacity
+        }
+        Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
+        return new ArrayList<>(waitlist.subList(0, capacity)); // Return subset
     }
 }

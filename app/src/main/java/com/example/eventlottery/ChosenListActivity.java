@@ -1,6 +1,8 @@
 package com.example.eventlottery;
 
 import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,11 +10,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-/**
- * Chosen List Activity
- * This class displays a list of users who have been "chosen" for the event.
- */
+import java.util.ArrayList;
+
 public class ChosenListActivity extends AppCompatActivity {
+
+    private ArrayList<UsersList> chosenEntrants;
+    private EventModel event;
+    private TextView chosenEntrantsCount;
+    private ListView chosenEntrantsListView;
+    private ChosenEntrantsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +30,28 @@ public class ChosenListActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Get data from intent
+        event = (EventModel) getIntent().getSerializableExtra("eventModel");
+        chosenEntrants = (ArrayList<UsersList>) getIntent().getSerializableExtra("chosenEntrants");
+
+        // Initialize views
+        chosenEntrantsCount = findViewById(R.id.chosen_entrants_number_chosen);
+        chosenEntrantsListView = findViewById(R.id.chosen_entrants_listview);
+
+        // Update the count text
+        updateChosenEntrantsCount();
+
+        // Set up adapter for ListView
+        adapter = new ChosenEntrantsAdapter(this, chosenEntrants);
+        chosenEntrantsListView.setAdapter(adapter);
+    }
+
+    /**
+     * Updates the count text for chosen entrants.
+     */
+    private void updateChosenEntrantsCount() {
+        String countText = chosenEntrants.size() + "/" + event.getCapacity();
+        chosenEntrantsCount.setText(countText);
     }
 }
