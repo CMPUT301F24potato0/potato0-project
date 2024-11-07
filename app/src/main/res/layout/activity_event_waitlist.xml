@@ -437,7 +437,8 @@
                             android:textColor="@color/black"
                             android:backgroundTint="@color/gray4">
                         </Button>
-                        <TextView
+                        <EditText
+                            android:id="@+id/draw_sample_edittext"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="1dp"
@@ -445,10 +446,10 @@
                             android:minHeight="0dp"
                             android:textSize="8dp"
                             android:textColor="@color/black"
-                            android:text="##"
+                            android:inputType="number"
                             android:layout_marginStart="3dp"
                             android:layout_marginTop="1dp">
-                        </TextView>
+                        </EditText>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

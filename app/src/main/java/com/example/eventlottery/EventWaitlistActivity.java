@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -36,6 +38,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<UsersList> userWaitList;
     private Button drawSample;
+    private EditText drawSampleEditText;
 
     /**
      * On create Override
@@ -63,6 +66,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
         drawSample = findViewById(R.id.draw_sample_button);
+        drawSampleEditText = findViewById(R.id.draw_sample_edittext);
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,34 +105,30 @@ public class EventWaitlistActivity extends AppCompatActivity {
                     }
                 });
 
+        // calculate remaining spots for event and update edittext
+        int remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+        drawSampleEditText.setText(Integer.toString(remaining_spots));
+
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Draw random sample based on event capacity
-                ArrayList<UsersList> chosenEntrants = drawRandomSample(userWaitList, event.getCapacity());
-
-                // Pass chosen entrants to ChosenListActivity
-                Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
-                intent.putExtra("chosenEntrants", chosenEntrants);
-                intent.putExtra("eventModel", event);
-                startActivity(intent);
+                Integer sample_amount = Integer.parseInt(drawSampleEditText.getText().toString());
+                // Check if the waiting list has enough people to sample
+                if (event.getWaitingList().size() < sample_amount) {
+                    Toast.makeText(EventWaitlistActivity.this, "Waiting list only has " + event.getWaitingList().size() + " entrants left!", Toast.LENGTH_SHORT).show();
+                }
+                // Check if organizer is trying to sample more than the remaining amount of spots available for the event
+                if (remaining_spots < sample_amount) {
+                    Toast.makeText(EventWaitlistActivity.this, "Cannot sample more than " + Integer.toString(remaining_spots) + " remaining spots.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
+                    intent.putExtra("sample_amount", sample_amount);
+                    intent.putExtra("remaining_spots", remaining_spots);
+                    intent.putExtra("eventModel", event);
+                    startActivity(intent);
+                }
             }
         });
-    }
-
-    /**
-     * Draws a random sample from the waitlist based on the event's capacity.
-     * If the waitlist is smaller than the capacity, returns the entire waitlist.
-     *
-     * @param waitlist The list of users on the waitlist.
-     * @param capacity The maximum number of entrants to select.
-     * @return A randomly selected subset of the waitlist.
-     */
-    private ArrayList<UsersList> drawRandomSample(ArrayList<UsersList> waitlist, int capacity) {
-        if (waitlist.size() <= capacity) {
-            return new ArrayList<>(waitlist); // Return full list if within capacity
-        }
-        Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
-        return new ArrayList<>(waitlist.subList(0, capacity)); // Return subset
     }
 }

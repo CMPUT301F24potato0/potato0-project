@@ -19,20 +19,17 @@ import java.util.ArrayList;
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
 
-    private ArrayList<UsersList> chosenEntrants;
     private EventModel event;
     FirebaseFirestore db;
 
     /**
      * Constructor
      * @param context context
-     * @param entrants list of entrants
      * @param event event
      * @param db firebase firestore
      */
-    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrants, EventModel event, FirebaseFirestore db) {
-        super(context, 0, entrants);
-        this.chosenEntrants = entrants;
+    public ChosenEntrantsAdapter(Context context, EventModel event, FirebaseFirestore db) {
+        super(context, 0, event.getChosenList());
         this.event = event;
         this.db = db;
     }
@@ -56,7 +53,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.chosen_entrant_item, parent, false);
         }
 
-        UsersList entrant = chosenEntrants.get(position);
+        UsersList entrant = getItem(position);
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.entrant_name);
@@ -65,23 +62,24 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
         Button inviteButton = convertView.findViewById(R.id.send_invite_button);
         Button removeButton = convertView.findViewById(R.id.remove_button);
 
-        // Set up invite button functionality (optional, to be implemented later)
-        inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Code to send invite notification
-            }
-        });
+        inviteButton.setVisibility(View.GONE);
+        // Set up invite button functionality (optional, to be implemented later in part 4)
+//        inviteButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Code to send invite notification
+//            }
+//        });
 
         // Set up remove button functionality
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    Toast.makeText(getContext(), "Hello!", Toast.LENGTH_SHORT).show();
                     event.unqueueWaitingList(entrant);
                     event.queueCancelledList(entrant);
-                    event.unqueueChosenList(entrant);
-                    chosenEntrants.remove(position);
+                    event.unqueueChosenList(entrant);  // equivalent to remove(entrant) because they are referencing the same ArrayList
                     notifyDataSetChanged();
                     db.collection("events").document(event.getEventID()).set(event);
                 }
