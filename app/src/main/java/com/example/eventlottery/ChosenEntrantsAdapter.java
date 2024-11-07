@@ -1,12 +1,14 @@
 package com.example.eventlottery;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -75,12 +77,17 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.unqueueWaitingList(entrant);
-                event.queueCancelledList(entrant);
-                event.unqueueChosenList(entrant);
-                chosenEntrants.remove(position);
-                notifyDataSetChanged();
-                db.collection("events").document(event.getEventID()).set(event);
+                try {
+                    event.unqueueWaitingList(entrant);
+                    event.queueCancelledList(entrant);
+                    event.unqueueChosenList(entrant);
+                    chosenEntrants.remove(position);
+                    notifyDataSetChanged();
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+                catch (Exception e) {
+                    Log.e("Event Queue/Unqueue Error", "Error: " + e);
+                }
             }
         });
 

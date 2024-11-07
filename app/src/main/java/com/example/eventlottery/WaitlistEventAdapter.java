@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -69,10 +70,15 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.unqueueWaitingList(user);
-                removeFromList(user, list);
+                try {
+                    event.unqueueWaitingList(user);
+                    removeFromList(user, list);
 
-                db.collection("events").document(event.getEventID()).set(event);
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+                catch (Exception e) {
+                    Log.e("Event Queue Error", "Error: " + e);
+                }
             }
         });
         return view;

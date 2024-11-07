@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,11 +73,16 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.unqueueInvitedList(entrant);
-                event.queueCancelledList(entrant);
-                chosenEntrants.remove(position);
-                notifyDataSetChanged();
-                db.collection("events").document(event.getEventID()).set(event);
+                try {
+                    event.unqueueInvitedList(entrant);
+                    event.queueCancelledList(entrant);
+                    chosenEntrants.remove(position);
+                    notifyDataSetChanged();
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+                catch (Exception e) {
+                    Log.e("Event Queue/Unqueue Error", "Error: " + e);
+                }
             }
         });
         return convertView;

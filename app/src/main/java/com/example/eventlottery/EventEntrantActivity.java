@@ -178,34 +178,35 @@ public class EventEntrantActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     // Unjoining
-                    event.unqueueWaitingList(userList);
-                    db.collection("events").document(event.getEventID()).set(event);
+                    try {
+                        event.unqueueWaitingList(userList);
+                        db.collection("events").document(event.getEventID()).set(event);
 
 
+                        String eventID = event.getEventID();
+                        String userID = userList.getiD();
+                        String topic = eventID + "_" + userID;
 
-                    String eventID = event.getEventID();
-                    String userID = userList.getiD();
-                    String topic = eventID + "_" + userID;
 
-
-                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                tempCurUser.removeTopics(topic);
-                                db.collection("users").document(userID).set(tempCurUser);
+                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                                    tempCurUser.removeTopics(topic);
+                                    db.collection("users").document(userID).set(tempCurUser);
+                                }
                             }
-                        }
-                    });
+                        });
 
 
-                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic,getApplicationContext());
-                    unsubscribeFromTopic.unsubscribe();
-
-
-
+                        UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
+                        unsubscribeFromTopic.unsubscribe();
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else {
