@@ -69,7 +69,7 @@ public class EventEntrantActivity extends AppCompatActivity {
 
 
 
-    CurrentUser curUser;
+    private CurrentUser curUser;
 
     /**
      * Overriding on back pressed
@@ -180,6 +180,9 @@ public class EventEntrantActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     curUser = documentSnapshot.toObject(CurrentUser.class);
+                    Toast.makeText(EventEntrantActivity.this, "User exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EventEntrantActivity.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -203,18 +206,19 @@ public class EventEntrantActivity extends AppCompatActivity {
                             String userID = userList.getiD();
                             String topic = eventID + "_" + userID;
 
-
-                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                        tempCurUser.removeTopics(topic);
-                                        db.collection("users").document(userID).set(tempCurUser);
-                                    }
-                                }
-                            });
+                            curUser.removeTopics(topic);
+                            db.collection("users").document(userID).set(curUser);
+//                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if (documentSnapshot.exists()) {
+//                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+//                                        tempCurUser.removeTopics(topic);
+//                                        db.collection("users").document(userID).set(tempCurUser);
+//                                    }
+//                                }
+//                            });
                             UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
                             unsubscribeFromTopic.unsubscribe();
                         }
@@ -247,7 +251,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                             String userID = userList.getiD();
                             String topic = eventID + "_" + userID;
                             curUser.addTopics(topic);
-                            db.collection("users").document(userID).set(tempCurUser);
+                            db.collection("users").document(userID).set(curUser);
 //                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
 //                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                                @Override
