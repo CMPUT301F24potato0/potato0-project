@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,16 +19,15 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.SuccessContinuation;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Create Event Dialogue Fragment
+ */
 public class CreateEventDialogueFragment extends DialogFragment {
 
     private FrameLayout frameLayout;
@@ -47,11 +45,70 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     private CurrentUser organizer;
     private FirebaseFirestore db;
-    private EventModel event;
-    private EventOrganizerActivity eventActivity;
 
+    private boolean isEditing = false;  // Flag to determine if we are editing an event
+    private String eventId;  // Store event ID if editing
+
+    /**
+     * Default constructor for creating a new event
+     */
+    // Default constructor for creating a new event
     public CreateEventDialogueFragment() {
-        // initial values
+        initializeDefaults();
+    }
+
+    /**
+     * Constructor for creating a new event with organizer and database references
+     * @param organizer The organizer of the event
+     * @param db The Firebase Firestore database
+     */
+    // Constructor for creating a new event with organizer and database references
+    public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
+        this();
+        this.organizer = organizer;
+        this.db = db;
+    }
+
+    /**
+     * Constructor for editing an existing event
+     * @param eventId The ID of the event to be edited
+     * @param eventTitle The title of the event
+     * @param capacity The capacity of the event
+     * @param waitListLimit The waitlist limit of the event
+     * @param joinDeadline The deadline for joining the event
+     * @param strLocation The location of the event
+     * @param geolocationRequired Whether geolocation is required for the event
+     * @param eventDescription The description of the event
+     * @param organizer The organizer of the event
+     * @param db The Firebase Firestore database
+     */
+    // Constructor for editing an existing event
+    public CreateEventDialogueFragment(String eventId,
+                                       String eventTitle,
+                                       Integer capacity,
+                                       Integer waitListLimit,
+                                       Date joinDeadline,
+                                       String strLocation,
+                                       Boolean geolocationRequired,
+                                       String eventDescription,
+                                       CurrentUser organizer,
+                                       FirebaseFirestore db) {
+        this(organizer, db);
+        this.isEditing = true;
+        this.eventId = eventId;
+        this.eventTitle = eventTitle;
+        this.capacity = capacity;
+        this.waitListLimit = waitListLimit;
+        this.joinDeadline = joinDeadline;
+        this.strLocation = strLocation;
+        this.geolocationRequired = geolocationRequired;
+        this.eventDescription = eventDescription;
+    }
+
+    /**
+     * Initialize default values for the event
+     */
+    private void initializeDefaults() {
         eventTitle = "";
         capacity = 0;
         waitListLimit = -1;
@@ -61,29 +118,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
-    // for creating a new event (organizer information required)
-    public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
-        this();
-        this.organizer = organizer;
-        this.event = null;
-        this.db = db;
-    }
-
-    // for editing an existing event (event information required, organizer information not required)
-    public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
-        this.eventTitle = event.getEventTitle();
-        this.capacity = event.getCapacity();
-        this.waitListLimit = event.getWaitingListLimit();
-        this.joinDeadline = event.getJoinDeadline();
-        this.strLocation = event.getEventStrLocation();
-        this.geolocationRequired = event.getGeolocationRequired();
-        this.eventDescription = event.getEventDescription();
-        this.organizer = null;
-        this.event = event;
-        this.db = db;
-        this.eventActivity = eventActivity;
-    }
-
+    /**
+     * Called when creating the dialog fragment.
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return A new Dialog instance to be displayed by the Fragment.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -91,12 +132,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_create_event, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        dialogState = 1; // initial state of the fragment
+        dialogState = 1;
 
         frameLayout = rootView.findViewById(R.id.create_event_frameLayout);
         dialogStateSwitch();
 
-        // setting up buttons
+        // Setting up buttons
         Button nextButton = rootView.findViewById(R.id.create_event_positive_button);
         Button backButton = rootView.findViewById(R.id.create_event_negative_button);
 
@@ -111,14 +152,14 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         backButton.setText("Go back");
                     }
                     if (dialogState == 3) {
-                        nextButton.setText("Confirm");
+                        nextButton.setText(isEditing ? "Update" : "Confirm");
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), "Invalid input", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,120 +181,121 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return builder.create();
     }
 
-    // Adapted from https://stackoverflow.com/questions/25737817/using-a-single-fragment-with-multiple-layout-in-android
+    /**
+     * Switch between dialog states
+     */
     private void dialogStateSwitch() {
         assert (0 <= dialogState) && (dialogState <= 4);
         LayoutInflater inflater = getLayoutInflater();
 
-        // switch out view
         frameLayout.removeAllViews();
         switch (dialogState) {
-            case 0: // user selects "cancel"
+            case 0:
                 dismiss();
                 break;
-            case 1: // switch UI to first page of the dialog
+            case 1:
                 stateView = inflater.inflate(R.layout.fragment_create_event_1, frameLayout);
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
                 eventTitleEditText.setText(eventTitle);
                 break;
-            case 2: // switch UI to second page of the dialog
+            case 2:
                 stateView = inflater.inflate(R.layout.fragment_create_event_2, frameLayout);
                 EditText capacityEditText = stateView.findViewById(R.id.create_event_edittext_event_capacity);
                 EditText waitListLimitEditText = stateView.findViewById(R.id.create_event_edittext_event_waitlist_limit);
                 EditText strLocationEditText = stateView.findViewById(R.id.create_event_edittext_event_location);
                 Switch geolocationRequiredSwitch = stateView.findViewById(R.id.create_event_switch_geolocation_required);
                 Button joinDeadlineButton = stateView.findViewById(R.id.create_event_join_deadline_button);
+
                 capacityEditText.setText(capacity.toString());
-                if (waitListLimit.equals(-1)) {
-                    waitListLimitEditText.setText("");
-                }
-                else {
-                    waitListLimitEditText.setText(waitListLimit.toString());
-                }
+                waitListLimitEditText.setText(waitListLimit.equals(-1) ? "" : waitListLimit.toString());
                 strLocationEditText.setText(strLocation);
                 geolocationRequiredSwitch.setChecked(geolocationRequired);
-                if (joinDeadline == null) {
-                    joinDeadline = new Date();
-                }
+
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(joinDeadline);
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                String dateStr = getMonth(month + 1) + " " + day + ", " + year;
-                joinDeadlineButton.setText(dateStr);
-                initDatePicker(joinDeadlineButton, year, month, day);
-                joinDeadlineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        datePickerDialog.show();
-                    }
-                });
+                initDatePicker(joinDeadlineButton, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                joinDeadlineButton.setOnClickListener(v -> datePickerDialog.show());
                 break;
-            case 3: // switch UI to third page of the dialog
+            case 3:
                 stateView = inflater.inflate(R.layout.fragment_create_event_3, frameLayout);
                 EditText eventDescriptionEditText = stateView.findViewById(R.id.create_event_edittext_event_description);
                 eventDescriptionEditText.setText(eventDescription);
                 break;
-            case 4: // user selects "confirm"
-                // pass info to database
-                if (event == null && organizer != null) {  // creating a new event
-                    EventModel event = new EventModel(
-                            organizer.getFacilityID(),
-                            geolocationRequired,
-                            waitListLimit,
-                            capacity,
-                            joinDeadline,
-                            strLocation,
-                            eventTitle,
-                            eventDescription,
-                            organizer.getfName() + " " + organizer.getlName()
-                    );
-                    db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if (task.isSuccessful()){
-                                DocumentReference documentReference = task.getResult();
-                                String eventID = documentReference.getId();
-                                event.setEventID(eventID);
-                                db.collection("events").document(eventID).set(event);
-                            }
-                        }
-                    });
-                }
-                else {  // editing (updating) an existing event)
-                    event.setEventTitle(eventTitle);
-                    event.setCapacity(capacity);
-                    event.setWaitingListLimit(waitListLimit);
-                    event.setEventStrLocation(strLocation);
-                    event.setGeolocationRequired(geolocationRequired);
-                    event.setJoinDeadline(joinDeadline);
-                    event.setEventDescription(eventDescription);
-                    db.collection("events").document(event.getEventID()).set(event);
-                    eventActivity.updateViews();
+            case 4:
+                if (isEditing) {
+                    updateEventInDatabase();
+                } else {
+                    createEventInDatabase();
                 }
                 dismiss();
                 break;
         }
     }
 
+    /**
+     * Create event in database
+     */
+    private void createEventInDatabase() {
+        EventModel event = new EventModel(
+                organizer.getFacilityID(),
+                geolocationRequired,
+                waitListLimit,
+                capacity,
+                joinDeadline,
+                strLocation,
+                eventTitle,
+                eventDescription,
+                organizer.getfName() + " " + organizer.getlName()
+        );
+
+        db.collection("events").add(event).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentReference docRef = task.getResult();
+                event.setEventID(docRef.getId());
+                db.collection("events").document(docRef.getId()).set(event);
+            }
+        });
+    }
+
+    /**
+     * Update event in database
+     */
+    private void updateEventInDatabase() {
+        db.collection("events").document(eventId).update(
+                "eventTitle", eventTitle,
+                "capacity", capacity,
+                "waitListLimit", waitListLimit,
+                "joinDeadline", joinDeadline,
+                "strLocation", strLocation,
+                "geolocationRequired", geolocationRequired,
+                "eventDescription", eventDescription
+        ).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Event updated successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Get information from the current dialog state
+     * @return Whether the information is valid
+     */
     private Boolean dialogStateGetInfo() {
         assert (1 <= dialogState) && (dialogState <= 3);
         Boolean validInput = Boolean.FALSE;
         switch (dialogState) {
-            case 1: // get input from state 1
+            case 1:
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
                 if (isValidString(eventTitleEditText.getText().toString())) {
                     eventTitle = eventTitleEditText.getText().toString();
                     validInput = Boolean.TRUE;
                 }
                 break;
-            case 2: // get input from state 2
+            case 2:
                 EditText capacityEditText = stateView.findViewById(R.id.create_event_edittext_event_capacity);
                 EditText waitListLimitEditText = stateView.findViewById(R.id.create_event_edittext_event_waitlist_limit);
                 EditText strLocationEditText = stateView.findViewById(R.id.create_event_edittext_event_location);
                 Switch geolocationRequiredSwitch = stateView.findViewById(R.id.create_event_switch_geolocation_required);
-                Button joinDeadlineButton = stateView.findViewById(R.id.create_event_join_deadline_button);
 
                 String capacity_before_validation = capacityEditText.getText().toString();
                 String waitListLimit_before_validation = waitListLimitEditText.getText().toString();
@@ -262,21 +304,18 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 if (isValidNumber(capacity_before_validation) && isValidString(strLocation_before_validation)) {
                     if (isValidNumber(waitListLimit_before_validation)) {
                         waitListLimit = Integer.parseInt(waitListLimit_before_validation);
-                    }
-                    else if (waitListLimit_before_validation.equals("")) {
-                        waitListLimit = -1; // default value for no limit on waiting list
-                    }
-                    else {
+                    } else if (waitListLimit_before_validation.equals("")) {
+                        waitListLimit = -1;
+                    } else {
                         break;
                     }
                     capacity = Integer.parseInt(capacity_before_validation);
                     strLocation = strLocation_before_validation;
                     geolocationRequired = geolocationRequiredSwitch.isChecked();
-                    // joinDeadline's value is set from inside initDatePicker onDateSet
                     validInput = Boolean.TRUE;
                 }
                 break;
-            case 3: // get input from state 3
+            case 3:
                 EditText eventDescriptionEditText = stateView.findViewById(R.id.create_event_edittext_event_description);
                 if (isValidString(eventDescriptionEditText.getText().toString())) {
                     eventDescription = eventDescriptionEditText.getText().toString();
@@ -287,101 +326,76 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return validInput;
     }
 
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+    /**
+     * Initialize date picker
+     * @param joinDeadlineButton The button to display the date picker
+     * @param year The year of the date
+     * @param month The month of the date
+     * @param day The day of the date
+     */
     private void initDatePicker(Button joinDeadlineButton, int year, int month, int day) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // https://stackoverflow.com/questions/30494687/java-util-dateint-int-int-deprecated
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, year);
                 cal.set(Calendar.MONTH, month);
                 cal.set(Calendar.DAY_OF_MONTH, day);
                 joinDeadline = cal.getTime();
-                month += 1;
-                String joinDeadlineStr = getMonth(month) + " " + day + ", " + year;
-                joinDeadlineButton.setText(joinDeadlineStr);
+                joinDeadlineButton.setText(getMonth(month + 1) + " " + day + ", " + year);
             }
         };
 
-        int style =  android.R.style.Theme_Material_Dialog_Alert;
-
+        int style = android.R.style.Theme_Material_Dialog_Alert;
         datePickerDialog = new DatePickerDialog(requireContext(), style, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return getMonth(month) + " " + day + ", " + year;
-    }
-
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+    /**
+     * Get month name
+     * @param month The month
+     * @return The month name
+     */
     private String getMonth(int month) {
-        String monthStr = "";
-        switch(month) {
-            case 1:
-                monthStr = "Jan.";
-                break;
-            case 2:
-                monthStr = "Feb.";
-                break;
-            case 3:
-                monthStr = "Mar.";
-                break;
-            case 4:
-                monthStr = "Apr.";
-                break;
-            case 5:
-                monthStr = "May";
-                break;
-            case 6:
-                monthStr = "June";
-                break;
-            case 7:
-                monthStr = "July";
-                break;
-            case 8:
-                monthStr = "Aug.";
-                break;
-            case 9:
-                monthStr = "Sep.";
-                break;
-            case 10:
-                monthStr = "Oct.";
-                break;
-            case 11:
-                monthStr = "Nov.";
-                break;
-            case 12:
-                monthStr = "Dec.";
-                break;
+        switch (month) {
+            case 1: return "Jan.";
+            case 2: return "Feb.";
+            case 3: return "Mar.";
+            case 4: return "Apr.";
+            case 5: return "May";
+            case 6: return "June";
+            case 7: return "July";
+            case 8: return "Aug.";
+            case 9: return "Sep.";
+            case 10: return "Oct.";
+            case 11: return "Nov.";
+            case 12: return "Dec.";
         }
-        return monthStr;
+        return "";
     }
 
+    /**
+     * Check if string is valid
+     * @param str The string to check
+     * @return Whether the string is valid
+     */
     private Boolean isValidString(String str) {
-        // checks to make sure it is not an empty string
         return !str.equals("");
     }
 
+    /**
+     * Check if string is a valid number
+     * @param str The string to check
+     * @return Whether the string is valid
+     */
     private Boolean isValidNumber(String str) {
-        // checks to make sure it is a nonnegative number
         if (!isValidString(str)) {
             return Boolean.FALSE;
         }
         try {
-            Integer number = Integer.parseInt(str);
-            if (number < 0) {
-                return Boolean.FALSE;
-            }
-        }
-        catch(NumberFormatException e) {
+            return Integer.parseInt(str) >= 0;
+        } catch (NumberFormatException e) {
             return Boolean.FALSE;
         }
-        return Boolean.TRUE;
     }
 }

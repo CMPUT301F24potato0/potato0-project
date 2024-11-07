@@ -7,14 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -112,56 +108,36 @@ public class ScanFragment extends Fragment {
      */
     private void checkEvent(String eventID, String userId) {
         CollectionReference eventRef = db.collection("events");
-        Task<DocumentSnapshot> eventTask = eventRef.document(eventID).get();
-        eventTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+        eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        EventModel eve = document.toObject(EventModel.class);
-                        Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-                        UsersList userList = new UsersList(userId, curUser.getfName() + " " + curUser.getlName());
-                        i.putExtra("userList", userList);
-                        i.putExtra("eventModel", eve);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(getContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Task Failed", Toast.LENGTH_SHORT).show();
+            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
                 }
+                if (querySnapshots != null) {
+                    boolean eventFound = false;
+                    for (QueryDocumentSnapshot doc: querySnapshots) {
+                        String eventId = doc.getId();
+                        if (eventId.equals(eventID)) {
+                            eventFound = true;
+                            EventModel temp = doc.toObject(EventModel.class);
+                            Intent i = new Intent(getActivity(), EventEntrantActivity.class);
+                            UsersList userList = new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName());
+                            i.putExtra("userList", userList);
+                            i.putExtra("eventModel", temp);
+                            startActivity(i);
+                            break;
+                        }
+                    }
+                    if (!eventFound) {
+                        Toast.makeText(getContext(), "Event not found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         });
-        //        eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.e("Firestore", error.toString());
-//                    return;
-//                }
-//                if (querySnapshots != null) {
-//                    boolean eventFound = false;
-//                    for (QueryDocumentSnapshot doc: querySnapshots) {
-//                        String eventId = doc.getId();
-//                        if (eventId.equals(eventID)) {
-//                            eventFound = true;
-//                            EventModel temp = doc.toObject(EventModel.class);
-//                            Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-//                            UsersList userList = new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName());
-//                            i.putExtra("userList", userList);
-//                            i.putExtra("eventModel", temp);
-//                            startActivity(i);
-//                            break;
-//                        }
-//                    }
-//                    if (!eventFound) {
-//                        Toast.makeText(getContext(), "Event not found", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//            }
-//        });
     }
 
     /**
