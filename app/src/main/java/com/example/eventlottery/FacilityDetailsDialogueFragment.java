@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Facility Details Dialogue Fragment
+ */
 public class FacilityDetailsDialogueFragment extends DialogFragment {
 
     private FirebaseFirestore db;
@@ -25,16 +28,21 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
     private FacilityModel facility;
     private FacilityFragment facilityFragment;
 
+    /**
+     * Constructor
+     */
     public FacilityDetailsDialogueFragment() {
         super();
     }
 
-//    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser user) {
-//        this();
-//        this.db = db;
-//        this.user = user;
-//    }
-
+    /**
+     * Constructor
+     * @param db Firebase Firestore
+     * @param curUser Current User
+     * @param facilityDne If the facility exists or not
+     * @param facility Facility Model
+     * @param facilityFragment Facility Fragment
+     */
     public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne, FacilityModel facility, FacilityFragment facilityFragment) {
         this.db = db;
         this.user = curUser;
@@ -43,6 +51,13 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         this.facilityFragment = facilityFragment;
     }
 
+    /**
+     * On create Dialog override
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return A new Dialog instance to be displayed by the Fragment.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -122,10 +137,20 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Check if the input is valid
+     * @param str String to check
+     * @return If the string is valid or not
+     */
     private Boolean isValidString(String str) {
         return !str.equals("");
     }
 
+    /**
+     * Check if the input is valid
+     * @param str String to check
+     * @return If the string is valid or not
+     */
     private Boolean isValidNumber(String str) {
         if (!isValidString(str)) {
             return Boolean.FALSE;

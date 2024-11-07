@@ -22,6 +22,9 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
+/**
+ * Event Waitlist Activity
+ */
 public class EventWaitlistActivity extends AppCompatActivity {
 
     private Button notify;
@@ -35,6 +38,14 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
 
     private Button drawSample;
+
+    /**
+     * On create Override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,16 +106,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
-//        // Add back button functionality
-//        Button backButton = findViewById(R.id.back_button);
-//        backButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(EventWaitlistActivity.this, EventOrganizerActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
-
 
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override

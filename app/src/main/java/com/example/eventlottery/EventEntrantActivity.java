@@ -40,6 +40,9 @@ import org.w3c.dom.Document;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Event Entrant Activity
+ */
 public class EventEntrantActivity extends AppCompatActivity {
     FloatingActionButton back;
     FirebaseFirestore db;
@@ -61,17 +64,23 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
+
+    /**
+     * Overriding on back pressed
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
         startActivity(i);
     }
-
-
     // NEED TO TEST THIS
     // ****************************************************************************************************************
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
+
+    /**
+     * Request permission launcher
+     */
+     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     // FCM SDK (and your app) can post notifications.
@@ -82,6 +91,9 @@ public class EventEntrantActivity extends AppCompatActivity {
                 }
             });
 
+    /**
+     * Ask notification permission
+     */
     private void askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -102,6 +114,14 @@ public class EventEntrantActivity extends AppCompatActivity {
     }
     // ****************************************************************************************************************
     CurrentUser tempCurUser;
+
+    /**
+     * On create of the View
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +132,6 @@ public class EventEntrantActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
 
         Bundle extras = getIntent().getExtras();
 

@@ -16,6 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Cancelled List Activity
+ * This activity displays a list of users who have been cancelled by the organizer of the event.
+ */
 public class CancelledListActivity extends AppCompatActivity {
 
     private ArrayList<UsersList> userCancelList;
@@ -24,6 +28,12 @@ public class CancelledListActivity extends AppCompatActivity {
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

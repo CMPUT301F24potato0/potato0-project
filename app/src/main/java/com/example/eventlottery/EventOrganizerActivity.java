@@ -25,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Event Organizer Activity
+ */
 public class EventOrganizerActivity extends AppCompatActivity {
     /*
         Getting the views from the layout file
@@ -50,6 +53,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private CurrentUser curUser;  // Ensure this is initialized correctly
     private ConstraintLayout progessBar;
 
+    /**
+     * On create Override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -157,6 +167,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         setupSnapshotListeners();
     }
 
+    /**
+     * Setup snapshot listeners for counters
+     */
     private void setupSnapshotListeners() {
         db.collection("events").document(eventID)
                 .addSnapshotListener((documentSnapshot, e) -> {

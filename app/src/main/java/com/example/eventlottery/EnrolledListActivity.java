@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Enrolled List Activity
+ */
 public class EnrolledListActivity extends AppCompatActivity {
 
     private ArrayList<UsersList> userEnrollList;
@@ -24,6 +27,13 @@ public class EnrolledListActivity extends AppCompatActivity {
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * Overriding on create
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
