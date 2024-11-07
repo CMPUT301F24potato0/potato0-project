@@ -114,7 +114,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     }
     // ****************************************************************************************************************
     CurrentUser tempCurUser;
-
+    CurrentUser tempTesting;
     /**
      * On create of the View
      * @param savedInstanceState If the activity is being re-initialized after
@@ -215,68 +215,65 @@ public class EventEntrantActivity extends AppCompatActivity {
             joinBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    askNotificationPermission();
                     if (event.getGeolocationRequired()) {
                         // Joining
                         new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
                         // Getting event specific topic
+                    }
+                    else {
 
-                        String eventID = event.getEventID();
-                        String userID = userList.getiD();
-                        String topic = eventID + "_" + userID;
-
-
-
-                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                        try {
+                            event.queueWaitingList(userList);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
                         task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if (documentSnapshot.exists()) {
-                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                    tempCurUser.addTopics(topic);
-                                    db.collection("users").document(userID).set(tempCurUser);
+                                    tempTesting = documentSnapshot.toObject(CurrentUser.class);
                                 }
                             }
                         });
-
-                        SubscribeToTopic subscribeToTopic_geo = new SubscribeToTopic(topic,getApplicationContext());
-                        subscribeToTopic_geo.subscribe();
-
-                        askNotificationPermission();
-
-
-                    }
-                    else {
-                        try {
-                            event.queueWaitingList(userList);
-
-                            // also joining
-
-                            String eventID = event.getEventID();
-                            String userID = userList.getiD();
-                            String topic = eventID + "_" + userID;
-
-
-                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                        tempCurUser.addTopics(topic);
-                                        db.collection("users").document(userID).set(tempCurUser);
-                                    }
-                                }
-                            });
-
-                            SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
-                            subscribeToTopic.subscribe();
-
-
-
-                        } catch (Exception e) {
-                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
-                        }
                         db.collection("events").document(event.getEventID()).set(event);
+                        task.onSuccessTask(t1 -> {
+                            tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
+                            db.collection("users").document(userList.getiD()).set(tempTesting);
+                            return null;
+                        });
+//                        try {
+//                            event.queueWaitingList(userList);
+//
+//                            // also joining
+//
+//                            String eventID = event.getEventID();
+//                            String userID = userList.getiD();
+//                            String topic = eventID + "_" + userID;
+//
+//
+//                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if (documentSnapshot.exists()) {
+//                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+//                                        tempCurUser.addTopics(topic);
+//                                        db.collection("users").document(userID).set(tempCurUser);
+//                                    }
+//                                }
+//                            });
+//
+//                            SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
+//                            subscribeToTopic.subscribe();
+//
+//
+//
+//                        } catch (Exception e) {
+//                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
+//                        }
+//                        db.collection("events").document(event.getEventID()).set(event);
 
                     }
                 }
