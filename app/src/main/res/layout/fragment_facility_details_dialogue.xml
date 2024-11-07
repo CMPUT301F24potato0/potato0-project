@@ -88,6 +88,7 @@
             android:background="@drawable/rounded_corner_background"
             android:hint="Optional"
             android:maxLines="1"
+            android:inputType="number"
             android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
             android:layout_gravity="center"/>
@@ -138,6 +139,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
             android:hint="Required"
+            android:inputType="number"
             android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
             android:layout_gravity="center"/>

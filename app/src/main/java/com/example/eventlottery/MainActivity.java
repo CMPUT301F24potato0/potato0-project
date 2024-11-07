@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -28,7 +29,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
+import java.util.ArrayList;
 /**
  * This is the MainActivity class
  * This class currently handles checking the user in the database, if the user exists then updating the current instance of the user
@@ -39,42 +40,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     BottomNavigationView bottomNavigationView;
 
     public FirebaseFirestore db;
-    public CollectionReference userRef;
+    public CollectionReference usersRef;
+    public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
     private CurrentUser curUser;
     public CollectionReference facilitiesRef;
     private FacilityModel facility;
+    ConstraintLayout mainActivityView;
+    ConstraintLayout mainActivityProgressBar;
 
-    // Declare the launcher at the top of your Activity/Fragment:
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    // FCM SDK (and your app) can post notifications.
-                    Log.e("Permission","Granted");
-                } else {
-                    // TODO: Inform user that that your app will not show notifications.
-                }
-            });
-
-    private void askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                // FCM SDK (and your app) can post notifications.
-
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-            }
-        }
-    }
     /**
      * This method is called when opening the app.
      * This method gets the AndroidID creates a new user.
@@ -84,67 +59,72 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//        askNotificationPermission();
+
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Check this for Qr scanner in fragment
         // https://stackoverflow.com/questions/40725336/android-studio-start-qr-code-scanner-from-fragment
         // https://medium.com/@dev.jeevanyohan/zxing-qr-code-scanner-android-implementing-in-activities-fragment-custom-colors-faa68bfc761d
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        mainActivityView = findViewById(R.id.main_activity_view);
+        mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        bottomNavigationView
-                = findViewById(R.id.bottomNavigationView);
 
-        bottomNavigationView
-                .setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.scanQR);
-
-        curUser = new CurrentUser("", "", "","", false, "", androidIDStr);
+        curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
-
-        userRef = db.collection("users");
+        usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
 
+        DocumentReference currentUserReference = usersRef.document(androidIDStr);
         DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
 
-        userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        facility = document.toObject(FacilityModel.class);
-                        curUser.setFacilityID(facility.getUserID());
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    Log.d("Firestore", "get failed with ", task.getException());
-                }
-            }
-        });
+        Task<DocumentSnapshot> task = currentUserReference.get();
 
-        DocumentReference currentUserReference = userRef.document(androidIDStr);
-
-        currentUserReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         curUser = document.toObject(CurrentUser.class);
-                        Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
-                        Toast.makeText(MainActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
                     } else {
                         newUser(curUser);
-                        Toast.makeText(MainActivity.this, "Document doesn't exist", Toast.LENGTH_SHORT).show();
                     }
+                    userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    facility = document.toObject(FacilityModel.class);
+                                    curUser.setFacilityID(facility.getUserID());
+                                }
+                                else {
+                                    Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else {
+                                Log.d("Firestore", "get failed with ", task.getException());
+                                throw new RuntimeException(task.getException().toString());
+                            }
+                        }
+                    });
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
+                    throw new RuntimeException(task.getException().toString());
                 }
             }
+        });
+
+        // https://stackoverflow.com/questions/66698325/how-to-wait-for-firebase-task-to-complete-to-get-result-as-an-await-function
+        task.onSuccessTask(task1 -> {
+            mainActivityProgressBar.setVisibility(View.GONE);
+            mainActivityView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            return null;
         });
     }
 
@@ -153,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     public void newUser(CurrentUser cUser) {
         // Adding a new User
-        userRef.document(androidIDStr).set(cUser);
+        usersRef.document(androidIDStr).set(cUser);
     }
 
     /**
@@ -185,35 +165,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.facility:
-                if (curUser.getFacilityID().equals("")) {
-                    Toast.makeText(MainActivity.this, "Creating a facility", Toast.LENGTH_SHORT).show();
-                    new FacilityDetailsDialogueFragment(db, curUser).show(getSupportFragmentManager(), "Create facility");
-                }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, (Boolean) curUser.getFacilityID().equals(""), facility))
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, facility))
                         .commit();
                 return true;
             case R.id.waitlist:
                 getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flFragment, new WaitlistedEventsFragment())
-                    .commit();
+                        .beginTransaction()
+                        .replace(R.id.flFragment, new WaitlistedEventsFragment())
+                        .commit();
                 return true;
 
             case R.id.profile:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new Profile(db, curUser))
-                        //.replace(R.id.flFragment, new Profile(db, profileFragment))
+                        .replace(R.id.flFragment, new ProfileFragment(db, curUser))
                         .commit();
                 return true;
         }
         return false; // if nothing was found then return false
-    }
-
-    public void createFacility(String userID) {
-        curUser.setFacilityID(androidIDStr);
-        userRef.document(userID).set(curUser);
     }
 }

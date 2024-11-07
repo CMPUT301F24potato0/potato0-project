@@ -1,68 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/parent">
+    android:id="@+id/parent"
+    android:background="@drawable/rounded_corner_background"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/notification_sending_title"
+        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@color/black">
-        <TextView
-            android:id="@+id/notification_sending_title"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
+        android:text="Send Notification"
+        android:textSize="25dp"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="2dp"
+        android:paddingHorizontal="10dp"
+        android:hint="Title"
+        android:textColorHint="@color/white"
+        android:textColor="@color/black"
+        android:maxLines="1"
+        android:background="@drawable/rounded_corner_background" />
+
+    <EditText
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="2dp"
+        android:paddingHorizontal="10dp"
+        android:minHeight="150dp"
+        android:hint="Message"
+        android:textColorHint="@color/white"
+        android:textColor="@color/black"
+        android:gravity="start"
+        android:maxLines="1"
+        android:background="@drawable/rounded_corner_background" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp">
+
+        <Button
+            android:id="@+id/Cancel_id"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Send Notification"
-            android:gravity="center">
-        </TextView>
-        <EditText
-            android:id="@+id/title"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
+            android:backgroundTint="@color/red1"
+            android:minWidth="0dp"
+            android:text="Cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/send_id"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white">
-        </EditText>
-        <EditText
-            android:id="@+id/body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:hint="Message"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white">
-        </EditText>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/Cancel_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:layout_weight="1"
-                android:layout_marginEnd="20dp">
-            </Button>
-            <Button
-                android:id="@+id/send_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp">
+            android:backgroundTint="@color/green1"
+            android:text="Send"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            </Button>
-
-        </LinearLayout>
-
-
-
-
-    </RelativeLayout>
-
-</RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

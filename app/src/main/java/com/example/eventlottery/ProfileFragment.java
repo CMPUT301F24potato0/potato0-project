@@ -7,30 +7,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
 
 /**
  * This class is the profile fragment.
  * This class is called when the user clicks the profile button on the bottom.
  */
-public class Profile extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private CurrentUser curUser;
     private FirebaseFirestore db;
     public CollectionReference userRef;
 
     private Button editUser;
+//    private Button on_notification;
+//    private Button off_notification;
+    private static boolean ismuted;
+
+    FloatingActionButton on_notifications;
+    FloatingActionButton off_notifications;
+
 
     /**
      * Empty Constructor
      */
-    public Profile(){
+    public ProfileFragment(){
         // require a empty public constructor
     }
 
@@ -39,9 +46,17 @@ public class Profile extends Fragment {
      * @param db This is the database instance
      * @param curUser This is the information about current user which is passed from MainActivity
      */
-    public Profile(FirebaseFirestore db, CurrentUser curUser) {
+    public ProfileFragment(FirebaseFirestore db, CurrentUser curUser) {
         this.db = db;
         this.curUser = curUser;
+    }
+
+    /**
+     * This method is called when sending a notification.
+     * @return It returns the boolean ismuted, returns either true or false, depending whether wants to receive notifications or not.
+     */
+    public static boolean getIsmute(){
+        return ismuted;
     }
 
     /**
@@ -93,6 +108,47 @@ public class Profile extends Fragment {
                 curUser.setPhone(phoneStr);
 
                 userRef.document(id).set(curUser);
+            }
+        });
+
+
+        // Notifications
+        on_notifications = (FloatingActionButton) rootView.findViewById(R.id.on_notification);
+        off_notifications = (FloatingActionButton) rootView.findViewById(R.id.off_notification);
+        ismuted = curUser.isMuted();
+
+
+        if(getIsmute() == true){
+            on_notifications.setVisibility(View.GONE);
+            off_notifications.setVisibility(View.VISIBLE);
+        } else if (getIsmute() == false) {
+            on_notifications.setVisibility(View.VISIBLE);
+            off_notifications.setVisibility(View.GONE);
+        }
+        on_notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = true;
+                curUser.setMuted(ismuted);
+                db.collection("users").document(curUser.getiD()).set(curUser);
+                Toast.makeText(getActivity(),"Notifications: Off",Toast.LENGTH_SHORT).show();
+                on_notifications.setVisibility(View.GONE);
+                off_notifications.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        off_notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismuted = false;
+
+                curUser.setMuted(ismuted);
+                db.collection("users").document(curUser.getiD()).set(curUser);
+
+                Toast.makeText(getActivity(),"Notifications: On",Toast.LENGTH_SHORT).show();
+                on_notifications.setVisibility(View.VISIBLE);
+                off_notifications.setVisibility(View.GONE);
             }
         });
 

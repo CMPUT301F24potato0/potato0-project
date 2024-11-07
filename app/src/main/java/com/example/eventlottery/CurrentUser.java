@@ -1,9 +1,12 @@
 package com.example.eventlottery;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * This Class stores the current user's information
  */
-public class CurrentUser {
+public class CurrentUser implements Serializable {
     private String fName;
     private String lName;
     private String email;
@@ -12,6 +15,8 @@ public class CurrentUser {
     private String facilityID;
     private String iD;
     private String userPhoto;
+    private boolean isMuted = false;
+    private ArrayList<String> topics;
 
     /**
      * Constructor that updates the local variables
@@ -22,7 +27,7 @@ public class CurrentUser {
      * @param phone Phone number
      * @param iD Android ID
      */
-    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD) {
+    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD, boolean isMuted, ArrayList<String> topics) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
@@ -30,6 +35,8 @@ public class CurrentUser {
         this.facilityID = facilityID;
         this.phone = phone;
         this.iD = iD;
+        this.isMuted = isMuted;
+        this.topics = topics;
     }
 
     public CurrentUser() {}
@@ -107,11 +114,107 @@ public class CurrentUser {
         this.isAdmin = isAdmin;
     }
 
+    /**
+     * Getting Facility ID
+     * @return Facility ID
+     */
     public String getFacilityID() {
         return facilityID;
     }
 
+    /**
+     * Setting Facility ID
+     * @param facilityID Facility ID
+     */
     public void setFacilityID(String facilityID) {
         this.facilityID = facilityID;
+    }
+
+    /**
+     * Getting admin
+     * @return admin
+     */
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    /**
+     * Setting admin
+     * @param admin admin boolean
+     */
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    /**
+     * Getting Android ID
+     * @param iD Android ID
+     */
+    public void setiD(String iD) {
+        this.iD = iD;
+    }
+
+    /**
+     * Getting user photo
+     * @return user photo
+     */
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    /**
+     * Setting user photo
+     * @param userPhoto user photo
+     */
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    /**
+     * Getting muted
+     * @return muted
+     */
+    public boolean isMuted() {
+        return isMuted;
+    }
+
+    /**
+     * Setting muted
+     * @param muted muted boolean
+     */
+    public void setMuted(boolean muted) {
+        isMuted = muted;
+    }
+
+    /**
+     * Getting topics
+     * @return topics
+     */
+    public ArrayList<String> getTopics() {
+        return topics;
+    }
+
+    /**
+     * Setting topics
+     * @param topics topics
+     */
+    public void setTopics(ArrayList<String> topics) {
+        this.topics = topics;
+    }
+
+    /**
+     * Adding topics
+     * @param topic topic
+     */
+    public void addTopics(String topic) {
+        this.topics.add(topic);
+    }
+
+    /**
+     * Removing topics
+     * @param topic topic
+     */
+    public void removeTopics(String topic){
+        this.topics.remove(topic);
     }
 }

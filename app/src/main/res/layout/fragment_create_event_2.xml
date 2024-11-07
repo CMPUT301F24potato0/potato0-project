@@ -4,6 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <!--
+    https://stackoverflow.com/questions/59047389/onclick-using-databinding-in-fragment
+    https://stackoverflow.com/questions/32815608/android-data-binding-cannot-resolve-symbol
+    -->
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="250dp"
+            android:minWidth="200dp"
             android:text="Event Capacity:"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -31,6 +38,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
             android:inputType="number"
+            android:hint="Event capacity here"
+            android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
             android:maxLines="1" />
     </LinearLayout>
@@ -44,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="250dp"
+            android:minWidth="200dp"
             android:text="Waiting List Limit (Optional):"
             android:textSize="15sp"
             android:layout_gravity="center" />
@@ -55,8 +64,60 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_background"
             android:inputType="number"
+            android:hint="Waitlist limit here"
+            android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
             android:maxLines="1" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="200dp"
+            android:text="Location:"
+            android:textSize="15sp"
+            android:layout_gravity="center" />
+
+        <EditText
+            android:id="@+id/create_event_edittext_event_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_background"
+            android:hint="Location here"
+            android:textColorHint="@color/white"
+            android:paddingHorizontal="10dp"
+            android:maxLines="1" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="200dp"
+            android:text="Geolocation Required:"
+            android:textSize="15sp"
+            android:layout_gravity="center" />
+
+        <Switch
+            android:id="@+id/create_event_switch_geolocation_required"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -69,17 +130,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="250dp"
-            android:text="Geolocation Required:"
+            android:minWidth="200dp"
+            android:text="Join Deadline:"
             android:textSize="15sp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"/>
 
-        <Switch
-            android:id="@+id/create_event_switch_geolocation_required"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+        <!-- https://youtu.be/qCoidM98zNk?si=ywcwpfPe0MzQRhzm -->
+        <Button
+            android:id="@+id/create_event_join_deadline_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/gray2"
+            style="?android:spinnerStyle"
+            android:text="Jan. 1, 2024"
+            android:textColor="@color/black"
+            android:maxLines="1" />
     </LinearLayout>
+
 
 
 
