@@ -10,6 +10,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+/**
+ * This class is the SubscribeToTopic
+ */
 public class SubscribeToTopic {
 
     //https://firebase.google.com/docs/cloud-messaging/android/topic-messaging
@@ -18,11 +21,19 @@ public class SubscribeToTopic {
     private final String topic;
     private final Context context;
 
+    /**
+     * This is the constructor for SubscribeToTopic
+     * @param topic The topic to subscribe to
+     * @param context The context
+     */
     SubscribeToTopic(String topic, Context context){
         this.topic = topic;
         this.context = context;
     }
 
+    /**
+     * This function subscribes to the topic
+     */
     public void subscribe(){
 
         FirebaseMessaging.getInstance().subscribeToTopic(topic)

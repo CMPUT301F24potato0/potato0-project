@@ -18,6 +18,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
+/**
+ * This class is the UserListviewAdapter
+ */
 public class UserListviewAdapter extends ArrayAdapter<UsersList> {
     private String state;
     private ArrayList<UsersList> list;

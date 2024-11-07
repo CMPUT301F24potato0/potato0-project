@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
- *
+ * This class is the LotterySystem
  */
 public class LotterySystem {
 
     private int end;
     private int num;
 
-
+    /**
+     * Constructor
+     * @param end The number of people in the waitlist
+     * @param num The number of people that will be "won" the lottery
+     */
     LotterySystem(int end, int num){
         this.end = end-1; // since indexing from 0
         this.num = num;

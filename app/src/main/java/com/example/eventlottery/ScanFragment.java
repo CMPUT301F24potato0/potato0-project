@@ -1,22 +1,13 @@
 package com.example.eventlottery;
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.media.metrics.Event;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -35,7 +26,6 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This class is the Scan Fragment
@@ -50,16 +40,26 @@ public class ScanFragment extends Fragment {
     private FirebaseFirestore db;
     private CurrentUser curUser;
 
+    /**
+     * This is the empty constructor
+     */
     public ScanFragment(){
         // require a empty public constructor
     }
 
-
+    /**
+     * This is the constructor that takes in the database and the current user
+     * @param db The database
+     * @param curUser The current user
+     */
     public ScanFragment(FirebaseFirestore db, CurrentUser curUser) {
         this.db = db;
         this.curUser = curUser;
     }
 
+    /**
+     * This is the callback for the barcode scanner
+     */
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
@@ -76,7 +76,7 @@ public class ScanFragment extends Fragment {
     };
 
     /**
-     *
+     * This function inflates the fragment_scan layout
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -140,12 +140,18 @@ public class ScanFragment extends Fragment {
         });
     }
 
+    /**
+     * This function pauses the barcode scanner when the fragment is paused
+     */
     @Override
     public void onPause() {
         super.onPause();
         barcodeView.pauseAndWait();
     }
 
+    /**
+     * This function resumes the barcode scanner when the fragment is resumed
+     */
     @Override
     public void onResume() {
         super.onResume();
