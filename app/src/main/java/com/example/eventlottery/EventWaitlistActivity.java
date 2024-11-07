@@ -6,8 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -36,6 +41,9 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<UsersList> userWaitList;
     private Button drawSample;
+    private String title;
+    private String body;
+
 
     /**
      * On create Override
@@ -64,6 +72,28 @@ public class EventWaitlistActivity extends AppCompatActivity {
         waitlist = findViewById(R.id.waitList_listview);
         drawSample = findViewById(R.id.draw_sample_button);
 
+
+        ActivityResultLauncher<Intent> activityResultLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(),
+                        new ActivityResultCallback<ActivityResult>() {
+                            @Override
+                            public void onActivityResult(ActivityResult activityResult) {
+                                int result = activityResult.getResultCode();
+                                Intent data = activityResult.getData();
+
+                                if (result == RESULT_OK && data != null){
+                                    title = data.getStringExtra(SendNotificationActivity.KEY_TITLE);
+                                    body = data.getStringExtra(SendNotificationActivity.KEY_MESSAGE);
+
+                                } else {
+                                    Toast.makeText(getApplicationContext() ,"Canceled notification",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                );
+
+
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,26 +102,22 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
                 ArrayList<UsersList> userIDs = event.getWaitingList();
                 String eventID = event.getEventID();
+                // Can't open activity when notification pressed
                 SendNotification sendNotification = new SendNotification(EventWaitlistActivity.this,eventID,false);
 
+                Intent intent = new Intent(EventWaitlistActivity.this, SendNotificationActivity.class);
+                activityResultLauncher.launch(intent);
 
-
-//                ArrayList<String> title_text = sendNotification.popup();
-
-//                sendNotification.popup();
-
-
-
-
-
-
-
+//
+                sendNotification.setTitle(title);
+                sendNotification.setBody(body);
+                sendNotification.setArrayList();
+                ArrayList<String> notification_info = sendNotification.getArray();
 
 
                 for(int i = 0; i < userIDs.size(); i++){
                     String topic = eventID + "_" + userIDs.get(i);
-                    sendNotification.NotificationCreate(title_text.get(0), title_text.get(1), topic);
-
+                    sendNotification.NotificationCreate(notification_info.get(0), notification_info.get(1), topic);
                 }
             }
         });

@@ -74,8 +74,8 @@ public class WaitlistedEventsFragment extends Fragment{
             // CAlLS SendNotification
             this.context = requireContext();
             String topic = "testTopic_signup";
-            SendNotification sendNotification = new SendNotification(context,topic);
-            sendNotification.popup();
+//            SendNotification sendNotification = new SendNotification(context,topic);
+//            sendNotification.popup();
             // CALLS
 
         });
