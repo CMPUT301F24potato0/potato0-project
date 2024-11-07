@@ -65,6 +65,12 @@ public class EventEntrantActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
 
+
+
+
+
+    private CurrentUser curUser;
+
     /**
      * Overriding on back pressed
      */
@@ -168,128 +174,111 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizer = event.getOrganizer();
         organizerName.setText(organizer);
         eventDescription.setText(event.getEventDescription());
-        progressBar.setVisibility(View.GONE);
-        linearLayout.setVisibility(View.VISIBLE);
-
-        if (event.checkUserInList(userList, event.getWaitingList())) {
-            unjoinBtn.setVisibility(View.VISIBLE);
-            joinBtn.setVisibility(View.GONE);
-            unjoinBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Unjoining
-                    try {
-                        event.unqueueWaitingList(userList);
-                        db.collection("events").document(event.getEventID()).set(event);
-
-
-                        String eventID = event.getEventID();
-                        String userID = userList.getiD();
-                        String topic = eventID + "_" + userID;
-
-
-                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                    tempCurUser.removeTopics(topic);
-                                    db.collection("users").document(userID).set(tempCurUser);
-                                }
-                            }
-                        });
-
-
-                        UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
-                        unsubscribeFromTopic.unsubscribe();
-                    }
-                    catch (Exception e) {
-                        Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
-                    }
+        Task<DocumentSnapshot> t = db.collection("users").document(userList.getiD()).get();
+        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    curUser = documentSnapshot.toObject(CurrentUser.class);
+                    Toast.makeText(EventEntrantActivity.this, "User exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EventEntrantActivity.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                 }
-            });
-        } else {
-            unjoinBtn.setVisibility(View.GONE);
-            joinBtn.setVisibility(View.VISIBLE);
-            joinBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (event.getGeolocationRequired()) {
-                        // Joining
-                        new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                        // Getting event specific topic
+            }
+        });
 
-                        String eventID = event.getEventID();
-                        String userID = userList.getiD();
-                        String topic = eventID + "_" + userID;
-
-
-
-                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                    tempCurUser.addTopics(topic);
-                                    db.collection("users").document(userID).set(tempCurUser);
-                                }
-                            }
-                        });
-
-                        SubscribeToTopic subscribeToTopic_geo = new SubscribeToTopic(topic,getApplicationContext());
-                        subscribeToTopic_geo.subscribe();
-
-                        askNotificationPermission();
-
-
-                    }
-                    else {
+        t.onSuccessTask(afterT -> {
+            progressBar.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+            if (event.checkUserInList(userList, event.getWaitingList())) {
+                unjoinBtn.setVisibility(View.VISIBLE);
+                joinBtn.setVisibility(View.GONE);
+                unjoinBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Unjoining
                         try {
-                            event.queueWaitingList(userList);
+                            event.unqueueWaitingList(userList);
+                            db.collection("events").document(event.getEventID()).set(event);
 
-                            // also joining
 
                             String eventID = event.getEventID();
                             String userID = userList.getiD();
                             String topic = eventID + "_" + userID;
 
+                            curUser.removeTopics(topic);
+                            db.collection("users").document(userID).set(curUser);
+//                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if (documentSnapshot.exists()) {
+//                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+//                                        tempCurUser.removeTopics(topic);
+//                                        db.collection("users").document(userID).set(tempCurUser);
+//                                    }
+//                                }
+//                            });
+                            UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
+                            unsubscribeFromTopic.unsubscribe();
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } else {
+                unjoinBtn.setVisibility(View.GONE);
+                joinBtn.setVisibility(View.VISIBLE);
+                joinBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        askNotificationPermission();
+                        if (event.getGeolocationRequired()) {
+                            // Joining
+                            new geo_requirement_dialog(userList, curUser, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                            // Getting event specific topic
+                        }
+                        else {
+                            try {
+                                event.queueWaitingList(userList);
+                                // also joining
 
-                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    if (documentSnapshot.exists()) {
-                                        tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                        tempCurUser.addTopics(topic);
-                                        db.collection("users").document(userID).set(tempCurUser);
-                                    }
-                                }
-                            });
-
+                            } catch (Exception e) {
+                                Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
+                            }
+                            String eventID = event.getEventID();
+                            String userID = userList.getiD();
+                            String topic = eventID + "_" + userID;
+                            curUser.addTopics(topic);
+                            db.collection("users").document(userID).set(curUser);
+//                            Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                            task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    if (documentSnapshot.exists()) {
+//                                        curUser = documentSnapshot.toObject(CurrentUser.class);
+//                                        tempCurUser.addTopics(topic);
+//                                    }
+//                                }
+//                            });
                             SubscribeToTopic subscribeToTopic = new SubscribeToTopic(topic,getApplicationContext());
                             subscribeToTopic.subscribe();
+                            db.collection("events").document(event.getEventID()).set(event);
 
-
-
-                        } catch (Exception e) {
-                            Toast.makeText(EventEntrantActivity.this, "Waitlist is full", Toast.LENGTH_SHORT).show();
                         }
-                        db.collection("events").document(event.getEventID()).set(event);
-
                     }
+                });
+            }
+
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
+                    startActivity(i);
                 }
             });
-        }
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
-                startActivity(i);
-            }
+           return null;
         });
-
     }
 }

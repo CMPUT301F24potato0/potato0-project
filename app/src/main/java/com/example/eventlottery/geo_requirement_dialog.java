@@ -14,8 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,6 +29,7 @@ public class geo_requirement_dialog extends DialogFragment {
 
     private UsersList user;
     private EventModel event;
+    private CurrentUser curUser;
     private FirebaseFirestore db;
 
     /**
@@ -34,9 +38,10 @@ public class geo_requirement_dialog extends DialogFragment {
      * @param event Event Model
      * @param db Firebase Firestore
      */
-    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
+    public geo_requirement_dialog(UsersList user, CurrentUser curUser, EventModel event, FirebaseFirestore db ) {
         this.user = user;
         this.event = event;
+        this.curUser = curUser;
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -51,6 +56,18 @@ public class geo_requirement_dialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.geo_requirement_dialog, null);
 
+        Task<DocumentSnapshot> t = db.collection("users").document(user.getiD()).get();
+        t.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    curUser = documentSnapshot.toObject(CurrentUser.class);
+                }
+            }
+        });
+        t.onSuccessTask(t1 -> {
+            return null;
+        });
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -62,6 +79,25 @@ public class geo_requirement_dialog extends DialogFragment {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+
+                    String eventID = event.getEventID();
+                    String userID = user.getiD();
+                    String topic = eventID + "_" + userID;
+                    curUser.addTopics(topic);
+                    db.collection("users").document(userID).set(curUser);
+//                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()) {
+//                                curUser.addTopics(topic);
+//                                db.collection("users").document(userID).set(curUser);
+//                            }
+//                        }
+//                    });
+
+                    SubscribeToTopic subscribeToTopic_geo = new SubscribeToTopic(topic,getContext());
+                    subscribeToTopic_geo.subscribe();
                     db.collection("events").document(event.getEventID()).set(event);
                 })
                 .create();
