@@ -217,7 +217,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (event.getGeolocationRequired()) {
                         // Joining
-                        new geo_requirement_dialog(userList,tempCurUser, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                        new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
                         // Getting event specific topic
 
                         String eventID = event.getEventID();
