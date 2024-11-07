@@ -56,7 +56,7 @@ public class EnrolledListActivity extends AppCompatActivity {
         userEnrollList = event.getEnrolledList();
 
         enrollList = findViewById(R.id.enroll_list);
-        enrollAdapter = new EnrolledListArrayAdapter(this, 100, userEnrollList, "enrolled", event, db);
+        enrollAdapter = new EnrolledListArrayAdapter(this, 0, userEnrollList, "enrolled", event, db);
         enrollList.setAdapter(enrollAdapter);
     }
 }

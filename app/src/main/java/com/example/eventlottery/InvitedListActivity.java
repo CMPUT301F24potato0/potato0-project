@@ -56,7 +56,7 @@ public class InvitedListActivity extends AppCompatActivity {
         userInvitedList = event.getInvitedList();
 
         invitedList = findViewById(R.id.invited_list);
-        invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite", event, db);
+        invitedAdapter = new InvitedListArrayAdapter(this, userInvitedList, event, db);
         invitedList.setAdapter(invitedAdapter);
     }
 }
