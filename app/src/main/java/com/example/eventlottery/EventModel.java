@@ -117,17 +117,54 @@ public class EventModel implements Serializable {
         this.eventID = eventID;
     }
 
+
+    /**
+     * This function adds the user to the provided list if they are not already in it
+     * @param user The entrant's unique user
+     * @param list The list to add the user into
+     * @param listStr The list to put into the exception if the user is already inside the list
+     * @throws Exception Throws an exception if the list already contains the user
+     */
+    private void queueList(UsersList user, ArrayList<UsersList> list, String listStr) throws Exception {
+        // check if user is already inside the list
+        if (checkUserInList(user, list)) {
+            throw new Exception("The user is already inside the event's " + listStr + "!");
+        }
+        // adds the user to the list
+        list.add(user);
+    }
+
+    /**
+     * This function removes the user from the provided list if they are in the list
+     * @param user The entrant's unique user
+     * @param list The list to remove the user from
+     * @param listStr The list to put into the exception if the user is not inside the list
+     * @throws Exception Throws an exception if the list does not contain the user
+     */
+    private void unqueueList(UsersList user, ArrayList<UsersList> list, String listStr) throws Exception {
+        // checks if user is not inside the list
+        if (!checkUserInList(user, list)) {
+            throw new Exception("The user is not inside the event's " + listStr + "!");
+        }
+        // removes the user from the list
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getiD().equals(user.getiD())) {
+                list.remove(i);
+            }
+        }
+    }
+
     /**
      * This function adds another user to the waiting list only if the waiting list
      * has not reached its limit, and if the user has not been added yet.
      * @param user The entrant's unique user
-     * @throws Exception Throws an exception if the waiting list is full
+     * @throws Exception Throws an exception if the waiting list is full or if the user is already inside the waiting list
      */
     public void queueWaitingList(UsersList user) throws Exception {
         if (waitingListIsFull()) {
             throw new Exception("The waiting list for this event is full!");
         }
-        waitingList.add(user);
+        queueList(user, waitingList, "waiting list");
     }
 
     /**
@@ -135,12 +172,8 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the waiting list
      */
-    public void unqueueWaitingList(UsersList user){
-        for (int i = 0; i < waitingList.size(); i++) {
-            if (waitingList.get(i).getiD().equals(user.getiD())) {
-                waitingList.remove(i);
-            }
-        }
+    public void unqueueWaitingList(UsersList user) throws Exception {
+        unqueueList(user, waitingList, "waiting list");
     }
 
     /**
@@ -151,66 +184,79 @@ public class EventModel implements Serializable {
         if (waitingListLimit == -1) {
             return Boolean.FALSE;
         }
-        return waitingList.size() == waitingListLimit;
+        return waitingList.size() >= waitingListLimit;
     }
-
-    // TODO: this function
 
     /**
      * This function adds another user to the invited list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is already in the invited list
      */
-    public void queueInvitedList(UsersList user) {
-        return;
+    public void queueInvitedList(UsersList user) throws Exception {
+        queueList(user, invitedList, "invited list");
     }
-
-    // TODO: this function
 
     /**
      * This function removes the provided user from the invited list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is not in the invited list
      */
-    public void unqueueInvitedList(UsersList user){
-        return;
+    public void unqueueInvitedList(UsersList user) throws Exception {
+        unqueueList(user, invitedList, "invited list");
     }
-
-    // TODO: this function
 
     /**
      * This function adds another user to the cancelled list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is already in the cancelled list
      */
-    public void queueCancelledList(UsersList user) {
-        return;
+    public void queueCancelledList(UsersList user) throws Exception {
+        queueList(user, cancelledList, "cancelled list");
     }
-
-    // TODO: this function
 
     /**
      * This function removes the provided user from the cancelled list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is not in the cancelled list
      */
-    public void queueEnrolledList(UsersList user) {
-        return;
+    public void unqueueCancelledList(UsersList user) throws Exception {
+        unqueueList(user, cancelledList, "cancelled list");
     }
 
-    // TODO: this function
+    /**
+     * This function adds another user to the enrolled list.
+     * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is already in the enrolled list
+     */
+    public void queueEnrolledList(UsersList user) throws Exception {
+        queueList(user, enrolledList, "enrolled list");
+    }
 
     /**
      * This function removes the provided user from the enrolled list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is not in the enrolled list
      */
-    public void queueChosenList(UsersList user) {
-        return;
+    public void unqueueEnrolledList(UsersList user) throws Exception {
+        unqueueList(user, enrolledList, "enrolled list");
     }
 
-    // TODO: this function
     /**
      * This function removes the provided user from the chosen list.
      * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is already in the chosen list
      */
-    public void unqueueChosenList(UsersList user) {
-        return;
+    public void queueChosenList(UsersList user) throws Exception {
+        queueList(user, chosenList, "chosen list");
+    }
+
+    /**
+     * This function removes the provided user from the chosen list.
+     * @param user The entrant's unique user
+     * @throws Exception Throws an exception if the user is not in the chosen list
+     */
+    public void unqueueChosenList(UsersList user) throws Exception {
+        unqueueList(user, chosenList, "chosen list");
     }
 
     /**
