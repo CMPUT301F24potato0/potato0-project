@@ -118,7 +118,8 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
         userWaitList = event.getWaitingList();
         cancelList = event.getCancelledList();
-        adapter = new WaitlistEventAdapter(this, 100, userWaitList, cancelList, event, db);
+        adapter = new WaitlistEventAdapter(this, 100, userWaitList, event, db);
+//        adapter = new WaitlistEventAdapter(this, 100, userWaitList, cancelList, event, db);
         waitlist.setAdapter(adapter);
 
         // When user unjoins the event, it is now being shown in this
