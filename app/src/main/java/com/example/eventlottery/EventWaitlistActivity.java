@@ -110,7 +110,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
             }
         });
 
-        userWaitList = new ArrayList<>(event.getWaitingList());
+        userWaitList = event.getWaitingList();
         adapter = new WaitlistEventAdapter(this, 100, userWaitList, event, db);
         waitlist.setAdapter(adapter);
 
