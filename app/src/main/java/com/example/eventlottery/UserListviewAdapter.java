@@ -54,21 +54,23 @@ public class UserListviewAdapter extends ArrayAdapter<UsersList> {
         userName.setText(user.getName());
         Button sendInviteButton = view.findViewById(R.id.listview_send_invite_button);
         Button removeButton = view.findViewById(R.id.listview_remove_button);
-        if (state == "waitlist") {
+        if (state == "chosen") {
             sendInviteButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.VISIBLE);
             removeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    event.unqueueWaitingList(user);
-                    removeFromList(user, list);
-
+                    // TODO make sure when accepting the event they get removed only get added to the wait list
+                    event.queueCancelledList(user);
+//                    removeFromList(user, list);
                     db.collection("events").document(event.getEventID()).set(event);
                 }
             });
-        } else if (state == "chosen") {
-            sendInviteButton.setVisibility(View.VISIBLE);
-            removeButton.setVisibility(View.GONE);
         } else if (state == "cancelled") {
+            sendInviteButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.VISIBLE);
+
+        } else if (state == "enrolled") {
             sendInviteButton.setVisibility(View.GONE);
             removeButton.setVisibility(View.GONE);
         }
