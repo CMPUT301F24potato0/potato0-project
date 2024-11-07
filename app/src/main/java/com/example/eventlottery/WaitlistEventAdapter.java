@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -10,9 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -21,8 +19,7 @@ import java.util.ArrayList;
  * This class is the WaitlistEventAdapter
  */
 public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
-    private ArrayList<UsersList> waitList;
-    private ArrayList<UsersList> cancelList;
+    private ArrayList<UsersList> list;
     private EventModel event;
     private FirebaseFirestore db;
 
@@ -31,9 +28,6 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * @param context The context
      * @param resource The resource
      */
-
-    private CurrentUser temp;
-
     public WaitlistEventAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
@@ -42,12 +36,11 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * This is the constructor for WaitlistEventAdapter
      * @param context The context
      * @param resource The resource
-     * @param waitList The list
+     * @param list The list
      */
-    public WaitlistEventAdapter(@NonNull Context context, int resource, ArrayList<UsersList> waitList, ArrayList<UsersList> cancelList, EventModel event, FirebaseFirestore db) {
-        super(context, resource, waitList);
-        this.waitList = waitList;
-        this.cancelList = cancelList;
+    public WaitlistEventAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, EventModel event, FirebaseFirestore db) {
+        super(context, resource, list);
+        this.list = list;
         this.event = event;
         this.db = db;
     }
@@ -77,28 +70,15 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //event.unqueueWaitingList(user);
-                removeFromList(user, waitList, cancelList);
+                try {
+                    event.unqueueWaitingList(user);
+                    removeFromList(user, list);
 
-//                Task<DocumentSnapshot> t = db.collection("users")
-//                        .document(user.getiD())
-//                        .get();
-//                t.addOnSuccessListener
-//                        (new OnSuccessListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                if (documentSnapshot.exists()) {
-//                                    temp = documentSnapshot.toObject(CurrentUser.class);
-//                                }
-//                            }
-//                        });
-//                t.onSuccessTask(t1 -> {
                     db.collection("events").document(event.getEventID()).set(event);
-//                    temp.removeTopics(event.getEventID() + "_" + temp.getiD());
-//                    db.collection("users").document(temp.getiD()).set(temp);
-//                    return null;
-//                });
-//                return null;
+                }
+                catch (Exception e) {
+                    Log.e("Event Queue Error", "Error: " + e);
+                }
             }
         });
         return view;
@@ -107,15 +87,13 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
     /**
      * removeFromList override
      * @param user The user
-     * @param waitList The waitList
+     * @param list The list
      */
-    private void removeFromList(UsersList user, ArrayList<UsersList> waitList, ArrayList<UsersList> cancelList) {
-        for (int i = 0; i < waitList.size(); i++) {
-            if (waitList.get(i).getName().equals(user.getName())) {
-                cancelList.add(waitList.get(i));
-                waitList.remove(i);
+    private void removeFromList(UsersList user, ArrayList<UsersList> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(user.getName())) {
+                list.remove(i);
                 notifyDataSetChanged();
-
             }
         }
     }
