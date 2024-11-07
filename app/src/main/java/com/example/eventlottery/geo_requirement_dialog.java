@@ -19,19 +19,33 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class is the geo_requirement_dialog
+ */
 public class geo_requirement_dialog extends DialogFragment {
 
     private UsersList user;
     private EventModel event;
     private FirebaseFirestore db;
 
+    /**
+     * Constructor
+     * @param user User
+     * @param event Event Model
+     * @param db Firebase Firestore
+     */
     public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
         this.user = user;
         this.event = event;
-//        this.eventRef = eventRef;
         this.db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * On create dialog override
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     * @return Dialog
+     */
     @Nullable
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -49,24 +63,6 @@ public class geo_requirement_dialog extends DialogFragment {
                         throw new RuntimeException(e);
                     }
                     db.collection("events").document(event.getEventID()).set(event);
-
-//                    if (event.checkUserInList(user, event.getWaitingList())) {
-//                        db.collection("events").document(event.getEventID()).set(event);
-//                    } else {
-//                        try {
-//                            event.queueWaitingList(user);
-//                            db.collection("events").document(event.getEventID()).set(event);
-//                        } catch (Exception e) {
-//                            Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-                    //
-//                    try {
-//                        event.queueWaitingList(user);
-//                        db.collection("events").document(event.getEventID()).set(event);
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
                 })
                 .create();
     }

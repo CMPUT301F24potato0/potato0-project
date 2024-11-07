@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * This class is the InvitedListActivity
+ */
 public class InvitedListActivity extends AppCompatActivity {
 
     private ArrayList<UsersList> userInvitedList;
@@ -25,6 +28,12 @@ public class InvitedListActivity extends AppCompatActivity {
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * On create Override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,15 +56,7 @@ public class InvitedListActivity extends AppCompatActivity {
         userInvitedList = event.getInvitedList();
 
         invitedList = findViewById(R.id.invited_list);
-        invitedAdapter = new UserListviewAdapter(this, 0, userInvitedList, "invite", event, db);
+        invitedAdapter = new InvitedListArrayAdapter(this, userInvitedList, event, db);
         invitedList.setAdapter(invitedAdapter);
-
-//        // Add back button functionality
-//        Button backButton = findViewById(R.id.back_button);
-//        backButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(InvitedListActivity.this, EventOrganizerActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
     }
 }

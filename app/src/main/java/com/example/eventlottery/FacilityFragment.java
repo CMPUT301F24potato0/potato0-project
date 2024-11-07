@@ -32,7 +32,9 @@ import java.util.Date;
  */
 
 public class FacilityFragment extends Fragment {
-
+    /**
+     * Constructor
+     */
     public FacilityFragment(){
         // require a empty public constructor
     }
@@ -51,7 +53,12 @@ public class FacilityFragment extends Fragment {
 
     private EventModel eventClicked;
 
-
+    /**
+     * Constructor
+     * @param db Firebase Firestore
+     * @param curUser Current User
+     * @param facility Facility Model
+     */
     public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
         this.db = db;
         this.curUser = curUser;
@@ -61,7 +68,7 @@ public class FacilityFragment extends Fragment {
     private ConstraintLayout createFacilityFirstPage;
     private ConstraintLayout facilityPage;
     /**
-     *
+     * On create view override
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -169,6 +176,9 @@ public class FacilityFragment extends Fragment {
         }
     }
 
+    /**
+     * Update views
+     */
     public void updateViews(){
         facilityNameTextView.setText(facilityModel.getName());
     }

@@ -18,15 +18,29 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-
+/**
+ * This class is the QR code dialog.
+ * Taken from https://www.geeksforgeeks.org/how-to-generate-qr-code-in-android/
+ */
 public class qr_code_dialog extends DialogFragment {
     private String eventID;
     private ImageView qrCodeIV;
 
+    /**
+     * This constructor is used to pass in the eventID.
+     * @param eventID This is the eventID
+     */
     public qr_code_dialog(String eventID) {
         this.eventID = eventID;
     }
 
+    /**
+     * onCreateDialog override
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return returns the Dialog
+     */
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.qr_code_dialog, null);
 
@@ -42,6 +56,10 @@ public class qr_code_dialog extends DialogFragment {
                 .create();
     }
 
+    /**
+     * This method is used to generate the QR code.
+     * @param text The text to be encoded in the QR code.
+     */
     private void generateQRCode(String text)
     {
         BarcodeEncoder barcodeEncoder
