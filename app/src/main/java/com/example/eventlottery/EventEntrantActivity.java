@@ -157,17 +157,23 @@ public class EventEntrantActivity extends AppCompatActivity {
 
         back = findViewById(R.id.floatingActionButton);
 
+        update();
+
         // getting event information from Firestore
         final DocumentReference eventRef = db.collection("events").document(event.getEventID());
+        eventRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("EventEntrantActivity", error.toString());
+                }
+                if (value != null) {
+                    event = value.toObject(EventModel.class);
+                    update();
+                }
+            }
+        });
 
-
-        eventTitle.setText(event.getEventTitle());
-        eventLocation.setText(event.getEventStrLocation());
-        Date javaDate = event.getJoinDeadline();
-        eventDate.setText(javaDate.toString());
-        organizer = event.getOrganizer();
-        organizerName.setText(organizer);
-        eventDescription.setText(event.getEventDescription());
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
 
@@ -291,5 +297,15 @@ public class EventEntrantActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void update(){
+        eventTitle.setText(event.getEventTitle());
+        eventLocation.setText(event.getEventStrLocation());
+        Date javaDate = event.getJoinDeadline();
+        eventDate.setText(javaDate.toString());
+        organizer = event.getOrganizer();
+        organizerName.setText(organizer);
+        eventDescription.setText(event.getEventDescription());
     }
 }
