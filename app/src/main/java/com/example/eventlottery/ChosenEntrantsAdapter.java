@@ -8,16 +8,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
 
     private ArrayList<UsersList> chosenEntrants;
     private EventModel event;
+    FirebaseFirestore db;
 
-    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrants) {
+    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrants, EventModel event, FirebaseFirestore db) {
         super(context, 0, entrants);
         this.chosenEntrants = entrants;
+        this.event = event;
+        this.db = db;
     }
 
     @Override
@@ -47,8 +52,11 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                event.queueCancelledList(entrant);
+                event.unqueueChosenList(entrant);
                 chosenEntrants.remove(position);
                 notifyDataSetChanged();
+                db.collection("events").document(event.getEventID()).set(event);
             }
         });
 

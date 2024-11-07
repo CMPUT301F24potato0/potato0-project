@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class ChosenListActivity extends AppCompatActivity {
@@ -19,6 +21,7 @@ public class ChosenListActivity extends AppCompatActivity {
     private TextView chosenEntrantsCount;
     private ListView chosenEntrantsListView;
     private ChosenEntrantsAdapter adapter;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class ChosenListActivity extends AppCompatActivity {
         updateChosenEntrantsCount();
 
         // Set up adapter for ListView
-        adapter = new ChosenEntrantsAdapter(this, chosenEntrants);
+        adapter = new ChosenEntrantsAdapter(this, chosenEntrants, event, db);
         chosenEntrantsListView.setAdapter(adapter);
     }
 
