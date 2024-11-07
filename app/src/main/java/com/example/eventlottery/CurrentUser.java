@@ -114,54 +114,106 @@ public class CurrentUser implements Serializable {
         this.isAdmin = isAdmin;
     }
 
+    /**
+     * Getting Facility ID
+     * @return Facility ID
+     */
     public String getFacilityID() {
         return facilityID;
     }
 
+    /**
+     * Setting Facility ID
+     * @param facilityID Facility ID
+     */
     public void setFacilityID(String facilityID) {
         this.facilityID = facilityID;
     }
 
+    /**
+     * Getting admin
+     * @return admin
+     */
     public boolean isAdmin() {
         return isAdmin;
     }
 
+    /**
+     * Setting admin
+     * @param admin admin boolean
+     */
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
 
+    /**
+     * Getting Android ID
+     * @param iD Android ID
+     */
     public void setiD(String iD) {
         this.iD = iD;
     }
 
+    /**
+     * Getting user photo
+     * @return user photo
+     */
     public String getUserPhoto() {
         return userPhoto;
     }
 
+    /**
+     * Setting user photo
+     * @param userPhoto user photo
+     */
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
     }
 
+    /**
+     * Getting muted
+     * @return muted
+     */
     public boolean isMuted() {
         return isMuted;
     }
 
+    /**
+     * Setting muted
+     * @param muted muted boolean
+     */
     public void setMuted(boolean muted) {
         isMuted = muted;
     }
 
+    /**
+     * Getting topics
+     * @return topics
+     */
     public ArrayList<String> getTopics() {
         return topics;
     }
 
+    /**
+     * Setting topics
+     * @param topics topics
+     */
     public void setTopics(ArrayList<String> topics) {
         this.topics = topics;
     }
 
+    /**
+     * Adding topics
+     * @param topic topic
+     */
     public void addTopics(String topic) {
         this.topics.add(topic);
     }
 
+    /**
+     * Removing topics
+     * @param topic topic
+     */
     public void removeTopics(String topic){
         this.topics.remove(topic);
     }

@@ -10,10 +10,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * TODO Describe this class
+ */
 public class AccessToken {
 
     private static final String firebaseMessagingScope =
             "https://www.googleapis.com/auth/firebase.messaging";
+
+    /**
+     * TODO Describe this method
+     * @return TODO Describe the return value
+     */
     public String getAccessToken(){
         try{
             String jsonString = "{\n" +

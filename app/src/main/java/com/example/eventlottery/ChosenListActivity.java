@@ -8,6 +8,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Chosen List Activity
+ * This class displays a list of users who have been "chosen" for the event.
+ */
 public class ChosenListActivity extends AppCompatActivity {
 
     @Override
