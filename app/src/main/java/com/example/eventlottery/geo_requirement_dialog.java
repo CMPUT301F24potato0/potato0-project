@@ -1,7 +1,5 @@
 package com.example.eventlottery;
 
-//public class geo_requirement_dialog {
-//}
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;

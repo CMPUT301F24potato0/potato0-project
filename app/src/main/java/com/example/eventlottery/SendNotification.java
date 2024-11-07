@@ -51,41 +51,41 @@ public class SendNotification implements Serializable {
 //
 //    }
 //    public ArrayList<String> popup(){
-    public void popup(){
-        ArrayList<String> title_text = new ArrayList<>();
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.notification_pop_up);
-        Button cancel = (Button) dialog.findViewById(R.id.Cancel_id);
-        Button send = (Button) dialog.findViewById(R.id.send_id);
-        EditText title = (EditText) dialog.findViewById(R.id.title);
-        EditText body = (EditText) dialog.findViewById(R.id.body);
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                setTitlesetBody(title.getText().toString(),body.getText().toString());
-//                NotificationCreate();
-                title_text.add(title.getText().toString());
-                title_text.add(body.getText().toString());
-
-                Toast.makeText(context ,"Sent",Toast.LENGTH_LONG).show();
-
-                dialog.dismiss();
-
-            }
-        });
-
-        dialog.show();
-
-
-    }
+//    public void popup(){
+//        ArrayList<String> title_text = new ArrayList<>();
+//        Dialog dialog = new Dialog(context);
+//        dialog.setContentView(R.layout.notification_pop_up);
+//        Button cancel = (Button) dialog.findViewById(R.id.Cancel_id);
+//        Button send = (Button) dialog.findViewById(R.id.send_id);
+//        EditText title = (EditText) dialog.findViewById(R.id.title);
+//        EditText body = (EditText) dialog.findViewById(R.id.body);
+//
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        send.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                setTitlesetBody(title.getText().toString(),body.getText().toString());
+////                NotificationCreate();
+//                title_text.add(title.getText().toString());
+//                title_text.add(body.getText().toString());
+//
+//                Toast.makeText(context ,"Sent",Toast.LENGTH_LONG).show();
+//
+//                dialog.dismiss();
+//
+//            }
+//        });
+//
+//        dialog.show();
+//
+//
+//    }
 
 
 
