@@ -19,7 +19,8 @@ import java.util.ArrayList;
  * This class is the WaitlistEventAdapter
  */
 public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
-    private ArrayList<UsersList> list;
+    private ArrayList<UsersList> waitList;
+    private ArrayList<UsersList> cancelList;
     private EventModel event;
     private FirebaseFirestore db;
 
@@ -38,9 +39,10 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * @param resource The resource
      * @param list The list
      */
-    public WaitlistEventAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, EventModel event, FirebaseFirestore db) {
-        super(context, resource, list);
-        this.list = list;
+    public WaitlistEventAdapter(@NonNull Context context, int resource, EventModel event, FirebaseFirestore db) {
+        super(context, resource, event.getWaitingList());
+        this.waitList = event.getWaitingList();
+        this.cancelList = event.getCancelledList();
         this.event = event;
         this.db = db;
     }
@@ -72,12 +74,11 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
             public void onClick(View v) {
                 try {
                     event.unqueueWaitingList(user);
-                    removeFromList(user, list);
-
+                    event.queueCancelledList(user);
                     db.collection("events").document(event.getEventID()).set(event);
                 }
                 catch (Exception e) {
-                    Log.e("Event Queue Error", "Error: " + e);
+                    Log.e("Event Queue/Unqueue Error", "Error: " + e);
                 }
             }
         });
