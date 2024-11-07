@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -133,22 +132,11 @@ public class FacilityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (eventListView.getAdapter().getItem(position) != null) {
                     eventClicked = (EventModel) eventListView.getAdapter().getItem(position);
-                    db.collection("events").document(eventClicked.getEventID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                            if (error != null) {
-                                Log.w("Firebase Events", "Listen failed.", error);
-                                return;
-                            }
-                            if (value != null && value.exists()) {
-                                eventClicked = value.toObject(EventModel.class);
-                                Intent i = new Intent(getActivity(), EventOrganizerActivity.class);
-                                i.putExtra("event_id", eventClicked.getEventID());
-                                i.putExtra("eventModel", eventClicked);
-                                startActivity(i);
-                            }
-                        }
-                    });
+                    Intent i = new Intent(getActivity(), EventOrganizerActivity.class);
+                    i.putExtra("event_id", eventClicked.getEventID());
+                    i.putExtra("eventModel", eventClicked);
+                    i.putExtra("currentUser", curUser);
+                    startActivity(i);
                 }
             }
         });
