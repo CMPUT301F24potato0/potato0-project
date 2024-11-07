@@ -1,5 +1,6 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -125,12 +130,25 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
+        // Adapted from https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
+        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            event = (EventModel) result.getData().getSerializableExtra("eventModel");
+                        }
+                    }
+                }
+        );
+
         waitlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
                 i.putExtra("eventModel", event);
-                startActivity(i);
+                startActivityIntent.launch(i);
 //                event_waitlist eventWaitlist = new event_waitlist();
 //                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //                transaction.replace(R.id.main,eventWaitlist);

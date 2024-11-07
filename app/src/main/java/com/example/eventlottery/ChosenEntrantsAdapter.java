@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,7 +19,9 @@ import java.util.ArrayList;
 public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
 
     private EventModel event;
-    FirebaseFirestore db;
+    private ArrayList<UsersList> entrantsListCopy;
+    private FirebaseFirestore db;
+    private ChosenListActivity chosenListActivity;
 
     /**
      * Constructor
@@ -28,10 +29,12 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
      * @param event event
      * @param db firebase firestore
      */
-    public ChosenEntrantsAdapter(Context context, EventModel event, FirebaseFirestore db) {
+    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrantsListCopy, EventModel event, FirebaseFirestore db, ChosenListActivity chosenListActivity) {
         super(context, 0, event.getChosenList());
+        this.entrantsListCopy = entrantsListCopy;
         this.event = event;
         this.db = db;
+        this.chosenListActivity = chosenListActivity;
     }
 
     /**
@@ -76,12 +79,13 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
             @Override
             public void onClick(View v) {
                 try {
-                    Toast.makeText(getContext(), "Hello!", Toast.LENGTH_SHORT).show();
+                    entrantsListCopy.remove(entrant);  // removes the entrant from entrants list copy
                     event.unqueueWaitingList(entrant);
                     event.queueCancelledList(entrant);
                     event.unqueueChosenList(entrant);  // equivalent to remove(entrant) because they are referencing the same ArrayList
                     notifyDataSetChanged();
                     db.collection("events").document(event.getEventID()).set(event);
+                    chosenListActivity.updateChosenCountAndRemainingSpotsLeft();
                 }
                 catch (Exception e) {
                     Log.e("Event Queue/Unqueue Error", "Error: " + e);

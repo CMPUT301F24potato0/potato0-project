@@ -1,6 +1,8 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -39,6 +45,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private ArrayList<UsersList> userWaitList;
     private Button drawSample;
     private EditText drawSampleEditText;
+    private int remaining_spots;
 
     /**
      * On create Override
@@ -106,29 +113,67 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 });
 
         // calculate remaining spots for event and update edittext
-        int remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
         drawSampleEditText.setText(Integer.toString(remaining_spots));
+
+        // Adapted from https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
+        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            event = (EventModel) result.getData().getSerializableExtra("eventModel");
+                        }
+                    }
+                }
+        );
 
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer sample_amount = Integer.parseInt(drawSampleEditText.getText().toString());
-                // Check if the waiting list has enough people to sample
-                if (event.getWaitingList().size() < sample_amount) {
-                    Toast.makeText(EventWaitlistActivity.this, "Waiting list only has " + event.getWaitingList().size() + " entrants left!", Toast.LENGTH_SHORT).show();
-                }
-                // Check if organizer is trying to sample more than the remaining amount of spots available for the event
-                if (remaining_spots < sample_amount) {
-                    Toast.makeText(EventWaitlistActivity.this, "Cannot sample more than " + Integer.toString(remaining_spots) + " remaining spots.", Toast.LENGTH_SHORT).show();
+                // Update remaining spots in case the organizer returns to this page and clicks draw sample button again
+                remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+                // Check for empty input
+                if (drawSampleEditText.getText().toString().equals("")) {
+                    Toast.makeText(EventWaitlistActivity.this, "Please enter a number.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
-                    intent.putExtra("sample_amount", sample_amount);
-                    intent.putExtra("remaining_spots", remaining_spots);
-                    intent.putExtra("eventModel", event);
-                    startActivity(intent);
+                    Integer sample_amount = Integer.parseInt(drawSampleEditText.getText().toString());
+                    // Check for 0 sample_amount
+//                    if (sample_amount == 0) {
+//                        Toast.makeText(EventWaitlistActivity.this, "Cannot sample 0 entrants.", Toast.LENGTH_SHORT).show();
+//                    }
+                    // Check if the waiting list has enough people to sample
+                    if (remaining_spots < sample_amount) {
+                        Toast.makeText(EventWaitlistActivity.this, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (event.getWaitingList().size() < sample_amount) {
+                        Toast.makeText(EventWaitlistActivity.this, "Waiting list only has " + event.getWaitingList().size() + " entrants left!", Toast.LENGTH_SHORT).show();
+                    }
+                    // Check if organizer is trying to sample more than the remaining amount of spots available for the event
+                    else {
+                        Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
+                        intent.putExtra("sample_amount", sample_amount);
+                        intent.putExtra("remaining_spots", remaining_spots);
+                        intent.putExtra("eventModel", event);
+                        startActivityIntent.launch(intent);
+                    }
                 }
             }
         });
+    }
+
+
+    /**
+     * Returns the EventModel object in an intent after modifications have been done to it
+     */
+    @Override
+    public void finish() {
+        // Adapted from https://stackoverflow.com/questions/22549294/getting-intent-result-from-ondestroy
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("eventModel", event);
+        setResult(Activity.RESULT_OK, returnIntent);
+        super.finish();
     }
 }

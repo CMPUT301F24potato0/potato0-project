@@ -18,8 +18,8 @@ public class LotterySystem {
      * @return A randomly selected subset of the waitlist.
      */
     public static ArrayList<UsersList> sampleEntrants(ArrayList<UsersList> waitlist, Integer sample_amount) {
-        if (waitlist.size() < sample_amount) {
-            return waitlist;
+        if (waitlist.size() <= sample_amount) {
+            return (ArrayList<UsersList>) waitlist.clone();
         }
         Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
         return new ArrayList<>(waitlist.subList(0, sample_amount)); // Return subset

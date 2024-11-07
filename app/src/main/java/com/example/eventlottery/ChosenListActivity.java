@@ -1,6 +1,10 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,18 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChosenListActivity extends AppCompatActivity {
 
@@ -36,15 +35,16 @@ public class ChosenListActivity extends AppCompatActivity {
     private ChosenEntrantsAdapter adapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference eventRef;
+    private ChosenListActivity chosenListActivity = this;
 
-    private ArrayList<UsersList> chosen_entrants;
+    private ArrayList<UsersList> chosenEntrantsTemp;  // for storing entrants chosen by the LotterySystem class but not yet added to the event model
+    private ArrayList<UsersList> chosenEntrantsModel; // a reference to the chosen entrants list from the event model
 
     /**
      * Called when the activity is first created.
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +59,7 @@ public class ChosenListActivity extends AppCompatActivity {
         searchbar = findViewById(R.id.chosen_entrants_search_edittext);  // TODO: implement in part 4
         chosenEntrantsListView = findViewById(R.id.chosen_entrants_listview);
 
-        eventRef = db.collection("events").document(event.getEventID());
-
-        // get data from intent
+        // Get data from intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             event = (EventModel) extras.getSerializable("eventModel");
@@ -69,35 +67,63 @@ public class ChosenListActivity extends AppCompatActivity {
             remaining_spots = extras.getInt("remaining_spots");
         }
 
+        eventRef = db.collection("events").document(event.getEventID());
+        chosenEntrantsModel = event.getChosenList();
+
         // Empty the chosen list (this happens only once after sample button is clicked)
-        event.getChosenList().clear();
+        chosenEntrantsModel.clear();
         // Make a copy of waitlist
         ArrayList<UsersList> waitlist_copy = (ArrayList<UsersList>) event.getWaitingList().clone();
 
+        // Set up adapter for ListView
+        adapter = new ChosenEntrantsAdapter(this, waitlist_copy, event, db, chosenListActivity);
+        chosenEntrantsListView.setAdapter(adapter);
+
         // Initial draw random sample based on provided sample_amount
         sampleEntrants(waitlist_copy, sample_amount);
-
-
-        // Set up adapter for ListView
-        adapter = new ChosenEntrantsAdapter(this, event, db);
-        chosenEntrantsListView.setAdapter(adapter);
+        updateChosenCountAndRemainingSpotsLeft();
 
         // Set up resample button
         resample_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chosen_entrants = LotterySystem.sampleEntrants(event.getWaitingList(), sample_amount);
-
-                updateChosenEntrantsCount();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
+                Integer chooseUpto = remaining_spots <= waitlist_copy.size() ? remaining_spots : waitlist_copy.size();
+                builder.setTitle("Please enter a number up to " + chooseUpto);
+                EditText input = new EditText(ChosenListActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (input.getText().toString().equals("")) {
+                            Toast.makeText(chosenListActivity, "Please enter a number.", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            sample_amount = Integer.parseInt(input.getText().toString());
+                            if (waitlist_copy.size() < sample_amount) {
+                                Toast.makeText(chosenListActivity, "Waiting list only has " + waitlist_copy.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (remaining_spots < sample_amount) {
+                                Toast.makeText(chosenListActivity, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                sampleEntrants(waitlist_copy, Integer.parseInt(input.getText().toString()));
+                                updateChosenCountAndRemainingSpotsLeft();
+                            }
+                        }
+                    }
+                });
+                builder.create().show();
             }
         });
-
 
         // Set up invite button
         send_invites_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (UsersList entrant : event.getChosenList()) {
+                // TODO: implement notifications
+                for (UsersList entrant : chosenEntrantsModel) {
                     try {
                         event.queueInvitedList(entrant);
                         event.unqueueChosenList(entrant);
@@ -111,19 +137,18 @@ public class ChosenListActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * Samples entrants from an ArrayList, removing them from that ArrayList, and updating both event model and Firestore with the chosen entrants
-     * @param entrants The ArrayList of entrants to choose and remove entrants from
+     * @param entrantsList The ArrayList of entrants to choose and remove entrants from
      * @param sample_amount How many entrants to sample from the ArrayList of entrants
      */
-    private void sampleEntrants(ArrayList<UsersList> entrants, Integer sample_amount) {
+    private void sampleEntrants(ArrayList<UsersList> entrantsList, Integer sample_amount) {
         // Sample a subset of entrants
-        chosen_entrants = LotterySystem.sampleEntrants(entrants, sample_amount);
+        chosenEntrantsTemp = LotterySystem.sampleEntrants(entrantsList, sample_amount);
         // Removing chosen entrants from the provided ArrayList and updating event model with chosen entrants
-        for (UsersList entrant : chosen_entrants) {
+        for (UsersList entrant : chosenEntrantsTemp) {
             try {
-                removeEntrant(entrants, entrant);
+                removeEntrant(entrantsList, entrant);
                 event.queueChosenList(entrant);
             }
             catch (IllegalArgumentException e) {
@@ -134,18 +159,9 @@ public class ChosenListActivity extends AppCompatActivity {
                 Toast.makeText(this, "Entrant " + entrant.getName() + " is already in the chosen list.", Toast.LENGTH_SHORT).show();
             }
         }
-        // Updating Firestore with the chosen entrants
+        // Updating Firestore with the chosen entrants and notifying ArrayAdapter
         eventRef.set(event);
-        // Updating remaining spots available for the event
-        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
-    }
-
-    /**
-     * Updates the count text for chosen entrants.
-     */
-    private void updateChosenEntrantsCount() {
-        String countText = Integer.toString(event.getChosenList().size());
-        chosenEntrantsCount.setText(countText);
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -163,4 +179,28 @@ public class ChosenListActivity extends AppCompatActivity {
         throw new IllegalArgumentException("Entrant " + entrant.getName() + " (" + entrant.getiD() + ") is not inside the ArrayList provided.");
     }
 
+    /**
+     * A helper function to update how many chosen entrants there are in the UI
+     * and also how many remaining spots are left
+     */
+    public void updateChosenCountAndRemainingSpotsLeft() {
+        // Updating how many are chosen in the UI
+        String chosenCount = Integer.toString(chosenEntrantsModel.size());
+        chosenEntrantsCount.setText(chosenCount);
+        // Updating remaining spots available for the event
+        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrantsModel.size();
+    }
+
+
+    /**
+     * Returns the EventModel object in an intent after modifications have been done to it
+     */
+    @Override
+    public void finish() {
+        // Adapted from https://stackoverflow.com/questions/22549294/getting-intent-result-from-ondestroy
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("eventModel", event);
+        setResult(Activity.RESULT_OK, returnIntent);
+        super.finish();
+    }
 }
