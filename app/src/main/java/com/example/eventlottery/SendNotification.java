@@ -8,9 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SendNotification {
+public class SendNotification implements Serializable {
 
     private String title;
     private String body;
@@ -26,13 +27,16 @@ public class SendNotification {
         this.eventID = eventID;
         this.SignUP = SignUP;
     }
+
     public ArrayList<String> getArray(){
-        return title_text;
-    }
-    public void setArrayList(){
         this.title_text.add(this.title);
         this.title_text.add(this.body);
+        return title_text;
     }
+//    public void setArrayList(){
+//        this.title_text.add(this.title);
+//        this.title_text.add(this.body);
+//    }
     public void setTitle(String title){
         this.title = title;
     }

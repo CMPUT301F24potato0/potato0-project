@@ -40,9 +40,12 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ArrayList<UsersList> userWaitList;
+
     private Button drawSample;
     private String title;
     private String body;
+
+    private SendNotification sendNotification;
 
 
     /**
@@ -73,26 +76,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
         drawSample = findViewById(R.id.draw_sample_button);
 
 
-        ActivityResultLauncher<Intent> activityResultLauncher =
-                registerForActivityResult(
-                        new ActivityResultContracts.StartActivityForResult(),
-                        new ActivityResultCallback<ActivityResult>() {
-                            @Override
-                            public void onActivityResult(ActivityResult activityResult) {
-                                int result = activityResult.getResultCode();
-                                Intent data = activityResult.getData();
-
-                                if (result == RESULT_OK && data != null){
-                                    title = data.getStringExtra(SendNotificationActivity.KEY_TITLE);
-                                    body = data.getStringExtra(SendNotificationActivity.KEY_MESSAGE);
-
-                                } else {
-                                    Toast.makeText(getApplicationContext() ,"Canceled notification",Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }
-                );
-
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,25 +83,30 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
                 //Need to get arrayList of all UserID's
 
-                ArrayList<UsersList> userIDs = event.getWaitingList();
-                String eventID = event.getEventID();
-                // Can't open activity when notification pressed
-                SendNotification sendNotification = new SendNotification(EventWaitlistActivity.this,eventID,false);
-
-                Intent intent = new Intent(EventWaitlistActivity.this, SendNotificationActivity.class);
-                activityResultLauncher.launch(intent);
-
-//
-                sendNotification.setTitle(title);
-                sendNotification.setBody(body);
-                sendNotification.setArrayList();
-                ArrayList<String> notification_info = sendNotification.getArray();
+//                ArrayList<UsersList> userIDs = event.getWaitingList();
+//                String eventID = event.getEventID();
 
 
-                for(int i = 0; i < userIDs.size(); i++){
-                    String topic = eventID + "_" + userIDs.get(i);
-                    sendNotification.NotificationCreate(notification_info.get(0), notification_info.get(1), topic);
-                }
+                Log.e("Array1","");
+                Log.e("Array2","");
+                Log.e("Array3","");
+                Log.e("Array4","");
+
+
+                // List of user ID's
+                ArrayList<UsersList> usersLists = event.getWaitingList();
+
+                // Event ID
+                String eventId = event.getEventID();
+
+
+
+                Intent intent1 = new Intent(EventWaitlistActivity.this,SendNotificationActivity.class);
+                intent1.putExtra("event", event);
+                intent1.putExtra("Bool",0);
+                startActivity(intent1);
+
+
             }
         });
 
