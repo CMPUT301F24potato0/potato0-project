@@ -6,6 +6,7 @@
     tools:context=".NotificationsFragment">
 
     <ListView
+        android:id="@+id/notification_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
