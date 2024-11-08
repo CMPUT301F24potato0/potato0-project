@@ -98,40 +98,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
         adapter = new WaitlistEventAdapter(this, 100, event, db);
         waitlist.setAdapter(adapter);
 
-        // Updates all the event's lists
-        db.collection("events")
-                .document(event.getEventID())
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.e("EventWaitlistActivity", e.toString());
-                        }
-                        if (doc != null && doc.exists()) {
-                            // Get the EventModel object
-                            EventModel FireStoreEvent = doc.toObject(EventModel.class);
-
-                            // Update Waiting List
-                            event.getWaitingList().clear();
-                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
-                            // Update Cancelled List
-                            event.getCancelledList().clear();
-                            event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
-                            // Update Chosen List
-                            event.getChosenList().clear();
-                            event.getChosenList().addAll(FireStoreEvent.getChosenList());
-                            // Update Enrolled List
-                            event.getEnrolledList().clear();
-                            event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
-                            // Update Invited List
-                            event.getInvitedList().clear();
-                            event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
-                            // Notify adapter of changes
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-
         // calculate remaining spots for event and update edittext
         remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
         drawSampleEditText.setText(Integer.toString(remaining_spots));
@@ -165,6 +131,40 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Updates all the event's lists
+        db.collection("events")
+                .document(event.getEventID())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e("EventWaitlistActivity", e.toString());
+                        }
+                        if (doc != null && doc.exists()) {
+                            // Get the EventModel object
+                            EventModel FireStoreEvent = doc.toObject(EventModel.class);
+
+                            // Update Waiting List
+                            event.getWaitingList().clear();
+                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
+                            // Update Cancelled List
+                            event.getCancelledList().clear();
+                            event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
+                            // Update Chosen List
+                            event.getChosenList().clear();
+                            event.getChosenList().addAll(FireStoreEvent.getChosenList());
+                            // Update Enrolled List
+                            event.getEnrolledList().clear();
+                            event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
+                            // Update Invited List
+                            event.getInvitedList().clear();
+                            event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
+                            // Notify adapter of changes
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 
 }

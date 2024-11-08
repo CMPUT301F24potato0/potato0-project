@@ -15,11 +15,15 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
@@ -146,6 +150,40 @@ public class ChosenListActivity extends AppCompatActivity {
                 eventRef.set(event);
             }
         });
+
+
+        db.collection("events")
+                .document(event.getEventID())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e("EventWaitlistActivity", e.toString());
+                        }
+                        if (doc != null && doc.exists()) {
+                            // Get the EventModel object
+                            EventModel FireStoreEvent = doc.toObject(EventModel.class);
+
+                            // Update Waiting List
+                            event.getWaitingList().clear();
+                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
+                            // Update Cancelled List
+                            event.getCancelledList().clear();
+                            event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
+                            // Update Chosen List
+                            event.getChosenList().clear();
+                            event.getChosenList().addAll(FireStoreEvent.getChosenList());
+                            // Update Enrolled List
+                            event.getEnrolledList().clear();
+                            event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
+                            // Update Invited List
+                            event.getInvitedList().clear();
+                            event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
+                            // Notify adapter of changes
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 
     /**

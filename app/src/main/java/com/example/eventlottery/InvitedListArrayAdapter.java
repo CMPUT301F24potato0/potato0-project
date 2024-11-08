@@ -59,16 +59,8 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
         entrantName.setText(entrant.getName());
 
         Button inviteButton = convertView.findViewById(R.id.listview_send_invite_button);
+        inviteButton.setVisibility(View.GONE);
         Button removeButton = convertView.findViewById(R.id.listview_remove_button);
-
-        // Set up invite button functionality (optional, to be implemented later)
-        inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Code to send invite notification
-            }
-        });
-
         // Set up remove button functionality
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +68,8 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
                 try {
                     event.unqueueInvitedList(entrant);
                     event.queueCancelledList(entrant);
-                    chosenEntrants.remove(position);
-                    notifyDataSetChanged();
+//                    chosenEntrants.remove(position);
+//                    notifyDataSetChanged();
                     db.collection("events").document(event.getEventID()).set(event);
                 }
                 catch (Exception e) {
