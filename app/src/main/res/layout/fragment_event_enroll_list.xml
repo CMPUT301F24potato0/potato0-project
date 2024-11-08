@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:id="@+id/main">
 
 
@@ -11,7 +12,7 @@
         android:layout_width="369dp"
         android:layout_height="610dp"
         android:background="@drawable/rounded_corner_background"
-        android:backgroundTint="@color/gray1"
+        android:backgroundTint="@color/darkgreen"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:text="Free Slots:"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp">
 
             </TextView>
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="##"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp">
 
             </TextView>
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="/"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp">
 
             </TextView>
@@ -73,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="##"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp">
 
             </TextView>
@@ -84,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/gold"
                 android:minWidth="0dp"
                 android:minHeight="48dp"
                 android:text="Send notification"
@@ -107,17 +108,20 @@
             android:orientation="vertical">
 
             <ListView
+                android:background="@color/darkgreen"
                 android:id="@+id/enroll_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="444dp">
+                tools:layout_editor_absoluteY="444dp"
+                android:padding="10dp">
 
             </ListView>
         </LinearLayout>
     </LinearLayout>
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
