@@ -57,7 +57,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
                 switch(flag) {
                     case "Waitlist":    usersLists = event.getWaitingList();
                                         break;
-                    case "Chosen":      usersLists = event.getChosenList();
+                    case "Chosen":      usersLists = event.getInvitedList();
                                         break;
                     case "Cancelled":   usersLists = event.getCancelledList();
                                         break;
@@ -78,7 +78,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
 
         }
 
-        sendNotification = new SendNotification(getApplicationContext(),eventId,click, db);
+        sendNotification = new SendNotification(getApplicationContext(),eventId, click, db);
         send = findViewById(R.id.send_id);
         title = findViewById(R.id.title_id);
         message = findViewById(R.id.message_id);
