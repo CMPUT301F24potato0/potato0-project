@@ -239,8 +239,8 @@ public class ChosenListActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Toast.makeText(ChosenListActivity.this, "Entrant " + entrant.getName() + " is already in the invited list or is not in chosen list anymore.", Toast.LENGTH_SHORT).show();
             }
-            event.getChosenList().removeAll(invitedEntrants);
         }
+        event.getChosenList().removeAll(invitedEntrants);
         eventRef.set(event);
         Toast.makeText(chosenListActivity, "Sent Notification", Toast.LENGTH_SHORT).show();
     }
