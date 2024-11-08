@@ -30,15 +30,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-
-import org.w3c.dom.Document;
-
 import java.util.Date;
-import java.util.List;
 
 /**
  * Event Entrant Activity
@@ -76,42 +70,42 @@ public class EventEntrantActivity extends AppCompatActivity {
     }
     // NEED TO TEST THIS
     // ****************************************************************************************************************
-
-    /**
-     * Request permission launcher
-     */
-     private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    // FCM SDK (and your app) can post notifications.
-                    Log.e("Permission","Granted");
-                } else {
-                    // TODO: Inform user that that your app will not show notifications.
-                    Log.e("Permission","Not granted");
-                }
-            });
-
-    /**
-     * Ask notification permission
-     */
-    private void askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                // FCM SDK (and your app) can post notifications.
-
-            } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                // Directly ask for the permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-            }
-        }
-    }
+//
+//    /**
+//     * Request permission launcher
+//     */
+//     private final ActivityResultLauncher<String> requestPermissionLauncher =
+//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+//                if (isGranted) {
+//                    // FCM SDK (and your app) can post notifications.
+//                    Log.e("Permission","Granted");
+//                } else {
+//                    // TODO: Inform user that that your app will not show notifications.
+//                    Log.e("Permission","Not granted");
+//                }
+//            });
+//
+//    /**
+//     * Ask notification permission
+//     */
+//    private void askNotificationPermission() {
+//        // This is only necessary for API level >= 33 (TIRAMISU)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
+//                    PackageManager.PERMISSION_GRANTED) {
+//                // FCM SDK (and your app) can post notifications.
+//
+//            } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
+//                // TODO: display an educational UI explaining to the user the features that will be enabled
+//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+//                //       If the user selects "No thanks," allow the user to continue without notifications.
+//            } else {
+//                // Directly ask for the permission
+//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+//            }
+//        }
+//    }
     // ****************************************************************************************************************
     CurrentUser tempCurUser;
     CurrentUser tempTesting;
@@ -175,9 +169,6 @@ public class EventEntrantActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
-
-//        checkUserInEvent();
-
         unjoinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,36 +177,37 @@ public class EventEntrantActivity extends AppCompatActivity {
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
 
-                    String eventID = event.getEventID();
-                    String userID = userList.getiD();
-                    String topic = eventID + "_" + userID;
-
-                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                tempCurUser.removeTopics(topic);
-                                db.collection("users").document(userID).set(tempCurUser);
-                                unjoinBtn.setVisibility(View.GONE);
-                                joinBtn.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
-
-                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
-                    unsubscribeFromTopic.unsubscribe();
+//                    String eventID = event.getEventID();
+//                    String userID = userList.getiD();
+//                    String topic = eventID + "_" + userID;
+//
+//                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()) {
+//                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+//                                tempCurUser.removeTopics(topic);
+//                                db.collection("users").document(userID).set(tempCurUser);
+//                                unjoinBtn.setVisibility(View.GONE);
+//                                joinBtn.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    });
+//
+//                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
+//                    unsubscribeFromTopic.unsubscribe();
                 }
                 catch (Exception e) {
                     Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
                 }
+                unjoinBtn.setVisibility(View.GONE);
+                joinBtn.setVisibility(View.VISIBLE);
             }
         });
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askNotificationPermission();
                 if (event.getGeolocationRequired()) {
                     // Joining
                     new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
@@ -227,23 +219,25 @@ public class EventEntrantActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
-                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                tempTesting = documentSnapshot.toObject(CurrentUser.class);
-                            }
-                        }
-                    });
-                    db.collection("events").document(event.getEventID()).set(event);
-                    task.onSuccessTask(t1 -> {
-                        tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
-                        db.collection("users").document(userList.getiD()).set(tempTesting);
-                        joinBtn.setVisibility(View.GONE);
-                        unjoinBtn.setVisibility(View.VISIBLE);
-                        return null;
-                    });
+//                    Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
+//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()) {
+//                                tempTesting = documentSnapshot.toObject(CurrentUser.class);
+//                            }
+//                        }
+//                    });
+//                    db.collection("events").document(event.getEventID()).set(event);
+//                    task.onSuccessTask(t1 -> {
+//                        tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
+//                        db.collection("users").document(userList.getiD()).set(tempTesting);
+//                        joinBtn.setVisibility(View.GONE);
+//                        unjoinBtn.setVisibility(View.VISIBLE);
+//                        return null;
+//                    });
+                    joinBtn.setVisibility(View.GONE);
+                    unjoinBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
