@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChosenListActivity">
+    tools:context=".ChosenListActivity"
+    android:background="@color/black">
 
     <!-- Title Text -->
     <TextView
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Chosen Entrants"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/darkgreen"
         android:background="@drawable/rounded_corner_background"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,12 +46,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chosen Entrants: "
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/chosen_entrants_number_chosen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="##"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -64,8 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Resample"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/red1"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/gold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="Send Invites"
                 android:textColor="@color/black"
-                android:backgroundTint="@color/green1"
+                android:backgroundTint="@color/gold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search: "
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
             <EditText

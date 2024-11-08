@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:padding="8dp"
     android:background="@drawable/rounded_corner_background"
-    android:backgroundTint="@color/gray4">
+    android:backgroundTint="@color/white">
 
     <!-- Entrant Name -->
     <TextView
