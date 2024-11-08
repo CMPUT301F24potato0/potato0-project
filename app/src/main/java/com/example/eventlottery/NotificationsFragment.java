@@ -55,6 +55,7 @@ public class NotificationsFragment extends Fragment {
         NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
                 getContext(),
                 100,
+                curUser.getNotifications(),
                 curUser,
                 db
         );

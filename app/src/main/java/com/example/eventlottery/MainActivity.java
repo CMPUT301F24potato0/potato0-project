@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.notifications:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new NotificationsFragment())
+                        .replace(R.id.flFragment, new NotificationsFragment(db, curUser))
                         .commit();
                 return true;
 
