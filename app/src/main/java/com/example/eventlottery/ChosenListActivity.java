@@ -191,16 +191,4 @@ public class ChosenListActivity extends AppCompatActivity {
         remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrantsModel.size();
     }
 
-
-    /**
-     * Returns the EventModel object in an intent after modifications have been done to it
-     */
-    @Override
-    public void finish() {
-        // Adapted from https://stackoverflow.com/questions/22549294/getting-intent-result-from-ondestroy
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("eventModel", event);
-        setResult(Activity.RESULT_OK, returnIntent);
-        super.finish();
-    }
 }

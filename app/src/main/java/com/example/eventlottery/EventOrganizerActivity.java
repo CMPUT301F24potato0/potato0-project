@@ -130,25 +130,12 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
-        // Adapted from https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
-        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            event = (EventModel) result.getData().getSerializableExtra("eventModel");
-                        }
-                    }
-                }
-        );
-
         waitlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
                 i.putExtra("eventModel", event);
-                startActivityIntent.launch(i);
+                startActivity(i);
 //                event_waitlist eventWaitlist = new event_waitlist();
 //                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //                transaction.replace(R.id.main,eventWaitlist);

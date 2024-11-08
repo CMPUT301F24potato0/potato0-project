@@ -42,7 +42,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private WaitlistEventAdapter adapter;
     private Button remove;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<UsersList> userWaitList;
 
     private Button drawSample;
     private EditText drawSampleEditText;
@@ -119,7 +118,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
         waitlist.setAdapter(adapter);
 
         // When user unjoins the event, it is now being shown in this
-        userWaitList = event.getWaitingList();
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -129,17 +127,25 @@ public class EventWaitlistActivity extends AppCompatActivity {
                             Log.e("EventWaitlistActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
-                            ArrayList<UsersList> temp = (ArrayList<UsersList>) userWaitList.clone();
-                            userWaitList.clear();
-                            ArrayList<UsersList> userWaitListTemp = (ArrayList<UsersList>) doc.toObject(EventModel.class).getWaitingList();
-                            for (UsersList u : userWaitListTemp) {
-                                userWaitList.add(u);
-                                temp.remove(u);
-                            }
+                            // Get the EventModel object
+                            EventModel FireStoreEvent = doc.toObject(EventModel.class);
 
-//                            for (UsersList u : temp) {
-//                                event.getCancelledList().add(u);
-//                            }
+                            // Update Waiting List
+                            event.getWaitingList().clear();
+                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
+                            // Update Cancelled List
+                            event.getCancelledList().clear();
+                            event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
+                            // Update Chosen List
+                            event.getChosenList().clear();
+                            event.getChosenList().addAll(FireStoreEvent.getChosenList());
+                            // Update Enrolled List
+                            event.getEnrolledList().clear();
+                            event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
+                            // Update Invited List
+                            event.getInvitedList().clear();
+                            event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
+                            // Notify adapter of changes
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -148,19 +154,6 @@ public class EventWaitlistActivity extends AppCompatActivity {
         // calculate remaining spots for event and update edittext
         remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
         drawSampleEditText.setText(Integer.toString(remaining_spots));
-
-        // Adapted from https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
-        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            event = (EventModel) result.getData().getSerializableExtra("eventModel");
-                        }
-                    }
-                }
-        );
 
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,40 +166,24 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 }
                 else {
                     Integer sample_amount = Integer.parseInt(drawSampleEditText.getText().toString());
-                    // Check for 0 sample_amount
-//                    if (sample_amount == 0) {
-//                        Toast.makeText(EventWaitlistActivity.this, "Cannot sample 0 entrants.", Toast.LENGTH_SHORT).show();
-//                    }
                     // Check if the waiting list has enough people to sample
                     if (remaining_spots < sample_amount) {
                         Toast.makeText(EventWaitlistActivity.this, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
                     }
+                    // Check if organizer is trying to sample more than the remaining amount of spots available for the event
                     else if (event.getWaitingList().size() < sample_amount) {
                         Toast.makeText(EventWaitlistActivity.this, "Waiting list only has " + event.getWaitingList().size() + " entrants left!", Toast.LENGTH_SHORT).show();
                     }
-                    // Check if organizer is trying to sample more than the remaining amount of spots available for the event
                     else {
                         Intent intent = new Intent(EventWaitlistActivity.this, ChosenListActivity.class);
                         intent.putExtra("sample_amount", sample_amount);
                         intent.putExtra("remaining_spots", remaining_spots);
                         intent.putExtra("eventModel", event);
-                        startActivityIntent.launch(intent);
+                        startActivity(intent);
                     }
                 }
             }
         });
     }
 
-
-    /**
-     * Returns the EventModel object in an intent after modifications have been done to it
-     */
-    @Override
-    public void finish() {
-        // Adapted from https://stackoverflow.com/questions/22549294/getting-intent-result-from-ondestroy
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("eventModel", event);
-        setResult(Activity.RESULT_OK, returnIntent);
-        super.finish();
-    }
 }
