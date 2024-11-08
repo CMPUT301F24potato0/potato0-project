@@ -6,30 +6,30 @@
     android:orientation="vertical"
     android:padding="8dp"
     android:background="@drawable/rounded_corner_background"
-    android:backgroundTint="@color/purple">
+    android:backgroundTint="@color/darkgreen">
     <TextView
         android:id="@+id/title_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gold"
         android:text="Title"/>
     <TextView
         android:id="@+id/message_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gold"
         android:text="Message"/>
     <TextView
         android:id="@+id/envent_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gold"
         android:text="EventID"/>
     <TextView
         android:id="@+id/flag_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="@color/gold"
         android:text="Flag"/>
     <TextView
         android:layout_width="match_parent"
@@ -47,8 +47,8 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTint="@color/red1"
-            android:textColor="@color/black"
+            android:backgroundTint="@color/darkRed"
+            android:textColor="@color/white"
             android:layout_marginStart="10dp"
             android:visibility="visible"
             android:text="Cancel"/>
@@ -60,7 +60,7 @@
             android:padding="5dp"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/green1"
+            android:backgroundTint="@color/seafoam"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
