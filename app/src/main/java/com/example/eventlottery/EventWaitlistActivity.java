@@ -84,14 +84,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //Need to get arrayList of all UserID's
-                // Event ID
-                Intent intent1 = new Intent(EventWaitlistActivity.this,SendNotificationActivity.class);
-                intent1.putExtra("event", event);
-                intent1.putExtra("Bool",0);
-                intent1.putExtra("flag", "Waitlist");
-                startActivity(intent1);
+                new SendNotificationDialog(event, "Waitlist", false, db).show(getSupportFragmentManager(), "Send Notification");
             }
         });
 

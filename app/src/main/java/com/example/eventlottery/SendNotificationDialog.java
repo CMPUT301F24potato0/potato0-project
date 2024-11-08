@@ -29,9 +29,12 @@ public class SendNotificationDialog extends DialogFragment {
     private FirebaseFirestore db;
     private String title_text;
     private String body_text;
-    private ChosenListActivity chosenListActivity;
 
-    public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, ChosenListActivity chosenListActivity){
+    private ChosenListActivity chosenListActivity = null;
+//    private EventWaitlistActivity eventWaitlistActivity = null;
+    private EnrolledListActivity enrolledListActivity = null;
+
+    public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db){
         this.event = event;
         this.flag = flag;
         switch(flag) {
@@ -49,8 +52,21 @@ public class SendNotificationDialog extends DialogFragment {
         this.eventID = event.getEventID();
         this.sent = sent;
         this.db = db;
+    }
+
+    public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, ChosenListActivity chosenListActivity){
+        this(event, flag, sent, db);
         this.chosenListActivity = chosenListActivity;
     }
+
+    public SendNotificationDialog(){
+        super();
+    }
+
+//    public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, EventWaitlistActivity eventWaitlistActivity) {
+//        this(event, flag, sent, db);
+//        this.eventWaitlistActivity = eventWaitlistActivity;
+//    }
 
     @Nullable
     @Override
@@ -74,7 +90,9 @@ public class SendNotificationDialog extends DialogFragment {
                     send();
                     sent = true;
                     db.collection("events").document(event.getEventID()).set(event);
-                    chosenListActivity.sendNotification();
+                    if (flag.equals("Chosen")) {
+                        chosenListActivity.sendNotification();
+                    }
                 })
                 .create();
 

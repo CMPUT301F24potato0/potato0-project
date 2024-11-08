@@ -68,8 +68,14 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedList.setAdapter(invitedAdapter);
 
         notify_invited = (Button) findViewById(R.id.invited_notif_button);
-        notify_invited.setVisibility(View.GONE);
+//        notify_invited.setVisibility(View.GONE);
 
+        notify_invited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SendNotificationDialog(event, "Invited", false, db).show(getSupportFragmentManager(), "Send Notification");
+            }
+        });
         // Updates all the event's lists
         db.collection("events")
                 .document(event.getEventID())

@@ -71,10 +71,7 @@ public class CancelledListActivity extends AppCompatActivity {
         notification_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CancelledListActivity.this,SendNotificationActivity.class);
-                intent.putExtra("event",event);
-                intent.putExtra("Bool",0);
-                startActivity(intent);
+                new SendNotificationDialog(event, "Cancelled", false, db).show(getSupportFragmentManager(), "Send Notification");
             }
         });
 
