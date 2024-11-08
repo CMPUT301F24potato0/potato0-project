@@ -77,7 +77,9 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.unqueueWaitingList(user);
+                try {
+                    event.unqueueWaitingList(user);
+                } catch(Exception e) {}; // temporary workaround
                 removeFromList(user, list);
 
                 Task<DocumentSnapshot> t = db.collection("users")
