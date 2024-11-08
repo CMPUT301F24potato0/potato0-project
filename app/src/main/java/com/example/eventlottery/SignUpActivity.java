@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This class is the SignUpActivity
+ * Not being used currently
+ * Planning to convert this into a dialog after user clicks a notification
+ */
 public class SignUpActivity extends AppCompatActivity {
     private String eventID;
     FirebaseFirestore db;
@@ -25,6 +30,13 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private EventModel event;
     private Button confirm;
+
+    /**
+     * On create override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +77,10 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * This function signs up
+     */
     public void signup(){
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

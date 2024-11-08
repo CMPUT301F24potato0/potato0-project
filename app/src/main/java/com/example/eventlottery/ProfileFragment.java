@@ -26,8 +26,6 @@ public class ProfileFragment extends Fragment {
     public CollectionReference userRef;
 
     private Button editUser;
-//    private Button on_notification;
-//    private Button off_notification;
     private static boolean ismuted;
 
     FloatingActionButton on_notifications;

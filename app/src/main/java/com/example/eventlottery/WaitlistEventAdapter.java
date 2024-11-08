@@ -37,7 +37,6 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * This is the constructor for WaitlistEventAdapter
      * @param context The context
      * @param resource The resource
-     * @param list The list
      */
     public WaitlistEventAdapter(@NonNull Context context, int resource, EventModel event, FirebaseFirestore db) {
         super(context, resource, event.getWaitingList());

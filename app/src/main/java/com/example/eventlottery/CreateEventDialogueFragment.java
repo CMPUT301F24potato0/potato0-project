@@ -50,6 +50,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private EventModel event;
     private EventOrganizerActivity eventActivity;
 
+    /** Empty constructor
+     */
     public CreateEventDialogueFragment() {
         // initial values
         eventTitle = "";
@@ -61,6 +63,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
+    /**
+     * Constructor
+     * @param organizer The organizer
+     * @param db The database
+     */
     // for creating a new event (organizer information required)
     public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
         this();
@@ -69,6 +76,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.db = db;
     }
 
+    /**
+     * Constructor
+     * @param event The event
+     * @param db The database
+     * @param eventActivity A reference to the event activity
+     */
     // for editing an existing event (event information required, organizer information not required)
     public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
         this.eventTitle = event.getEventTitle();
@@ -84,6 +97,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.eventActivity = eventActivity;
     }
 
+    /**
+     * On create override
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return the view
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -140,7 +160,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return builder.create();
     }
 
-    // Adapted from https://stackoverflow.com/questions/25737817/using-a-single-fragment-with-multiple-layout-in-android
+    /**
+     * from https://stackoverflow.com/questions/25737817/using-a-single-fragment-with-multiple-layout-in-android
+     */
     private void dialogStateSwitch() {
         assert (0 <= dialogState) && (dialogState <= 4);
         LayoutInflater inflater = getLayoutInflater();
@@ -237,6 +259,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Get info from the dialog
+     * @return true if valid input, false otherwise
+     */
     private Boolean dialogStateGetInfo() {
         assert (1 <= dialogState) && (dialogState <= 3);
         Boolean validInput = Boolean.FALSE;
@@ -287,7 +313,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return validInput;
     }
 
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+    /**
+     * From https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * @param joinDeadlineButton Button to set the date on
+     * @param year Year
+     * @param month Month
+     * @param day day
+     */
     private void initDatePicker(Button joinDeadlineButton, int year, int month, int day) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -310,16 +342,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
     }
 
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
-    private String getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return getMonth(month) + " " + day + ", " + year;
-    }
-
-    // https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+    /**
+     * https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * @param month Month
+     * @return String representation of the month
+     */
     private String getMonth(int month) {
         String monthStr = "";
         switch(month) {
@@ -363,11 +390,21 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return monthStr;
     }
 
+    /**
+     * Checks to make sure the string is not empty
+     * @param str passed string
+     * @return true if not empty, false otherwise
+     */
     private Boolean isValidString(String str) {
         // checks to make sure it is not an empty string
         return !str.equals("");
     }
 
+    /**
+     * Checks to make sure the string is a non negative number
+     * @param str passed string
+     * @return true if non negative number, false otherwise
+     */
     private Boolean isValidNumber(String str) {
         // checks to make sure it is a nonnegative number
         if (!isValidString(str)) {

@@ -40,6 +40,7 @@ import java.util.Date;
 
 /**
  * Event Entrant Activity
+ * All images and poster stuff is left for part 4
  */
 public class EventEntrantActivity extends AppCompatActivity {
     FloatingActionButton back;
@@ -72,47 +73,6 @@ public class EventEntrantActivity extends AppCompatActivity {
         Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
         startActivity(i);
     }
-    // NEED TO TEST THIS
-    // ****************************************************************************************************************
-//
-//    /**
-//     * Request permission launcher
-//     */
-//     private final ActivityResultLauncher<String> requestPermissionLauncher =
-//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-//                if (isGranted) {
-//                    // FCM SDK (and your app) can post notifications.
-//                    Log.e("Permission","Granted");
-//                } else {
-//                    // TODO: Inform user that that your app will not show notifications.
-//                    Log.e("Permission","Not granted");
-//                }
-//            });
-//
-//    /**
-//     * Ask notification permission
-//     */
-//    private void askNotificationPermission() {
-//        // This is only necessary for API level >= 33 (TIRAMISU)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-//                    PackageManager.PERMISSION_GRANTED) {
-//                // FCM SDK (and your app) can post notifications.
-//
-//            } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
-//                // TODO: display an educational UI explaining to the user the features that will be enabled
-//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-//                //       If the user selects "No thanks," allow the user to continue without notifications.
-//            } else {
-//                // Directly ask for the permission
-//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-//            }
-//        }
-//    }
-    // ****************************************************************************************************************
-    CurrentUser tempCurUser;
-    CurrentUser tempTesting;
     /**
      * On create of the View
      * @param savedInstanceState If the activity is being re-initialized after
@@ -195,26 +155,6 @@ public class EventEntrantActivity extends AppCompatActivity {
                 try {
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
-//
-//                    String eventID = event.getEventID();
-//                    String userID = userList.getiD();
-//                    String topic = eventID + "_" + userID;
-//
-//                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-//                                tempCurUser.removeTopics(topic);
-//                                db.collection("users").document(userID).set(tempCurUser);
-//
-//                            }
-//                        }
-//                    });
-//
-//                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
-//                    unsubscribeFromTopic.unsubscribe();
                 }
                 catch (Exception e) {
                     Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
@@ -240,22 +180,6 @@ public class EventEntrantActivity extends AppCompatActivity {
                     }
                     joinBtn.setVisibility(View.GONE);
                     unjoinBtn.setVisibility(View.VISIBLE);
-//                    Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
-//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                tempTesting = documentSnapshot.toObject(CurrentUser.class);
-//                            }
-//                        }
-//                    });
-//                    db.collection("events").document(event.getEventID()).set(event);
-//                    task.onSuccessTask(t1 -> {
-//                        tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
-//                        db.collection("users").document(userList.getiD()).set(tempTesting);
-//
-//                        return null;
-//                    });
                 }
             }
         });
@@ -268,6 +192,9 @@ public class EventEntrantActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updating the view
+     */
     private void update(){
         eventTitle.setText(event.getEventTitle());
         eventLocation.setText(event.getEventStrLocation());
@@ -278,6 +205,9 @@ public class EventEntrantActivity extends AppCompatActivity {
         eventDescription.setText(event.getEventDescription());
     }
 
+    /**
+     * Checking if the user is in the event
+     */
     private void checkUserInEvent(){
         if (event.checkUserInList(userList, event.getWaitingList())) {
             unjoinBtn.setVisibility(View.VISIBLE);

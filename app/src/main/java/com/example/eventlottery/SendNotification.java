@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is the SendNotification
+ */
 public class SendNotification implements Serializable {
 
     private String title;
@@ -25,6 +28,13 @@ public class SendNotification implements Serializable {
     private CurrentUser tempCurUser;
 
 
+    /**
+     * Constructor for SendNotification
+     * @param context The context
+     * @param eventID The event's ID
+     * @param SignUP Boolean flag for sign up
+     * @param db The database
+     */
     public  SendNotification(Context context, String eventID, Boolean SignUP, FirebaseFirestore db){
         this.context = context;
         this.eventID = eventID;
@@ -32,67 +42,39 @@ public class SendNotification implements Serializable {
         this.db = db;
     }
 
+    /**
+     * This function gets the array of the title and body
+     * @return title_text
+     */
     public ArrayList<String> getArray(){
         this.title_text.add(this.title);
         this.title_text.add(this.body);
         return title_text;
     }
-//    public void setArrayList(){
-//        this.title_text.add(this.title);
-//        this.title_text.add(this.body);
-//    }
+
+    /**
+     * This function sets the title and body
+     * @param title The title
+     */
     public void setTitle(String title){
         this.title = title;
     }
+
+    /**
+     * This function sets the body
+     * @param body The body
+     */
     public void setBody(String body){
         this.body = body;
     }
 
-
-//    public void setTitlesetBody(String title, String body){
-//        this.title = title;
-//        this.body = body;
-//
-//    }
-//    public ArrayList<String> popup(){
-//    public void popup(){
-//        ArrayList<String> title_text = new ArrayList<>();
-//        Dialog dialog = new Dialog(context);
-//        dialog.setContentView(R.layout.notification_pop_up);
-//        Button cancel = (Button) dialog.findViewById(R.id.Cancel_id);
-//        Button send = (Button) dialog.findViewById(R.id.send_id);
-//        EditText title = (EditText) dialog.findViewById(R.id.title);
-//        EditText body = (EditText) dialog.findViewById(R.id.body);
-//
-//        cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        send.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                setTitlesetBody(title.getText().toString(),body.getText().toString());
-////                NotificationCreate();
-//                title_text.add(title.getText().toString());
-//                title_text.add(body.getText().toString());
-//
-//                Toast.makeText(context ,"Sent",Toast.LENGTH_LONG).show();
-//
-//                dialog.dismiss();
-//
-//            }
-//        });
-//
-//        dialog.show();
-//
-//
-//    }
-
-
-
+    /**
+     * This function sends the notification
+     * @param title The title
+     * @param body The body
+     * @param id The id
+     * @param flag The flag
+     */
     public void NotificationCreate (String title, String body, String id, String flag){
 
         Task<DocumentSnapshot> docRef = db.collection("users").document(id).get();
@@ -111,19 +93,6 @@ public class SendNotification implements Serializable {
                 }
             }
         });
-
         Tasks.whenAllComplete(docRef);
-
-//
-//        FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
-//                title,
-//                body,
-//                context,
-//                topic,
-//                eventID,
-//                SignUP
-//        );
-//        fcmNotificationSender.SendNotifications();
-
     }
 }

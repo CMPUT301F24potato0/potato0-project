@@ -19,6 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * This class is the SendNotificationActivity
+ * This is not being used right now. It has been converted to a dialog fragment
+ */
 public class SendNotificationActivity extends AppCompatActivity  {
 
     private Button send;
@@ -37,7 +41,13 @@ public class SendNotificationActivity extends AppCompatActivity  {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String flag;
 
-
+    /**
+     * On create override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +105,9 @@ public class SendNotificationActivity extends AppCompatActivity  {
         });
     }
 
+    /**
+     * This function sends the notification
+     */
     public void send(){
         for(int i = 0; i < usersLists.size(); i++){
             sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag);

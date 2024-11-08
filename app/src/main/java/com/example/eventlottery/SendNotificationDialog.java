@@ -16,6 +16,10 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
+/**
+ * This class is the SendNotificationDialog
+ * This was taken after Maxim implemented SendNotificationActivity
+ */
 public class SendNotificationDialog extends DialogFragment {
     private EditText title;
     private EditText message;
@@ -34,6 +38,13 @@ public class SendNotificationDialog extends DialogFragment {
 //    private EventWaitlistActivity eventWaitlistActivity = null;
     private EnrolledListActivity enrolledListActivity = null;
 
+    /**
+     * Constructor for SendNotificationDialog
+     * @param event The event
+     * @param flag The flag indicating which list the organizer is sending a notification from
+     * @param sent Boolean flag for sending notifications
+     * @param db The database
+     */
     public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db){
         this.event = event;
         this.flag = flag;
@@ -54,20 +65,33 @@ public class SendNotificationDialog extends DialogFragment {
         this.db = db;
     }
 
+    /**
+     * Constructor for SendNotificationDialog
+     * @param event The event
+     * @param flag The flag indicating which list the organizer is sending a notification from
+     * @param sent Boolean flag for sending notifications
+     * @param db The database
+     * @param chosenListActivity A reference to chosenListActivity
+     */
     public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, ChosenListActivity chosenListActivity){
         this(event, flag, sent, db);
         this.chosenListActivity = chosenListActivity;
     }
 
+    /**
+     * Empty constructor
+     */
     public SendNotificationDialog(){
         super();
     }
 
-//    public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, EventWaitlistActivity eventWaitlistActivity) {
-//        this(event, flag, sent, db);
-//        this.eventWaitlistActivity = eventWaitlistActivity;
-//    }
-
+    /**
+     * on create
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return the dialog after being created
+     */
     @Nullable
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -75,8 +99,6 @@ public class SendNotificationDialog extends DialogFragment {
 
         title = view.findViewById(R.id.title_id);
         message = view.findViewById(R.id.message_id);
-//        send = view.findViewById(R.id.send_id);
-//        send.setVisibility(View.GONE);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         return builder
@@ -97,6 +119,10 @@ public class SendNotificationDialog extends DialogFragment {
                 .create();
 
     }
+
+    /**
+     * This function sends the notification
+     */
     public void send(){
         for(int i = 0; i < usersLists.size(); i++){
             sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag);

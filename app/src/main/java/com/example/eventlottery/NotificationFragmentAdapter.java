@@ -26,8 +26,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This is the NotificationFragmentAdapter class
+ */
 public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, String>> {
 
+    /**
+     * Constructor for NotificationFragmentAdapter
+     */
 
     private CurrentUser currentUser;
     private FirebaseFirestore db;
@@ -36,6 +42,14 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         super(context, resource);
     }
 
+    /**
+     * Constructor for NotificationFragmentAdapter
+     * @param context The context
+     * @param resource The resource
+     * @param notifications ArrayList of notifications
+     * @param currentUser The current user
+     * @param db The database
+     */
     public NotificationFragmentAdapter
             (@NonNull Context context,
              int resource, ArrayList<HashMap<String, String>> notifications,
@@ -47,10 +61,22 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         this.db = db;
     }
 
+    /**
+     * Get View override
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view
+     *        is non-null and of an appropriate type before using. If it is not possible to convert
+     *        this view to display the correct data, this method can create a new view.
+     *        Heterogeneous lists can specify their number of view types, so that this View is
+     *        always of the right type (see {@link #getViewTypeCount()} and
+     *        {@link #getItemViewType(int)}).
+     * @param parent The parent that this view will eventually be attached to
+     * @return the view
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        return super.getView(position, convertView, parent);
         View view;
         if (convertView == null) {
             view = View.inflate(getContext(), R.layout.notification_adapter_view, null);
