@@ -12,7 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,36 +77,95 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         }
 
         // get the notification from the data base using db and curUser
-        TextView title = (TextView) view.findViewById(R.id.title_id);
-        TextView message = (TextView) view.findViewById(R.id.message_id);
-        TextView eventID = (TextView) view.findViewById(R.id.envent_id);
-        TextView flagID = (TextView) view.findViewById(R.id.flag_id);
-        Button cancel_btn = (Button) view.findViewById(R.id.cancel_id);
-        Button signup_btn = (Button) view.findViewById(R.id.signup_id);
+        TextView title = view.findViewById(R.id.title_id);
+        TextView message = view.findViewById(R.id.message_id);
+        TextView eventID = view.findViewById(R.id.envent_id);
+        TextView flagID = view.findViewById(R.id.flag_id);
+        Button cancel_btn = view.findViewById(R.id.cancel_id);
+        Button signup_btn = view.findViewById(R.id.signup_id);
         HashMap<String, String> notification = getItem(position);
+
         title.setText(notification.get("title"));
         message.setText(notification.get("body"));
         eventID.setText(notification.get("eventID"));
         flagID.setText(notification.get("flag"));
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel_btn.setVisibility(View.GONE);
-                signup_btn.setVisibility(View.GONE);
-                // TODO remove from invited
+        if (flagID.getText().toString().equals("Chosen")) {
+            // Make sure the buttons are visible
+            cancel_btn.setVisibility(View.VISIBLE);
+            signup_btn.setVisibility(View.VISIBLE);
 
-            }
-        });
-        signup_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel_btn.setVisibility(View.GONE);
-                signup_btn.setVisibility(View.GONE);
-                // remove from invited
-                // move to enrolled
-            }
-        });
+            // Setting up Sign Up button
+            signup_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HashMap<String, String> notification = getItem(position);
+                    DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
+                    eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot != null) {
+                                EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+                                UsersList entrantUsersList = new UsersList(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                // Update event model after user chooses to join the event
+                                try {
+                                    eventFireStore.unqueueInvitedList(entrantUsersList);
+                                    eventFireStore.queueEnrolledList(entrantUsersList);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                // Update event in FireStore database
+                                db.collection("events").document(notification.get("eventID")).set(eventFireStore);
+                                // Remove notification and update the user on FireStore
+                                remove(notification);
+                                currentUser.removeNotifications(notification);
+                                db.collection("users").document(currentUser.getiD()).set(currentUser);
+                                notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+
+                }
+            });
+
+            // Setting up Cancel button
+            cancel_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HashMap<String, String> notification = getItem(position);
+                    DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
+                    eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot != null) {
+                                EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+                                UsersList entrantUsersList = new UsersList(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                // Update event model after user chooses to not join the event
+                                try {
+                                    eventFireStore.unqueueInvitedList(entrantUsersList);
+                                    eventFireStore.queueCancelledList(entrantUsersList);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                // Update event in FireStore database
+                                db.collection("events").document(notification.get("eventID")).set(eventFireStore);
+                                // Remove notification and update the user on FireStore
+                                remove(notification);
+                                currentUser.removeNotifications(notification);
+                                db.collection("users").document(currentUser.getiD()).set(currentUser);
+                                notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            cancel_btn.setVisibility(View.GONE);
+            signup_btn.setVisibility(View.GONE);
+        }
+
         return view;
     }
 }
