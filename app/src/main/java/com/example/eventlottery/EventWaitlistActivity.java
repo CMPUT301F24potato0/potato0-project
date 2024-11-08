@@ -86,31 +86,12 @@ public class EventWaitlistActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //Need to get arrayList of all UserID's
-
-//                ArrayList<UsersList> userIDs = event.getWaitingList();
-//                String eventID = event.getEventID();
-
-
-                Log.e("Array1","");
-                Log.e("Array2","");
-                Log.e("Array3","");
-                Log.e("Array4","");
-
-
-                // List of user ID's
-                ArrayList<UsersList> usersLists = event.getWaitingList();
-
                 // Event ID
-                String eventId = event.getEventID();
-
-
-
                 Intent intent1 = new Intent(EventWaitlistActivity.this,SendNotificationActivity.class);
                 intent1.putExtra("event", event);
                 intent1.putExtra("Bool",0);
+                intent1.putExtra("flag", "Waitlist");
                 startActivity(intent1);
-
-
             }
         });
 
