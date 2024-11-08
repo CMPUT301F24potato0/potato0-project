@@ -3,11 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fProfile"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/black">
 
         <!-- First Name -->
 
@@ -20,7 +23,8 @@
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/white"/>
 
         <EditText
             android:id="@+id/fNameEditText"
@@ -28,6 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="156dp"
             android:hint="Enter your first name"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/profile_page_last_name"
+            android:textColor="@color/white"
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +60,8 @@
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:hint="Enter your last name"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/profile_page_phone_number"
+            android:textColor="@color/white"
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +87,8 @@
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:hint="Enter your phone number"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="phone"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,6 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/profile_page_email"
+            android:textColor="@color/white"
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +114,8 @@
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:hint="Enter your email address"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -116,6 +131,8 @@
             android:text="Edit Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/gold"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailEditText"
             app:layout_constraintVertical_bias="0.0" />
@@ -129,6 +146,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Notifications:"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:layout_marginEnd="40dp"-->
+<!--            android:textSize="19dp"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/on_notifications"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/green1"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:visibility="visible"-->
+<!--            android:text="On"-->
+<!--            android:padding="0dp"-->
+<!--            android:minHeight="5dp"-->
+<!--            android:minWidth="35dp"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/off_notifications"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/red1"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:visibility="gone"-->
+<!--            android:text="Off"-->
+<!--            android:padding="0dp"-->
+<!--            android:minHeight="5dp"-->
+<!--            android:minWidth="35dp"/>-->
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/on_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_on_notification_foreground"
+            android:backgroundTint="@color/green1"
+            app:maxImageSize="50dp"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/off_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_off_notification_foreground"
+            android:backgroundTint="@color/darkRed"
+            app:maxImageSize="50dp"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

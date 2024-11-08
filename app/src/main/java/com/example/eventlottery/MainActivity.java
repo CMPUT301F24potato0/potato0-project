@@ -1,24 +1,35 @@
 package com.example.eventlottery;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentReference;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -31,9 +42,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     BottomNavigationView bottomNavigationView;
 
     public FirebaseFirestore db;
-    public CollectionReference userRef;
-    private CurrentUser curUser;
+    public CollectionReference usersRef;
+    public CollectionReference facilitiesRef;
+    public DocumentReference userDocRef;
     private String androidIDStr;
+    private CurrentUser curUser;
+//    public CollectionReference facilitiesRef;
+    private FacilityModel facility;
+    ConstraintLayout mainActivityView;
+    ConstraintLayout mainActivityProgressBar;
 
     /**
      * This method is called when opening the app.
@@ -43,64 +60,82 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        androidIDStr = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);;
         db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Check this for Qr scanner in fragment
+        // https://stackoverflow.com/questions/40725336/android-studio-start-qr-code-scanner-from-fragment
+        // https://medium.com/@dev.jeevanyohan/zxing-qr-code-scanner-android-implementing-in-activities-fragment-custom-colors-faa68bfc761d
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        mainActivityView = findViewById(R.id.main_activity_view);
+        mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        bottomNavigationView
-                = findViewById(R.id.bottomNavigationView);
 
-        bottomNavigationView
-                .setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.scanQR);
+        curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
+        facility = new FacilityModel("", "", "", "", 0, androidIDStr);
+        usersRef = db.collection("users");
+        facilitiesRef = db.collection("facilities");
 
-        curUser = new CurrentUser("", "", "","", false, androidIDStr);
+        DocumentReference currentUserReference = usersRef.document(androidIDStr);
+        DocumentReference userFacility = db.collection("facilities").document(androidIDStr);
 
-        userRef = db.collection("users");
+        Task<DocumentSnapshot> task = currentUserReference.get();
 
-        userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-                        String userID = doc.getId();
-                        String email = doc.getString("email");
-                        String f_name = doc.getString("f_name");
-                        String l_name = doc.getString("l_name");
-                        String phone = doc.getString("phone");
-                        if (userID.equals(androidIDStr)) {
-                            curUser.setEmail(email);
-                            curUser.setfName(f_name);
-                            curUser.setlName(l_name);
-                            curUser.setPhone(phone);
-                            return;
-                        }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        curUser = document.toObject(CurrentUser.class);
+                    } else {
+                        newUser(curUser);
                     }
+                    userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    facility = document.toObject(FacilityModel.class);
+                                    curUser.setFacilityID(facility.getUserID());
+                                }
+                                else {
+                                    Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else {
+                                Log.d("Firestore", "get failed with ", task.getException());
+                                throw new RuntimeException(task.getException().toString());
+                            }
+                        }
+                    });
+                } else {
+                    Log.d("Firestore", "get failed with ", task.getException());
+                    throw new RuntimeException(task.getException().toString());
                 }
-                newUser();
             }
+        });
+
+        // https://stackoverflow.com/questions/66698325/how-to-wait-for-firebase-task-to-complete-to-get-result-as-an-await-function
+        task.onSuccessTask(task1 -> {
+            mainActivityProgressBar.setVisibility(View.GONE);
+            mainActivityView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            return null;
         });
     }
 
     /**
      * This method is to add a new user to the database
      */
-    public void newUser() {
+    public void newUser(CurrentUser cUser) {
         // Adding a new User
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("android_id", curUser.getiD());
-        data.put("email", curUser.getEmail());
-        data.put("f_name", curUser.getfName());
-        data.put("l_name", curUser.getlName());
-        data.put("isAdmin", curUser.getIsAdmin());
-        data.put("phone", curUser.getPhone());
-        userRef.document(curUser.getiD()).set(data);
+        usersRef.document(androidIDStr).set(cUser);
     }
 
     /**
@@ -114,37 +149,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.scanQR:
+                // Ask for camera permissions if not already allowed to use camera
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
+                }
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new ScanFragment())
+                        .replace(R.id.flFragment, new ScanFragment(db, curUser))
                         .commit();
                 return true;
 
             case R.id.notifications:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new NotificationsFragment())
+                        .replace(R.id.flFragment, new NotificationsFragment(db, curUser, curUser.getNotifications()))
                         .commit();
                 return true;
 
             case R.id.facility:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new FacilityFragment())
+                        .replace(R.id.flFragment, new FacilityFragment(db, curUser, facility))
                         .commit();
                 return true;
             case R.id.waitlist:
                 getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.flFragment, new WaitlistedEventsFragment())
-                    .commit();
+                        .beginTransaction()
+                        .replace(R.id.flFragment, new WaitlistedEventsFragment())
+                        .commit();
                 return true;
 
             case R.id.profile:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new Profile(db, curUser))
-                        //.replace(R.id.flFragment, new Profile(db, profileFragment))
+                        .replace(R.id.flFragment, new ProfileFragment(db, curUser))
                         .commit();
                 return true;
         }
