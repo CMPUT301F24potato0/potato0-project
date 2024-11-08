@@ -180,6 +180,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
             android:text="Delete"
+            android:visibility="invisible"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/facility_details_cancel_button"

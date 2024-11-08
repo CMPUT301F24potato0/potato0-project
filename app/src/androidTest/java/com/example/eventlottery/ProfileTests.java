@@ -43,22 +43,22 @@ public class ProfileTests {
         NavigateToProfile();
         waiter.perform(withId(R.id.fNameEditText), replaceText("Persistence tester first name"));
         onView(withId(R.id.lNameEditText)).perform(replaceText("Persistence tester last name"));
-        onView(withId(R.id.phoneEditText)).perform(replaceText("000 000 000 111"));
+        onView(withId(R.id.phoneEditText)).perform(replaceText("000000000111"));
         onView(withId(R.id.emailEditText)).perform(replaceText("persist@example.com"));
-        closeSoftKeyboard();
+        // closeSoftKeyboard();
         waiter.perform(withId(R.id.saveProfileBtn), click());
         onView(withId(R.id.facility)).perform(click());
         onView(withId(R.id.saveProfileBtn)).check(doesNotExist());
         onView(withId(R.id.profile)).perform(click());
         waiter.check(withId(R.id.fNameEditText), matches(withText("Persistence tester first name")));
         onView(withId(R.id.lNameEditText)).check(matches(withText("Persistence tester last name")));
-        onView(withId(R.id.phoneEditText)).check(matches(withText("000 000 000 111")));
+        onView(withId(R.id.phoneEditText)).check(matches(withText("000000000111")));
         onView(withId(R.id.emailEditText)).check(matches(withText("persist@example.com")));
         waiter.perform(withId(R.id.fNameEditText), replaceText("Tester first name"));
         onView(withId(R.id.lNameEditText)).perform(replaceText("Tester last name"));
-        onView(withId(R.id.phoneEditText)).perform(replaceText("000 000 000 000"));
+        onView(withId(R.id.phoneEditText)).perform(replaceText("000000000000"));
         onView(withId(R.id.emailEditText)).perform(replaceText("tester@example.com"));
-        closeSoftKeyboard();
+        // closeSoftKeyboard();
         waiter.perform(withId(R.id.saveProfileBtn), click());
     }
     @Test
@@ -66,7 +66,7 @@ public class ProfileTests {
         ProfileEditPersistent();
         waiter.perform(withId(R.id.fNameEditText), replaceText("Temporary first name"));
         onView(withId(R.id.lNameEditText)).perform(replaceText("Temporary last name"));
-        onView(withId(R.id.phoneEditText)).perform(replaceText("111 111 111 111"));
+        onView(withId(R.id.phoneEditText)).perform(replaceText("111111111111"));
         onView(withId(R.id.emailEditText)).perform(replaceText("temp@example.com"));
         closeSoftKeyboard();
         waiter.perform(withId(R.id.facility), click());
@@ -74,7 +74,7 @@ public class ProfileTests {
         onView(withId(R.id.profile)).perform(click());
         waiter.check(withId(R.id.fNameEditText), matches(withText("Tester first name")));
         onView(withId(R.id.lNameEditText)).check(matches(withText("Tester last name")));
-        onView(withId(R.id.phoneEditText)).check(matches(withText("000 000 000 000")));
+        onView(withId(R.id.phoneEditText)).check(matches(withText("000000000000")));
         onView(withId(R.id.emailEditText)).check(matches(withText("tester@example.com")));
     }
 }

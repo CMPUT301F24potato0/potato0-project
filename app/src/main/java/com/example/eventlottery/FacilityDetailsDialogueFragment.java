@@ -84,12 +84,14 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         }
         // an existing facility is passed to edit/update with new information
         // get details from the facility to fill out form as initial default values
+        // also show delete button to remove facility if wanted
         else {
             facilityNameEditText.setText(facility.getName());
             facilityLocationEditText.setText(facility.getLocation());
             facilityPhoneEditText.setText(facility.getPhone());
             facilityEmailEditText.setText(facility.getEmail());
             facilityCapacityEditText.setText(facility.getCapacity().toString());
+            deleteButton.setVisibility(View.VISIBLE);
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
