@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,6 +30,7 @@ public class NotificationsFragment extends Fragment {
     private CurrentUser curUser;
     private ArrayList<HashMap<String, String>> notifications;
     private ListView notification_listview;
+    private ConstraintLayout notification_off_textView;
 
     public NotificationsFragment(){
         // require a empty public constructor
@@ -60,6 +62,15 @@ public class NotificationsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
         notification_listview = view.findViewById(R.id.notification_listview);
+        notification_off_textView = view.findViewById(R.id.notification_off_textView);
+
+        if (curUser.isMuted()) {
+            notification_off_textView.setVisibility(View.VISIBLE);
+            notification_listview.setVisibility(View.GONE);
+        } else {
+            notification_off_textView.setVisibility(View.GONE);
+            notification_listview.setVisibility(View.VISIBLE);
+        }
         notifications = curUser.getNotifications();
         NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
                 requireContext(),
