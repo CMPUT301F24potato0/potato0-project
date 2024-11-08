@@ -132,6 +132,7 @@ public class ChosenListActivity extends AppCompatActivity {
                 // TODO: implement notifications
                 Boolean sent = false;
                 new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
+//                .show(getSupportFragmentManager(), "Send Notification");
             }
         });
 

@@ -70,10 +70,7 @@ public class EnrolledListActivity extends AppCompatActivity {
         notif_enrolled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EnrolledListActivity.this,SendNotificationActivity.class);
-                intent.putExtra("event",event);
-                intent.putExtra("Bool",0);
-                startActivity(intent);
+                new SendNotificationDialog(event, "Enrolled", false, db).show(getSupportFragmentManager(), "Send Notification");
             }
         });
 
