@@ -141,7 +141,6 @@ public class EventEntrantActivity extends AppCompatActivity {
         }
 
         db = FirebaseFirestore.getInstance();
-
         eventPoster = findViewById(R.id.event_entrant_page_event_poster1);
         eventTitle = findViewById(R.id.event_entrant_page_event_title1);
         eventLocation = findViewById(R.id.event_entrant_page_event_location1);
@@ -154,7 +153,6 @@ public class EventEntrantActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar1);
         linearLayout = findViewById(R.id.linearLayout1);
-
         back = findViewById(R.id.floatingActionButton);
 
         update();
@@ -170,6 +168,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 if (value != null) {
                     event = value.toObject(EventModel.class);
                     update();
+                    checkUserInEvent();
                 }
             }
         });
@@ -177,83 +176,77 @@ public class EventEntrantActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
 
-        if (event.checkUserInList(userList, event.getWaitingList())) {
-            unjoinBtn.setVisibility(View.VISIBLE);
-            joinBtn.setVisibility(View.GONE);
-            unjoinBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Unjoining
-                    try {
-                        event.unqueueWaitingList(userList);
-                        db.collection("events").document(event.getEventID()).set(event);
+//        checkUserInEvent();
 
+        unjoinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Unjoining
+                try {
+                    event.unqueueWaitingList(userList);
+                    db.collection("events").document(event.getEventID()).set(event);
 
-                        String eventID = event.getEventID();
-                        String userID = userList.getiD();
-                        String topic = eventID + "_" + userID;
+                    String eventID = event.getEventID();
+                    String userID = userList.getiD();
+                    String topic = eventID + "_" + userID;
 
-
-                        Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
-                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
-                                    tempCurUser.removeTopics(topic);
-                                    db.collection("users").document(userID).set(tempCurUser);
-                                }
+                    Task<DocumentSnapshot> task = db.collection("users").document(userID).get();
+                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                                tempCurUser.removeTopics(topic);
+                                db.collection("users").document(userID).set(tempCurUser);
+                                unjoinBtn.setVisibility(View.GONE);
+                                joinBtn.setVisibility(View.VISIBLE);
                             }
-                        });
-
-
-                        UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
-                        unsubscribeFromTopic.unsubscribe();
-                    }
-                    catch (Exception e) {
-                        Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } else {
-            unjoinBtn.setVisibility(View.GONE);
-            joinBtn.setVisibility(View.VISIBLE);
-            joinBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    askNotificationPermission();
-                    if (event.getGeolocationRequired()) {
-                        // Joining
-                        new geo_requirement_dialog(userList, event, db).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                        // Getting event specific topic
-                    }
-                    else {
-
-                        try {
-                            event.queueWaitingList(userList);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
                         }
-                        Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
-                        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    tempTesting = documentSnapshot.toObject(CurrentUser.class);
-                                }
-                            }
-                        });
-                        db.collection("events").document(event.getEventID()).set(event);
-                        task.onSuccessTask(t1 -> {
-                            tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
-                            db.collection("users").document(userList.getiD()).set(tempTesting);
-                            return null;
-                        });
-                    }
-                }
-            });
-        }
+                    });
 
+                    UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(topic, getApplicationContext());
+                    unsubscribeFromTopic.unsubscribe();
+                }
+                catch (Exception e) {
+                    Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        joinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askNotificationPermission();
+                if (event.getGeolocationRequired()) {
+                    // Joining
+                    new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                    // Getting event specific topic
+                }
+                else {
+                    try {
+                        event.queueWaitingList(userList);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
+                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                tempTesting = documentSnapshot.toObject(CurrentUser.class);
+                            }
+                        }
+                    });
+                    db.collection("events").document(event.getEventID()).set(event);
+                    task.onSuccessTask(t1 -> {
+                        tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
+                        db.collection("users").document(userList.getiD()).set(tempTesting);
+                        joinBtn.setVisibility(View.GONE);
+                        unjoinBtn.setVisibility(View.VISIBLE);
+                        return null;
+                    });
+                }
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,7 +254,6 @@ public class EventEntrantActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 
     private void update(){
@@ -272,5 +264,15 @@ public class EventEntrantActivity extends AppCompatActivity {
         organizer = event.getOrganizer();
         organizerName.setText(organizer);
         eventDescription.setText(event.getEventDescription());
+    }
+
+    private void checkUserInEvent(){
+        if (event.getWaitingList().contains(userList)) {
+            unjoinBtn.setVisibility(View.VISIBLE);
+            joinBtn.setVisibility(View.GONE);
+        } else {
+            unjoinBtn.setVisibility(View.GONE);
+            joinBtn.setVisibility(View.VISIBLE);
+        }
     }
 }
