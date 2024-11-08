@@ -26,12 +26,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.w3c.dom.Document;
+
 import java.util.Date;
 
 /**
@@ -150,6 +154,21 @@ public class EventEntrantActivity extends AppCompatActivity {
         back = findViewById(R.id.floatingActionButton);
 
         update();
+        checkUserInEvent();
+        Task<DocumentSnapshot> task1 = db.collection("events").document(event.getEventID()).get();
+
+        task1.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    event = documentSnapshot.toObject(EventModel.class);
+                    update();
+                    checkUserInEvent();
+                }
+            }
+        });
+
+        Tasks.whenAllComplete(task1);
 
         // getting event information from Firestore
         final DocumentReference eventRef = db.collection("events").document(event.getEventID());
@@ -176,7 +195,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 try {
                     event.unqueueWaitingList(userList);
                     db.collection("events").document(event.getEventID()).set(event);
-
+//
 //                    String eventID = event.getEventID();
 //                    String userID = userList.getiD();
 //                    String topic = eventID + "_" + userID;
@@ -189,8 +208,7 @@ public class EventEntrantActivity extends AppCompatActivity {
 //                                tempCurUser = documentSnapshot.toObject(CurrentUser.class);
 //                                tempCurUser.removeTopics(topic);
 //                                db.collection("users").document(userID).set(tempCurUser);
-//                                unjoinBtn.setVisibility(View.GONE);
-//                                joinBtn.setVisibility(View.VISIBLE);
+//
 //                            }
 //                        }
 //                    });
@@ -216,9 +234,12 @@ public class EventEntrantActivity extends AppCompatActivity {
                 else {
                     try {
                         event.queueWaitingList(userList);
+                        db.collection("events").document(event.getEventID()).set(event);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    joinBtn.setVisibility(View.GONE);
+                    unjoinBtn.setVisibility(View.VISIBLE);
 //                    Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
 //                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                        @Override
@@ -232,12 +253,9 @@ public class EventEntrantActivity extends AppCompatActivity {
 //                    task.onSuccessTask(t1 -> {
 //                        tempTesting.addTopics(event.getEventID() + "_" + userList.getiD());
 //                        db.collection("users").document(userList.getiD()).set(tempTesting);
-//                        joinBtn.setVisibility(View.GONE);
-//                        unjoinBtn.setVisibility(View.VISIBLE);
+//
 //                        return null;
 //                    });
-                    joinBtn.setVisibility(View.GONE);
-                    unjoinBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -261,7 +279,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     }
 
     private void checkUserInEvent(){
-        if (event.getWaitingList().contains(userList)) {
+        if (event.checkUserInList(userList, event.getWaitingList())) {
             unjoinBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
         } else {
