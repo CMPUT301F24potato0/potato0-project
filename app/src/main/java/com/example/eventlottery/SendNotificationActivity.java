@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -32,7 +34,8 @@ public class SendNotificationActivity extends AppCompatActivity  {
     private SendNotification sendNotification;
     private boolean click;
     private int temp;
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String flag;
 
 
     @Override
@@ -60,10 +63,10 @@ public class SendNotificationActivity extends AppCompatActivity  {
             else{
                 click = true;
             }
-
+            flag = extra.getString("flag");
         }
 
-        sendNotification = new SendNotification(getApplicationContext(),eventId,click);
+        sendNotification = new SendNotification(getApplicationContext(),eventId,click, db);
         send = findViewById(R.id.send_id);
         title = findViewById(R.id.title_id);
         message = findViewById(R.id.message_id);
@@ -81,12 +84,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
 
     public void send(){
         for(int i = 0; i < usersLists.size(); i++){
-            String topic = eventId + "_" + usersLists.get(i).getiD();
-
-            sendNotification.NotificationCreate(title_text, body_text, topic);
+            sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag);
         }
-
     }
-
-
 }
