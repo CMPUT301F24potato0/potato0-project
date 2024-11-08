@@ -95,22 +95,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 
 
 
-        db
-            .collection("users")
-            .document(currentUser.getiD())
-            .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    if (error != null) {
-                        Toast.makeText(getContext(), "error: " + error.toString(), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (value != null && value.exists()) {
-                        currentUser = value.toObject(CurrentUser.class);
-                        notifyDataSetChanged();
-                    }
-                }
-            });
+
 
         // if flag "chose" then button visible
         // button will add user to enrolled, remove from invited, remove button and update data base

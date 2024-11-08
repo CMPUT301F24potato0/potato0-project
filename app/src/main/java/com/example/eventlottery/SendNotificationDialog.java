@@ -37,7 +37,7 @@ public class SendNotificationDialog extends DialogFragment {
         switch(flag) {
             case "Waitlist":    usersLists = event.getWaitingList();
                 break;
-            case "Chosen":      usersLists = event.getInvitedList();
+            case "Chosen":      usersLists = event.getChosenList();
                 break;
             case "Cancelled":   usersLists = event.getCancelledList();
                 break;
