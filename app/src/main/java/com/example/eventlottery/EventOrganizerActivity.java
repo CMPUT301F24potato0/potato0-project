@@ -24,6 +24,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Event Organizer Activity
+ * All the poster and images are for part 4
+ */
 public class EventOrganizerActivity extends AppCompatActivity {
     /*
         Getting the views from the layout file
@@ -53,6 +57,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private ConstraintLayout progessBar;
     EventOrganizerActivity currentActivity = this;
 
+    /**
+     * On create override
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -92,37 +103,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
             event = (EventModel) extra.getSerializable("eventModel");
         }
         updateViews();
-//        eventDescription.setText(event.getEventDescription());
-//        eventTitle.setText(event.getEventTitle());
-//        eventDate.setText(event.getJoinDeadline().toString());
-////        eventPoster.setImageResource(R.drawable.ic_facility_background);
-//        organizerName.setText(event.getOrganizer());
         progessBar.setVisibility(View.GONE);
         eventView.setVisibility(View.VISIBLE);
-//        db.collection("events").document(eventID)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentSnapshot document = task.getResult();
-//                            if (document.exists()) {
-//                                event = document.toObject(EventModel.class);
-//                                eventTitle.setText(event.getEventTitle());
-//                                eventDescription.setText(event.getEventDescription());
-////                                eventPoster.setImageResource(R.drawable.ic_facility_background);
-////                                organizerName.setText(document.getString("organizer"));
-//                                progessBar.setVisibility(View.GONE);
-//                                eventView.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                        else {
-//                            Log.d("Firebase error", "Cached get failed: ", task.getException());
-//                        }
-//                    }
-//                });
-
-
         QRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,10 +118,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
                 i.putExtra("eventModel", event);
                 startActivity(i);
-//                event_waitlist eventWaitlist = new event_waitlist();
-//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.main,eventWaitlist);
-//                transaction.commit();
             }
         });
 
@@ -179,6 +157,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates the views
+     */
     public void updateViews() {
         Log.d("TESTING", "Views updated");
         eventTitle.setText(event.getEventTitle());
@@ -192,6 +173,5 @@ public class EventOrganizerActivity extends AppCompatActivity {
         }
         eventDate.setText(event.getJoinDeadline().toString());
         eventDescription.setText(event.getEventDescription());
-//        organizerName.setText(event.getOrganizer());
     }
 }

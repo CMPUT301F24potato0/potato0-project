@@ -133,35 +133,6 @@ public class ScanFragment extends Fragment {
                 }
             }
         });
-        //        eventRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    Log.e("Firestore", error.toString());
-//                    return;
-//                }
-//                if (querySnapshots != null) {
-//                    boolean eventFound = false;
-//                    for (QueryDocumentSnapshot doc: querySnapshots) {
-//                        String eventId = doc.getId();
-//                        if (eventId.equals(eventID)) {
-//                            eventFound = true;
-//                            EventModel temp = doc.toObject(EventModel.class);
-//                            Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-//                            UsersList userList = new UsersList(curUser.getiD(), curUser.getfName() + " " + curUser.getlName());
-//                            i.putExtra("userList", userList);
-//                            i.putExtra("eventModel", temp);
-//                            startActivity(i);
-//                            break;
-//                        }
-//                    }
-//                    if (!eventFound) {
-//                        Toast.makeText(getContext(), "Event not found", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//            }
-//        });
     }
 
     /**

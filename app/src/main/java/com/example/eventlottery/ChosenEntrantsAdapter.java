@@ -66,13 +66,6 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
         Button removeButton = convertView.findViewById(R.id.remove_button);
 
         inviteButton.setVisibility(View.GONE);
-        // Set up invite button functionality (optional, to be implemented later in part 4)
-//        inviteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Code to send invite notification
-//            }
-//        });
 
         // Set up remove button functionality
         removeButton.setOnClickListener(new View.OnClickListener() {

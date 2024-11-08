@@ -225,6 +225,9 @@ public class ChosenListActivity extends AppCompatActivity {
         remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrantsModel.size();
     }
 
+    /**
+     * A helper function to send notifications to the entrants
+     */
     public void sendNotification(){
 
         for (UsersList entrant : chosenEntrantsModel) {

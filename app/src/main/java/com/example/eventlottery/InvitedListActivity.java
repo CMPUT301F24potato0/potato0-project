@@ -68,7 +68,6 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedList.setAdapter(invitedAdapter);
 
         notify_invited = (Button) findViewById(R.id.invited_notif_button);
-//        notify_invited.setVisibility(View.GONE);
 
         notify_invited.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,6 +16,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is not being used
+ */
 public class FcmNotificationSender {
 
     //https://www.youtube.com/watch?v=o_PikvavsYY&ab_channel=CodingwithMukund

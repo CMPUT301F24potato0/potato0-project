@@ -8,12 +8,13 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * This is the MyBroadcastReceiver class
+ * Not being used
+ */
 public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
-
         Log.e("Notification","Button");
         String action = intent.getAction();
         if(action.equals("first")){

@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 /**
  * This class is the Waitlisting Fragment
  * This class inflates fragment_waitlisted_events
+ * Not being used currently. Planned to be used in part 4
  */
 public class WaitlistedEventsFragment extends Fragment{
 
@@ -71,12 +72,8 @@ public class WaitlistedEventsFragment extends Fragment{
         unmute_btn = (Button) rootview.findViewById(R.id.unmute);
 
         notification_btn.setOnClickListener(view -> {
-            // CAlLS SendNotification
             this.context = requireContext();
             String topic = "testTopic_signup";
-//            SendNotification sendNotification = new SendNotification(context,topic);
-//            sendNotification.popup();
-            // CALLS
 
         });
         subscribe.setOnClickListener(new View.OnClickListener() {

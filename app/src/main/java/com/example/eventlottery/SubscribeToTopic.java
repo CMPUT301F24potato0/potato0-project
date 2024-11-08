@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * This class is the SubscribeToTopic
+ * Not being used
  */
 public class SubscribeToTopic {
 
@@ -46,7 +47,6 @@ public class SubscribeToTopic {
                         }
                         Log.d("Notification subscription", msg);
                         Log.d("Topic",topic);
-//                        Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

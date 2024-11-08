@@ -101,11 +101,7 @@ public class FacilityFragment extends Fragment {
         eventsAdapter = new EventsArrayAdapter(requireContext(), events);
         eventListView.setAdapter(eventsAdapter);
 
-//        EventModel temp = new EventModel(curUser.getFacilityID(),false,100,new Date(),"No location","Example Title");
         CollectionReference eventsRef = db.collection("events");
-
-//        eventsRef.document("test_event").set(temp);
-
         // https://firebase.google.com/docs/firestore/query-data/listen
         eventsRef
                 .whereEqualTo("facilityID", curUser.getiD())
@@ -123,7 +119,6 @@ public class FacilityFragment extends Fragment {
                             }
                         }
                         eventsAdapter.notifyDataSetChanged();
-//                        Log.d("Firebase Events", "Current cites in CA: " + events.size());
                     }
                 });
 
@@ -167,6 +162,11 @@ public class FacilityFragment extends Fragment {
 
         return rootview;
     }
+
+    /**
+     * Change view
+     * @param fac Facility boolean
+     */
     public void changeView(int fac){
         if (fac == 0) {
             createFacilityFirstPage.setVisibility(View.VISIBLE);

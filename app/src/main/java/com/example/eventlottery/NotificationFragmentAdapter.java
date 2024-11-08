@@ -24,8 +24,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This is the NotificationFragmentAdapter class
+ */
 public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, String>> {
 
+    /**
+     * Constructor for NotificationFragmentAdapter
+     */
 
     private CurrentUser currentUser;
     private FirebaseFirestore db;
@@ -45,10 +51,22 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         this.db = db;
     }
 
+    /**
+     * Get View override
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view
+     *        is non-null and of an appropriate type before using. If it is not possible to convert
+     *        this view to display the correct data, this method can create a new view.
+     *        Heterogeneous lists can specify their number of view types, so that this View is
+     *        always of the right type (see {@link #getViewTypeCount()} and
+     *        {@link #getItemViewType(int)}).
+     * @param parent The parent that this view will eventually be attached to
+     * @return the view
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        return super.getView(position, convertView, parent);
         View view;
         if (convertView == null) {
             view = View.inflate(getContext(), R.layout.notification_adapter_view, null);
@@ -64,8 +82,6 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         Button cancel_btn = (Button) view.findViewById(R.id.cancel_id);
         Button signup_btn = (Button) view.findViewById(R.id.signup_id);
         HashMap<String, String> notification = getItem(position);
-        //        currentUser = getItem(position);
-//        ArrayList<HashMap<String, String>> notification = currentUser.getNotifications();
         title.setText(notification.get("title"));
         message.setText(notification.get("body"));
         eventID.setText(notification.get("eventID"));
@@ -80,9 +96,6 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 
             }
         });
-//
-//        Task<DocumentSnapshot> t = db.collection()
-//
         signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,16 +105,6 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                 // move to enrolled
             }
         });
-
-
-
-
-
-        // if flag "chose" then button visible
-        // button will add user to enrolled, remove from invited, remove button and update data base
-        // if button cancel then remove both buttons, move user to canceled list and remove from invited
-
-
         return view;
     }
 }
