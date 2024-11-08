@@ -130,24 +130,8 @@ public class ChosenListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: implement notifications
-
-                for (UsersList entrant : chosenEntrantsModel) {
-                    try {
-                        event.queueInvitedList(entrant);
-                        event.unqueueWaitingList(entrant);
-                        event.unqueueChosenList(entrant);
-                    } catch (Exception e) {
-                        Toast.makeText(ChosenListActivity.this, "Entrant " + entrant.getName() + " is already in the invited list or is not in chosen list anymore.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                // Call notification
-                Intent intent1 = new Intent(ChosenListActivity.this, SendNotificationActivity.class);
-                intent1.putExtra("event", event);
-                intent1.putExtra("Bool",0);
-                intent1.putExtra("flag", "Chosen");
-                startActivity(intent1);
-                // update database with invited entrants and emptied out chosen list
-                eventRef.set(event);
+                Boolean sent = false;
+                new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
             }
         });
 
@@ -240,4 +224,18 @@ public class ChosenListActivity extends AppCompatActivity {
         remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrantsModel.size();
     }
 
+    public void sendNotification(){
+
+        for (UsersList entrant : chosenEntrantsModel) {
+            try {
+                event.queueInvitedList(entrant);
+                event.unqueueWaitingList(entrant);
+                event.unqueueChosenList(entrant);
+            } catch (Exception e) {
+                Toast.makeText(ChosenListActivity.this, "Entrant " + entrant.getName() + " is already in the invited list or is not in chosen list anymore.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        eventRef.set(event);
+        Toast.makeText(chosenListActivity, "Sent Notification", Toast.LENGTH_SHORT).show();
+    }
 }
