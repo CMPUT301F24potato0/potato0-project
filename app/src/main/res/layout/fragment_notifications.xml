@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".NotificationsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        >
+    </ListView>
 
 </FrameLayout>
