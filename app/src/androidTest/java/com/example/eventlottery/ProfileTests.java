@@ -34,8 +34,9 @@ public class ProfileTests {
             .grant(Manifest.permission.CAMERA);
     @Test
     public void NavigateToProfile() {
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.profile), click());
-        onView(withId(R.id.fProfile)).check(matches(isDisplayed()));
+        waiter.check(withId(R.id.fProfile), matches(isDisplayed()));
     }
 
     @Test

@@ -34,6 +34,7 @@ public class FacilityTests {
             .grant(Manifest.permission.CAMERA);
     @Test
     public void NavigateToFacility() {
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());
         onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
     }

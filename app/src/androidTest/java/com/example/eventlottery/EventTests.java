@@ -35,6 +35,7 @@ public class EventTests {
     private final Waiter waiter = new Waiter(10, 1);
 
     private void CreateFacility() {
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());
         onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
         onView(withId(R.id.create_facility_button)).perform(click());
