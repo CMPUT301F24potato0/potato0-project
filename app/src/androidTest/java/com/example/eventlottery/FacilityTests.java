@@ -38,7 +38,7 @@ public class FacilityTests {
         onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
     }
 
-    public void CreateFacility() {
+    private void CreateFacility() {
         NavigateToFacility();
         onView(withId(R.id.create_facility_button)).perform(click());
         waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test facility"));
@@ -61,5 +61,18 @@ public class FacilityTests {
         onView(withId(R.id.facility_details_edittext_capacity)).check(matches(withText("99")));
         waiter.perform(withId(R.id.facility_details_delete_button), click());
         waiter.check(withId(R.id.create_facility_button), matches(isDisplayed()));
+    }
+
+    @Test
+    public void InvalidFacilityCreation() {
+        NavigateToFacility();
+        onView(withId(R.id.create_facility_button)).perform(click());
+        waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test facility"));
+        onView(withId(R.id.facility_details_edittext_location)).perform(replaceText(""));
+        onView(withId(R.id.facility_details_edittext_phone_number)).perform(replaceText("abcdefgh"));
+        onView(withId(R.id.facility_details_edittext_email)).perform(replaceText("1343512345"));
+        onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
+        onView(withId(R.id.facility_details_confirm_button)).perform(click());
+        waiter.check(withId(R.id.facility_details_cancel_button), matches(isDisplayed()));
     }
 }

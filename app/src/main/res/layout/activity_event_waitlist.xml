@@ -278,6 +278,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/event_waitlist"
         app:layout_constraintTop_toTopOf="parent">
         <ImageView
             android:layout_width="match_parent"
