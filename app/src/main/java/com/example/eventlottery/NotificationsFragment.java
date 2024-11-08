@@ -53,16 +53,12 @@ public class NotificationsFragment extends Fragment {
 
         notification_listview = view.findViewById(R.id.notification_listview);
         NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
-                getContext(),
+                requireContext(),
                 100,
                 curUser.getNotifications(),
                 curUser,
                 db
         );
-//        NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
-//                getContext(),
-//                100
-//        );
         notification_listview.setAdapter(adapter);
 
 

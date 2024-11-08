@@ -29,7 +29,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 
     private CurrentUser currentUser;
     private FirebaseFirestore db;
-
+    private ArrayList<HashMap<String, String>> notifications;
     public NotificationFragmentAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
@@ -39,7 +39,8 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
              int resource, ArrayList<HashMap<String, String>> notifications,
              CurrentUser currentUser,
              FirebaseFirestore db) {
-        super(context, resource);
+        super(context, resource, notifications);
+        this.notifications = notifications;
         this.currentUser = currentUser;
         this.db = db;
     }
