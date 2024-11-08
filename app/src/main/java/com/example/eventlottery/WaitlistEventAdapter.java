@@ -74,7 +74,9 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
             public void onClick(View v) {
                 try {
                     event.unqueueWaitingList(user);
+
                     event.queueCancelledList(user);
+
                     db.collection("events").document(event.getEventID()).set(event);
                 }
                 catch (Exception e) {

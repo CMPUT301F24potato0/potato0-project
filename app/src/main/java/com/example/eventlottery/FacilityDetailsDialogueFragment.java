@@ -75,6 +75,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
 
         Button confirmButton = rootView.findViewById(R.id.facility_details_confirm_button);
         Button cancelButton = rootView.findViewById(R.id.facility_details_cancel_button);
+        Button deleteButton = rootView.findViewById(R.id.facility_details_delete_button);
 
         // initial default values if creating facility for the first time are organizer's information
         if (user.getFacilityID().equals("")) {
@@ -83,12 +84,14 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         }
         // an existing facility is passed to edit/update with new information
         // get details from the facility to fill out form as initial default values
+        // also show delete button to remove facility if wanted
         else {
             facilityNameEditText.setText(facility.getName());
             facilityLocationEditText.setText(facility.getLocation());
             facilityPhoneEditText.setText(facility.getPhone());
             facilityEmailEditText.setText(facility.getEmail());
             facilityCapacityEditText.setText(facility.getCapacity().toString());
+            deleteButton.setVisibility(View.VISIBLE);
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +127,18 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                 else {
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.collection("facilities").document(user.getiD()).delete();
+                facilityFragment.changeView(0);
+                user.setFacilityID("");
+                db.collection("users").document(user.getiD()).set(user);
+                // after updating or creating a facility, update the view
+                facilityFragment.updateViews();
+                dismiss();
             }
         });
 
