@@ -11,10 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -23,7 +19,8 @@ import java.util.ArrayList;
  * This class is the WaitlistEventAdapter
  */
 public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
-    private ArrayList<UsersList> list;
+    private ArrayList<UsersList> waitList;
+    private ArrayList<UsersList> cancelList;
     private EventModel event;
     private FirebaseFirestore db;
 
@@ -32,9 +29,6 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * @param context The context
      * @param resource The resource
      */
-
-    private CurrentUser temp;
-
     public WaitlistEventAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
@@ -45,9 +39,10 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * @param resource The resource
      * @param list The list
      */
-    public WaitlistEventAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, EventModel event, FirebaseFirestore db) {
-        super(context, resource, list);
-        this.list = list;
+    public WaitlistEventAdapter(@NonNull Context context, int resource, EventModel event, FirebaseFirestore db) {
+        super(context, resource, event.getWaitingList());
+        this.waitList = event.getWaitingList();
+        this.cancelList = event.getCancelledList();
         this.event = event;
         this.db = db;
     }
@@ -79,28 +74,14 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
             public void onClick(View v) {
                 try {
                     event.unqueueWaitingList(user);
-                } catch(Exception e) {}; // temporary workaround
-                removeFromList(user, list);
 
-                Task<DocumentSnapshot> t = db.collection("users")
-                        .document(user.getiD())
-                        .get();
-                t.addOnSuccessListener
-                        (new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    temp = documentSnapshot.toObject(CurrentUser.class);
-                                }
-                            }
-                        });
-                t.onSuccessTask(t1 -> {
+                    event.queueCancelledList(user);
+
                     db.collection("events").document(event.getEventID()).set(event);
-                    temp.removeTopics(event.getEventID() + "_" + temp.getiD());
-                    db.collection("users").document(temp.getiD()).set(temp);
-                    return null;
-                });
-//                return null;
+                }
+                catch (Exception e) {
+                    Log.e("Event Queue/Unqueue Error", "Error: " + e);
+                }
             }
         });
         return view;
@@ -116,7 +97,6 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
             if (list.get(i).getName().equals(user.getName())) {
                 list.remove(i);
                 notifyDataSetChanged();
-
             }
         }
     }

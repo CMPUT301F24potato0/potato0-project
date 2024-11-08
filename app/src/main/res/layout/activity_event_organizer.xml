@@ -6,7 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventOrganizerActivity">
+    tools:context=".EventOrganizerActivity"
+    android:background="@color/black">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_corner_background"
-                android:backgroundTint="@color/gray1"
+                android:backgroundTint="@color/darkgreen"
                 android:layout_marginTop="10dp"
                 android:layout_marginHorizontal="10dp"
                 android:paddingHorizontal="10dp"
@@ -53,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:text="Event Title Here"
                     android:textSize="30sp"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     android:maxLines="1"
                     android:ellipsize="end" />
@@ -68,6 +70,7 @@
                         android:maxWidth="250dp"
                         android:text="October 20, 2024"
                         android:textSize="20sp"
+                        android:textColor="@color/white"
                         android:maxLines="1"
                         android:ellipsize="end"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +85,7 @@
                         android:minHeight="0dp"
                         android:text="Edit Event"
                         android:textColor="@color/black"
-                        android:backgroundTint="@color/gray2"
+                        android:backgroundTint="@color/gold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +94,7 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:backgroundTint="@color/white"
                     android:background="@drawable/rounded_corner_background"
                     android:padding="10dp">
 
@@ -102,10 +106,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/black"
                             android:text="Event Description:\n" />
 
                         <TextView
                             android:id="@+id/event_organizer_event_description"
+                            android:textColor="@color/black"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="@string/event_sample_description" />
@@ -131,6 +137,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Organizer:"
+                            android:textColor="@color/white"
                             android:textSize="20sp" />
 
 <!--                        <LinearLayout-->
@@ -164,6 +171,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:text="Geolocation Required: "
                                 android:textSize="20sp" />
 
@@ -172,7 +180,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Yes"
-                                android:textColor="@color/gray4"
+                                android:textColor="@color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -184,6 +192,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:text="Event Capacity: "
                                 android:textSize="20sp" />
 
@@ -192,7 +201,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="100"
-                                android:textColor="@color/gray4"
+                                android:textColor="@color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -205,14 +214,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Waiting List Limit: "
-                                android:textSize="20sp" />
+                                android:textSize="20sp"
+                                android:textColor="@color/white"/>
 
                             <TextView
                                 android:id="@+id/event_organizer_waiting_list_limit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="No Limit"
-                                android:textColor="@color/gray4"
+                                android:textColor="@color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -229,7 +239,7 @@
                             android:id="@+id/event_organizer_QR_code_view_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/gray2"
+                            android:backgroundTint="@color/gold"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:text="View QR\nCode"
@@ -247,9 +257,9 @@
                         android:id="@+id/event_organizer_invited_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
                         android:minWidth="150dp"
-                        android:backgroundTint="@color/gray2"
-                        android:text="Invited: 0"
+                        android:text="Invited"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -258,9 +268,9 @@
                         android:id="@+id/event_organizer_cancelled_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
                         android:minWidth="150dp"
-                        android:backgroundTint="@color/gray2"
-                        android:text="Cancelled: 0"
+                        android:text="Cancelled"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -269,10 +279,10 @@
                         android:id="@+id/event_organizer_waitlist_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
                         android:minWidth="150dp"
                         android:minHeight="0dp"
-                        android:backgroundTint="@color/gray2"
-                        android:text="Waitlist: 0"
+                        android:text="Waitlist"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -282,9 +292,9 @@
                         android:id="@+id/event_organizer_enrolled_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
                         android:minWidth="150dp"
-                        android:backgroundTint="@color/gray2"
-                        android:text="Enrolled: 0"
+                        android:text="Enrolled"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package com.example.eventlottery;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,30 +11,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
-/**
- * Event Organizer Activity
- */
 public class EventOrganizerActivity extends AppCompatActivity {
     /*
         Getting the views from the layout file
      */
 
     private FirebaseFirestore db;
+
     private Button editEvent;
     private FloatingActionButton back;
     private TextView eventTitle;
@@ -42,6 +39,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private ImageView eventPoster;
     private TextView organizerName;
     private Button QRCode;
+    private TextView geolocationRequired;
+    private TextView eventCapacity;
+    private TextView waitlistLimit;
     private Button invited;
     private Button cancelled;
     private Button waitlist;
@@ -50,16 +50,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
-    private CurrentUser curUser;  // Ensure this is initialized correctly
     private ConstraintLayout progessBar;
+    EventOrganizerActivity currentActivity = this;
 
-    /**
-     * On create Override
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -76,13 +69,16 @@ public class EventOrganizerActivity extends AppCompatActivity {
             Initializing the views
          */
         editEvent = findViewById(R.id.event_organizer_edit_event_button);
-//        back = findViewById(R.id.back_button);
+//        back = findViewById(R.id.event_organizer_fab_button);
         eventTitle = findViewById(R.id.event_organizer_event_title);
         eventDate = findViewById(R.id.event_organizer_event_date);
         eventDescription = findViewById(R.id.event_organizer_event_description);
         eventPoster = findViewById(R.id.event_organizer_event_poster);
 //        organizerName = findViewById(R.id.event_organizer_organizer_and_facility_names);
         QRCode = findViewById(R.id.event_organizer_QR_code_view_button);
+        geolocationRequired = findViewById(R.id.event_organizer_geolocation_required);
+        eventCapacity = findViewById(R.id.event_organizer_event_capacity);
+        waitlistLimit = findViewById(R.id.event_organizer_waiting_list_limit);
         invited = findViewById(R.id.event_organizer_invited_button);
         cancelled = findViewById(R.id.event_organizer_cancelled_button);
         waitlist = findViewById(R.id.event_organizer_waitlist_button);
@@ -94,15 +90,38 @@ public class EventOrganizerActivity extends AppCompatActivity {
         if (extra != null) {
             eventID = extra.getString("event_id");
             event = (EventModel) extra.getSerializable("eventModel");
-            curUser = (CurrentUser) extra.getSerializable("currentUser");
         }
-
-        eventDescription.setText(event.getEventDescription());
-        eventTitle.setText(event.getEventTitle());
-        eventDate.setText(event.getJoinDeadline().toString());
+        updateViews();
+//        eventDescription.setText(event.getEventDescription());
+//        eventTitle.setText(event.getEventTitle());
+//        eventDate.setText(event.getJoinDeadline().toString());
+////        eventPoster.setImageResource(R.drawable.ic_facility_background);
 //        organizerName.setText(event.getOrganizer());
         progessBar.setVisibility(View.GONE);
         eventView.setVisibility(View.VISIBLE);
+//        db.collection("events").document(eventID)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            if (document.exists()) {
+//                                event = document.toObject(EventModel.class);
+//                                eventTitle.setText(event.getEventTitle());
+//                                eventDescription.setText(event.getEventDescription());
+////                                eventPoster.setImageResource(R.drawable.ic_facility_background);
+////                                organizerName.setText(document.getString("organizer"));
+//                                progessBar.setVisibility(View.GONE);
+//                                eventView.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                        else {
+//                            Log.d("Firebase error", "Cached get failed: ", task.getException());
+//                        }
+//                    }
+//                });
+
 
         QRCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +136,10 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 Intent i = new Intent(EventOrganizerActivity.this, EventWaitlistActivity.class);
                 i.putExtra("eventModel", event);
                 startActivity(i);
+//                event_waitlist eventWaitlist = new event_waitlist();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.main,eventWaitlist);
+//                transaction.commit();
             }
         });
 
@@ -126,6 +149,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
                 i.putExtra("eventModel", event);
                 startActivity(i);
+
             }
         });
 
@@ -147,56 +171,27 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
-        editEvent.setOnClickListener(v -> {
-            CreateEventDialogueFragment editDialog = new CreateEventDialogueFragment(
-                    event.getEventID(),
-                    event.getEventTitle(),
-                    event.getCapacity(),
-                    event.getWaitingListLimit(),
-                    event.getJoinDeadline(),
-                    event.getEventStrLocation(),
-                    event.getGeolocationRequired(),
-                    event.getEventDescription(),
-                    curUser,
-                    db
-            );
-            editDialog.show(getSupportFragmentManager(), "edit_event");
+        editEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CreateEventDialogueFragment(event, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
+            }
         });
-
-        // Setup snapshot listeners for counters
-        setupSnapshotListeners();
     }
 
-    /**
-     * Setup snapshot listeners for counters
-     */
-    private void setupSnapshotListeners() {
-        db.collection("events").document(eventID)
-                .addSnapshotListener((documentSnapshot, e) -> {
-                    if (e != null) {
-                        Log.w("EventOrganizerActivity", "Listen failed.", e);
-                        return;
-                    }
-
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        // Update Waitlist Count
-                        ArrayList<UsersList> waitlistArray = (ArrayList<UsersList>) documentSnapshot.get("waitingList");
-                        waitlist.setText("Waitlist: " + (waitlistArray != null ? waitlistArray.size() : 0));
-
-                        // Update Invited Count
-                        ArrayList<UsersList> invitedArray = (ArrayList<UsersList>) documentSnapshot.get("invitedList");
-                        invited.setText("Invited: " + (invitedArray != null ? invitedArray.size() : 0));
-
-                        // Update Cancelled Count
-                        ArrayList<UsersList> cancelledArray = (ArrayList<UsersList>) documentSnapshot.get("cancelledList");
-                        cancelled.setText("Cancelled: " + (cancelledArray != null ? cancelledArray.size() : 0));
-
-                        // Update Enrolled Count
-                        ArrayList<UsersList> enrolledArray = (ArrayList<UsersList>) documentSnapshot.get("enrolledList");
-                        enrolled.setText("Enrolled: " + (enrolledArray != null ? enrolledArray.size() : 0));
-                    } else {
-                        Log.d("EventOrganizerActivity", "Current data: null");
-                    }
-                });
+    public void updateViews() {
+        Log.d("TESTING", "Views updated");
+        eventTitle.setText(event.getEventTitle());
+        eventCapacity.setText(event.getCapacity().toString());
+        waitlistLimit.setText(event.getWaitingListLimit().toString());
+        if (event.getGeolocationRequired().equals(Boolean.TRUE)) {
+            geolocationRequired.setText("Yes");
+        }
+        else {
+            geolocationRequired.setText("No");
+        }
+        eventDate.setText(event.getJoinDeadline().toString());
+        eventDescription.setText(event.getEventDescription());
+//        organizerName.setText(event.getOrganizer());
     }
 }

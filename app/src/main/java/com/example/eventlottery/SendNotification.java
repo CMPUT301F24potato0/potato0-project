@@ -1,15 +1,16 @@
 package com.example.eventlottery;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SendNotification implements Serializable {
 
@@ -20,12 +21,15 @@ public class SendNotification implements Serializable {
     private String eventID;
     private Boolean SignUP;
     private ArrayList<String> title_text;
+    private FirebaseFirestore db;
+    private CurrentUser tempCurUser;
 
 
-    public  SendNotification(Context context, String eventID, Boolean SignUP){
+    public  SendNotification(Context context, String eventID, Boolean SignUP, FirebaseFirestore db){
         this.context = context;
         this.eventID = eventID;
         this.SignUP = SignUP;
+        this.db = db;
     }
 
     public ArrayList<String> getArray(){
@@ -51,55 +55,75 @@ public class SendNotification implements Serializable {
 //
 //    }
 //    public ArrayList<String> popup(){
-    public void popup(){
-        ArrayList<String> title_text = new ArrayList<>();
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.notification_pop_up);
-        Button cancel = (Button) dialog.findViewById(R.id.Cancel_id);
-        Button send = (Button) dialog.findViewById(R.id.send_id);
-        EditText title = (EditText) dialog.findViewById(R.id.title);
-        EditText body = (EditText) dialog.findViewById(R.id.body);
+//    public void popup(){
+//        ArrayList<String> title_text = new ArrayList<>();
+//        Dialog dialog = new Dialog(context);
+//        dialog.setContentView(R.layout.notification_pop_up);
+//        Button cancel = (Button) dialog.findViewById(R.id.Cancel_id);
+//        Button send = (Button) dialog.findViewById(R.id.send_id);
+//        EditText title = (EditText) dialog.findViewById(R.id.title);
+//        EditText body = (EditText) dialog.findViewById(R.id.body);
+//
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        send.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                setTitlesetBody(title.getText().toString(),body.getText().toString());
+////                NotificationCreate();
+//                title_text.add(title.getText().toString());
+//                title_text.add(body.getText().toString());
+//
+//                Toast.makeText(context ,"Sent",Toast.LENGTH_LONG).show();
+//
+//                dialog.dismiss();
+//
+//            }
+//        });
+//
+//        dialog.show();
+//
+//
+//    }
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+
+
+    public void NotificationCreate (String title, String body, String id, String flag){
+
+        Task<DocumentSnapshot> docRef = db.collection("users").document(id).get();
+        docRef.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                    HashMap<String,String> notification = new HashMap<String,String>();
+                    notification.put("title",title);
+                    notification.put("body",body);
+                    notification.put("eventID",eventID);
+                    notification.put("flag",flag);
+                    tempCurUser.addNotifications(notification);
+                    db.collection("users").document(id).set(tempCurUser);
+                }
             }
         });
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                setTitlesetBody(title.getText().toString(),body.getText().toString());
-//                NotificationCreate();
-                title_text.add(title.getText().toString());
-                title_text.add(body.getText().toString());
+        Tasks.whenAllComplete(docRef);
 
-                Toast.makeText(context ,"Sent",Toast.LENGTH_LONG).show();
-
-                dialog.dismiss();
-
-            }
-        });
-
-        dialog.show();
-
-
-    }
-
-
-
-    public void NotificationCreate (String title, String body, String topic){
-
-        FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
-                title,
-                body,
-                context,
-                topic,
-                eventID,
-                SignUP
-        );
-        fcmNotificationSender.SendNotifications();
+//
+//        FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
+//                title,
+//                body,
+//                context,
+//                topic,
+//                eventID,
+//                SignUP
+//        );
+//        fcmNotificationSender.SendNotifications();
 
     }
 }

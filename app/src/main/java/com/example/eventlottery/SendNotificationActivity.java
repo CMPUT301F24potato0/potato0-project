@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -32,7 +34,8 @@ public class SendNotificationActivity extends AppCompatActivity  {
     private SendNotification sendNotification;
     private boolean click;
     private int temp;
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String flag;
 
 
     @Override
@@ -49,8 +52,20 @@ public class SendNotificationActivity extends AppCompatActivity  {
         Bundle extra = getIntent().getExtras();
         if(extra != null){
             event = (EventModel) extra.getSerializable("event");
+            flag = extra.getString("flag");
             if(event != null){
-                usersLists = event.getWaitingList();
+                switch(flag) {
+                    case "Waitlist":    usersLists = event.getWaitingList();
+                                        break;
+                    case "Chosen":      usersLists = event.getChosenList();
+                                        break;
+                    case "Cancelled":   usersLists = event.getCancelledList();
+                                        break;
+                    case "Enrolled":    usersLists = event.getEnrolledList();
+                                        break;
+                    case "Invited":     usersLists = event.getInvitedList();
+                                        break;
+                }
                 eventId = event.getEventID();
             }
             temp = (int) extra.getInt("bool");
@@ -63,7 +78,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
 
         }
 
-        sendNotification = new SendNotification(getApplicationContext(),eventId,click);
+        sendNotification = new SendNotification(getApplicationContext(),eventId,click, db);
         send = findViewById(R.id.send_id);
         title = findViewById(R.id.title_id);
         message = findViewById(R.id.message_id);
@@ -74,6 +89,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
                 title_text = title.getText().toString();
                 body_text = message.getText().toString();
                 send();
+                db.collection("events").document(event.getEventID()).set(event);
                 finish();
             }
         });
@@ -81,12 +97,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
 
     public void send(){
         for(int i = 0; i < usersLists.size(); i++){
-            String topic = eventId + "_" + usersLists.get(i).getiD();
-
-            sendNotification.NotificationCreate(title_text, body_text, topic);
+            sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag);
         }
-
     }
-
-
 }

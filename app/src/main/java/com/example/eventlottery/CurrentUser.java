@@ -2,6 +2,7 @@ package com.example.eventlottery;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This Class stores the current user's information
@@ -17,6 +18,7 @@ public class CurrentUser implements Serializable {
     private String userPhoto;
     private boolean isMuted = false;
     private ArrayList<String> topics;
+    private ArrayList<HashMap<String, String>> notifications;
 
     /**
      * Constructor that updates the local variables
@@ -27,7 +29,11 @@ public class CurrentUser implements Serializable {
      * @param phone Phone number
      * @param iD Android ID
      */
-    public CurrentUser(String fName, String lName, String email, String phone, boolean isAdmin, String facilityID, String iD, boolean isMuted, ArrayList<String> topics) {
+    public CurrentUser(String fName, String lName,
+                       String email, String phone,
+                       boolean isAdmin, String facilityID,
+                       String iD, boolean isMuted,
+                       ArrayList<String> topics) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
@@ -37,6 +43,23 @@ public class CurrentUser implements Serializable {
         this.iD = iD;
         this.isMuted = isMuted;
         this.topics = topics;
+    }
+
+    public CurrentUser(String fName, String lName,
+                       String email, String phone,
+                       boolean isAdmin, String facilityID,
+                       String iD, boolean isMuted,
+                       ArrayList<String> topics, ArrayList<HashMap<String, String>> notifications) {
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.isAdmin = isAdmin;
+        this.facilityID = facilityID;
+        this.phone = phone;
+        this.iD = iD;
+        this.isMuted = isMuted;
+        this.topics = topics;
+        this.notifications = notifications;
     }
 
     public CurrentUser() {}
@@ -207,6 +230,11 @@ public class CurrentUser implements Serializable {
      * @param topic topic
      */
     public void addTopics(String topic) {
+        for (String t : topics) {
+            if (t.equals(topic)) {
+                return;
+            }
+        }
         this.topics.add(topic);
     }
 
@@ -215,6 +243,47 @@ public class CurrentUser implements Serializable {
      * @param topic topic
      */
     public void removeTopics(String topic){
-        this.topics.remove(topic);
+        for (String t : topics) {
+            if (t.equals(topic)) {
+                this.topics.remove(topic);
+            }
+        }
+    }
+
+    /**
+     * Getting notifications
+     * @return notifications
+     */
+    public ArrayList<HashMap<String, String>> getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * Setting notifications
+     * @param notifications notifications
+     */
+    public void setNotifications(ArrayList<HashMap<String, String>> notifications) {
+        this.notifications = notifications;
+    }
+
+    /**
+     * Adding notifications
+     * @param notification hash map that contains the notification
+     */
+
+    public void addNotifications(HashMap<String, String> notification) {
+        this.notifications.add(notification);
+    }
+
+    /**
+     * Removing notifications
+     * @param notification notification to be removed
+     */
+    public void removeNotifications(HashMap<String, String> notification){
+        for (HashMap<String, String> n : notifications) {
+            if (n.equals(notification)) {
+                this.notifications.remove(notification);
+            }
+        }
     }
 }

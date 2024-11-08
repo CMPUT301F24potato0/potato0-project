@@ -15,10 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class NotificationsFragment extends Fragment {
 
-
+    private CurrentUser curUser;
 
     public NotificationsFragment(){
         // require a empty public constructor
+    }
+
+    public NotificationsFragment(CurrentUser cu) {
+        this.curUser = cu;
     }
 
     /**
@@ -39,12 +43,6 @@ public class NotificationsFragment extends Fragment {
 
 
 
-
-
-
         return inflater.inflate(R.layout.fragment_notifications, container, false);
-
-
-
     }
 }

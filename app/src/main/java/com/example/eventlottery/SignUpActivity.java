@@ -2,7 +2,9 @@ package com.example.eventlottery;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     ConstraintLayout mainView;
     ProgressBar progressBar;
     private EventModel event;
+    private Button confirm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        confirm  = (Button) findViewById(R.id.confirm_signup);
         mainView = findViewById(R.id.accept_invite_buttons);
         progressBar = findViewById(R.id.signup_progressBar);
         db = FirebaseFirestore.getInstance();
@@ -55,9 +59,19 @@ public class SignUpActivity extends AppCompatActivity {
         task.onSuccessTask(task1 -> {
             mainView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
+            signup();
             return null;
         });
 
+
+    }
+    public void signup(){
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Signed up", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }
