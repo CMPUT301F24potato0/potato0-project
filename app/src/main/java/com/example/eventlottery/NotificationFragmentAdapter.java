@@ -42,6 +42,14 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         super(context, resource);
     }
 
+    /**
+     * Constructor for NotificationFragmentAdapter
+     * @param context The context
+     * @param resource The resource
+     * @param notifications ArrayList of notifications
+     * @param currentUser The current user
+     * @param db The database
+     */
     public NotificationFragmentAdapter
             (@NonNull Context context,
              int resource, ArrayList<HashMap<String, String>> notifications,

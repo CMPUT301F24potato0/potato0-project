@@ -50,6 +50,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private EventModel event;
     private EventOrganizerActivity eventActivity;
 
+    /** Empty constructor
+     */
     public CreateEventDialogueFragment() {
         // initial values
         eventTitle = "";
@@ -61,6 +63,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
+    /**
+     * Constructor
+     * @param organizer The organizer
+     * @param db The database
+     */
     // for creating a new event (organizer information required)
     public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
         this();
@@ -69,6 +76,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
         this.db = db;
     }
 
+    /**
+     * Constructor
+     * @param event The event
+     * @param db The database
+     * @param eventActivity A reference to the event activity
+     */
     // for editing an existing event (event information required, organizer information not required)
     public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
         this.eventTitle = event.getEventTitle();

@@ -32,10 +32,19 @@ public class NotificationsFragment extends Fragment {
     private ListView notification_listview;
     private ConstraintLayout notification_off_textView;
 
+    /**
+     * Empty constructor
+     */
     public NotificationsFragment(){
         // require a empty public constructor
     }
 
+    /**
+     * Constructor for NotificationsFragment
+     * @param db The database
+     * @param curUser The current user
+     * @param notifications The ArrayList of notifications
+     */
     public NotificationsFragment(FirebaseFirestore db, CurrentUser curUser, ArrayList<HashMap<String, String>> notifications) {
         this.db = db;
         this.curUser = curUser;

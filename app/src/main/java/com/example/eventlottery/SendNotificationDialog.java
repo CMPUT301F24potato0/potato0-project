@@ -38,6 +38,13 @@ public class SendNotificationDialog extends DialogFragment {
 //    private EventWaitlistActivity eventWaitlistActivity = null;
     private EnrolledListActivity enrolledListActivity = null;
 
+    /**
+     * Constructor for SendNotificationDialog
+     * @param event The event
+     * @param flag The flag indicating which list the organizer is sending a notification from
+     * @param sent Boolean flag for sending notifications
+     * @param db The database
+     */
     public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db){
         this.event = event;
         this.flag = flag;
@@ -58,11 +65,22 @@ public class SendNotificationDialog extends DialogFragment {
         this.db = db;
     }
 
+    /**
+     * Constructor for SendNotificationDialog
+     * @param event The event
+     * @param flag The flag indicating which list the organizer is sending a notification from
+     * @param sent Boolean flag for sending notifications
+     * @param db The database
+     * @param chosenListActivity A reference to chosenListActivity
+     */
     public SendNotificationDialog(EventModel event, String flag, Boolean sent, FirebaseFirestore db, ChosenListActivity chosenListActivity){
         this(event, flag, sent, db);
         this.chosenListActivity = chosenListActivity;
     }
 
+    /**
+     * Empty constructor
+     */
     public SendNotificationDialog(){
         super();
     }

@@ -45,6 +45,19 @@ public class CurrentUser implements Serializable {
         this.topics = topics;
     }
 
+    /**
+     * Constructor for CurrentUser
+     * @param fName First name
+     * @param lName Last name
+     * @param email Email
+     * @param phone Phone number
+     * @param isAdmin Boolean flag if the user is an admin
+     * @param facilityID The user's facility ID
+     * @param iD The user's unique device ID
+     * @param isMuted Boolean flag for muted notifications
+     * @param topics Topics the user is subscribed to
+     * @param notifications Notifications sent to the user
+     */
     public CurrentUser(String fName, String lName,
                        String email, String phone,
                        boolean isAdmin, String facilityID,
@@ -62,6 +75,9 @@ public class CurrentUser implements Serializable {
         this.notifications = notifications;
     }
 
+    /**
+     * Empty constructor
+     */
     public CurrentUser() {}
 
     /**

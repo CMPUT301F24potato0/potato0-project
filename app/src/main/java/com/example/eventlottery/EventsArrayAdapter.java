@@ -18,6 +18,12 @@ Most of the code from lab 3.
  * Events Array Adapter
  */
 public class EventsArrayAdapter extends ArrayAdapter<EventModel> {
+
+    /**
+     * Constructor for EventsArrayAdapter
+     * @param context The context
+     * @param events An ArrayList of EventModel objects
+     */
     public EventsArrayAdapter(Context context, ArrayList<EventModel> events) {
         super(context, 0, events);
     }

@@ -28,6 +28,13 @@ public class SendNotification implements Serializable {
     private CurrentUser tempCurUser;
 
 
+    /**
+     * Constructor for SendNotification
+     * @param context The context
+     * @param eventID The event's ID
+     * @param SignUP Boolean flag for sign up
+     * @param db The database
+     */
     public  SendNotification(Context context, String eventID, Boolean SignUP, FirebaseFirestore db){
         this.context = context;
         this.eventID = eventID;

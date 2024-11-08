@@ -39,6 +39,15 @@ public class FcmNotificationSender {
 
     private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery/messages:send";
 
+    /**
+     * Constructor for FcmNotificationSender
+     * @param title The title of the notification
+     * @param body The message body of the notification
+     * @param context The context
+     * @param topic The topic
+     * @param eventID The event's ID
+     * @param SignUp Boolean flag for sign up
+     */
     public FcmNotificationSender (String title, String body, Context context, String topic, String eventID, Boolean SignUp){
 
         this.title = title;
@@ -51,6 +60,9 @@ public class FcmNotificationSender {
         Log.d("Body",body);
     }
 
+    /**
+     * Function for sending notifications
+     */
     public void SendNotifications(){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject mainObj = new JSONObject();
