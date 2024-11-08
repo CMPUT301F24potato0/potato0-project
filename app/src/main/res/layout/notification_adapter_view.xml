@@ -50,6 +50,7 @@
             android:backgroundTint="@color/red1"
             android:textColor="@color/black"
             android:layout_marginStart="10dp"
+            android:visibility="visible"
             android:text="Cancel"/>
         <Button
             android:id="@+id/signup_id"
@@ -63,6 +64,7 @@
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
+            android:visibility="visible"
             android:text="Sign up"/>
 
 
