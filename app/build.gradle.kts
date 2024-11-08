@@ -54,7 +54,7 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
-    implementation(files("/home/chirayu/Android/Sdk/platforms/android-34/android.jar"))
+//    implementation(files("/home/chirayu/Android/Sdk/platforms/android-34/android.jar"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
