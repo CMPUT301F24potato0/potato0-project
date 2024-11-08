@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,16 +30,21 @@ public class geo_requirement_dialog extends DialogFragment {
     private EventModel event;
     private FirebaseFirestore db;
     private CurrentUser cuUser;
+    private Button joinBtn;
+    private Button unjoinBtn;
+
     /**
      * Constructor
      * @param user User
      * @param event Event Model
      * @param db Firebase Firestore
      */
-    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db ) {
+    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db, Button joinBtn, Button unjoinBtn ) {
         this.user = user;
         this.event = event;
         this.db = FirebaseFirestore.getInstance();
+        this.joinBtn = joinBtn;
+        this.unjoinBtn = unjoinBtn;
     }
 
     /**
@@ -76,6 +82,8 @@ public class geo_requirement_dialog extends DialogFragment {
                     task.onSuccessTask(t1 -> {
                         cuUser.addTopics(event.getEventID() + "_" + user.getiD());
                         db.collection("users").document(user.getiD()).set(cuUser);
+                        joinBtn.setVisibility(View.GONE);
+                        unjoinBtn.setVisibility(View.VISIBLE);
                         return null;
                     });
                 })
