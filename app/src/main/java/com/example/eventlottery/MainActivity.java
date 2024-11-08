@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         task.onSuccessTask(task1 -> {
             mainActivityProgressBar.setVisibility(View.GONE);
             mainActivityView.setVisibility(View.VISIBLE);
-            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            bottomNavigationView.setSelectedItemId(R.id.notifications);
             return null;
         });
     }
