@@ -52,8 +52,20 @@ public class SendNotificationActivity extends AppCompatActivity  {
         Bundle extra = getIntent().getExtras();
         if(extra != null){
             event = (EventModel) extra.getSerializable("event");
+            flag = extra.getString("flag");
             if(event != null){
-                usersLists = event.getWaitingList();
+                switch(flag) {
+                    case "Waitlist":    usersLists = event.getWaitingList();
+                                        break;
+                    case "Chosen":      usersLists = event.getChosenList();
+                                        break;
+                    case "Cancelled":   usersLists = event.getCancelledList();
+                                        break;
+                    case "Enrolled":    usersLists = event.getEnrolledList();
+                                        break;
+                    case "Invited":     usersLists = event.getInvitedList();
+                                        break;
+                }
                 eventId = event.getEventID();
             }
             temp = (int) extra.getInt("bool");
@@ -63,7 +75,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
             else{
                 click = true;
             }
-            flag = extra.getString("flag");
+
         }
 
         sendNotification = new SendNotification(getApplicationContext(),eventId,click, db);
@@ -77,6 +89,7 @@ public class SendNotificationActivity extends AppCompatActivity  {
                 title_text = title.getText().toString();
                 body_text = message.getText().toString();
                 send();
+                db.collection("events").document(event.getEventID()).set(event);
                 finish();
             }
         });

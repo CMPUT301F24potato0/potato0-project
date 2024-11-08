@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -118,19 +119,29 @@ public class ChosenListActivity extends AppCompatActivity {
             }
         });
 
+        //ActivityResultContracts<Intent> startActivityIntent =
+
         // Set up invite button
         send_invites_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: implement notifications
+
                 for (UsersList entrant : chosenEntrantsModel) {
                     try {
                         event.queueInvitedList(entrant);
+                        event.unqueueWaitingList(entrant);
                         event.unqueueChosenList(entrant);
                     } catch (Exception e) {
                         Toast.makeText(ChosenListActivity.this, "Entrant " + entrant.getName() + " is already in the invited list or is not in chosen list anymore.", Toast.LENGTH_SHORT).show();
                     }
                 }
+                // Call notification
+                Intent intent1 = new Intent(ChosenListActivity.this, SendNotificationActivity.class);
+                intent1.putExtra("event", event);
+                intent1.putExtra("Bool",0);
+                intent1.putExtra("flag", "Chosen");
+                startActivity(intent1);
                 // update database with invited entrants and emptied out chosen list
                 eventRef.set(event);
             }

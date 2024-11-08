@@ -98,7 +98,7 @@ public class EventWaitlistActivity extends AppCompatActivity {
         adapter = new WaitlistEventAdapter(this, 100, event, db);
         waitlist.setAdapter(adapter);
 
-        // When user unjoins the event, it is now being shown in this
+        // Updates all the event's lists
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
