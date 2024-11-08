@@ -6,7 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventWaitlistActivity">
+    tools:context=".EventWaitlistActivity"
+    android:background="@color/black">
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
@@ -277,260 +278,302 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@color/gray2"/>
+            android:src="@color/gray2" />
 
-<!--        <Button-->
-<!--            android:id="@+id/back_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Back"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:backgroundTint="@color/gray4" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/back_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Back"-->
+        <!--            android:layout_margin="10dp"-->
+        <!--            android:backgroundTint="@color/gray4" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/gray1"
-            android:background="@drawable/rounded_corner_background"
-            android:layout_marginTop="20dp"
             android:layout_marginHorizontal="10dp"
-            android:paddingHorizontal="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:orientation="vertical">
+            android:background="@drawable/rounded_corner_background"
+            android:backgroundTint="@color/darkgreen"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Geolocation Required:"
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="Y/N"
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Capacity:"
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Waiting List Limit: "
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textSize="20dp"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:textColor="@color/gold"
+                    android:textSize="20dp"></TextView>
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:src="@color/gray2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@color/gray2">
-                </ImageView>
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></ImageView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/gray4"
-                android:background="@drawable/rounded_corner_background"
                 android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="@color/brown"
                 android:orientation="vertical">
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
                         android:text="Waitlisted entrants:"
-                        android:textSize="15dp"
-                        android:textColor="@color/black">
-                    </TextView>
+                        android:textColor="@color/gold"
+                        android:textSize="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"></TextView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:text="##"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:textSize="15dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <LinearLayout
-                        android:layout_width="150dp"
-                        android:layout_height="22dp"
-                        android:backgroundTint="@color/gray1"
-                        android:background="@drawable/rounded_corner_background"
+                        android:text="##"
+                        android:textColor="@color/gold"
+                        android:textSize="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginStart="15dp">
+                        android:text="Free Slots: "
+                        android:textColor="@color/gold"
+                        android:textSize="16dp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="##"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/gold"
+                        android:textSize="16dp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/gold"
+                        android:textSize="16dp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="##"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/gold"
+                        android:textSize="16dp">
+
+                    </TextView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    >
+
+                    <Button
+                        android:id="@+id/notify_btn_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="@color/white"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="Notify"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent">
+
+                    </Button>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@drawable/rounded_corner_background"
+                        android:backgroundTint="@color/gold">
+
                         <Button
                             android:id="@+id/draw_sample_button"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Draw Sample"
-                            android:layout_marginStart="2dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:backgroundTint="@color/white"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
-                            android:layout_marginTop="1dp"
-                            android:textSize="8dp"
+                            android:padding="0dp"
                             android:paddingStart="5dp"
                             android:paddingEnd="5dp"
-                            android:padding="1dp"
+                            android:text="Draw Sample"
                             android:textColor="@color/black"
-                            android:backgroundTint="@color/gray4">
+                            android:textSize="16dp">
+
                         </Button>
+
                         <EditText
                             android:id="@+id/draw_sample_edittext"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="1dp"
-                            android:minWidth="0dp"
-                            android:minHeight="0dp"
-                            android:textSize="8dp"
-                            android:textColor="@color/black"
-                            android:inputType="number"
                             android:layout_marginStart="3dp"
-                            android:layout_marginTop="1dp">
+                            android:layout_marginTop="5dp"
+                            android:inputType="number"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:padding="1dp"
+                            android:textColor="@color/black"
+                            android:textSize="20dp">
+
                         </EditText>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="1dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="1dp"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
-                            android:textSize="10dp"
-                            android:textColor="@color/black"
+                            android:padding="1dp"
                             android:text="Invited: "
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="1dp">
+                            android:textColor="@color/black"
+                            android:textSize="16dp">
+
                         </TextView>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="1dp"
+                            android:layout_marginTop="1dp"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
-                            android:textSize="8dp"
-                            android:textColor="@color/black"
+                            android:padding="0dp"
                             android:text="##"
-                            android:layout_marginTop="1dp">
+                            android:textColor="@color/black"
+                            android:textSize="16dp">
+
                         </TextView>
 
                     </LinearLayout>
+
+
+
                 </LinearLayout>
-                <LinearLayout
+
+                <ListView
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/waitList_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-                    <Button
-                        android:id="@+id/notify_btn_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/gray3"
-                        android:textColor="@color/black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:layout_marginStart="10dp"
-                        android:textSize="15dp"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:text="Notify">
-                    </Button>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Free Slots:"
-                        android:layout_marginStart="20dp"
-                        android:textSize="15dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:textColor="@color/black"
-                        android:text="##">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:textColor="@color/black"
-                        android:text="/">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:textColor="@color/black"
-                        android:text="##">
-                    </TextView>
+                    android:layout_height="wrap_content">
 
-                </LinearLayout>
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/waitList_listview">
-
-                    </ListView>
+                </ListView>
             </LinearLayout>
 
         </LinearLayout>

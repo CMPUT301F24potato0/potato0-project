@@ -23,5 +23,8 @@
     <color name="l">#2b4244</color>
     <color name="gold">#fabd02</color>
     <color name="n">#E1CBDC</color>
+    <color name="brown">#6F4E37</color>
+    <color name="niceRed">#9A2A2A</color>
+    <color name="darkRed">#8B0000</color>
 
 </resources>
