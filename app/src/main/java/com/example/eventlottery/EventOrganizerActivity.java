@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -22,16 +23,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
-/**
- * Event Organizer Activity
- * All the poster and images are for part 4
- */
+import java.util.ArrayList;
+
 public class EventOrganizerActivity extends AppCompatActivity {
-    /*
-        Getting the views from the layout file
-     */
 
     private FirebaseFirestore db;
 
@@ -57,13 +56,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private ConstraintLayout progessBar;
     EventOrganizerActivity currentActivity = this;
 
-    /**
-     * On create override
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
@@ -76,16 +68,12 @@ public class EventOrganizerActivity extends AppCompatActivity {
             return insets;
         });
 
-        /*
-            Initializing the views
-         */
+        // Initializing the views
         editEvent = findViewById(R.id.event_organizer_edit_event_button);
-//        back = findViewById(R.id.event_organizer_fab_button);
         eventTitle = findViewById(R.id.event_organizer_event_title);
         eventDate = findViewById(R.id.event_organizer_event_date);
         eventDescription = findViewById(R.id.event_organizer_event_description);
         eventPoster = findViewById(R.id.event_organizer_event_poster);
-//        organizerName = findViewById(R.id.event_organizer_organizer_and_facility_names);
         QRCode = findViewById(R.id.event_organizer_QR_code_view_button);
         geolocationRequired = findViewById(R.id.event_organizer_geolocation_required);
         eventCapacity = findViewById(R.id.event_organizer_event_capacity);
@@ -97,14 +85,18 @@ public class EventOrganizerActivity extends AppCompatActivity {
         eventView = findViewById(R.id.event_view);
         progessBar = findViewById(R.id.progressBar2);
 
+        // Load data from intent if available
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             eventID = extra.getString("event_id");
             event = (EventModel) extra.getSerializable("eventModel");
         }
         updateViews();
-        progessBar.setVisibility(View.GONE);
-        eventView.setVisibility(View.VISIBLE);
+
+        // Add the snapshot listener to update counters
+        setupSnapshotListeners();
+
+        // QR Code button click listener
         QRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +104,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
+        // Waitlist button click listener
         waitlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,16 +114,17 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
+        // Cancelled button click listener
         cancelled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(EventOrganizerActivity.this, CancelledListActivity.class);
                 i.putExtra("eventModel", event);
                 startActivity(i);
-
             }
         });
 
+        // Invited button click listener
         invited.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +134,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
+        // Enrolled button click listener
         enrolled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +144,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             }
         });
 
+        // Edit Event button click listener
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,21 +153,47 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Updates the views
-     */
     public void updateViews() {
         Log.d("TESTING", "Views updated");
         eventTitle.setText(event.getEventTitle());
         eventCapacity.setText(event.getCapacity().toString());
         waitlistLimit.setText(event.getWaitingListLimit().toString());
-        if (event.getGeolocationRequired().equals(Boolean.TRUE)) {
-            geolocationRequired.setText("Yes");
-        }
-        else {
-            geolocationRequired.setText("No");
-        }
+        geolocationRequired.setText(event.getGeolocationRequired() ? "Yes" : "No");
         eventDate.setText(event.getJoinDeadline().toString());
         eventDescription.setText(event.getEventDescription());
+    }
+
+    // Method to set up Firestore snapshot listeners for list counters
+    private void setupSnapshotListeners() {
+        db.collection("events").document(eventID)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("EventOrganizerActivity", "Listen failed.", e);
+                            return;
+                        }
+
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            // Update Waitlist Count
+                            ArrayList<UsersList> waitlistArray = (ArrayList<UsersList>) documentSnapshot.get("waitingList");
+                            waitlist.setText("Waitlist: " + (waitlistArray != null ? waitlistArray.size() : 0));
+
+                            // Update Invited Count
+                            ArrayList<UsersList> invitedArray = (ArrayList<UsersList>) documentSnapshot.get("invitedList");
+                            invited.setText("Invited: " + (invitedArray != null ? invitedArray.size() : 0));
+
+                            // Update Cancelled Count
+                            ArrayList<UsersList> cancelledArray = (ArrayList<UsersList>) documentSnapshot.get("cancelledList");
+                            cancelled.setText("Cancelled: " + (cancelledArray != null ? cancelledArray.size() : 0));
+
+                            // Update Enrolled Count
+                            ArrayList<UsersList> enrolledArray = (ArrayList<UsersList>) documentSnapshot.get("enrolledList");
+                            enrolled.setText("Enrolled: " + (enrolledArray != null ? enrolledArray.size() : 0));
+                        } else {
+                            Log.d("EventOrganizerActivity", "Current data: null");
+                        }
+                    }
+                });
     }
 }
