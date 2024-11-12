@@ -155,13 +155,22 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     public void updateViews() {
         Log.d("TESTING", "Views updated");
+
         eventTitle.setText(event.getEventTitle());
         eventCapacity.setText(event.getCapacity().toString());
-        waitlistLimit.setText(event.getWaitingListLimit().toString());
+
+        // Display "No Limit" if waitingListLimit is -1, otherwise show the actual limit
+        if (event.getWaitingListLimit() == -1) {
+            waitlistLimit.setText("No Limit");
+        } else {
+            waitlistLimit.setText(event.getWaitingListLimit().toString());
+        }
+
         geolocationRequired.setText(event.getGeolocationRequired() ? "Yes" : "No");
         eventDate.setText(event.getJoinDeadline().toString());
         eventDescription.setText(event.getEventDescription());
     }
+
 
     // Method to set up Firestore snapshot listeners for list counters
     private void setupSnapshotListeners() {
