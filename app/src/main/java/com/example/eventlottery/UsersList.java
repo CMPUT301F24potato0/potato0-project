@@ -1,5 +1,7 @@
 package com.example.eventlottery;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.Serializable;
 
 /**
@@ -8,11 +10,15 @@ import java.io.Serializable;
 public class UsersList implements Serializable {
     private String iD;
     private String name;
+    private GeoPoint geoPoint;
 
     /**
      * This is the empty constructor
      */
     public UsersList() {
+        iD = null;
+        name = null;
+        geoPoint = null;
     }
 
     /**
@@ -39,6 +45,7 @@ public class UsersList implements Serializable {
     public UsersList(String iD, String name) {
         this.iD = iD;
         this.name = name;
+        this.geoPoint = null;
     }
 
     /**
@@ -57,4 +64,11 @@ public class UsersList implements Serializable {
         this.iD = iD;
     }
 
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
+    }
+
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
+    }
 }
