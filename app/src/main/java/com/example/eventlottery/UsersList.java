@@ -10,7 +10,8 @@ import java.io.Serializable;
 public class UsersList implements Serializable {
     private String iD;
     private String name;
-    private GeoPoint geoPoint;
+    private Double latitude;
+    private Double longitude;
 
     /**
      * This is the empty constructor
@@ -18,7 +19,8 @@ public class UsersList implements Serializable {
     public UsersList() {
         iD = null;
         name = null;
-        geoPoint = null;
+        latitude = null;
+        longitude = null;
     }
 
     /**
@@ -45,7 +47,8 @@ public class UsersList implements Serializable {
     public UsersList(String iD, String name) {
         this.iD = iD;
         this.name = name;
-        this.geoPoint = null;
+        this.latitude = null;
+        this.longitude = null;
     }
 
     /**
@@ -64,11 +67,36 @@ public class UsersList implements Serializable {
         this.iD = iD;
     }
 
-    public GeoPoint getGeoPoint() {
-        return geoPoint;
+    /**
+     * Returns the latitude
+     * @return The latitude
+     */
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setGeoPoint(GeoPoint geoPoint) {
-        this.geoPoint = geoPoint;
+    /**
+     * Sets the latitude
+     * @param latitude The latitude
+     */
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
+
+    /**
+     * Returns the longitude
+     * @return The longitude
+     */
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Sets the longitude
+     * @param longitude The longitude
+     */
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
 }

@@ -96,8 +96,8 @@ public class geo_requirement_dialog extends DialogFragment {
                                 LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
                                 Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                                GeoPoint geoPoint = new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude());
-                                user.setGeoPoint(geoPoint);
+                                user.setLatitude(lastLocation.getLatitude());
+                                user.setLongitude(lastLocation.getLongitude());
                                 event.queueWaitingList(user);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
