@@ -9,270 +9,6 @@
     tools:context=".EventWaitlistActivity"
     android:background="@color/black">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/event_waitlist_location_image"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="150dp"-->
-<!--            android:src="@color/gray2" />-->
-
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginHorizontal="10dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:background="@drawable/rounded_corner_background"-->
-<!--            android:backgroundTint="@color/gray1"-->
-<!--            android:orientation="vertical"-->
-<!--            android:paddingHorizontal="10dp">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginTop="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Geolocation Required:"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:text="Y/N"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginTop="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Event Capacity:"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:text="##"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginTop="10dp">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Waiting List Limit: "-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:text="##"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20dp"/>-->
-<!--            </LinearLayout>-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="200dp"-->
-<!--                    android:contentDescription="LocationImage"-->
-<!--                    android:src="@color/gray2"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                    app:layout_constraintRight_toRightOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"/>-->
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginTop="15dp"-->
-<!--                android:background="@drawable/rounded_corner_background"-->
-<!--                android:backgroundTint="@color/gray4"-->
-<!--                android:orientation="vertical">-->
-
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="10dp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:text="Waitlisted entrants:"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintRight_toRightOf="parent"/>-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="10dp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:text="##"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintRight_toRightOf="parent"/>-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="22dp"-->
-<!--                        android:layout_marginStart="15dp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:background="@drawable/rounded_corner_background"-->
-<!--                        android:backgroundTint="@color/gray1">-->
-
-<!--                        <Button-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="5dp"-->
-<!--                            android:layout_marginTop="1dp"-->
-<!--                            android:backgroundTint="@color/gray4"-->
-<!--                            android:minWidth="0dp"-->
-<!--                            android:minHeight="0dp"-->
-<!--                            android:padding="1dp"-->
-<!--                            android:text="Draw Sample"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="8dp"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="3dp"-->
-<!--                            android:layout_marginTop="1dp"-->
-<!--                            android:minWidth="0dp"-->
-<!--                            android:minHeight="0dp"-->
-<!--                            android:padding="1dp"-->
-<!--                            android:text="##"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="8dp"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="20dp"-->
-<!--                            android:layout_marginTop="1dp"-->
-<!--                            android:minWidth="0dp"-->
-<!--                            android:minHeight="0dp"-->
-<!--                            android:padding="1dp"-->
-<!--                            android:text="Invited: "-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="10dp"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginTop="1dp"-->
-<!--                            android:minWidth="0dp"-->
-<!--                            android:minHeight="0dp"-->
-<!--                            android:padding="1dp"-->
-<!--                            android:text="##"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="8dp"/>-->
-
-<!--                    </LinearLayout>-->
-<!--                </LinearLayout>-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <Button-->
-<!--                        android:id="@+id/notify_btn_id"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="10dp"-->
-<!--                        android:backgroundTint="@color/gray3"-->
-<!--                        android:minWidth="0dp"-->
-<!--                        android:minHeight="0dp"-->
-<!--                        android:text="Notify Waitlisted Entrants"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintRight_toRightOf="parent"/>-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="20dp"-->
-<!--                        android:text="Free Slots:"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"/>-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="##"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"/>-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="/"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"/>-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="##"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="15dp"/>-->
-
-<!--                </LinearLayout>-->
-
-<!--                <ListView-->
-<!--                    android:id="@+id/event_waitlist_id"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
-
-<!--                </ListView>-->
-<!--            </LinearLayout>-->
-
-<!--        </LinearLayout>-->
-<!--    </LinearLayout>-->
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -287,14 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:src="@color/gray2" />
-
-        <!--        <Button-->
-        <!--            android:id="@+id/back_button"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Back"-->
-        <!--            android:layout_margin="10dp"-->
-        <!--            android:backgroundTint="@color/gray4" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -317,15 +45,16 @@
                     android:layout_height="wrap_content"
                     android:text="Geolocation Required:"
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
 
                 <TextView
+                    android:id="@+id/event_waitlist_geolocation_required"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="Y/N"
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -338,15 +67,16 @@
                     android:layout_height="wrap_content"
                     android:text="Event Capacity:"
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
 
                 <TextView
+                    android:id="@+id/event_waitlist_event_capacity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -359,15 +89,16 @@
                     android:layout_height="wrap_content"
                     android:text="Waiting List Limit: "
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
 
                 <TextView
+                    android:id="@+id/event_waitlist_limit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
                     android:textColor="@color/gold"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -381,9 +112,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></ImageView>
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -392,7 +122,6 @@
                 android:background="@drawable/rounded_corner_background"
                 android:backgroundTint="@color/brown"
                 android:orientation="vertical">
-
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -409,20 +138,17 @@
                         android:minHeight="0dp"
                         android:text="Waitlisted entrants:"
                         android:textColor="@color/gold"
-                        android:textSize="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"></TextView>
+                        android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/waitlisted_entrants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:text="##"
                         android:textColor="@color/gold"
-                        android:textSize="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"></TextView>
+                        android:textSize="16dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -431,39 +157,16 @@
                         android:layout_marginTop="10dp"
                         android:text="Free Slots: "
                         android:textColor="@color/gold"
-                        android:textSize="16dp">
-
-                    </TextView>
+                        android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/free_slots"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="##"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/gold"
-                        android:textSize="16dp">
-
-                    </TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="/"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/gold"
-                        android:textSize="16dp">
-
-                    </TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="##"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/gold"
-                        android:textSize="16dp">
-
-                    </TextView>
+                        android:textSize="16dp" />
 
 
                 </LinearLayout>
@@ -471,8 +174,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/notify_btn_id"
@@ -486,11 +188,8 @@
                         android:minHeight="0dp"
                         android:text="Notify"
                         android:textColor="@color/black"
-                        android:textSize="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent">
+                        android:textSize="16dp" />
 
-                    </Button>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -515,9 +214,7 @@
                             android:paddingEnd="5dp"
                             android:text="Draw Sample"
                             android:textColor="@color/black"
-                            android:textSize="16dp">
-
-                        </Button>
+                            android:textSize="16dp" />
 
                         <EditText
                             android:id="@+id/draw_sample_edittext"
@@ -530,9 +227,7 @@
                             android:minHeight="0dp"
                             android:padding="1dp"
                             android:textColor="@color/black"
-                            android:textSize="20dp">
-
-                        </EditText>
+                            android:textSize="20dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -544,11 +239,10 @@
                             android:padding="1dp"
                             android:text="Invited: "
                             android:textColor="@color/black"
-                            android:textSize="16dp">
-
-                        </TextView>
+                            android:textSize="16dp" />
 
                         <TextView
+                            android:id="@+id/invited_entrants"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
@@ -557,14 +251,8 @@
                             android:padding="0dp"
                             android:text="##"
                             android:textColor="@color/black"
-                            android:textSize="16dp">
-
-                        </TextView>
-
+                            android:textSize="16dp" />
                     </LinearLayout>
-
-
-
                 </LinearLayout>
 
                 <ListView
@@ -572,11 +260,8 @@
                     android:layout_marginTop="10dp"
                     android:id="@+id/waitList_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </ListView>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

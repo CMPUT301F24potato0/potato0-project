@@ -9,12 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,16 +40,17 @@ public class EventWaitlistActivity extends AppCompatActivity {
     private ListView waitlist;
     private EventModel event;
     private WaitlistEventAdapter adapter;
-    private Button remove;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private Button drawSample;
     private EditText drawSampleEditText;
     private int remaining_spots;
-    private String title;
-    private String body;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private SendNotification sendNotification;
+    // UI elements to display updated values
+    private TextView geolocationRequiredTextView;
+    private TextView eventCapacityTextView;
+    private TextView waitlistLimitTextView;
+    private TextView waitlistedEntrantsTextView;
+    private TextView freeSlotsTextView;
 
     /**
      * On create Override
@@ -69,17 +70,27 @@ public class EventWaitlistActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Initialize the event data
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             event = (EventModel) extra.getSerializable("eventModel");
         }
 
+        // Initialize UI elements
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
         drawSample = findViewById(R.id.draw_sample_button);
         drawSampleEditText = findViewById(R.id.draw_sample_edittext);
 
+        // Initialize TextViews for dynamic data
+        geolocationRequiredTextView = findViewById(R.id.event_waitlist_geolocation_required);
+        eventCapacityTextView = findViewById(R.id.event_waitlist_event_capacity);
+        waitlistLimitTextView = findViewById(R.id.event_waitlist_limit);
+        waitlistedEntrantsTextView = findViewById(R.id.waitlisted_entrants);
+        freeSlotsTextView = findViewById(R.id.free_slots);
 
+        // Set initial values
+        updateUI();
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,11 +164,34 @@ public class EventWaitlistActivity extends AppCompatActivity {
                             // Update Invited List
                             event.getInvitedList().clear();
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
+
                             // Notify adapter of changes
                             adapter.notifyDataSetChanged();
+
+                            // Update UI elements with new values
+                            updateUI();
                         }
                     }
                 });
     }
 
+    /**
+     * Updates the dynamic UI elements based on the latest event data
+     */
+    private void updateUI() {
+        geolocationRequiredTextView.setText(event.getGeolocationRequired() ? "Yes" : "No");
+        eventCapacityTextView.setText(String.valueOf(event.getCapacity()));
+        waitlistLimitTextView.setText(event.getWaitingListLimit() == -1 ? "No Limit" : String.valueOf(event.getWaitingListLimit()));
+        waitlistedEntrantsTextView.setText(String.valueOf(event.getWaitingList().size()));
+
+        // Calculate and display free slots based on waitlist limit
+        if (event.getWaitingListLimit() == -1) {
+            // Hide the free slots text if no waitlist limit
+            freeSlotsTextView.setVisibility(View.GONE);
+        } else {
+            int freeSlots = event.getWaitingListLimit() - event.getWaitingList().size();
+            freeSlotsTextView.setText(String.valueOf(freeSlots));
+            freeSlotsTextView.setVisibility(View.VISIBLE);
+        }
+    }
 }
