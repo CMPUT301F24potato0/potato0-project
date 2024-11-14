@@ -56,19 +56,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search: "
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:text="Search:"
+                android:textColor="@color/black" />
 
-            <EditText
-                android:id="@+id/search_bar"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/current_event_page_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corner_background_white"
-                android:padding="8dp"
-                android:textColorHint="@android:color/black"
-                android:hint="Search" />
+                android:layout_marginStart="5dp"
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="@color/white"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
+                android:text="Sample Events Name"
+                android:textColor="@color/black" />
+
         </LinearLayout>
 
 
