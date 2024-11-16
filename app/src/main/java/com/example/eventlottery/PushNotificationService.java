@@ -35,38 +35,100 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.Objects;
 
-/**
- * This class is the push notification service from firebase
- * Not being used right now
- */
-public class PushNotificationService extends FirebaseMessagingService {
+public class PushNotificationService extends FirebaseMessagingService{
 
     // https://medium.com/@Codeible/android-notifications-with-firebase-cloud-messaging-914623716dea
     FirebaseFirestore db;
     /**
      * @param remoteMessage Remote message that has been received.
      */
-    public static final String TAG  = "PushNotificationService";
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            Log.d(TAG, "Inside the onMessageReceived");
+        // TESTING
+
+        String title = remoteMessage.getNotification().getTitle();
+        String text = remoteMessage.getNotification().getBody();
+
+        String SignUP = remoteMessage.getData().get("SignUP");
+        String eventID = "";
+        if(Objects.equals(SignUP, "true")) {
+            eventID = remoteMessage.getData().get("eventID");
         }
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+
+
+        String topic = remoteMessage.getFrom();
+
+//        String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
+
+        String check = "signup";
+        Log.d("Recieved notification", title);
+        Log.d("Recieved notification", text);
+        Log.d("Topic",topic);
+        if(eventID != ""){
+            Log.d("eventId",eventID);
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+
+
+        // TESTING
+
+        final String channel_id = "notification_popup";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            Boolean ismuted = ProfileFragment.getIsmute();
+            Log.e("Ismuted", String.valueOf(ismuted));
+
+            NotificationChannel channel = new NotificationChannel(
+                    channel_id,
+                    "Heads Up Notification", // We can put event name here
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            getSystemService(NotificationManager.class).createNotificationChannel(channel);
+
+            NotificationCompat.Builder notification;
+
+
+            notification = new NotificationCompat.Builder(
+                    this, channel_id)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setAutoCancel(true);
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+
+
+
+            if(!ismuted) {
+                Log.e("Ismuted??",""+ismuted);
+                // TEST THIS MORE
+                // SHOULD BE ABLE TO OPEN NOTIFICATION FRAGMENT
+
+                // CAlls activity when notification pressed
+                Intent notificationIntent = new Intent(this, MainActivity.class);
+//                notificationIntent.putExtra("eventID", eventID);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.notify(1, notification.build());
+
+
+               NotificationManagerCompat.from(this).notify(1, notification.build());
+            }
+
+            super.onMessageReceived(remoteMessage);
+        }
     }
-
 }

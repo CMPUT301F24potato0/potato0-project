@@ -94,5 +94,19 @@ public class SendNotification implements Serializable {
             }
         });
         Tasks.whenAllComplete(docRef);
+
+
+
+        // ****************************************************************************************
+        FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
+                title,
+                body,
+                context,
+                topic,
+                eventID,
+                false
+
+        );
+        fcmNotificationSender.SendNotifications();
     }
 }

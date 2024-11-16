@@ -63,6 +63,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
+    private CurrentUser currentUser;
 
     /**
      * Overriding on back pressed
@@ -146,6 +147,18 @@ public class EventEntrantActivity extends AppCompatActivity {
             }
         });
 
+        // ****************************************************************************************
+        // ****************************************************************************************
+        Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
+        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentUser = documentSnapshot.toObject(CurrentUser.class);
+            }
+        });
+        // ****************************************************************************************
+        // ****************************************************************************************
+
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
         unjoinBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +172,12 @@ public class EventEntrantActivity extends AppCompatActivity {
                 catch (Exception e) {
                     Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
                 }
+                // ****************************************************************************************
+                UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
+                unsubscribeFromTopic.unsubscribe();
+                currentUser.removeTopics(event.getEventID() + "_" + userList.getiD());
+                db.collection("users").document(userList.getiD()).set(currentUser);
+                // ****************************************************************************************
                 unjoinBtn.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.VISIBLE);
             }
@@ -178,6 +197,14 @@ public class EventEntrantActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    // ****************************************************************************************
+                    // Subscribing to topic when joining event to receive notification
+                    SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
+                    subscribeToTopic.subscribe();
+                    currentUser.addTopics(event.getEventID() + "_" + userList.getiD());
+                    // ****************************************************************************************
+                    db.collection("users").document(userList.getiD()).set(currentUser);
+                    // ****************************************************************************************
                     joinBtn.setVisibility(View.GONE);
                     unjoinBtn.setVisibility(View.VISIBLE);
                 }
