@@ -50,11 +50,11 @@ public class PushNotificationService extends FirebaseMessagingService{
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
 
-        String SignUP = remoteMessage.getData().get("SignUP");
-        String eventID = "";
-        if(Objects.equals(SignUP, "true")) {
-            eventID = remoteMessage.getData().get("eventID");
-        }
+//        String SignUP = remoteMessage.getData().get("SignUP");
+//        String eventID = "";
+//        if(Objects.equals(SignUP, "true")) {
+//            eventID = remoteMessage.getData().get("eventID");
+//        }
 
 
 
@@ -62,13 +62,13 @@ public class PushNotificationService extends FirebaseMessagingService{
 
 //        String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
 
-        String check = "signup";
+//        String check = "signup";
         Log.d("Recieved notification", title);
         Log.d("Recieved notification", text);
         Log.d("Topic",topic);
-        if(eventID != ""){
-            Log.d("eventId",eventID);
-        }
+//        if(eventID != ""){
+//            Log.d("eventId",eventID);
+//        }
 
 
 

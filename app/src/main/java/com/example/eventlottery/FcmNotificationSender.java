@@ -76,14 +76,14 @@ public class FcmNotificationSender {
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
-            dataObject.put("SignUP",SignUp.toString());
-            dataObject.put("eventID", eventID);
+//            dataObject.put("SignUP",SignUp.toString());
+//            dataObject.put("eventID", eventID);
 
 
             messageObject.put("topic", topic);
 
             messageObject.put("notification", notificationObject);
-            messageObject.put("data", dataObject);
+//            messageObject.put("data", dataObject);
 
             mainObj.put("message", messageObject);
 
