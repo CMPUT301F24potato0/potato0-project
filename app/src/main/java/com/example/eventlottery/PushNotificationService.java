@@ -114,18 +114,23 @@ public class PushNotificationService extends FirebaseMessagingService{
 
             if(!ismuted) {
                 Log.e("Ismuted??",""+ismuted);
+                // https://www.youtube.com/watch?v=Hj8mjY4znEo&ab_channel=TechnicalSkillz
+
                 // TEST THIS MORE
                 // SHOULD BE ABLE TO OPEN NOTIFICATION FRAGMENT
 
                 // CAlls activity when notification pressed
                 Intent notificationIntent = new Intent(this, MainActivity.class);
+                notificationIntent.putExtra("redirect","NotificationsFragment");
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                notificationIntent.putExtra("eventID", eventID);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                notification.setContentIntent(pendingIntent);
+
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                 notificationManager.notify(1, notification.build());
 
-
-               NotificationManagerCompat.from(this).notify(1, notification.build());
+//                NotificationManagerCompat.from(this).notify(1, notification.build());
             }
 
             super.onMessageReceived(remoteMessage);
