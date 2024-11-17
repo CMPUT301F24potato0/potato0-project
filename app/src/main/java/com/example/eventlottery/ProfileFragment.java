@@ -1,6 +1,7 @@
 package com.example.eventlottery;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ public class ProfileFragment extends Fragment {
 
     FloatingActionButton on_notifications;
     FloatingActionButton off_notifications;
+
+    private Button admin_view;
 
 
     /**
@@ -147,6 +150,15 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getActivity(),"Notifications: On",Toast.LENGTH_SHORT).show();
                 on_notifications.setVisibility(View.VISIBLE);
                 off_notifications.setVisibility(View.GONE);
+            }
+        });
+
+        admin_view = (Button) rootView.findViewById(R.id.admin_button);
+        admin_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AdminMainActivity.class);
+                startActivity(i);
             }
         });
 
