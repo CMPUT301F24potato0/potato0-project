@@ -74,6 +74,35 @@ public class EventEntrantActivity extends AppCompatActivity {
         Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
         startActivity(i);
     }
+
+    /**
+     * Making a toast depending on the user's choice whether to allow the app to send notifications
+     */
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(this, "Notifications on", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Notifications off", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    /**
+     * Checks if the user has allowed the app to send notifications
+     * If not, it asks the user to have notifications turned on
+     */
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
     /**
      * On create of the View
      * @param savedInstanceState If the activity is being re-initialized after
@@ -185,6 +214,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                askNotificationPermission();
                 if (event.getGeolocationRequired()) {
                     // Joining
                     new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
