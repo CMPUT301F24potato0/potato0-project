@@ -1,26 +1,14 @@
 package com.example.eventlottery.Admin;
 
 import android.content.Context;
-import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Intent;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.eventlottery.EventModel;
 import com.example.eventlottery.EventsArrayAdapter;
+import com.example.eventlottery.FacilityModel;
 import com.example.eventlottery.R;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -28,12 +16,25 @@ import java.util.ArrayList;
 
 
 public class AdminEventsFragment extends AdminGenericFragment<EventModel> {
-    public AdminEventsFragment(FirebaseFirestore db) {
-        super(db);
-        typeParameterClass = EventModel.class;
-        layout = R.layout.admin_current_event_list;
-        listViewID = R.id.current_events_page_events_listview;
-        collection = "events";
+    public AdminEventsFragment() {
+        super(
+                EventModel.class,
+                R.layout.admin_current_event_list,
+                R.id.current_events_page_events_listview,
+                "events",
+                true);
+    }
+
+    @Override
+    public void handleClick(EventModel item) {
+        Intent i = new Intent(getActivity(), AdminEventDetailsActivity.class);
+        i.putExtra("item", item);
+        startActivity(i);
+    }
+
+    @Override
+    public boolean match(EventModel item, String search) {
+        return item.getEventTitle().contains(search);
     }
 
     @Override

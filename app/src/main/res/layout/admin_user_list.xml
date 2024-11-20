@@ -56,8 +56,8 @@
                     android:text="Search:"
                     android:textColor="@color/black" />
 
-                <TextView
-                    android:id="@+id/admin_user_list_page_name"
+                <EditText
+                    android:id="@+id/search_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -65,9 +65,7 @@
                     android:backgroundTint="@color/white"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:paddingHorizontal="10dp"
-                    android:text="Sample Events Name"
-                    android:textColor="@color/black" />
+                    android:paddingHorizontal="10dp" />
             </LinearLayout>
 
             <ListView
@@ -75,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10sp"
@@ -83,28 +81,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/admin_user_list_page_details" />
-
-            <TextView
-                android:id="@+id/admin_total_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="44dp"
-                android:text="Total:"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/admin_total_users"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="44dp"
-                android:text="##"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/admin_total_text"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

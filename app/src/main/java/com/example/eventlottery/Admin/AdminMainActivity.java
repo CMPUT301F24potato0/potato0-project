@@ -8,19 +8,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventlottery.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
-    public FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_main);
 
-        db = FirebaseFirestore.getInstance();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -38,28 +35,28 @@ public class AdminMainActivity extends AppCompatActivity implements BottomNaviga
             case R.id.eventsAdmin:
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.adminFragments, new AdminEventsFragment(db))
+                    .replace(R.id.adminFragments, new AdminEventsFragment())
                     .commit();
             return true;
 
             case R.id.facilitiesAdmin:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.adminFragments, new AdminFacilityFragment(db))
+                        .replace(R.id.adminFragments, new AdminFacilitiesFragment())
                         .commit();
                 return true;
 
             case R.id.profilesAdmin:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.adminFragments, new AdminUserFragment(db))
+                        .replace(R.id.adminFragments, new AdminUsersFragment())
                         .commit();
                 return true;
 
             case R.id.imagesAdmin:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.adminFragments, new AdminImagesFragment(db))
+                        .replace(R.id.adminFragments, new AdminImagesFragment())
                         .commit();
                 return true;
 

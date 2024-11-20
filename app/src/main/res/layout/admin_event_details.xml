@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_dark"
-    tools:context=".EventOrganizerActivity">
+    android:background="@android:color/holo_orange_dark">
 
 
     <ScrollView
@@ -89,7 +88,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Event Details:"
+                            android:text="Description:"
                             android:textColor="@color/black" />
 
                         <TextView
@@ -101,84 +100,11 @@
                     </LinearLayout>
                 </ScrollView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="235dp"
-                    android:layout_marginVertical="10dp"
-                    android:background="@color/gray2"
-                    android:backgroundTint="@color/gray2">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constrainedWidth="true"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <!--                        <LinearLayout-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:paddingTop="10dp">-->
-
-                        <!--                            <ImageView-->
-                        <!--                                android:id="@+id/event_organizer_organizer_profile_picture"-->
-                        <!--                                android:layout_width="50dp"-->
-                        <!--                                android:layout_height="50dp"-->
-                        <!--                                android:src="@drawable/ic_facility_background" />-->
-
-                        <!--                            <TextView-->
-                        <!--                                android:id="@+id/event_organizer_organizer_and_facility_names"-->
-                        <!--                                android:layout_width="wrap_content"-->
-                        <!--                                android:layout_height="wrap_content"-->
-                        <!--                                android:text="Organizer Name\nFacility"-->
-                        <!--                                android:textSize="15sp"-->
-                        <!--                                android:paddingLeft="10dp"-->
-                        <!--                                android:layout_gravity="center"-->
-                        <!--                                android:maxLines="3"-->
-                        <!--                                android:ellipsize="end" />-->
-                        <!--                        </LinearLayout>-->
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Waiting List:"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
-
-                            <TextView
-                                android:id="@+id/admin_number_people_waiting_list"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="##"
-                                android:textColor="@color/black"
-                                android:textSize="20sp" />
-                        </LinearLayout>
-
-                        <ListView
-                            android:id="@+id/admin_waiting_listview"
-                            android:layout_width="337dp"
-                            android:layout_height="178dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginEnd="16dp"
-                            android:divider="@android:color/transparent"
-                            android:dividerHeight="10sp" />
-
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <!-- Buttons for Invited, Cancelled, Waitlist, and Enrolled counters -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="103dp">
+                    android:layout_height="103dp"
+                    android:layout_marginTop="10dp">
 
                     <Button
                         android:id="@+id/qr_code_delete_button"

@@ -25,7 +25,7 @@ public class UserArrayAdapter extends ArrayAdapter<CurrentUser> {
     public View getView(int pos, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = View.inflate(getContext(), R.layout.user_listview_content, null);
+            view = View.inflate(getContext(), R.layout.admin_user_listview_content, null);
         } else {
             view = convertView;
         }

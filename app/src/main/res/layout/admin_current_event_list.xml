@@ -56,8 +56,8 @@
                     android:text="Search:"
                     android:textColor="@color/black" />
 
-                <TextView
-                    android:id="@+id/current_event_page_name"
+                <EditText
+                    android:id="@+id/search_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -65,9 +65,7 @@
                     android:backgroundTint="@color/white"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:paddingHorizontal="10dp"
-                    android:text="Sample Events Name"
-                    android:textColor="@color/black" />
+                    android:paddingHorizontal="10dp" />
             </LinearLayout>
 
             <ListView

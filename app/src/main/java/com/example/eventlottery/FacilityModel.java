@@ -1,9 +1,11 @@
 package com.example.eventlottery;
 
+import java.io.Serializable;
+
 /**
  * Facility Model
  */
-public class FacilityModel {
+public class FacilityModel implements Serializable {
     private String name;
     private String location;
     private String phone;

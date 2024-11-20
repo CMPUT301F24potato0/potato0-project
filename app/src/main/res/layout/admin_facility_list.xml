@@ -37,14 +37,6 @@
         app:layout_constraintVertical_bias="0.0">
 
         <!-- Total Users Count -->
-        <TextView
-            android:id="@+id/total_users_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Total users: 0"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
 
         <!-- Search Bar -->
         <LinearLayout
@@ -59,8 +51,8 @@
                 android:text="Search:"
                 android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/current_event_page_name"
+            <EditText
+                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -68,9 +60,7 @@
                 android:backgroundTint="@color/white"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingHorizontal="10dp"
-                android:text="Sample Events Name"
-                android:textColor="@color/black" />
+                android:paddingHorizontal="10dp" />
 
         </LinearLayout>
 

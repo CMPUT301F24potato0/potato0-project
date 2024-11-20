@@ -13,9 +13,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class AdminImagesFragment extends Fragment {
 
     private FirebaseFirestore db;
-    public AdminImagesFragment(FirebaseFirestore db) {
+    public AdminImagesFragment() {
         // Required empty public constructor
-        this.db = db;
     }
 
     @Override
