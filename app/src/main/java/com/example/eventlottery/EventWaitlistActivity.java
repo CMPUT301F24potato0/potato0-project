@@ -184,14 +184,11 @@ public class EventWaitlistActivity extends AppCompatActivity {
         waitlistLimitTextView.setText(event.getWaitingListLimit() == -1 ? "No Limit" : String.valueOf(event.getWaitingListLimit()));
         waitlistedEntrantsTextView.setText(String.valueOf(event.getWaitingList().size()));
 
-        // Calculate and display free slots based on waitlist limit
-        if (event.getWaitingListLimit() == -1) {
-            // Hide the free slots text if no waitlist limit
-            freeSlotsTextView.setVisibility(View.GONE);
-        } else {
-            int freeSlots = event.getWaitingListLimit() - event.getWaitingList().size();
-            freeSlotsTextView.setText(String.valueOf(freeSlots));
-            freeSlotsTextView.setVisibility(View.VISIBLE);
-        }
+        // Calculate and display free slots based on event capacity and enrolled entrants
+        int freeSlots = event.getCapacity() - event.getEnrolledList().size();
+        freeSlotsTextView.setText("Free Slots: " + freeSlots);
+
+        // Ensure freeSlotsTextView is visible
+        freeSlotsTextView.setVisibility(View.VISIBLE);
     }
 }
