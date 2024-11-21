@@ -7,19 +7,24 @@
     android:background="@android:color/holo_orange_dark">
 
     <!-- Title for Facilities List -->
-    <TextView
-        android:id="@+id/title_facilities_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Facilities List"
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
 
     <!-- Rounded Container for Total Users, Search, and Facilities List -->
+    <LinearLayout
+
+        android:id="@+id/title_facilities_list"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Facilities List"
+            android:textColor="@color/black"
+            android:textSize="29sp" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/list_container"
         android:layout_width="match_parent"
