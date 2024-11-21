@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/facilityHomePage"
     tools:context=".FacilityFragment"
-    android:background="@drawable/gradient_button">
+    android:background="@drawable/gradient_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/createFacilityFirstPage"
