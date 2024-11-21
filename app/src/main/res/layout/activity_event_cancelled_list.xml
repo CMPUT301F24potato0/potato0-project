@@ -70,7 +70,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="Send notification"
-                android:textColor="@color/space_cadet"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent">

@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/notification_sending_title"
-        android:textColor="@color/space_cadet"
+        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Notification"
@@ -26,7 +26,7 @@
         android:paddingHorizontal="10dp"
         android:hint="Title"
         android:textColorHint="@color/white"
-        android:textColor="@color/space_cadet"
+        android:textColor="@color/black"
         android:maxLines="1"
         android:background="@drawable/rounded_corner_background" />
 
@@ -40,7 +40,7 @@
         android:minHeight="150dp"
         android:hint="Message"
         android:textColorHint="@color/white"
-        android:textColor="@color/space_cadet"
+        android:textColor="@color/black"
         android:gravity="start"
         android:maxLines="1"
         android:background="@drawable/rounded_corner_background" />
@@ -62,8 +62,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/space_cadet"
-            app:strokeWidth="1.5dp" />
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp" />
 
         <Button
             android:id="@+id/send_id"
@@ -71,12 +71,12 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green1"
             android:text="Send"
-            android:textColor="@color/space_cadet"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/space_cadet"
-            app:strokeWidth="1.5dp"/>
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

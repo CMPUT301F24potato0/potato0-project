@@ -97,7 +97,7 @@
                             android:paddingStart="5dp"
                             android:paddingEnd="5dp"
                             android:text="Edit Event"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -116,14 +116,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Event Description:\n"
-                                android:textColor="@color/space_cadet" />
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:id="@+id/event_organizer_event_description"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="Lorem Ipsum"
-                                android:textColor="@color/space_cadet" />
+                                android:textColor="@color/black" />
                         </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -221,7 +221,7 @@
                                 android:minWidth="0dp"
                                 android:minHeight="0dp"
                                 android:text="View QR\nCode"
-                                android:textColor="@color/space_cadet"
+                                android:textColor="@color/black"
                                 android:textSize="10sp" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -241,7 +241,7 @@
                             android:paddingStart="32dp"
                             android:paddingEnd="32dp"
                             android:text="Invited"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -255,7 +255,7 @@
                             android:paddingStart="20dp"
                             android:paddingEnd="20dp"
                             android:text="Cancelled"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -269,7 +269,7 @@
                             android:paddingStart="30dp"
                             android:paddingEnd="30dp"
                             android:text="Waitlist"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/event_organizer_invited_button" />
@@ -284,7 +284,7 @@
                             android:paddingStart="25dp"
                             android:paddingEnd="25dp"
                             android:text="Enrolled"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/event_organizer_cancelled_button" />

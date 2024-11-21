@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Entrant Name"
-        android:textColor="@color/space_cadet"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp" />
@@ -29,8 +29,8 @@
         android:backgroundTint="@color/green1"
         android:textColor="@color/white"
         android:padding="5dp"
-        app:strokeColor="@color/space_cadet"
-        app:strokeWidth="1.5dp"/>
+        app:strokeColor="@color/black"
+        app:strokeWidth="2.5dp"/>
 
     <!-- Remove Button -->
     <Button
@@ -42,6 +42,6 @@
         android:textColor="@color/white"
         android:padding="5dp"
         android:layout_marginStart="8dp"
-        app:strokeColor="@color/space_cadet"
-        app:strokeWidth="1.5dp"/>
+        app:strokeColor="@color/black"
+        app:strokeWidth="2.5dp"/>
 </LinearLayout>
