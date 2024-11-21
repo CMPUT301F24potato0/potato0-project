@@ -188,7 +188,9 @@
                             android:paddingEnd="10dp"
                             android:text="Notify"
                             android:textColor="@color/space_cadet"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            app:strokeColor="@color/space_cadet"
+                            app:strokeWidth="1.5dp" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -249,7 +251,9 @@
                         android:paddingEnd="10dp"
                         android:text="Draw Sample"
                         android:textColor="@color/space_cadet"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:strokeColor="@color/space_cadet"
+                        app:strokeWidth="1.5dp" />
 
                     <EditText
                         android:id="@+id/draw_sample_edittext"
