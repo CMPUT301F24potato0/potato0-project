@@ -4,6 +4,7 @@ package com.example.eventlottery;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,11 +26,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import com.google.firebase.firestore.Blob;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class is the profile fragment.
@@ -47,6 +54,8 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton off_notifications;
 
     private Button temp_add_pic;
+    private Button temp_load_pic;
+    private ImageView profilePicture;
 
 
     /**
@@ -167,14 +176,24 @@ public class ProfileFragment extends Fragment {
             }
         });
         // Profile picture
-
+        profilePicture = rootView.findViewById(R.id.profilePicture);
         temp_add_pic = rootView.findViewById(R.id.temp_add_pic_id);
         temp_add_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageChoose();
+                Log.e("After choosing image","decoding");
+
             }
         });
+        temp_load_pic = rootView.findViewById(R.id.temp_loade_pic_id);
+        temp_load_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decode();
+            }
+        });
+
 
         return rootView;
     }
@@ -218,23 +237,25 @@ public class ProfileFragment extends Fragment {
                                 quality -= 10;
                             }
                             // Save to hashmap and to firebase here
-                            HashMap<String, Object> hashMap = new HashMap<>();
+//                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
 
-                            hashMap.put(curUser.getiD(), bytes);
+                            Blob blob = Blob.fromBytes(bytes);
+
+//                            hashMap.put("Blob", blob);
+
+
                             //Works -> No
-                            db.collection("photos").document(curUser.getiD()).set(hashMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Log.d("TAG", "Document written");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("TAG", "Error");
-                                        }
-                                    });
+//                            db.collection("photos").document(curUser.getiD()).set(hashMap);
+                            // Works?
+
+
+//                            photo = new PhotosModel(hashMap);
+
+
+                            db.collection("photos").document(curUser.getiD()).set(
+                                    new HashMap<String, Object>(){{
+                                        put("Blob",blob);
+                                    }});
                             Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
 
 
@@ -246,5 +267,19 @@ public class ProfileFragment extends Fragment {
                 }
             }
     );
+    public void decode(){
+        DocumentReference docref = db.collection("photos").document(curUser.getiD());
+        docref.get().addOnCompleteListener( task -> {
+           if (task.isSuccessful()) {
+               DocumentSnapshot document = task.getResult();
+               if (document.exists()){
+                   Blob blob = document.getBlob("Blob");
+                   byte[] bytes = blob.toBytes();
+                   Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                   profilePicture.setImageBitmap(bitmap);
+               }
+           }
+        });
+    }
 
 }

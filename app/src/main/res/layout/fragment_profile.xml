@@ -139,8 +139,8 @@
 
         <ImageView
             android:id="@+id/profilePicture"
-            android:layout_width="87dp"
-            android:layout_height="87dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:layout_constraintBottom_toTopOf="@+id/fNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -160,9 +160,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="temp_delete_pic"
-            android:id="@+id/temp_delete_pic_id"
+            android:text="temp_load_pic"
+            android:id="@+id/temp_loade_pic_id"
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:padding="2dp"
