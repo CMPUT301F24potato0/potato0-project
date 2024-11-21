@@ -113,7 +113,7 @@ public class PushNotificationService extends FirebaseMessagingService{
 
 
             if(!ismuted) {
-                Log.e("Ismuted??",""+ismuted);
+                Log.e("Ismuted??", ""+ false);
                 // https://www.youtube.com/watch?v=Hj8mjY4znEo&ab_channel=TechnicalSkillz
 
                 // TEST THIS MORE
