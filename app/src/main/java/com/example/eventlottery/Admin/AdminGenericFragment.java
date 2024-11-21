@@ -82,6 +82,7 @@ abstract public class AdminGenericFragment<T extends Serializable> extends Fragm
                 return;
             }
             adapter.clear();
+            items.clear();
             for (QueryDocumentSnapshot doc : value) items.add(doc.toObject(typeParameterClass));
             filter_into(items, items_filtered, search);
         });
