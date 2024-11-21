@@ -11,7 +11,7 @@
         android:id="@+id/createFacilityFirstPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@color/space_cadet">
 
         <TextView
             android:id="@+id/textView"
@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:text="Create facility"
-            android:backgroundTint="@color/gold"
-            android:textColor="@color/black"
+            android:backgroundTint="@color/indigo"
+            android:textColor="@color/space_cadet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -42,7 +42,7 @@
         android:id="@+id/FacilityPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        android:background="@color/space_cadet"
         android:visibility="gone">
 
         <LinearLayout
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Facility"
-                android:textColor="@color/gold"
+                android:textColor="@color/indigo"
                 android:textSize="29sp"/>
         </LinearLayout>
 
@@ -64,7 +64,7 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="@color/darkgreen"
+            android:backgroundTint="@color/violet1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/facility_page_text">
 
@@ -94,7 +94,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:backgroundTint="@color/white"
-                    android:textColor="@color/black"
+                    android:textColor="@color/space_cadet"
                     android:paddingHorizontal="10dp"
                     android:text="Sample Facility Name" />
             </LinearLayout>
@@ -131,12 +131,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/gold"
+                android:backgroundTint="@color/indigo"
                 android:text="Edit Facility"
-                android:textColor="@color/black"
+                android:textColor="@color/space_cadet"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:strokeColor="@color/black"
+                app:strokeColor="@color/space_cadet"
                 app:strokeWidth="1.5dp" />
 
             <Button
@@ -145,12 +145,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/gold"
+                android:backgroundTint="@color/indigo"
                 android:text="Add Event"
-                android:textColor="@color/black"
+                android:textColor="@color/space_cadet"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:strokeColor="@color/black"
+                app:strokeColor="@color/space_cadet"
                 app:strokeWidth="1.5dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

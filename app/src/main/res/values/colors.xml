@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="space_cadet">#2C2A4A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray1">#BEBCBC</color>
     <color name="gray2">#BAA2A2</color>
@@ -19,9 +19,9 @@
     <color name="h">#889dff</color>
     <color name="i">#b88dff</color>
     <color name="j">#df7bef</color>
-    <color name="darkgreen">#092C04</color>
+    <color name="violet1">#4F518C</color>
     <color name="l">#2b4244</color>
-    <color name="gold">#fabd02</color>
+    <color name="indigo">#907ad6</color>
     <color name="n">#E1CBDC</color>
     <color name="brown">#6F4E37</color>
     <color name="niceRed">#9A2A2A</color>

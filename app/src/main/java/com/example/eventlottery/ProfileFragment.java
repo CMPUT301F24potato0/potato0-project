@@ -81,17 +81,17 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection("users");
 
-        EditText f_name = (EditText) rootView.findViewById(R.id.fNameEditText);
-        EditText l_name = (EditText) rootView.findViewById(R.id.lNameEditText);
-        EditText email = (EditText) rootView.findViewById(R.id.emailEditText);
-        EditText phone = (EditText) rootView.findViewById(R.id.phoneEditText);
+        EditText f_name = rootView.findViewById(R.id.fNameEditText);
+        EditText l_name = rootView.findViewById(R.id.lNameEditText);
+        EditText email = rootView.findViewById(R.id.emailEditText);
+        EditText phone = rootView.findViewById(R.id.phoneEditText);
 
         f_name.setText(curUser.getfName());
         l_name.setText(curUser.getlName());
         email.setText(curUser.getEmail());
         phone.setText(curUser.getPhone());
 
-        editUser = (Button) rootView.findViewById(R.id.saveProfileBtn);
+        editUser = rootView.findViewById(R.id.saveProfileBtn);
         editUser.setEnabled(false);
         editUser.setBackgroundColor(getResources().getColor(R.color.red1));
         TextWatcher textWatcher = new TextWatcher() {
@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 editUser.setEnabled(true);
-                editUser.setBackgroundColor(getResources().getColor(R.color.gold));
+                editUser.setBackgroundColor(getResources().getColor(R.color.indigo));
             }
 
             @Override
@@ -140,8 +140,8 @@ public class ProfileFragment extends Fragment {
 
 
         // Notifications
-        on_notifications = (FloatingActionButton) rootView.findViewById(R.id.on_notification);
-        off_notifications = (FloatingActionButton) rootView.findViewById(R.id.off_notification);
+        on_notifications = rootView.findViewById(R.id.on_notification);
+        off_notifications = rootView.findViewById(R.id.off_notification);
         ismuted = curUser.isMuted();
 
 

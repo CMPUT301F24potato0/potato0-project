@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventWaitlistActivity"
-    android:background="@color/black">
+    android:background="@color/space_cadet">
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
@@ -303,7 +303,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="@color/darkgreen"
+            android:backgroundTint="@color/violet1"
             android:orientation="vertical"
             android:paddingHorizontal="10dp">
 
@@ -316,7 +316,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Geolocation Required:"
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
 
                 <TextView
@@ -324,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="Y/N"
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
             </LinearLayout>
 
@@ -337,7 +337,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Capacity:"
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
 
                 <TextView
@@ -345,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
             </LinearLayout>
 
@@ -358,7 +358,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Waiting List Limit: "
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
 
                 <TextView
@@ -366,7 +366,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textColor="@color/gold"
+                    android:textColor="@color/indigo"
                     android:textSize="20dp"></TextView>
             </LinearLayout>
 
@@ -408,7 +408,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="Waitlisted entrants:"
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"></TextView>
@@ -419,7 +419,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:text="##"
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"></TextView>
@@ -430,7 +430,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:text="Free Slots: "
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp">
 
                     </TextView>
@@ -440,7 +440,7 @@
                         android:layout_height="wrap_content"
                         android:text="##"
                         android:layout_marginTop="10dp"
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp">
 
                     </TextView>
@@ -450,7 +450,7 @@
                         android:layout_height="wrap_content"
                         android:text="/"
                         android:layout_marginTop="10dp"
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp">
 
                     </TextView>
@@ -460,7 +460,7 @@
                         android:layout_height="wrap_content"
                         android:text="##"
                         android:layout_marginTop="10dp"
-                        android:textColor="@color/gold"
+                        android:textColor="@color/indigo"
                         android:textSize="16dp">
 
                     </TextView>
@@ -485,7 +485,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="Notify"
-                        android:textColor="@color/black"
+                        android:textColor="@color/space_cadet"
                         android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent">
@@ -498,7 +498,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginTop="0dp"
                         android:background="@drawable/rounded_corner_background"
-                        android:backgroundTint="@color/gold">
+                        android:backgroundTint="@color/indigo">
 
                         <Button
                             android:id="@+id/draw_sample_button"
@@ -514,7 +514,7 @@
                             android:paddingStart="5dp"
                             android:paddingEnd="5dp"
                             android:text="Draw Sample"
-                            android:textColor="@color/black"
+                            android:textColor="@color/space_cadet"
                             android:textSize="16dp">
 
                         </Button>
@@ -529,7 +529,7 @@
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:padding="1dp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/space_cadet"
                             android:textSize="20dp">
 
                         </EditText>
@@ -543,7 +543,7 @@
                             android:minHeight="0dp"
                             android:padding="1dp"
                             android:text="Invited: "
-                            android:textColor="@color/black"
+                            android:textColor="@color/space_cadet"
                             android:textSize="16dp">
 
                         </TextView>
@@ -556,7 +556,7 @@
                             android:minHeight="0dp"
                             android:padding="0dp"
                             android:text="##"
-                            android:textColor="@color/black"
+                            android:textColor="@color/space_cadet"
                             android:textSize="16dp">
 
                         </TextView>

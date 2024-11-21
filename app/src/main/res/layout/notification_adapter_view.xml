@@ -6,30 +6,30 @@
     android:orientation="vertical"
     android:padding="8dp"
     android:background="@drawable/rounded_corner_background"
-    android:backgroundTint="@color/darkgreen">
+    android:backgroundTint="@color/violet1">
     <TextView
         android:id="@+id/title_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/gold"
+        android:textColor="@color/indigo"
         android:text="Title"/>
     <TextView
         android:id="@+id/message_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/gold"
+        android:textColor="@color/indigo"
         android:text="Message"/>
     <TextView
         android:id="@+id/envent_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/gold"
+        android:textColor="@color/indigo"
         android:text="EventID"/>
     <TextView
         android:id="@+id/flag_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/gold"
+        android:textColor="@color/indigo"
         android:text="Flag"/>
     <TextView
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:backgroundTint="@color/seafoam"
-            android:textColor="@color/black"
+            android:textColor="@color/space_cadet"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
             android:visibility="visible"

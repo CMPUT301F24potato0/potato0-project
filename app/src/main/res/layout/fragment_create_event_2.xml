@@ -145,7 +145,7 @@
             android:backgroundTint="@color/gray2"
             style="?android:spinnerStyle"
             android:text="Jan. 1, 2024"
-            android:textColor="@color/black"
+            android:textColor="@color/space_cadet"
             android:maxLines="1" />
     </LinearLayout>
 

@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fProfile"
-    android:background="@color/black"
+    android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black">
+        android:background="@color/space_cadet">
 
         <!-- First Name -->
 
@@ -131,8 +131,8 @@
             android:text="Edit Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:backgroundTint="@color/gold"
-            android:textColor="@color/black"
+            android:backgroundTint="@color/indigo"
+            android:textColor="@color/space_cadet"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailEditText"
             app:layout_constraintVertical_bias="0.0" />

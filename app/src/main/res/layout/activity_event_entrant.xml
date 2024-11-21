@@ -44,7 +44,7 @@
                 android:id="@+id/event_entrant_page_event_poster1"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@color/black" />
+                android:src="@color/space_cadet" />
 
             <TextView
                 android:id="@+id/event_entrant_page_event_title1"
@@ -124,7 +124,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:text="Event Details:"
-                    android:textColor="@color/black"
+                    android:textColor="@color/space_cadet"
                     android:textSize="20sp" />
 
                 <TextView
@@ -132,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/space_cadet"
                     android:text="@string/event_details" />
             </LinearLayout>
 

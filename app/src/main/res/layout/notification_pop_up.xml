@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/notification_sending_title"
-        android:textColor="@color/black"
+        android:textColor="@color/space_cadet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send Notification"
@@ -26,7 +26,7 @@
         android:paddingHorizontal="10dp"
         android:hint="Title"
         android:textColorHint="@color/white"
-        android:textColor="@color/black"
+        android:textColor="@color/space_cadet"
         android:maxLines="1"
         android:background="@drawable/rounded_corner_background" />
 
@@ -40,7 +40,7 @@
         android:minHeight="150dp"
         android:hint="Message"
         android:textColorHint="@color/white"
-        android:textColor="@color/black"
+        android:textColor="@color/space_cadet"
         android:gravity="start"
         android:maxLines="1"
         android:background="@drawable/rounded_corner_background" />
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green1"
             android:text="Send"
-            android:textColor="@color/black"
+            android:textColor="@color/space_cadet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
