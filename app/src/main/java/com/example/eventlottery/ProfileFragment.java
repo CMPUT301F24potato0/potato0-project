@@ -1,7 +1,13 @@
 package com.example.eventlottery;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +15,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * This class is the profile fragment.
@@ -30,6 +45,8 @@ public class ProfileFragment extends Fragment {
 
     FloatingActionButton on_notifications;
     FloatingActionButton off_notifications;
+
+    private Button temp_add_pic;
 
 
     /**
@@ -149,7 +166,85 @@ public class ProfileFragment extends Fragment {
                 off_notifications.setVisibility(View.GONE);
             }
         });
+        // Profile picture
+
+        temp_add_pic = rootView.findViewById(R.id.temp_add_pic_id);
+        temp_add_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageChoose();
+            }
+        });
 
         return rootView;
     }
+    public void imageChoose(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        imageChooser.launch(intent);
+    }
+    ActivityResultLauncher<Intent> imageChooser = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if(result.getResultCode() == Activity.RESULT_OK){
+                    Intent data = result.getData();
+                    if(data != null && data.getData() != null){
+                        Uri uri = data.getData();
+                        try{
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
+                            // initialize byte stream
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            byte[] bytes = new byte[0];
+                            // ****************************************************************************************
+                            final int targetSize = 1024 * 1024;
+                            // Start with 100% quality, and reduce quality until we get under the target size
+                            int quality = 100;
+                            int compressedSize = 0;
+
+                            // Compress the image and check the size after each compression
+                            while (compressedSize > targetSize || quality >= 10){
+                                if (compressedSize < targetSize && compressedSize > 0){
+                                    // Stops when the JPEG size is just under 1 mb
+                                    break;
+                                }
+                                stream.reset();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+                                bytes = stream.toByteArray();
+                                compressedSize = bytes.length;
+
+                                Log.e("Image compression","Compressed size: " + compressedSize + " bytes");
+                                Log.e("Image quality", "Image qualit is: " + quality + "/100");
+                                // Reduce the quality by 10% for the next iteration if the image is still too large
+                                quality -= 10;
+                            }
+                            // Save to hashmap and to firebase here
+                            HashMap<String, Object> hashMap = new HashMap<>();
+
+                            hashMap.put(curUser.getiD(), bytes);
+                            //Works -> No
+                            db.collection("photos").document(curUser.getiD()).set(hashMap)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d("TAG", "Document written");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("TAG", "Error");
+                                        }
+                                    });
+                            Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
+
+
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
+
 }
