@@ -190,7 +190,7 @@ public class ProfileFragment extends Fragment {
         temp_load_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                decode();
+
             }
         });
 
@@ -236,28 +236,20 @@ public class ProfileFragment extends Fragment {
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
                             }
-                            // Save to hashmap and to firebase here
-//                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                            // ****************************************************************************************
 
                             Blob blob = Blob.fromBytes(bytes);
 
-//                            hashMap.put("Blob", blob);
-
-
-                            //Works -> No
-//                            db.collection("photos").document(curUser.getiD()).set(hashMap);
-                            // Works?
-
-
-//                            photo = new PhotosModel(hashMap);
-
-
+                            // ****************************************************************************************
                             db.collection("photos").document(curUser.getiD()).set(
                                     new HashMap<String, Object>(){{
                                         put("Blob",blob);
                                     }});
-                            Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
+                            // ****************************************************************************************
 
+                            Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
+                            Log.e("After choosing image","decoding");
+                            decode();
 
                         }
                         catch (IOException e){
@@ -268,6 +260,7 @@ public class ProfileFragment extends Fragment {
             }
     );
     public void decode(){
+        // ****************************************************************************************
         DocumentReference docref = db.collection("photos").document(curUser.getiD());
         docref.get().addOnCompleteListener( task -> {
            if (task.isSuccessful()) {
