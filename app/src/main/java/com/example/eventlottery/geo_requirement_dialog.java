@@ -76,11 +76,11 @@ public class geo_requirement_dialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         AlertDialog alertDialog = builder.setView(view)
-                                    .setView(view)
-                                    .setTitle("Geo location required")
-                                    .setNegativeButton("Cancel", null)
-                                    .setPositiveButton("Accept", null)
-                                    .create();
+                .setView(view)
+                .setTitle("Geo location required")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Accept", null)
+                .create();
 
         // Adapted from https://stackoverflow.com/questions/2620444/how-to-prevent-a-dialog-from-closing-when-a-button-is-clicked
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -100,7 +100,7 @@ public class geo_requirement_dialog extends DialogFragment {
                                 user.setLongitude(lastLocation.getLongitude());
                                 event.queueWaitingList(user);
                             } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                Toast.makeText(getContext(), "The waiting list is already full or the user is already inside the waiting list", Toast.LENGTH_SHORT).show();
                             }
                             Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                             task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -111,7 +111,7 @@ public class geo_requirement_dialog extends DialogFragment {
                                     }
                                 }
                             });
-                            db.collection("events").document(event.getEventID()).set(event);
+                            db.collection("events").document(event.getEventID()).set(event);  // updates
                             task.onSuccessTask(t1 -> {
                                 cuUser.addTopics(event.getEventID() + "_" + user.getiD());
                                 db.collection("users").document(user.getiD()).set(cuUser);
@@ -120,9 +120,8 @@ public class geo_requirement_dialog extends DialogFragment {
                                 return null;
                             });
                             alertDialog.dismiss();
-                        }
-                        else {
-                            // TODO: Ask permissions
+                        } else {
+                            // Ask for location permission if not yet granted
                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                             Toast.makeText(getContext(), "Please allow precise location permissions.", Toast.LENGTH_SHORT).show();
                         }
@@ -130,59 +129,6 @@ public class geo_requirement_dialog extends DialogFragment {
                 });
             }
         });
-
         return alertDialog;
-
-//        return builder
-//                .setView(view)
-//                .setTitle("Geo location required")
-//                .setNegativeButton("Cancel", null)
-//                .setPositiveButton("Accept", (dialog, which) -> {
-//                    try {
-//                        event.queueWaitingList(user);
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
-//                    task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                cuUser = documentSnapshot.toObject(CurrentUser.class);
-//                            }
-//                        }
-//                    });
-//                    db.collection("events").document(event.getEventID()).set(event);
-//                    task.onSuccessTask(t1 -> {
-//                        cuUser.addTopics(event.getEventID() + "_" + user.getiD());
-//                        db.collection("users").document(user.getiD()).set(cuUser);
-//                        joinBtn.setVisibility(View.GONE);
-//                        unjoinBtn.setVisibility(View.VISIBLE);
-//                        return null;
-//                    });
-//                })
-//                .create();
     }
-
-    /**
-     * A helper function that checks if location permissions have been granted.
-     * If permission has not been granted, asks the user to grant permissions.
-     * @return True if location permission has been granted<br>
-     *         False if location permission has not been granted
-     */
-    private Boolean locationPermsGranted() {
-        Boolean permissionsGranted = Boolean.FALSE;
-
-        // Permissions already granted
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            permissionsGranted = Boolean.TRUE;
-        }
-        // Permissions not granted
-        else {
-            // Ask for permissions
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
-        return permissionsGranted;
-    }
-
 }

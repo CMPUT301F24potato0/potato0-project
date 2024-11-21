@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 //    id("com.android.application")
 }
 
@@ -54,6 +55,9 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
+    implementation(libs.play.services.maps)
+
+
 //    implementation(files("/home/chirayu/Android/Sdk/platforms/android-34/android.jar"))
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -68,4 +72,10 @@ dependencies {
     implementation (libs.google.auth.library.oauth2.http)
     implementation (libs.volley)
 
+}
+
+// adapted from https://developers.google.com/maps/documentation/android-sdk/start#add-key
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }

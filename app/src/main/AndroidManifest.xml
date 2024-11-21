@@ -55,6 +55,12 @@
             </intent-filter>
         </activity>
 
+        <!--
+        Used for Google Maps API
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
 
         <!--
  Set custom default icon. This is used when no icon is set for incoming notification messages.
