@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/facilityHomePage"
-    tools:context=".FacilityFragment">
+    tools:context=".FacilityFragment"
+    android:background="@drawable/gradient_button">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/createFacilityFirstPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/space_cadet">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView"
@@ -44,7 +44,6 @@
         android:id="@+id/FacilityPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/space_cadet"
         android:visibility="gone">
 
         <LinearLayout
@@ -57,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Facility"
-                android:textColor="@color/indigo"
+                android:textColor="@color/space_cadet"
                 android:textSize="29sp"/>
         </LinearLayout>
 
