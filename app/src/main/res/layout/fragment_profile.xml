@@ -132,12 +132,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="@color/indigo"
-            android:textColor="@color/space_cadet"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailEditText"
             app:layout_constraintVertical_bias="0.0"
             app:strokeColor="@color/black"
-            app:strokeWidth="1.5dp"/>
+            app:strokeWidth="2.5dp"/>
 
         <ImageView
             android:id="@+id/profilePicture"

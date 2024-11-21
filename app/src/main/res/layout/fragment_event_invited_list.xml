@@ -92,12 +92,12 @@
                 android:minWidth="0dp"
                 android:minHeight="48dp"
                 android:text="Send notification"
-                android:textColor="@color/space_cadet"
+                android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:strokeColor="@color/space_cadet"
-                app:strokeWidth="1.5dp">
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp">
 
             </Button>
 

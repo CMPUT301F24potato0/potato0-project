@@ -49,14 +49,14 @@
                 android:id="@+id/confirm_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/space_cadet"
-                app:strokeWidth="1.5dp"/>
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:strokeColor="@color/space_cadet"
-                app:strokeWidth="1.5dp"/>
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

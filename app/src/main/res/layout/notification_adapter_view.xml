@@ -53,7 +53,7 @@
             android:visibility="visible"
             android:text="Cancel"
             app:strokeColor="@color/black"
-            app:strokeWidth="1.5dp"/>
+            app:strokeWidth="2.5dp"/>
         <Button
             android:id="@+id/signup_id"
             android:layout_width="wrap_content"
@@ -63,13 +63,13 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:backgroundTint="@color/green1"
-            android:textColor="@color/space_cadet"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
             android:visibility="visible"
             android:text="Sign up"
             app:strokeColor="@color/black"
-            app:strokeWidth="1.5dp" />
+            app:strokeWidth="2.5dp" />
 
 
 

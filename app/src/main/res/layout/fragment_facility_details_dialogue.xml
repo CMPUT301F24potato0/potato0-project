@@ -157,13 +157,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirm"
-            android:textColor="@color/space_cadet"
+            android:textColor="@color/black"
             android:backgroundTint="@color/green1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/space_cadet"
-            app:strokeWidth="1.5dp" />
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp" />
 
         <Button
             android:id="@+id/facility_details_cancel_button"
@@ -175,8 +175,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/space_cadet"
-            app:strokeWidth="1.5dp"/>
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp"/>
 
         <Button
             android:id="@+id/facility_details_delete_button"
@@ -191,8 +191,8 @@
             app:layout_constraintStart_toEndOf="@+id/facility_details_confirm_button"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:strokeColor="@color/space_cadet"
-            app:strokeWidth="1.5dp" />
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Geolocation Required:"
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="Y/N"
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Waiting List Limit: "
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -93,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Capacity:"
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="##"
-                    android:textColor="@color/mauve"
+                    android:textColor="@color/white"
                     android:textSize="20sp">
 
                 </TextView>
@@ -141,7 +141,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="10dp"
                             android:text="Waitlisted entrants:"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent" />
@@ -154,7 +154,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_toEndOf="@+id/textView4"
                             android:text="##"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent" />
@@ -168,10 +168,10 @@
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:text="Notify"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:strokeColor="@color/space_cadet"
-                            app:strokeWidth="1.5dp" />
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -183,7 +183,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:text="Free Slots: "
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp" />
 
                         <TextView
@@ -191,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:text="##"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp" />
 
                         <TextView
@@ -210,7 +210,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:text="##"
-                            android:textColor="@color/space_cadet"
+                            android:textColor="@color/black"
                             android:textSize="16sp">
 
                         </TextView>
@@ -232,10 +232,10 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:text="Draw Sample"
-                        android:textColor="@color/space_cadet"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        app:strokeColor="@color/space_cadet"
-                        app:strokeWidth="1.5dp" />
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="2.5dp" />
 
                     <EditText
                         android:id="@+id/draw_sample_edittext"
