@@ -22,16 +22,15 @@
     <!-- Rounded Container for Total Users, Search, and Facilities List -->
     <LinearLayout
         android:id="@+id/list_container"
-        android:layout_width="340dp"
-        android:layout_height="593dp"
-        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
         android:background="@drawable/rounded_corner_background"
         android:backgroundTint="#FFE5B4"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_facilities_list"
         app:layout_constraintVertical_bias="0.0">
