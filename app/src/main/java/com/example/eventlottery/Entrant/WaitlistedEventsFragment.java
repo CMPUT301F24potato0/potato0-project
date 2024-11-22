@@ -74,13 +74,13 @@ public class WaitlistedEventsFragment extends Fragment{
             }
         });
 
-        upload_image_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), TestingFirebaseStorage.class);
-                startActivity(intent);
-            }
-        });
+//        upload_image_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), TestingFirebaseStorage.class);
+//                startActivity(intent);
+//            }
+//        });
 
         return rootview;
     }
