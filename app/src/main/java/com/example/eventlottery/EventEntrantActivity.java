@@ -224,8 +224,10 @@ public class EventEntrantActivity extends AppCompatActivity {
                     try {
                         event.queueWaitingList(userList);
                         db.collection("events").document(event.getEventID()).set(event);
+                        joinBtn.setVisibility(View.GONE);
+                        unjoinBtn.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        Toast.makeText(EventEntrantActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     // ****************************************************************************************
                     // Subscribing to topic when joining event to receive notification
