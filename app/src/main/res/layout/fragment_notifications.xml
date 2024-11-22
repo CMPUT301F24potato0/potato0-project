@@ -38,7 +38,7 @@
             android:text="Notifications"
             android:textSize="50dp"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/gold"
+            android:textColor="@color/space_cadet"
             android:paddingTop="20dp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/darkgreen"
+                android:backgroundTint="@color/violet_transparent"
                 android:orientation="vertical"
                 android:background="@drawable/rounded_corner_background">
                 <Button
