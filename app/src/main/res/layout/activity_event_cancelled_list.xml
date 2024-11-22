@@ -5,32 +5,32 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet">
+    android:background="@drawable/gradient_background">
 
 
     <LinearLayout
-        android:layout_width="369dp"
-        android:layout_height="610dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
         android:background="@drawable/rounded_corner_background"
-        android:backgroundTint="@color/violet1"
+        android:backgroundTint="@color/violet_transparent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.867">
+        app:layout_constraintTop_toBottomOf="@+id/CancelledView">
 
-<!--        <Button-->
-<!--            android:id="@+id/back_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Back"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:backgroundTint="@color/gray4" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/back_button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Back"-->
+        <!--            android:layout_margin="10dp"-->
+        <!--            android:backgroundTint="@color/gray4" />-->
 
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="66dp"
             android:orientation="horizontal">
@@ -79,35 +79,24 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="310dp"
-            android:layout_height="520dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="72dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical">
+        <ListView
+            android:id="@+id/cancelled_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="444dp">
 
-            <ListView
-                android:id="@+id/cancelled_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="0dp"
-                android:background="@color/violet1"
-                tools:layout_editor_absoluteY="444dp">
-
-            </ListView>
-        </LinearLayout>
+        </ListView>
     </LinearLayout>
 
     <TextView
         android:id="@+id/CancelledView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:text="Cancelled Entrants"
-        android:textSize="34sp"
-        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textColor="@color/space_cadet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

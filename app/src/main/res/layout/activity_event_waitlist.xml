@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventWaitlistActivity"
-    android:background="@color/space_cadet">
+    android:background="@drawable/gradient_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="@color/violet1"
+            android:backgroundTint="@color/violet_transparent"
             android:orientation="vertical"
             android:paddingHorizontal="10dp">
 

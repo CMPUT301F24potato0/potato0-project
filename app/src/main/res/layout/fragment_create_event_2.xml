@@ -16,13 +16,15 @@
         android:layout_height="wrap_content"
         android:text="Your Event's Settings"
         android:textColor="@color/space_cadet"
-        android:layout_marginBottom="20dp"
+        android:layout_marginVertical="20dp"
         android:textSize="25sp"
+        android:textStyle="bold"
         android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
@@ -34,7 +36,8 @@
             android:minWidth="150dp"
             android:text="Event Capacity:"
             android:textColor="@color/space_cadet"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/create_event_edittext_event_capacity"
@@ -51,7 +54,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
@@ -62,7 +65,8 @@
             android:gravity="center_vertical"
             android:text="Waiting List Limit (Optional):"
             android:textColor="@color/space_cadet"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/create_event_edittext_event_waitlist_limit"
@@ -82,7 +86,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
@@ -94,7 +99,8 @@
             android:minWidth="150dp"
             android:text="Location:"
             android:textColor="@color/space_cadet"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/create_event_edittext_event_location"
@@ -127,7 +133,8 @@
             android:minWidth="150dp"
             android:text="Geolocation Required:"
             android:textColor="@color/space_cadet"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Switch
             android:id="@+id/create_event_switch_geolocation_required"
@@ -152,7 +159,8 @@
             android:minWidth="150dp"
             android:text="Join Deadline:"
             android:textColor="@color/space_cadet"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- https://youtu.be/qCoidM98zNk?si=ywcwpfPe0MzQRhzm -->
         <Button

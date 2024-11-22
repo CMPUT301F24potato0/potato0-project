@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventOrganizerActivity"
-    android:background="@color/space_cadet">
+    android:background="@drawable/gradient_background">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,8 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical"
-        android:background="@color/space_cadet">
+        android:orientation="vertical">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ProgressBar
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,8 @@
                 android:id="@+id/event_organizer_event_poster"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:src="@color/mauve" />
+                android:layout_margin="10dp"
+                android:src="@color/indigo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,9 +54,9 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_corner_background"
-                    android:backgroundTint="@color/violet1"
+                    android:backgroundTint="@color/violet_transparent"
                     android:orientation="vertical"
-                    android:paddingHorizontal="10dp">
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/event_organizer_event_title"
@@ -91,7 +91,7 @@
                             android:id="@+id/event_organizer_edit_event_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/indigo"
+                            android:backgroundTint="@color/mauve"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
                             android:paddingStart="5dp"
@@ -100,7 +100,9 @@
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -108,7 +110,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
                             android:background="@drawable/rounded_corner_background"
-                            android:backgroundTint="@color/white"
+                            android:backgroundTint="@color/mauve"
                             android:padding="10dp"
                             android:orientation="vertical">
 
@@ -217,12 +219,14 @@
                                 android:id="@+id/event_organizer_QR_code_view_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/indigo"
+                                android:backgroundTint="@color/white"
                                 android:minWidth="0dp"
                                 android:minHeight="0dp"
                                 android:text="View QR\nCode"
                                 android:textColor="@color/black"
-                                android:textSize="10sp" />
+                                android:textSize="10sp"
+                                app:strokeColor="@color/black"
+                                app:strokeWidth="2.5dp" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -243,7 +247,9 @@
                             android:text="Invited"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp"/>
 
                         <Button
                             android:id="@+id/event_organizer_cancelled_button"
@@ -257,7 +263,9 @@
                             android:text="Cancelled"
                             android:textColor="@color/black"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp" />
 
                         <Button
                             android:id="@+id/event_organizer_waitlist_button"
@@ -272,7 +280,9 @@
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/event_organizer_invited_button" />
+                            app:layout_constraintTop_toBottomOf="@+id/event_organizer_invited_button"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp" />
 
                         <Button
                             android:id="@+id/event_organizer_enrolled_button"
@@ -287,7 +297,9 @@
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/event_organizer_cancelled_button" />
+                            app:layout_constraintTop_toBottomOf="@+id/event_organizer_cancelled_button"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2.5dp" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -74,5 +75,12 @@ public class qr_code_dialog extends DialogFragment {
         catch (WriterException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(R.drawable.gradient_background);
     }
 }
