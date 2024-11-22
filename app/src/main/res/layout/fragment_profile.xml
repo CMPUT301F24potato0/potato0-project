@@ -145,7 +145,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY"
             tools:srcCompat="@tools:sample/avatars" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/profile_letter_picture"
+            android:text=""
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -160,9 +170,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="temp_load_pic"
-            android:id="@+id/temp_loade_pic_id"
+            android:text="temp_delete_pic"
+            android:id="@+id/temp_delete_pic_id"
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:padding="2dp"
