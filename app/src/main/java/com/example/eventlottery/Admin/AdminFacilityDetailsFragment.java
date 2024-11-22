@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.eventlottery.FacilityModel;
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 

@@ -2,6 +2,8 @@ package com.example.eventlottery;
 
 import static org.junit.Assert.assertEquals;
 
+import com.example.eventlottery.Models.FacilityModel;
+
 import org.junit.Test;
 
 public class FacilityModelTest {

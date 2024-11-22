@@ -3,20 +3,11 @@ package com.example.eventlottery.Admin;
 
 import android.content.Context;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
-import com.example.eventlottery.CurrentUser;
+import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserArrayAdapter;
 import com.example.eventlottery.R;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.AggregateSource;
 
 import java.util.ArrayList;
 

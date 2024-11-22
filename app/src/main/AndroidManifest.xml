@@ -34,25 +34,25 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ChosenListActivity"
+            android:name=".Organizer.ChosenListActivity"
             android:exported="false" />
         <activity
-            android:name=".EnrolledListActivity"
+            android:name=".Organizer.EnrolledListActivity"
             android:exported="false" />
         <activity
-            android:name=".CancelledListActivity"
+            android:name=".Organizer.CancelledListActivity"
             android:exported="false" />
         <activity
-            android:name=".InvitedListActivity"
+            android:name=".Organizer.InvitedListActivity"
             android:exported="false" />
         <activity
-            android:name=".EventWaitlistActivity"
+            android:name=".Organizer.EventWaitlistActivity"
             android:exported="false" />
         <activity
-            android:name=".EventOrganizerActivity"
+            android:name=".Organizer.EventOrganizerActivity"
             android:exported="false" />
         <activity
-            android:name=".EventEntrantActivity"
+            android:name=".Entrant.EventEntrantActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -98,7 +98,7 @@
         <!-- </intent-filter> -->
         <!-- </service> -->
         <service
-            android:name=".PushNotificationService"
+            android:name=".Notifications.PushNotificationService"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>
@@ -109,7 +109,7 @@
         </service>
 
         <receiver
-            android:name=".MyBroadcastReceiver"
+            android:name=".Entrant.MyBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="MyBroadcastReceiver" />

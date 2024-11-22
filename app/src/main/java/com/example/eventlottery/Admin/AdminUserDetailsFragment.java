@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.eventlottery.CurrentUser;
+import com.example.eventlottery.Models.CurrentUser;
 import com.example.eventlottery.R;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminUserDetailsFragment extends DialogFragment {

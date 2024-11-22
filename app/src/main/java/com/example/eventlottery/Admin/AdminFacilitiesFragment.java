@@ -3,11 +3,10 @@ package com.example.eventlottery.Admin;
 
 import android.content.Context;
 
-import android.content.Intent;
 import android.widget.ArrayAdapter;
 
-import com.example.eventlottery.EventModel;
-import com.example.eventlottery.FacilityModel;
+import com.example.eventlottery.Models.FacilityArrayAdapter;
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 
 import java.util.ArrayList;

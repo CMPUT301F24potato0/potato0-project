@@ -2,6 +2,9 @@ package com.example.eventlottery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.UsersList;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

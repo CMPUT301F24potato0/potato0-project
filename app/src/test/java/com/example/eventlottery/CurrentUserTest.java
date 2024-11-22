@@ -1,5 +1,7 @@
 package com.example.eventlottery;
 
+import com.example.eventlottery.Models.CurrentUser;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

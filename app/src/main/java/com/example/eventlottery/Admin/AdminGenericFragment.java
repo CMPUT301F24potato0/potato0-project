@@ -1,7 +1,6 @@
 package com.example.eventlottery.Admin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,13 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.eventlottery.EventModel;
-import com.example.eventlottery.EventOrganizerActivity;
-import com.example.eventlottery.EventsArrayAdapter;
-import com.example.eventlottery.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;

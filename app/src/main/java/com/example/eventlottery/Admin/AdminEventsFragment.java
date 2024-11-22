@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
 
-import com.example.eventlottery.EventModel;
-import com.example.eventlottery.EventsArrayAdapter;
-import com.example.eventlottery.FacilityModel;
+import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.EventsArrayAdapter;
 import com.example.eventlottery.R;
 
 import java.util.ArrayList;

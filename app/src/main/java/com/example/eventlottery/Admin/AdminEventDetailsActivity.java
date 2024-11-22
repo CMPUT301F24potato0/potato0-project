@@ -11,15 +11,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.eventlottery.CurrentUser;
-import com.example.eventlottery.EventModel;
-import com.example.eventlottery.FacilityModel;
+import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.w3c.dom.Text;
 
 public class AdminEventDetailsActivity extends AppCompatActivity {
     public FirebaseFirestore db;
