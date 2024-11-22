@@ -125,7 +125,8 @@ public class SendNotificationDialog extends DialogFragment {
      */
     public void send(){
         for(int i = 0; i < usersLists.size(); i++){
-            sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag);
+            String topic = event.getEventID() + "_" + usersLists.get(i).getiD();
+            sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag, topic);
         }
     }
 }
