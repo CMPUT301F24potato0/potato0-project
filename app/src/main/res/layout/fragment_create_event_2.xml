@@ -15,30 +15,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Event's Settings"
+        android:textColor="@color/space_cadet"
+        android:layout_marginVertical="20dp"
         android:textSize="25sp"
+        android:textStyle="bold"
         android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:minWidth="150dp"
             android:text="Event Capacity:"
-            android:textSize="15sp"
-            android:layout_gravity="center" />
+            android:textColor="@color/space_cadet"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/create_event_edittext_event_capacity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_corner_background"
             android:inputType="number"
             android:hint="Event capacity here"
+            android:backgroundTint="@color/indigo"
             android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
             android:maxLines="1" />
@@ -51,19 +59,22 @@
         android:layout_marginHorizontal="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
             android:text="Waiting List Limit (Optional):"
-            android:textSize="15sp"
-            android:layout_gravity="center" />
+            android:textColor="@color/space_cadet"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/create_event_edittext_event_waitlist_limit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_corner_background"
             android:inputType="number"
+            android:backgroundTint="@color/indigo"
             android:hint="Waitlist limit here"
             android:textColorHint="@color/white"
             android:paddingHorizontal="10dp"
@@ -76,76 +87,91 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:minWidth="150dp"
             android:text="Location:"
-            android:textSize="15sp"
-            android:layout_gravity="center" />
+            android:textColor="@color/space_cadet"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/create_event_edittext_event_location"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_corner_background"
             android:hint="Location here"
             android:textColorHint="@color/white"
+            android:backgroundTint="@color/indigo"
+
             android:paddingHorizontal="10dp"
             android:maxLines="1" />
 
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:minWidth="150dp"
             android:text="Geolocation Required:"
-            android:textSize="15sp"
-            android:layout_gravity="center" />
+            android:textColor="@color/space_cadet"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Switch
             android:id="@+id/create_event_switch_geolocation_required"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:minWidth="150dp"
             android:text="Join Deadline:"
-            android:textSize="15sp"
-            android:layout_gravity="center"/>
+            android:textColor="@color/space_cadet"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- https://youtu.be/qCoidM98zNk?si=ywcwpfPe0MzQRhzm -->
         <Button
             android:id="@+id/create_event_join_deadline_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:minHeight="0dp"
             android:backgroundTint="@color/gray2"
-            style="?android:spinnerStyle"
-            android:text="Jan. 1, 2024"
             android:textColor="@color/black"
+            style="?android:spinnerStyle"
             android:maxLines="1" />
     </LinearLayout>
 

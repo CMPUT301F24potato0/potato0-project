@@ -41,7 +41,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private TextView eventDate;
     private TextView eventDescription;
     private ImageView eventPoster;
-    private TextView organizerName;
     private Button QRCode;
     private TextView geolocationRequired;
     private TextView eventCapacity;
@@ -54,7 +53,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
-    private ConstraintLayout progessBar;
+    private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
 
     /**

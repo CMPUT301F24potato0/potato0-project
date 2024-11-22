@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -62,6 +63,13 @@ public class geo_requirement_dialog extends DialogFragment {
         this.unjoinBtn = unjoinBtn;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(R.drawable.gradient_background);
+    }
+
     /**
      * On create dialog override
      * @param savedInstanceState If the fragment is being re-created from
@@ -77,7 +85,7 @@ public class geo_requirement_dialog extends DialogFragment {
 
         AlertDialog alertDialog = builder.setView(view)
                 .setView(view)
-                .setTitle("Geo location required")
+                .setTitle("   ")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Accept", null)
                 .create();
@@ -101,6 +109,19 @@ public class geo_requirement_dialog extends DialogFragment {
                                 event.queueWaitingList(user);
                             } catch (Exception e) {
                                 Toast.makeText(getContext(), "The waiting list is already full or the user is already inside the waiting list", Toast.LENGTH_SHORT).show();
+//                 .setPositiveButton("Accept", (dialog, which) -> {
+//                     try {
+//                         event.queueWaitingList(user);
+//                     } catch (Exception e) {
+//                         Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                         return;
+//                     }
+//                     Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
+//                     task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                         @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()) {
+//                                cuUser = documentSnapshot.toObject(CurrentUser.class);
                             }
                             Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                             task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -143,5 +164,21 @@ public class geo_requirement_dialog extends DialogFragment {
             }
         });
         return alertDialog;
+//                     });
+//                     db.collection("events").document(event.getEventID()).set(event);
+//                     task.onSuccessTask(t1 -> {
+//                         cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+//                         // Subscribing to topic when joining event to receive notification
+//                         SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + user.getiD(),getContext());
+//                         subscribeToTopic.subscribe();
+//                         cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+//                         // ****************************************************************************************
+//                         db.collection("users").document(user.getiD()).set(cuUser);
+//                         joinBtn.setVisibility(View.GONE);
+//                         unjoinBtn.setVisibility(View.VISIBLE);
+//                         return null;
+//                     });
+//                 })
+//                 .create();
     }
 }

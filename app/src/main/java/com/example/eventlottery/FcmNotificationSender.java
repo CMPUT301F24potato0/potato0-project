@@ -67,28 +67,24 @@ public class FcmNotificationSender {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject mainObj = new JSONObject();
         try{
-
             JSONObject messageObject = new JSONObject();
             JSONObject notificationObject = new JSONObject();
-            JSONObject dataObject = new JSONObject();
 
 
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
-            dataObject.put("SignUP",SignUp.toString());
-            dataObject.put("eventID", eventID);
-
+            messageObject.put("topic", topic);
 
             messageObject.put("topic", topic);
 
             messageObject.put("notification", notificationObject);
-            messageObject.put("data", dataObject);
 
             mainObj.put("message", messageObject);
 
 
 
+            mainObj.put("message", messageObject);
 
 
 

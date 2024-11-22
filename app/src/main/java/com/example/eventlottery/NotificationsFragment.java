@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,7 +33,8 @@ public class NotificationsFragment extends Fragment {
     private ArrayList<HashMap<String, String>> notifications;
     private ListView notification_listview;
     private ConstraintLayout notification_off_textView;
-
+    private LinearLayout notification_view;
+    private Button clearAll;
     /**
      * Empty constructor
      */
@@ -70,15 +73,16 @@ public class NotificationsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
+        notification_view = view.findViewById(R.id.notification_view);
         notification_listview = view.findViewById(R.id.notification_listview);
         notification_off_textView = view.findViewById(R.id.notification_off_textView);
 
         if (curUser.isMuted()) {
             notification_off_textView.setVisibility(View.VISIBLE);
-            notification_listview.setVisibility(View.GONE);
+            notification_view.setVisibility(View.GONE);
         } else {
             notification_off_textView.setVisibility(View.GONE);
-            notification_listview.setVisibility(View.VISIBLE);
+            notification_view.setVisibility(View.VISIBLE);
         }
         notifications = curUser.getNotifications();
         NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
@@ -111,6 +115,17 @@ public class NotificationsFragment extends Fragment {
                     }
                 });
 
+
+        // working
+        clearAll = view.findViewById(R.id.clearAll_btn);
+        clearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curUser.getNotifications().clear();
+                db.collection("users").document(curUser.getiD()).set(curUser);
+
+            }
+        });
         return view;
     }
 }

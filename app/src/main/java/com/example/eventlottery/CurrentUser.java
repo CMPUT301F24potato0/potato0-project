@@ -1,5 +1,10 @@
 package com.example.eventlottery;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +83,17 @@ public class CurrentUser implements Serializable {
     /**
      * Empty constructor
      */
-    public CurrentUser() {}
+    public CurrentUser() {
+        this.fName = "";
+        this.lName = "";
+        this.email = "";
+        this.isAdmin = false;
+        this.facilityID = "";
+        this.phone = "";
+        this.iD = "";
+        this.isMuted = false;
+        this.topics = new ArrayList<String>();
+    }
 
     /**
      * Getting First name
@@ -301,5 +316,17 @@ public class CurrentUser implements Serializable {
                 this.notifications.remove(notification);
             }
         }
+    }
+
+    /**
+     * Deletes the user from firebase, taking care to also delete associated facilities and events
+     */
+    public void delete(FirebaseFirestore db) {
+        db.collection("facilities").document(getiD()).get().addOnCompleteListener((Task<DocumentSnapshot> facilityTask) -> {
+            FacilityModel facility = facilityTask.getResult().toObject(FacilityModel.class);
+            if (facility == null) return;
+            facility.delete(db);
+        });
+        db.collection("users").document(getiD()).delete();
     }
 }

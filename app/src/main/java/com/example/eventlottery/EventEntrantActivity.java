@@ -63,6 +63,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
+    private CurrentUser currentUser;
 
     /**
      * Overriding on back pressed
@@ -72,6 +73,35 @@ public class EventEntrantActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
         startActivity(i);
+    }
+
+    /**
+     * Making a toast depending on the user's choice whether to allow the app to send notifications
+     */
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(this, "Notifications on", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Notifications off", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    /**
+     * Checks if the user has allowed the app to send notifications
+     * If not, it asks the user to have notifications turned on
+     */
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
     /**
      * On create of the View
@@ -146,6 +176,18 @@ public class EventEntrantActivity extends AppCompatActivity {
             }
         });
 
+        // ****************************************************************************************
+        // ****************************************************************************************
+        Task<DocumentSnapshot> task = db.collection("users").document(userList.getiD()).get();
+        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentUser = documentSnapshot.toObject(CurrentUser.class);
+            }
+        });
+        // ****************************************************************************************
+        // ****************************************************************************************
+
         progressBar.setVisibility(View.GONE);
         linearLayout.setVisibility(View.VISIBLE);
         unjoinBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +201,12 @@ public class EventEntrantActivity extends AppCompatActivity {
                 catch (Exception e) {
                     Toast.makeText(EventEntrantActivity.this, "This user is not in the waiting list!", Toast.LENGTH_SHORT).show();
                 }
+                // ****************************************************************************************
+                UnsubscribeFromTopic unsubscribeFromTopic = new UnsubscribeFromTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
+                unsubscribeFromTopic.unsubscribe();
+                currentUser.removeTopics(event.getEventID() + "_" + userList.getiD());
+                db.collection("users").document(userList.getiD()).set(currentUser);
+                // ****************************************************************************************
                 unjoinBtn.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.VISIBLE);
             }
@@ -166,6 +214,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                askNotificationPermission();
                 if (event.getGeolocationRequired()) {
                     // Joining
                     new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
@@ -175,9 +224,19 @@ public class EventEntrantActivity extends AppCompatActivity {
                     try {
                         event.queueWaitingList(userList);
                         db.collection("events").document(event.getEventID()).set(event);
+                        joinBtn.setVisibility(View.GONE);
+                        unjoinBtn.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        Toast.makeText(EventEntrantActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                    // ****************************************************************************************
+                    // Subscribing to topic when joining event to receive notification
+                    SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
+                    subscribeToTopic.subscribe();
+                    currentUser.addTopics(event.getEventID() + "_" + userList.getiD());
+                    // ****************************************************************************************
+                    db.collection("users").document(userList.getiD()).set(currentUser);
+                    // ****************************************************************************************
                     joinBtn.setVisibility(View.GONE);
                     unjoinBtn.setVisibility(View.VISIBLE);
                 }

@@ -125,7 +125,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         task.onSuccessTask(task1 -> {
             mainActivityProgressBar.setVisibility(View.GONE);
             mainActivityView.setVisibility(View.VISIBLE);
-            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            Bundle getExtras = getIntent().getExtras();
+            if (getExtras != null){
+                String redirect = getExtras.getString("redirect");
+                if (redirect != null){
+                    if (redirect.equals("NotificationsFragment")){
+                        bottomNavigationView.setSelectedItemId(R.id.notifications);
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.flFragment, new NotificationsFragment(db, curUser, curUser.getNotifications()))
+                                .commit();
+                    }
+                }
+            } else {
+                bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            }
             return null;
         });
     }

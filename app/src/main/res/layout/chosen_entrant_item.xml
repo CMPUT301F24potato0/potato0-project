@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp"
     android:background="@drawable/rounded_corner_background"
@@ -13,11 +14,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Entrant Name"
-        android:textColor="@color/black"
-        android:textSize="16sp"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp" />
+        android:paddingEnd="8dp"
+        android:text="Entrant Name"
+        android:textColor="@color/space_cadet"
+        android:textSize="16sp" />
 
     <!-- Invite Button -->
     <Button
@@ -27,7 +28,9 @@
         android:text="Invite"
         android:backgroundTint="@color/green1"
         android:textColor="@color/white"
-        android:padding="5dp" />
+        android:padding="5dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2.5dp"/>
 
     <!-- Remove Button -->
     <Button
@@ -38,5 +41,7 @@
         android:backgroundTint="@color/red1"
         android:textColor="@color/white"
         android:padding="5dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2.5dp"/>
 </LinearLayout>
