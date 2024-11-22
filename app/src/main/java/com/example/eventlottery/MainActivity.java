@@ -3,7 +3,6 @@ package com.example.eventlottery;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -18,6 +17,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.eventlottery.entrant.ProfileFragment;
+import com.example.eventlottery.entrant.ScanFragment;
+import com.example.eventlottery.entrant.WaitlistedEventsFragment;
+import com.example.eventlottery.models.CurrentUser;
+import com.example.eventlottery.models.FacilityModel;
+import com.example.eventlottery.notifications.NotificationsFragment;
+import com.example.eventlottery.organizer.FacilityFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
