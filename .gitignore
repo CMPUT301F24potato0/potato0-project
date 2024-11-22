@@ -88,3 +88,5 @@ app/src/main/java/com/example/eventlottery/AccessToken.java
 # Secrets
 secrets.properties
 
+
+app/google-services.json
