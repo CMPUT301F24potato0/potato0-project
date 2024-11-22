@@ -151,7 +151,7 @@ public class FacilityModel implements Serializable {
         });
         Task<DocumentSnapshot> task = db.collection("users").document(getUserID()).get();
         task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
-            CurrentUser owner = posttask.getResult().toObject(CurrentUser.class);
+            UserModel owner = posttask.getResult().toObject(UserModel.class);
             if (owner == null) return;
             owner.setFacilityID("");
             db.collection("users").document(owner.getiD()).set(owner);

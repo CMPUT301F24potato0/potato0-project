@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 /**
  * This class is the WaitlistEventAdapter
  */
-public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
-    private ArrayList<UsersList> waitList;
-    private ArrayList<UsersList> cancelList;
+public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
+    private ArrayList<RemoteUserRef> waitList;
+    private ArrayList<RemoteUserRef> cancelList;
     private EventModel event;
     private FirebaseFirestore db;
 
@@ -67,7 +67,7 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
         Button remove = view.findViewById(R.id.listview_remove_button);
         Button sendInvite = view.findViewById(R.id.listview_send_invite_button);
         sendInvite.setVisibility(View.GONE);
-        UsersList user = getItem(position);
+        RemoteUserRef user = getItem(position);
         TextView userName = view.findViewById(R.id.listview_user_name);
         userName.setText(user.getName());
 
@@ -94,7 +94,7 @@ public class WaitlistEventAdapter extends ArrayAdapter<UsersList> {
      * @param user The user
      * @param list The list
      */
-    private void removeFromList(UsersList user, ArrayList<UsersList> list) {
+    private void removeFromList(RemoteUserRef user, ArrayList<RemoteUserRef> list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getName().equals(user.getName())) {
                 list.remove(i);

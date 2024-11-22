@@ -12,8 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
         super(context, resource);
     }
 
-    private ArrayList<UsersList> chosenEntrants;
+    private ArrayList<RemoteUserRef> chosenEntrants;
     private EventModel event;
     FirebaseFirestore db;
 
@@ -42,7 +42,7 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
      * @param event The event model
      * @param db Firebase Firestore
      */
-    public InvitedListArrayAdapter(Context context, ArrayList<UsersList> entrants, EventModel event, FirebaseFirestore db) {
+    public InvitedListArrayAdapter(Context context, ArrayList<RemoteUserRef> entrants, EventModel event, FirebaseFirestore db) {
         super(context, 0, entrants);
         this.chosenEntrants = entrants;
         this.event = event;
@@ -68,7 +68,7 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_listview_content, parent, false);
         }
 
-        UsersList entrant = chosenEntrants.get(position);
+        RemoteUserRef entrant = chosenEntrants.get(position);
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.listview_user_name);

@@ -14,9 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,9 +29,9 @@ import java.util.ArrayList;
  */
 public class InvitedListActivity extends AppCompatActivity {
 
-    private ArrayList<UsersList> userInvitedList;
+    private ArrayList<RemoteUserRef> userInvitedList;
     private ListView invitedList;
-    private ArrayAdapter<UsersList> invitedAdapter;
+    private ArrayAdapter<RemoteUserRef> invitedAdapter;
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -55,7 +55,7 @@ public class InvitedListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userInvitedList = new ArrayList<UsersList>();
+        userInvitedList = new ArrayList<RemoteUserRef>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {

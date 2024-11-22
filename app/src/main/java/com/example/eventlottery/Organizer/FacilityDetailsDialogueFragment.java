@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FacilityDetailsDialogueFragment extends DialogFragment {
 
     private FirebaseFirestore db;
-    private CurrentUser user;
+    private UserModel user;
     private Boolean facilityDne;
     private FacilityModel facility;
     private FacilityFragment facilityFragment;
@@ -46,7 +46,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
      * @param facility Facility Model
      * @param facilityFragment Facility Fragment
      */
-    public FacilityDetailsDialogueFragment(FirebaseFirestore db, CurrentUser curUser, Boolean facilityDne, FacilityModel facility, FacilityFragment facilityFragment) {
+    public FacilityDetailsDialogueFragment(FirebaseFirestore db, UserModel curUser, Boolean facilityDne, FacilityModel facility, FacilityFragment facilityFragment) {
         this.db = db;
         this.user = curUser;
         this.facilityDne = facilityDne;

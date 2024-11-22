@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ import java.util.ArrayList;
 /**
  * This class is the array adapter for the cancelled list
  */
-public class CancelledListArrayAdapter extends ArrayAdapter<UsersList> {
+public class CancelledListArrayAdapter extends ArrayAdapter<RemoteUserRef> {
     private String state;
-    private ArrayList<UsersList> list;
+    private ArrayList<RemoteUserRef> list;
     private EventModel event;
     private FirebaseFirestore db;
 
@@ -35,7 +35,7 @@ public class CancelledListArrayAdapter extends ArrayAdapter<UsersList> {
      * @param event event model class
      * @param db firebase firestore
      */
-    public CancelledListArrayAdapter(@NonNull Context context, int resource, ArrayList<UsersList> list, String state, EventModel event, FirebaseFirestore db) {
+    public CancelledListArrayAdapter(@NonNull Context context, int resource, ArrayList<RemoteUserRef> list, String state, EventModel event, FirebaseFirestore db) {
         super(context, resource, list);
         this.list = list;
         this.state = state;
@@ -74,7 +74,7 @@ public class CancelledListArrayAdapter extends ArrayAdapter<UsersList> {
         } else {
             view = convertView;
         }
-        UsersList user = getItem(position);
+        RemoteUserRef user = getItem(position);
         TextView userName = view.findViewById(R.id.listview_user_name);
         userName.setText(user.getName());
         Button sendInviteButton = view.findViewById(R.id.listview_send_invite_button);

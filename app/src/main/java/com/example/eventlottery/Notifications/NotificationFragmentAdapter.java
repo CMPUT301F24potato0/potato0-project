@@ -10,10 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.RemoteUserRef;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,7 +31,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
      * Constructor for NotificationFragmentAdapter
      */
 
-    private CurrentUser currentUser;
+    private UserModel currentUser;
     private FirebaseFirestore db;
     private ArrayList<HashMap<String, String>> notifications;
     public NotificationFragmentAdapter(@NonNull Context context, int resource) {
@@ -49,7 +49,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
     public NotificationFragmentAdapter
             (@NonNull Context context,
              int resource, ArrayList<HashMap<String, String>> notifications,
-             CurrentUser currentUser,
+             UserModel currentUser,
              FirebaseFirestore db) {
         super(context, resource, notifications);
         this.notifications = notifications;
@@ -110,11 +110,11 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot != null) {
                                 EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                                UsersList entrantUsersList = new UsersList(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                RemoteUserRef entrantRemoteUserRef = new RemoteUserRef(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
                                 // Update event model after user chooses to join the event
                                 try {
-                                    eventFireStore.unqueueInvitedList(entrantUsersList);
-                                    eventFireStore.queueEnrolledList(entrantUsersList);
+                                    eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
+                                    eventFireStore.queueEnrolledList(entrantRemoteUserRef);
                                 } catch (Exception e) {
                                     throw new RuntimeException(e);
                                 }
@@ -144,11 +144,11 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot != null) {
                                 EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                                UsersList entrantUsersList = new UsersList(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                RemoteUserRef entrantRemoteUserRef = new RemoteUserRef(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
                                 // Update event model after user chooses to not join the event
                                 try {
-                                    eventFireStore.unqueueInvitedList(entrantUsersList);
-                                    eventFireStore.queueCancelledList(entrantUsersList);
+                                    eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
+                                    eventFireStore.queueCancelledList(entrantRemoteUserRef);
                                 } catch (Exception e) {
                                     throw new RuntimeException(e);
                                 }

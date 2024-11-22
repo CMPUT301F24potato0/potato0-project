@@ -11,7 +11,7 @@ import java.util.HashMap;
 /**
  * This Class stores the current user's information
  */
-public class CurrentUser implements Serializable {
+public class UserModel implements Serializable {
     private String fName;
     private String lName;
     private String email;
@@ -33,11 +33,11 @@ public class CurrentUser implements Serializable {
      * @param phone Phone number
      * @param iD Android ID
      */
-    public CurrentUser(String fName, String lName,
-                       String email, String phone,
-                       boolean isAdmin, String facilityID,
-                       String iD, boolean isMuted,
-                       ArrayList<String> topics) {
+    public UserModel(String fName, String lName,
+                     String email, String phone,
+                     boolean isAdmin, String facilityID,
+                     String iD, boolean isMuted,
+                     ArrayList<String> topics) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
@@ -50,7 +50,7 @@ public class CurrentUser implements Serializable {
     }
 
     /**
-     * Constructor for CurrentUser
+     * Constructor for UserModel
      * @param fName First name
      * @param lName Last name
      * @param email Email
@@ -62,11 +62,11 @@ public class CurrentUser implements Serializable {
      * @param topics Topics the user is subscribed to
      * @param notifications Notifications sent to the user
      */
-    public CurrentUser(String fName, String lName,
-                       String email, String phone,
-                       boolean isAdmin, String facilityID,
-                       String iD, boolean isMuted,
-                       ArrayList<String> topics, ArrayList<HashMap<String, String>> notifications) {
+    public UserModel(String fName, String lName,
+                     String email, String phone,
+                     boolean isAdmin, String facilityID,
+                     String iD, boolean isMuted,
+                     ArrayList<String> topics, ArrayList<HashMap<String, String>> notifications) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
@@ -82,7 +82,7 @@ public class CurrentUser implements Serializable {
     /**
      * Empty constructor
      */
-    public CurrentUser() {
+    public UserModel() {
         this.fName = "";
         this.lName = "";
         this.email = "";

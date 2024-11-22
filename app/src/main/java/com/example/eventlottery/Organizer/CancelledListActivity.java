@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,9 +30,9 @@ import java.util.ArrayList;
  */
 public class CancelledListActivity extends AppCompatActivity {
 
-    private ArrayList<UsersList> userCancelList;
+    private ArrayList<RemoteUserRef> userCancelList;
     private ListView cancelledList;
-    private ArrayAdapter<UsersList> cancelAdapter;
+    private ArrayAdapter<RemoteUserRef> cancelAdapter;
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notification_send;
@@ -55,7 +55,7 @@ public class CancelledListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userCancelList = new ArrayList<UsersList>();
+        userCancelList = new ArrayList<RemoteUserRef>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {

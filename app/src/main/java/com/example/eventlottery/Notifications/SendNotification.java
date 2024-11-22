@@ -2,7 +2,7 @@ package com.example.eventlottery.Notifications;
 
 import android.content.Context;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -26,7 +26,7 @@ public class SendNotification implements Serializable {
     private String topic;
     private ArrayList<String> title_text;
     private FirebaseFirestore db;
-    private CurrentUser tempCurUser;
+    private UserModel tempCurUser;
 
 
     /**
@@ -84,7 +84,7 @@ public class SendNotification implements Serializable {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    tempCurUser = documentSnapshot.toObject(CurrentUser.class);
+                    tempCurUser = documentSnapshot.toObject(UserModel.class);
                     HashMap<String,String> notification = new HashMap<String,String>();
                     notification.put("title",title);
                     notification.put("body",body);

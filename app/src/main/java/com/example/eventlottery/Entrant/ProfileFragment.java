@@ -30,7 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventlottery.Admin.AdminMainActivity;
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,7 +55,7 @@ import java.util.Objects;
  */
 public class ProfileFragment extends Fragment {
 
-    private CurrentUser curUser;
+    private UserModel curUser;
     private FirebaseFirestore db;
     public CollectionReference userRef;
 
@@ -79,11 +79,11 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * This constructor is used to pass in the instance of CurrentUser
+     * This constructor is used to pass in the instance of UserModel
      * @param db This is the database instance
      * @param curUser This is the information about current user which is passed from MainActivity
      */
-    public ProfileFragment(FirebaseFirestore db, CurrentUser curUser) {
+    public ProfileFragment(FirebaseFirestore db, UserModel curUser) {
         this.db = db;
         this.curUser = curUser;
     }
@@ -98,7 +98,7 @@ public class ProfileFragment extends Fragment {
 
     /**
      * This method is called when creating the fragment.
-     * This method uses the CurrentUser instance and puts the information if any in the EditText in the fragment.
+     * This method uses the UserModel instance and puts the information if any in the EditText in the fragment.
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's

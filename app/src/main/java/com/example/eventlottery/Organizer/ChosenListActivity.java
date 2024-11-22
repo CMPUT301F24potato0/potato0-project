@@ -17,9 +17,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -43,8 +43,8 @@ public class ChosenListActivity extends AppCompatActivity {
     private DocumentReference eventRef;
     private ChosenListActivity chosenListActivity = this;
 
-    private ArrayList<UsersList> chosenEntrantsTemp;  // for storing entrants chosen by the LotterySystem class but not yet added to the event model
-    private ArrayList<UsersList> chosenEntrantsModel; // a reference to the chosen entrants list from the event model
+    private ArrayList<RemoteUserRef> chosenEntrantsTemp;  // for storing entrants chosen by the LotterySystem class but not yet added to the event model
+    private ArrayList<RemoteUserRef> chosenEntrantsModel; // a reference to the chosen entrants list from the event model
 
     /**
      * Called when the activity is first created.
@@ -79,7 +79,7 @@ public class ChosenListActivity extends AppCompatActivity {
         // Empty the chosen list (this happens only once after sample button is clicked)
         chosenEntrantsModel.clear();
         // Make a copy of waitlist
-        ArrayList<UsersList> waitlist_copy = (ArrayList<UsersList>) event.getWaitingList().clone();
+        ArrayList<RemoteUserRef> waitlist_copy = (ArrayList<RemoteUserRef>) event.getWaitingList().clone();
 
         // Set up adapter for ListView
         adapter = new ChosenEntrantsAdapter(this, waitlist_copy, event, db, chosenListActivity);
@@ -177,11 +177,11 @@ public class ChosenListActivity extends AppCompatActivity {
      * @param entrantsList The ArrayList of entrants to choose and remove entrants from
      * @param sample_amount How many entrants to sample from the ArrayList of entrants
      */
-    private void sampleEntrants(ArrayList<UsersList> entrantsList, Integer sample_amount) {
+    private void sampleEntrants(ArrayList<RemoteUserRef> entrantsList, Integer sample_amount) {
         // Sample a subset of entrants
         chosenEntrantsTemp = LotterySystem.sampleEntrants(entrantsList, sample_amount);
         // Removing chosen entrants from the provided ArrayList and updating event model with chosen entrants
-        for (UsersList entrant : chosenEntrantsTemp) {
+        for (RemoteUserRef entrant : chosenEntrantsTemp) {
             try {
                 removeEntrant(entrantsList, entrant);
                 event.queueChosenList(entrant);
@@ -204,7 +204,7 @@ public class ChosenListActivity extends AppCompatActivity {
      * @param entrantsList The ArrayList of entrants
      * @param entrant The entrant to remove from the ArrayList
      */
-    private void removeEntrant(ArrayList<UsersList> entrantsList, UsersList entrant) throws IllegalArgumentException {
+    private void removeEntrant(ArrayList<RemoteUserRef> entrantsList, RemoteUserRef entrant) throws IllegalArgumentException {
         for (int i = 0; i < entrantsList.size(); i++) {
             if (entrantsList.get(i).getiD().equals(entrant.getiD())) {
                 entrantsList.remove(i);
@@ -231,8 +231,8 @@ public class ChosenListActivity extends AppCompatActivity {
      */
     public void sendNotification(){
 
-        ArrayList<UsersList> invitedEntrants = new ArrayList<>();
-        for (UsersList entrant : chosenEntrantsModel) {
+        ArrayList<RemoteUserRef> invitedEntrants = new ArrayList<>();
+        for (RemoteUserRef entrant : chosenEntrantsModel) {
             try {
                 event.queueInvitedList(entrant);
                 event.unqueueWaitingList(entrant);

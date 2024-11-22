@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,7 +45,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private Boolean geolocationRequired;
     private String eventDescription;
 
-    private CurrentUser organizer;
+    private UserModel organizer;
     private FirebaseFirestore db;
     private EventModel event;
     private EventOrganizerActivity eventActivity;
@@ -76,7 +76,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
      * @param db The database
      */
     // for creating a new event (organizer information required)
-    public CreateEventDialogueFragment(CurrentUser organizer, FirebaseFirestore db) {
+    public CreateEventDialogueFragment(UserModel organizer, FirebaseFirestore db) {
         this();
         this.organizer = organizer;
         this.event = null;

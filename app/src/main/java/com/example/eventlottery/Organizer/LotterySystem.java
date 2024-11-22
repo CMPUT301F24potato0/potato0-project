@@ -1,6 +1,6 @@
 package com.example.eventlottery.Organizer;
 
-import com.example.eventlottery.Models.UsersList;
+import com.example.eventlottery.Models.RemoteUserRef;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,9 +18,9 @@ public class LotterySystem {
      * @param sample_amount The number of entrants to select.
      * @return A randomly selected subset of the waitlist.
      */
-    public static ArrayList<UsersList> sampleEntrants(ArrayList<UsersList> waitlist, Integer sample_amount) {
+    public static ArrayList<RemoteUserRef> sampleEntrants(ArrayList<RemoteUserRef> waitlist, Integer sample_amount) {
         if (waitlist.size() <= sample_amount) {
-            return (ArrayList<UsersList>) waitlist.clone();
+            return (ArrayList<RemoteUserRef>) waitlist.clone();
         }
         Collections.shuffle(waitlist, new Random()); // Shuffle for randomness
         return new ArrayList<>(waitlist.subList(0, sample_amount)); // Return subset

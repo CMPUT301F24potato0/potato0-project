@@ -13,8 +13,8 @@ import com.example.eventlottery.R;
 
 import java.util.ArrayList;
 
-public class UserArrayAdapter extends ArrayAdapter<CurrentUser> {
-    public UserArrayAdapter(Context context, ArrayList<CurrentUser> users) {
+public class UserArrayAdapter extends ArrayAdapter<UserModel> {
+    public UserArrayAdapter(Context context, ArrayList<UserModel> users) {
         super(context, 0, users);
     }
 
@@ -27,7 +27,7 @@ public class UserArrayAdapter extends ArrayAdapter<CurrentUser> {
         } else {
             view = convertView;
         }
-        CurrentUser user = getItem(pos);
+        UserModel user = getItem(pos);
         TextView nameview = view.findViewById(R.id.listview_user_name);
         nameview.setText(user.getfName() + " " + user.getlName());
 

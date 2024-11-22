@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 public class NotificationsFragment extends Fragment {
 
     private FirebaseFirestore db;
-    private CurrentUser curUser;
+    private UserModel curUser;
     private ArrayList<HashMap<String, String>> notifications;
     private ListView notification_listview;
     private ConstraintLayout notification_off_textView;
@@ -50,7 +50,7 @@ public class NotificationsFragment extends Fragment {
      * @param curUser The current user
      * @param notifications The ArrayList of notifications
      */
-    public NotificationsFragment(FirebaseFirestore db, CurrentUser curUser, ArrayList<HashMap<String, String>> notifications) {
+    public NotificationsFragment(FirebaseFirestore db, UserModel curUser, ArrayList<HashMap<String, String>> notifications) {
         this.db = db;
         this.curUser = curUser;
         this.notifications = notifications;
@@ -106,7 +106,7 @@ public class NotificationsFragment extends Fragment {
                             return;
                         }
                         if (value != null && value.exists()) {
-                            CurrentUser tempCurUser = value.toObject(CurrentUser.class);
+                            UserModel tempCurUser = value.toObject(UserModel.class);
                             curUser.getNotifications().clear();
                             for (HashMap<String, String> notification : tempCurUser.getNotifications()) {
                                 curUser.addNotifications(notification);

@@ -9,10 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.RemoteUserRef;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,7 +40,7 @@ public class ScanFragment extends Fragment {
     View rootView;
     private String eventScanned;
     private FirebaseFirestore db;
-    private CurrentUser curUser;
+    private UserModel curUser;
 
     /**
      * This is the empty constructor
@@ -54,7 +54,7 @@ public class ScanFragment extends Fragment {
      * @param db The database
      * @param curUser The current user
      */
-    public ScanFragment(FirebaseFirestore db, CurrentUser curUser) {
+    public ScanFragment(FirebaseFirestore db, UserModel curUser) {
         this.db = db;
         this.curUser = curUser;
     }
@@ -119,7 +119,7 @@ public class ScanFragment extends Fragment {
                     if (document.exists()) {
                         EventModel eve = document.toObject(EventModel.class);
                         Intent i = new Intent(getActivity(), EventEntrantActivity.class);
-                        UsersList userList = new UsersList(userId, curUser.getfName() + " " + curUser.getlName());
+                        RemoteUserRef userList = new RemoteUserRef(userId, curUser.getfName() + " " + curUser.getlName());
                         i.putExtra("userList", userList);
                         i.putExtra("eventModel", eve);
                         startActivity(i);

@@ -11,11 +11,11 @@ public class EventModel implements Serializable {
     private String facilityID;
     private String eventID;
     // each of the following list contains user ID's formatted as Strings
-    private ArrayList<UsersList> waitingList;
-    private ArrayList<UsersList> invitedList;
-    private ArrayList<UsersList> cancelledList;
-    private ArrayList<UsersList> enrolledList;
-    private ArrayList<UsersList> chosenList;
+    private ArrayList<RemoteUserRef> waitingList;
+    private ArrayList<RemoteUserRef> invitedList;
+    private ArrayList<RemoteUserRef> cancelledList;
+    private ArrayList<RemoteUserRef> enrolledList;
+    private ArrayList<RemoteUserRef> chosenList;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -44,11 +44,11 @@ public class EventModel implements Serializable {
         eventDescription = "";
         hashQR = "";
         organizer = "";
-        waitingList = new ArrayList<UsersList>();
-        invitedList = new ArrayList<UsersList>();
-        cancelledList = new ArrayList<UsersList>();
-        enrolledList = new ArrayList<UsersList>();
-        chosenList = new ArrayList<UsersList>();
+        waitingList = new ArrayList<RemoteUserRef>();
+        invitedList = new ArrayList<RemoteUserRef>();
+        cancelledList = new ArrayList<RemoteUserRef>();
+        enrolledList = new ArrayList<RemoteUserRef>();
+        chosenList = new ArrayList<RemoteUserRef>();
     }
 
     /**
@@ -122,7 +122,7 @@ public class EventModel implements Serializable {
      * @param listStr The list to put into the exception if the user is already inside the list
      * @throws Exception Throws an exception if the list already contains the user
      */
-    private void queueList(UsersList user, ArrayList<UsersList> list, String listStr) throws Exception {
+    private void queueList(RemoteUserRef user, ArrayList<RemoteUserRef> list, String listStr) throws Exception {
         // check if user is already inside the list
         if (checkUserInList(user, list)) {
             throw new Exception("The user is already inside the event's " + listStr + "!");
@@ -138,7 +138,7 @@ public class EventModel implements Serializable {
      * @param listStr The list to put into the exception if the user is not inside the list
      * @throws Exception Throws an exception if the list does not contain the user
      */
-    private void unqueueList(UsersList user, ArrayList<UsersList> list, String listStr) throws Exception {
+    private void unqueueList(RemoteUserRef user, ArrayList<RemoteUserRef> list, String listStr) throws Exception {
         // checks if user is not inside the list
         if (!checkUserInList(user, list)) {
             throw new Exception("The user is not inside the event's " + listStr + "!");
@@ -157,7 +157,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the waiting list is full or if the user is already inside the waiting list
      */
-    public void queueWaitingList(UsersList user) throws Exception {
+    public void queueWaitingList(RemoteUserRef user) throws Exception {
         if (waitingListIsFull()) {
             throw new Exception("The waiting list for this event is full!");
         }
@@ -169,7 +169,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the waiting list
      */
-    public void unqueueWaitingList(UsersList user) throws Exception {
+    public void unqueueWaitingList(RemoteUserRef user) throws Exception {
         unqueueList(user, waitingList, "waiting list");
     }
 
@@ -189,7 +189,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is already in the invited list
      */
-    public void queueInvitedList(UsersList user) throws Exception {
+    public void queueInvitedList(RemoteUserRef user) throws Exception {
         queueList(user, invitedList, "invited list");
     }
 
@@ -198,7 +198,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the invited list
      */
-    public void unqueueInvitedList(UsersList user) throws Exception {
+    public void unqueueInvitedList(RemoteUserRef user) throws Exception {
         unqueueList(user, invitedList, "invited list");
     }
 
@@ -207,7 +207,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is already in the cancelled list
      */
-    public void queueCancelledList(UsersList user) throws Exception {
+    public void queueCancelledList(RemoteUserRef user) throws Exception {
         queueList(user, cancelledList, "cancelled list");
     }
 
@@ -216,7 +216,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the cancelled list
      */
-    public void unqueueCancelledList(UsersList user) throws Exception {
+    public void unqueueCancelledList(RemoteUserRef user) throws Exception {
         unqueueList(user, cancelledList, "cancelled list");
     }
 
@@ -225,7 +225,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is already in the enrolled list
      */
-    public void queueEnrolledList(UsersList user) throws Exception {
+    public void queueEnrolledList(RemoteUserRef user) throws Exception {
         queueList(user, enrolledList, "enrolled list");
     }
 
@@ -234,7 +234,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the enrolled list
      */
-    public void unqueueEnrolledList(UsersList user) throws Exception {
+    public void unqueueEnrolledList(RemoteUserRef user) throws Exception {
         unqueueList(user, enrolledList, "enrolled list");
     }
 
@@ -243,7 +243,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is already in the chosen list
      */
-    public void queueChosenList(UsersList user) throws Exception {
+    public void queueChosenList(RemoteUserRef user) throws Exception {
         queueList(user, chosenList, "chosen list");
     }
 
@@ -252,7 +252,7 @@ public class EventModel implements Serializable {
      * @param user The entrant's unique user
      * @throws Exception Throws an exception if the user is not in the chosen list
      */
-    public void unqueueChosenList(UsersList user) throws Exception {
+    public void unqueueChosenList(RemoteUserRef user) throws Exception {
         unqueueList(user, chosenList, "chosen list");
     }
 
@@ -437,7 +437,7 @@ public class EventModel implements Serializable {
      * Getter for waiting list
      * @return The waiting list
      */
-    public ArrayList<UsersList> getWaitingList() {
+    public ArrayList<RemoteUserRef> getWaitingList() {
         return waitingList;
     }
 
@@ -445,7 +445,7 @@ public class EventModel implements Serializable {
      * Setter for waiting list
      * @param waitingList The waiting list
      */
-    public void setWaitingList(ArrayList<UsersList> waitingList) {
+    public void setWaitingList(ArrayList<RemoteUserRef> waitingList) {
         this.waitingList = waitingList;
     }
 
@@ -453,7 +453,7 @@ public class EventModel implements Serializable {
      * Getter for invited list
      * @return The invited list
      */
-    public ArrayList<UsersList> getInvitedList() {
+    public ArrayList<RemoteUserRef> getInvitedList() {
         return invitedList;
     }
 
@@ -461,7 +461,7 @@ public class EventModel implements Serializable {
      * Setter for invited list
      * @param invitedList The invited list
      */
-    public void setInvitedList(ArrayList<UsersList> invitedList) {
+    public void setInvitedList(ArrayList<RemoteUserRef> invitedList) {
         this.invitedList = invitedList;
     }
 
@@ -470,7 +470,7 @@ public class EventModel implements Serializable {
      * @return The cancelled list
      */
 
-    public ArrayList<UsersList> getCancelledList() {
+    public ArrayList<RemoteUserRef> getCancelledList() {
         return cancelledList;
     }
 
@@ -478,7 +478,7 @@ public class EventModel implements Serializable {
      * Setter for cancelled list
      * @param cancelledList The cancelled list
      */
-    public void setCancelledList(ArrayList<UsersList> cancelledList) {
+    public void setCancelledList(ArrayList<RemoteUserRef> cancelledList) {
         this.cancelledList = cancelledList;
     }
 
@@ -486,7 +486,7 @@ public class EventModel implements Serializable {
      * Getter for enrolled list
      * @return The enrolled list
      */
-    public ArrayList<UsersList> getEnrolledList() {
+    public ArrayList<RemoteUserRef> getEnrolledList() {
         return enrolledList;
     }
 
@@ -494,7 +494,7 @@ public class EventModel implements Serializable {
      * Setter for enrolled list
      * @param enrolledList The enrolled list
      */
-    public void setEnrolledList(ArrayList<UsersList> enrolledList) {
+    public void setEnrolledList(ArrayList<RemoteUserRef> enrolledList) {
         this.enrolledList = enrolledList;
     }
 
@@ -502,7 +502,7 @@ public class EventModel implements Serializable {
      * Getter for chosen list
      * @return The chosen list
      */
-    public ArrayList<UsersList> getChosenList() {
+    public ArrayList<RemoteUserRef> getChosenList() {
         return chosenList;
     }
 
@@ -510,7 +510,7 @@ public class EventModel implements Serializable {
      * Setter for chosen list
      * @param chosenList The chosen list
      */
-    public void setChosenList(ArrayList<UsersList> chosenList) {
+    public void setChosenList(ArrayList<RemoteUserRef> chosenList) {
         this.chosenList = chosenList;
     }
 
@@ -520,8 +520,8 @@ public class EventModel implements Serializable {
      * @param list The list to check
      * @return Whether the user is in the list
      */
-    public boolean checkUserInList(UsersList user, ArrayList<UsersList> list) {
-        for (UsersList u : list) {
+    public boolean checkUserInList(RemoteUserRef user, ArrayList<RemoteUserRef> list) {
+        for (RemoteUserRef u : list) {
             if (u.getiD().equals(user.getiD())) {
                 return true;
             }

@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ import java.util.ArrayList;
 /**
  * This class is the ChosenEntrantsAdapter
  */
-public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
+public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
     private EventModel event;
-    private ArrayList<UsersList> entrantsListCopy;
+    private ArrayList<RemoteUserRef> entrantsListCopy;
     private FirebaseFirestore db;
     private ChosenListActivity chosenListActivity;
 
@@ -32,7 +32,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
      * @param event event
      * @param db firebase firestore
      */
-    public ChosenEntrantsAdapter(Context context, ArrayList<UsersList> entrantsListCopy, EventModel event, FirebaseFirestore db, ChosenListActivity chosenListActivity) {
+    public ChosenEntrantsAdapter(Context context, ArrayList<RemoteUserRef> entrantsListCopy, EventModel event, FirebaseFirestore db, ChosenListActivity chosenListActivity) {
         super(context, 0, event.getChosenList());
         this.entrantsListCopy = entrantsListCopy;
         this.event = event;
@@ -59,7 +59,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<UsersList> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.chosen_entrant_item, parent, false);
         }
 
-        UsersList entrant = getItem(position);
+        RemoteUserRef entrant = getItem(position);
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.entrant_name);

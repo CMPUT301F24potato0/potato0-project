@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
@@ -41,7 +41,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         String id = event.getFacilityID();
         Task<DocumentSnapshot> task = db.collection("users").document(id).get();
         task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
-            CurrentUser organizer = posttask.getResult().toObject(CurrentUser.class);
+            UserModel organizer = posttask.getResult().toObject(UserModel.class);
             ((TextView)findViewById(R.id.organizer_name)).setText(String.format("%s %s", organizer.getfName(), organizer.getlName()));
         });
         task = db.collection("facilities").document(id).get();

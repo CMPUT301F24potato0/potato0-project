@@ -24,10 +24,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Notifications.SendNotification;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.example.eventlottery.Entrant.WaitlistEventAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -185,9 +185,9 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
                 });
     }
 
-    private void updateMapMarkers(ArrayList<UsersList> entrantsList) {
+    private void updateMapMarkers(ArrayList<RemoteUserRef> entrantsList) {
         googleMap.clear();
-        for (UsersList entrant : entrantsList) {
+        for (RemoteUserRef entrant : entrantsList) {
             // The following code is adapted from https://developers.google.com/maps/documentation/android-sdk/map-with-marker
             Double latitude = entrant.getLatitude();
             Double longitude = entrant.getLongitude();

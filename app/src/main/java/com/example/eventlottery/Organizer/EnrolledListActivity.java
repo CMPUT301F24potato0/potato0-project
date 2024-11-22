@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,9 +29,9 @@ import java.util.ArrayList;
  */
 public class EnrolledListActivity extends AppCompatActivity {
 
-    private ArrayList<UsersList> userEnrollList;
+    private ArrayList<RemoteUserRef> userEnrollList;
     private ListView enrollList;
-    private ArrayAdapter<UsersList> enrollAdapter;
+    private ArrayAdapter<RemoteUserRef> enrollAdapter;
     private EventModel event;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notif_enrolled;
@@ -55,7 +55,7 @@ public class EnrolledListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userEnrollList = new ArrayList<UsersList>();
+        userEnrollList = new ArrayList<RemoteUserRef>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {

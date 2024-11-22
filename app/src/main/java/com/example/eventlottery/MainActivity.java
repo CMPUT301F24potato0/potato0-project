@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat;
 import com.example.eventlottery.Entrant.ProfileFragment;
 import com.example.eventlottery.Entrant.ScanFragment;
 import com.example.eventlottery.Entrant.WaitlistedEventsFragment;
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.Notifications.NotificationsFragment;
 import com.example.eventlottery.Organizer.FacilityFragment;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
-    private CurrentUser curUser;
+    private UserModel curUser;
 //    public CollectionReference facilitiesRef;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 
-        curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
+        curUser = new UserModel("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        curUser = document.toObject(CurrentUser.class);
+                        curUser = document.toObject(UserModel.class);
                     } else {
                         newUser(curUser);
                     }
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     /**
      * This method is to add a new user to the database
      */
-    public void newUser(CurrentUser cUser) {
+    public void newUser(UserModel cUser) {
         // Adding a new User
         usersRef.document(androidIDStr).set(cUser);
     }

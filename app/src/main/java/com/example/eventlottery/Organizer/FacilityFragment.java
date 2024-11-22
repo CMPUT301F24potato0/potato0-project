@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventlottery.Models.EventsArrayAdapter;
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
@@ -46,7 +46,7 @@ public class FacilityFragment extends Fragment {
     FacilityFragment currentFragment = this;
 
     private Boolean facility_dne;
-    private CurrentUser curUser;
+    private UserModel curUser;
     private FirebaseFirestore db;
     private FacilityModel facilityModel;
 
@@ -63,7 +63,7 @@ public class FacilityFragment extends Fragment {
      * @param curUser Current User
      * @param facility Facility Model
      */
-    public FacilityFragment(FirebaseFirestore db, CurrentUser curUser, FacilityModel facility) {
+    public FacilityFragment(FirebaseFirestore db, UserModel curUser, FacilityModel facility) {
         this.db = db;
         this.curUser = curUser;
         this.facility_dne = curUser.getFacilityID().equals("");

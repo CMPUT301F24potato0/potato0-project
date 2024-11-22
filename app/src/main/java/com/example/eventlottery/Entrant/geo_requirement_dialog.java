@@ -19,11 +19,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.RemoteUserRef;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SubscribeToTopic;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,10 +34,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class geo_requirement_dialog extends DialogFragment {
 
-    private UsersList user;
+    private RemoteUserRef user;
     private EventModel event;
     private FirebaseFirestore db;
-    private CurrentUser cuUser;
+    private UserModel cuUser;
     private Button joinBtn;
     private Button unjoinBtn;
 
@@ -47,7 +47,7 @@ public class geo_requirement_dialog extends DialogFragment {
      * @param event Event Model
      * @param db Firebase Firestore
      */
-    public geo_requirement_dialog(UsersList user, EventModel event, FirebaseFirestore db, Button joinBtn, Button unjoinBtn ) {
+    public geo_requirement_dialog(RemoteUserRef user, EventModel event, FirebaseFirestore db, Button joinBtn, Button unjoinBtn ) {
         this.user = user;
         this.event = event;
         this.db = FirebaseFirestore.getInstance();
@@ -113,14 +113,14 @@ public class geo_requirement_dialog extends DialogFragment {
 //                         @Override
 //                        public void onSuccess(DocumentSnapshot documentSnapshot) {
 //                            if (documentSnapshot.exists()) {
-//                                cuUser = documentSnapshot.toObject(CurrentUser.class);
+//                                cuUser = documentSnapshot.toObject(UserModel.class);
                             }
                             Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                             task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     if (documentSnapshot.exists()) {
-                                        cuUser = documentSnapshot.toObject(CurrentUser.class);
+                                        cuUser = documentSnapshot.toObject(UserModel.class);
                                     }
                                 }
                             });

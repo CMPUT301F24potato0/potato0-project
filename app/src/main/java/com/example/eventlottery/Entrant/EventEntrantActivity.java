@@ -25,12 +25,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventlottery.MainActivity;
-import com.example.eventlottery.Models.CurrentUser;
+import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SubscribeToTopic;
 import com.example.eventlottery.Notifications.UnsubscribeFromTopic;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -55,7 +55,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private DocumentReference facilityRef;
     private String organizer;
     // Event stuff and user stuff
-    private UsersList userList;
+    private RemoteUserRef userList;
     private EventModel event;
     // XML stuff
     private TextView eventDescription;
@@ -68,7 +68,7 @@ public class EventEntrantActivity extends AppCompatActivity {
     private ImageView organizerProfilePicture;
     private LinearLayout linearLayout;
     private ProgressBar progressBar;
-    private CurrentUser currentUser;
+    private UserModel currentUser;
 
     /**
      * Overriding on back pressed
@@ -130,7 +130,7 @@ public class EventEntrantActivity extends AppCompatActivity {
 
         if (extras != null) {
             event = (EventModel) extras.getSerializable("eventModel");
-            userList = (UsersList) extras.getSerializable("userList");
+            userList = (RemoteUserRef) extras.getSerializable("userList");
         }
 
         db = FirebaseFirestore.getInstance();
@@ -187,7 +187,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                currentUser = documentSnapshot.toObject(CurrentUser.class);
+                currentUser = documentSnapshot.toObject(UserModel.class);
             }
         });
         // ****************************************************************************************

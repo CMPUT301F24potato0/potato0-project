@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.eventlottery.Organizer.ChosenListActivity;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Models.UsersList;
+import com.example.eventlottery.Models.RemoteUserRef;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class SendNotificationDialog extends DialogFragment {
     private EditText message;
     private EventModel event;
     private String flag;
-    private ArrayList<UsersList> usersLists;
+    private ArrayList<RemoteUserRef> remoteUserRefs;
     private String eventID;
     private SendNotification sendNotification;
     private Boolean sent;
@@ -49,15 +49,15 @@ public class SendNotificationDialog extends DialogFragment {
         this.event = event;
         this.flag = flag;
         switch(flag) {
-            case "Waitlist":    usersLists = event.getWaitingList();
+            case "Waitlist":    remoteUserRefs = event.getWaitingList();
                 break;
-            case "Chosen":      usersLists = event.getChosenList();
+            case "Chosen":      remoteUserRefs = event.getChosenList();
                 break;
-            case "Cancelled":   usersLists = event.getCancelledList();
+            case "Cancelled":   remoteUserRefs = event.getCancelledList();
                 break;
-            case "Enrolled":    usersLists = event.getEnrolledList();
+            case "Enrolled":    remoteUserRefs = event.getEnrolledList();
                 break;
-            case "Invited":     usersLists = event.getInvitedList();
+            case "Invited":     remoteUserRefs = event.getInvitedList();
                 break;
         }
         this.eventID = event.getEventID();
@@ -130,9 +130,9 @@ public class SendNotificationDialog extends DialogFragment {
      * This function sends the notification
      */
     public void send(){
-        for(int i = 0; i < usersLists.size(); i++){
-            String topic = event.getEventID() + "_" + usersLists.get(i).getiD();
-            sendNotification.NotificationCreate(title_text, body_text, usersLists.get(i).getiD(), flag, topic);
+        for(int i = 0; i < remoteUserRefs.size(); i++){
+            String topic = event.getEventID() + "_" + remoteUserRefs.get(i).getiD();
+            sendNotification.NotificationCreate(title_text, body_text, remoteUserRefs.get(i).getiD(), flag, topic);
         }
     }
 }
