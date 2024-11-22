@@ -19,10 +19,10 @@ public class SendNotification implements Serializable {
 
     private String title;
     private String body;
-    private String topic;
     private Context context;
     private String eventID;
     private Boolean SignUP;
+    private String topic;
     private ArrayList<String> title_text;
     private FirebaseFirestore db;
     private CurrentUser tempCurUser;
@@ -40,6 +40,7 @@ public class SendNotification implements Serializable {
         this.eventID = eventID;
         this.SignUP = SignUP;
         this.db = db;
+        this.topic = topic;
     }
 
     /**
@@ -75,7 +76,7 @@ public class SendNotification implements Serializable {
      * @param id The id
      * @param flag The flag
      */
-    public void NotificationCreate (String title, String body, String id, String flag){
+    public void NotificationCreate (String title, String body, String id, String flag, String topic){
 
         Task<DocumentSnapshot> docRef = db.collection("users").document(id).get();
         docRef.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -94,5 +95,19 @@ public class SendNotification implements Serializable {
             }
         });
         Tasks.whenAllComplete(docRef);
+
+
+
+        // ****************************************************************************************
+        FcmNotificationSender fcmNotificationSender = new FcmNotificationSender(
+                title,
+                body,
+                context,
+                topic,
+                eventID,
+                false
+
+        );
+        fcmNotificationSender.SendNotifications();
     }
 }
