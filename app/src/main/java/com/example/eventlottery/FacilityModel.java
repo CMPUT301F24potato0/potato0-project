@@ -1,9 +1,17 @@
 package com.example.eventlottery;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.Serializable;
+
 /**
  * Facility Model
  */
-public class FacilityModel {
+public class FacilityModel implements Serializable {
     private String name;
     private String location;
     private String phone;
@@ -128,5 +136,25 @@ public class FacilityModel {
      */
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    /**
+     * Deletes from firebase, also deletes all associated events
+     * @param db firestore reference
+     */
+    public void delete(FirebaseFirestore db) {
+        String selfID = getUserID();
+        db.collection("facilities").document(selfID).delete();
+        db.collection("events").whereEqualTo("facilityID", selfID).get().addOnCompleteListener((Task<QuerySnapshot> task) -> {
+            for (QueryDocumentSnapshot document : task.getResult())
+                document.getReference().delete();
+        });
+        Task<DocumentSnapshot> task = db.collection("users").document(getUserID()).get();
+        task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
+            CurrentUser owner = posttask.getResult().toObject(CurrentUser.class);
+            if (owner == null) return;
+            owner.setFacilityID("");
+            db.collection("users").document(owner.getiD()).set(owner);
+        });
     }
 }

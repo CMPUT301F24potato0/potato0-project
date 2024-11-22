@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.eventlottery.Admin.AdminMainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,6 +63,7 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton on_notifications;
     FloatingActionButton off_notifications;
 
+    private Button admin_view;
     private Button temp_add_pic;
     private Button temp_delete_pic;
     private ImageView profilePicture;
@@ -357,6 +359,15 @@ public class ProfileFragment extends Fragment {
 //            }
 //        });
 
+
+        admin_view = (Button) rootView.findViewById(R.id.admin_button);
+        admin_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AdminMainActivity.class);
+                startActivity(i);
+            }
+        });
 
         return rootView;
     }
