@@ -40,20 +40,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/space_cadet"
             android:paddingTop="20dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="30dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="20dp"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/violet_transparent"
-                android:orientation="vertical"
-                android:background="@drawable/rounded_corner_background">
+
                 <Button
                     android:id="@+id/clearAll_btn"
                     android:layout_width="wrap_content"
@@ -71,13 +58,11 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="7dp"
                     android:backgroundTint="@color/darkRed"/>
-                <ListView
+                <view class="androidx.appcompat.app.AlertController$RecycleListView"
                     android:id="@+id/notification_listview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp">
-                </ListView>
+                </view>
             </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
 </FrameLayout>

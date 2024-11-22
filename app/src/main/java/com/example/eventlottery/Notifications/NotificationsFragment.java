@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
@@ -37,6 +39,7 @@ public class NotificationsFragment extends Fragment {
     private ConstraintLayout notification_off_textView;
     private LinearLayout notification_view;
     private Button clearAll;
+    private NotificationFragmentAdapter adapter;
     /**
      * Empty constructor
      */
@@ -87,7 +90,7 @@ public class NotificationsFragment extends Fragment {
             notification_view.setVisibility(View.VISIBLE);
         }
         notifications = curUser.getNotifications();
-        NotificationFragmentAdapter adapter = new NotificationFragmentAdapter(
+        adapter = new NotificationFragmentAdapter(
                 requireContext(),
                 100,
                 notifications,

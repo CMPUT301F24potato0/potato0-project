@@ -87,6 +87,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
         TextView flagID = view.findViewById(R.id.flag_id);
         Button cancel_btn = view.findViewById(R.id.cancel_id);
         Button signup_btn = view.findViewById(R.id.signup_id);
+        Button delete_notification = view.findViewById(R.id.delete_notification);
         HashMap<String, String> notification = getItem(position);
 
         title.setText(notification.get("title"));
@@ -169,6 +170,16 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
             cancel_btn.setVisibility(View.GONE);
             signup_btn.setVisibility(View.GONE);
         }
+
+        delete_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(notification);
+                currentUser.removeNotifications(notification);
+                db.collection("users").document(currentUser.getiD()).set(currentUser);
+                notifyDataSetChanged();
+            }
+        });
 
         return view;
     }
