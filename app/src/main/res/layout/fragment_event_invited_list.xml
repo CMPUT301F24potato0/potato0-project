@@ -4,46 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:background="@color/space_cadet"
+    android:background="@drawable/gradient_background"
     android:layout_height="match_parent">
 
-
-
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Invited Entrants"
+        android:textColor="@color/space_cadet"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
-        android:layout_width="369dp"
-        android:layout_height="610dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/violet_transparent"
         android:background="@drawable/rounded_corner_background"
-
-        android:backgroundTint="@color/violet1"
-        android:orientation="vertical"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.867">
-
-<!--        <Button-->
-<!--            android:id="@+id/back_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Back"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:backgroundTint="@color/gray4" />-->
-
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="66dp"
-            android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
                 android:text="Invited Entrants:"
                 android:textColor="@color/white"
                 android:textSize="20sp">
@@ -54,7 +50,6 @@
                 android:id="@+id/invited_confirmed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text="##"
                 android:textColor="@color/white"
                 android:textSize="20sp">
@@ -64,7 +59,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text="/"
                 android:textColor="@color/white"
                 android:textSize="20sp">
@@ -75,7 +69,6 @@
                 android:id="@+id/invited_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text="##"
                 android:textColor="@color/white"
                 android:textSize="20sp">
@@ -86,11 +79,8 @@
                 android:id="@+id/invited_notif_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/indigo"
-                android:minWidth="0dp"
-                android:minHeight="48dp"
+                android:layout_marginStart="5dp"
                 android:text="Send notification"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -103,37 +93,12 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="310dp"
-            android:layout_height="520dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="72dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/invited_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="444dp"
-                android:background="@color/violet1"
-                android:padding="10dp"/>
-        </LinearLayout>
+        <ListView
+            android:id="@+id/invited_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Invited Entrants"
-        android:textSize="34dp"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

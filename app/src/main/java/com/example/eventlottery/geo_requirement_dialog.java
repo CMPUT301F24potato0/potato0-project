@@ -75,7 +75,8 @@ public class geo_requirement_dialog extends DialogFragment {
                     try {
                         event.queueWaitingList(user);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                     task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

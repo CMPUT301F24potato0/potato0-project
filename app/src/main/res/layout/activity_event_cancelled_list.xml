@@ -73,7 +73,9 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                app:layout_constraintRight_toRightOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp">
 
             </Button>
 

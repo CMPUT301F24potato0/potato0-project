@@ -16,10 +16,6 @@
             android:name=".TestingFirebaseStorage"
             android:exported="false" />
         <activity
-            android:name=".SendNotificationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.EventLottery" />
-        <activity
             android:name=".ChosenListActivity"
             android:exported="false" />
         <activity

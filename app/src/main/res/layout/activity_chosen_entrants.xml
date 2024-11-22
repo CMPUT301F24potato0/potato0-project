@@ -71,7 +71,9 @@
                 android:backgroundTint="@color/indigo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp" />
 
             <Button
                 android:id="@+id/chosen_entrants_send_invites_button"
@@ -82,7 +84,9 @@
                 android:backgroundTint="@color/indigo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Search Bar -->
