@@ -83,7 +83,17 @@ public class CurrentUser implements Serializable {
     /**
      * Empty constructor
      */
-    public CurrentUser() {}
+    public CurrentUser() {
+        this.fName = "";
+        this.lName = "";
+        this.email = "";
+        this.isAdmin = false;
+        this.facilityID = "";
+        this.phone = "";
+        this.iD = "";
+        this.isMuted = false;
+        this.topics = new ArrayList<String>();
+    }
 
     /**
      * Getting First name
