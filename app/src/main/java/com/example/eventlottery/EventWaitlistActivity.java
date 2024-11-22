@@ -1,8 +1,11 @@
 package com.example.eventlottery;
 
-import android.app.Activity;
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,32 +15,37 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
 /**
  * Event Waitlist Activity
  */
-public class EventWaitlistActivity extends AppCompatActivity {
+public class EventWaitlistActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button notify;
     private ListView waitlist;
+    private MapView mapView;
+    private GoogleMap googleMap;
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private EventModel event;
     private WaitlistEventAdapter adapter;
     private Button remove;
@@ -76,10 +84,18 @@ public class EventWaitlistActivity extends AppCompatActivity {
 
         notify = findViewById(R.id.notify_btn_id);
         waitlist = findViewById(R.id.waitList_listview);
+        mapView = findViewById(R.id.waitlist_mapview);
         drawSample = findViewById(R.id.draw_sample_button);
         drawSampleEditText = findViewById(R.id.draw_sample_edittext);
 
-
+        // MapView implementation adapted from Google Maps SDK for Android Samples (RawMapViewDemoActivity.java)
+        // https://github.com/googlemaps-samples/android-samples/blob/main/ApiDemos/java/app/src/main/java/com/example/mapdemo/RawMapViewDemoActivity.java
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
+        }
+        mapView.onCreate(mapViewBundle);
+        mapView.getMapAsync(this);
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +157,9 @@ public class EventWaitlistActivity extends AppCompatActivity {
                             // Update Waiting List
                             event.getWaitingList().clear();
                             event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
+                            if (event.getGeolocationRequired()) {
+                                updateMapMarkers(event.getWaitingList());
+                            }
                             // Update Cancelled List
                             event.getCancelledList().clear();
                             event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
@@ -160,4 +179,82 @@ public class EventWaitlistActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateMapMarkers(ArrayList<UsersList> entrantsList) {
+        googleMap.clear();
+        for (UsersList entrant : entrantsList) {
+            // The following code is adapted from https://developers.google.com/maps/documentation/android-sdk/map-with-marker
+            Double latitude = entrant.getLatitude();
+            Double longitude = entrant.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+            googleMap.addMarker(new MarkerOptions().position(latLng).title(entrant.getName()));
+        }
+    }
+
+    // The following overrides are adapted from
+    // https://github.com/googlemaps-samples/android-samples/blob/main/ApiDemos/java/app/src/v3/java/com/example/mapdemo/RawMapViewDemoActivity.java
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        // Check if location permission is granted
+        if (ActivityCompat.checkSelfPermission(EventWaitlistActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            // Permission not yet granted, request for location permission
+            ActivityCompat.requestPermissions(EventWaitlistActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+        if (ActivityCompat.checkSelfPermission(EventWaitlistActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted, zoom map to area of the organizer
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Double latitude = lastLocation.getLatitude();
+            Double longitube = lastLocation.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitube);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9f));
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
+        }
+        mapView.onSaveInstanceState(mapViewBundle);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
 }

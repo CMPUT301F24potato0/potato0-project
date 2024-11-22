@@ -85,6 +85,6 @@ ndkBuild/
 # \app\src\main\java\com\example\eventlottery\AccessToken.java
 app/src/main/java/com/example/eventlottery/AccessToken.java
 
-# MAP API KEY
+# Secrets
 secrets.properties
 
