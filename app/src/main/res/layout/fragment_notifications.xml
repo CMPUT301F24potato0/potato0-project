@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Your notifications are off"
             android:textSize="30dp"
+            android:textColor="@color/space_cadet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
