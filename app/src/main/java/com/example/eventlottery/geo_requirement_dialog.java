@@ -114,10 +114,23 @@ public class geo_requirement_dialog extends DialogFragment {
                             db.collection("events").document(event.getEventID()).set(event);  // updates
                             task.onSuccessTask(t1 -> {
                                 cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+                                // Subscribing to topic when joining event to receive notification
+                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + user.getiD(),getContext());
+                                subscribeToTopic.subscribe();
+                                cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+                                // ****************************************************************************************
                                 db.collection("users").document(user.getiD()).set(cuUser);
                                 joinBtn.setVisibility(View.GONE);
                                 unjoinBtn.setVisibility(View.VISIBLE);
                                 return null;
+
+//                                cuUser.addTopics(event.getEventID() + "_" + user.getiD());
+//                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + user.getiD(),getContext());
+//                                subscribeToTopic.subscribe();
+//                                db.collection("users").document(user.getiD()).set(cuUser);
+//                                joinBtn.setVisibility(View.GONE);
+//                                unjoinBtn.setVisibility(View.VISIBLE);
+//                                return null;
                             });
                             alertDialog.dismiss();
                         } else {
