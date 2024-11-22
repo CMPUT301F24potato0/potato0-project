@@ -148,13 +148,15 @@
             android:scaleType="fitXY"
             tools:srcCompat="@tools:sample/avatars" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:visibility="gone"
             android:id="@+id/profile_letter_picture"
             android:text=""
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:gravity="center"
+            android:textSize="30sp"
             />
         <Button
             android:layout_width="wrap_content"

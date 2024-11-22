@@ -201,68 +201,54 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 db.collection("photos").document(curUser.getiD()).delete();
+
+
+
+
+                String initial = "";
+                if (!curUser.getfName().isEmpty()){
+                    initial = String.valueOf(curUser.getfName().charAt(0)).toUpperCase();
+                }
+                else if(!curUser.getlName().isEmpty()){
+                    initial = String.valueOf(curUser.getlName().charAt(0)).toUpperCase();
+                }
+                DocumentReference docRef = db.collection("photos").document(curUser.getiD());
+                String finalInitial = initial;
+
+                if(!finalInitial.isEmpty()){
+                    Log.e("First or Last name","First or last name inital: "+finalInitial);
+                    profile_letter.setVisibility(View.VISIBLE);
+                    profile_letter.setText(finalInitial);
+                    Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    // Get the TextView's text and draw it onto the canvas
+                    Paint paint = profile_letter.getPaint();
+//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.gray1));
+                    canvas.drawColor(Color.GRAY);
+                    canvas.drawText(profile_letter.getText().toString(), 20, 80, paint);
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                    byte[] bytes = stream.toByteArray();
+                    profile_letter.setVisibility(View.GONE);
+
+                    Blob blob = Blob.fromBytes(bytes);
+
+                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("Blob",blob);
+                    hashMap.put("type",false);
+                    hashMap.put("Initial",finalInitial);
+
+                    db.collection("photos").document(curUser.getiD()).set(hashMap);
+                    decode();
+                }
+                else{
+                    // document doesn't exist
+                    Log.e("Document","Does not exist");
+                    default_picture();
+                }
             }
         });
-
-//        DocumentReference photoRef = db.collection("photos").document(curUser.getiD());
-//        photoRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//                if (error != null){
-//                    Log.d("Error",""+error);
-//                } else {
-//                    Log.e("Updated","You updated your photos");
-//
-//
-//                    String initial = "";
-//                    if (!curUser.getfName().isEmpty()){
-//                        initial = String.valueOf(curUser.getfName().charAt(0)).toUpperCase();
-//                    }
-//                    else if(!curUser.getlName().isEmpty()){
-//                        initial = String.valueOf(curUser.getlName().charAt(0)).toUpperCase();
-//                    }
-//                    String finalInitial = initial;
-//                    if (!initial.isEmpty()){
-//                        Log.e("First or Last name","First or last name inital: "+finalInitial);
-//                        profile_letter.setVisibility(View.VISIBLE);
-//                        profile_letter.setText(finalInitial);
-//                        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-//                        Canvas canvas = new Canvas(bitmap);
-//                        // Get the TextView's text and draw it onto the canvas
-//                        Paint paint = profile_letter.getPaint();
-////                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.gray1));
-//                        canvas.drawColor(Color.GRAY);
-//                        canvas.drawText(profile_letter.getText().toString(), 20, 77, paint);
-//
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-//                        byte[] bytes = stream.toByteArray();
-//                        profile_letter.setVisibility(View.GONE);
-//
-//                        Blob blob = Blob.fromBytes(bytes);
-//
-//                        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-//                        hashMap.put("Blob",blob);
-//                        hashMap.put("type",false);
-//                        hashMap.put("Initial",finalInitial);
-//
-//                        db.collection("photos").document(curUser.getiD()).set(hashMap);
-//                        decode();
-//                    }
-//                    else{
-//                        // document doesn't exist
-//                        Log.e("Document","Does not exist");
-//                        default_picture();
-//                    }
-//
-//
-//
-//                }
-//
-//            }
-//        });
-
-
 
 
 
@@ -318,7 +304,7 @@ public class ProfileFragment extends Fragment {
                                 Paint paint = profile_letter.getPaint();
 //                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.gray1));
                                 canvas.drawColor(Color.GRAY);
-                                canvas.drawText(profile_letter.getText().toString(), 20, 77, paint);
+                                canvas.drawText(profile_letter.getText().toString(), 20, 80, paint);
 
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
