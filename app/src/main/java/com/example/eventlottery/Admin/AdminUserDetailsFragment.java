@@ -36,8 +36,7 @@ public class AdminUserDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("Phone: %s", user.getPhone()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         ((Button) rootView.findViewById(R.id.admin_delete_user)).setOnClickListener((View view) -> {
-            db.collection("facilities").document(user.getiD()).delete();
-            db.collection("users").document(user.getiD()).delete();
+            user.delete(db);
             dismiss();
         });;
         ((Button) rootView.findViewById(R.id.cancel_button)).setOnClickListener((View view) -> {

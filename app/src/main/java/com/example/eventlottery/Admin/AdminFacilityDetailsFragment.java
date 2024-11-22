@@ -12,11 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.eventlottery.CurrentUser;
 import com.example.eventlottery.FacilityModel;
 import com.example.eventlottery.R;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminFacilityDetailsFragment extends DialogFragment {
@@ -38,13 +35,7 @@ public class AdminFacilityDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.facility_details_text_email)).setText(String.format("Email: %s", facility.getEmail()));
         ((TextView)rootView.findViewById(R.id.facility_details_text_capacity)).setText(String.format("Capacity: %d", facility.getCapacity()));AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         ((Button) rootView.findViewById(R.id.delete_button)).setOnClickListener((View view) -> {
-            db.collection("facilities").document(facility.getUserID()).delete();
-            Task<DocumentSnapshot> task = db.collection("users").document(facility.getUserID()).get();
-            task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
-                CurrentUser owner = posttask.getResult().toObject(CurrentUser.class);
-                owner.setFacilityID("");
-                db.collection("users").document(owner.getiD()).set(owner);
-            });
+            facility.delete(db);
             dismiss();
         });
         ((Button) rootView.findViewById(R.id.cancel_button)).setOnClickListener((View view) -> {
