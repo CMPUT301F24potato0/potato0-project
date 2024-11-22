@@ -333,7 +333,7 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
-//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.gray1));
+//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.g));
                                 canvas.drawColor(Color.GRAY);
                                 canvas.drawText(profile_letter.getText().toString(), 20, 80, paint);
 
