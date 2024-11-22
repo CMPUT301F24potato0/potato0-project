@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -47,6 +48,13 @@ public class geo_requirement_dialog extends DialogFragment {
         this.unjoinBtn = unjoinBtn;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(R.drawable.gradient_background);
+    }
+
     /**
      * On create dialog override
      * @param savedInstanceState If the fragment is being re-created from
@@ -61,13 +69,14 @@ public class geo_requirement_dialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Geo location required")
+                .setTitle("   ")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Accept", (dialog, which) -> {
                     try {
                         event.queueWaitingList(user);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                     task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

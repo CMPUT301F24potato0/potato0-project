@@ -80,11 +80,11 @@ proguard-rules.pro
 
 # Android NDK
 ndkBuild/
-local.properties
 
 # Access Token
 # \app\src\main\java\com\example\eventlottery\AccessToken.java
 app/src/main/java/com/example/eventlottery/AccessToken.java
 
-# Secrets
+# MAP API KEY
 secrets.properties
+

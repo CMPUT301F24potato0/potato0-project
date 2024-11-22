@@ -3,22 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Event's Description"
         android:textSize="25sp"
+        android:textColor="@color/space_cadet"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_gravity="center" />
 
     <EditText
         android:id="@+id/create_event_edittext_event_description"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginHorizontal="2dp"
-        android:paddingHorizontal="10dp"
         android:background="@drawable/rounded_corner_background"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/indigo"
         android:hint="Describe your event here"
         android:textColorHint="@color/white"
         android:gravity="start" />

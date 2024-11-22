@@ -41,7 +41,7 @@ public class WaitlistedEventsFragment extends Fragment{
     private Context context;
     private Button mute_btn;
     private Button unmute_btn;
-
+    Button upload_image_btn;
     /**
      * This is the empty constructor
      */
@@ -71,6 +71,8 @@ public class WaitlistedEventsFragment extends Fragment{
         mute_btn = (Button) rootview.findViewById(R.id.mute);
         unmute_btn = (Button) rootview.findViewById(R.id.unmute);
 
+        upload_image_btn = (Button) rootview.findViewById(R.id.open_upload_image);
+
         notification_btn.setOnClickListener(view -> {
             this.context = requireContext();
             String topic = "testTopic_signup";
@@ -84,6 +86,15 @@ public class WaitlistedEventsFragment extends Fragment{
                 subscribeToTopic.subscribe();
             }
         });
+
+        upload_image_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TestingFirebaseStorage.class);
+                startActivity(intent);
+            }
+        });
+
         return rootview;
     }
 

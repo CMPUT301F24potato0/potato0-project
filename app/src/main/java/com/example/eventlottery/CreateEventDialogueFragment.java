@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -61,6 +62,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         strLocation = "";
         geolocationRequired = Boolean.FALSE;
         eventDescription = "";
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(R.drawable.gradient_background);
     }
 
     /**

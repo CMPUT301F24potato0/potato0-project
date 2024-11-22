@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -49,6 +50,13 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         this.facilityDne = facilityDne;
         this.facility = facility;
         this.facilityFragment = facilityFragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawableResource(R.drawable.gradient_background);
     }
 
     /**

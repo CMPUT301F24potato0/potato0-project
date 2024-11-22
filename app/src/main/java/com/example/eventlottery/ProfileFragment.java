@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -116,17 +118,42 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection("users");
 
-        EditText f_name = (EditText) rootView.findViewById(R.id.fNameEditText);
-        EditText l_name = (EditText) rootView.findViewById(R.id.lNameEditText);
-        EditText email = (EditText) rootView.findViewById(R.id.emailEditText);
-        EditText phone = (EditText) rootView.findViewById(R.id.phoneEditText);
+        EditText f_name = rootView.findViewById(R.id.fNameEditText);
+        EditText l_name = rootView.findViewById(R.id.lNameEditText);
+        EditText email = rootView.findViewById(R.id.emailEditText);
+        EditText phone = rootView.findViewById(R.id.phoneEditText);
 
         f_name.setText(curUser.getfName());
         l_name.setText(curUser.getlName());
         email.setText(curUser.getEmail());
         phone.setText(curUser.getPhone());
 
-        editUser = (Button) rootView.findViewById(R.id.saveProfileBtn);
+        editUser = rootView.findViewById(R.id.saveProfileBtn);
+        editUser.setEnabled(false);
+        editUser.setBackgroundColor(getResources().getColor(R.color.red1));
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editUser.setEnabled(true);
+                editUser.setBackgroundColor(getResources().getColor(R.color.indigo));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        f_name.addTextChangedListener(textWatcher);
+        l_name.addTextChangedListener(textWatcher);
+        email.addTextChangedListener(textWatcher);
+        phone.addTextChangedListener(textWatcher);
+
         editUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,13 +170,15 @@ public class ProfileFragment extends Fragment {
                 curUser.setPhone(phoneStr);
 
                 userRef.document(id).set(curUser);
+                editUser.setBackgroundColor(getResources().getColor(R.color.red1));
+                editUser.setEnabled(false);
             }
         });
 
 
         // Notifications
-        on_notifications = (FloatingActionButton) rootView.findViewById(R.id.on_notification);
-        off_notifications = (FloatingActionButton) rootView.findViewById(R.id.off_notification);
+        on_notifications = rootView.findViewById(R.id.on_notification);
+        off_notifications = rootView.findViewById(R.id.off_notification);
         ismuted = curUser.isMuted();
 
 
