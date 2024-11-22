@@ -2,6 +2,7 @@ package com.example.eventlottery.Organizer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -167,7 +168,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
         else {
             geolocationRequired.setText("No");
         }
-        eventDate.setText(event.getJoinDeadline().toString());
+        CharSequence timeFormat  = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
+        eventDate.setText(timeFormat);
         eventDescription.setText(event.getEventDescription());
     }
 }
