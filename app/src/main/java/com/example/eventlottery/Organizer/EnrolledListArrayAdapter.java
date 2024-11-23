@@ -76,7 +76,7 @@ public class EnrolledListArrayAdapter extends ArrayAdapter<RemoteUserRef> {
         }
         RemoteUserRef user = getItem(position);
         TextView userName = view.findViewById(R.id.listview_user_name);
-        userName.setText(user.getName());
+        user.sync(() -> {userName.setText(user.getName());});
         Button sendInviteButton = view.findViewById(R.id.listview_send_invite_button);
         Button removeButton = view.findViewById(R.id.listview_remove_button);
         sendInviteButton.setVisibility(View.GONE);

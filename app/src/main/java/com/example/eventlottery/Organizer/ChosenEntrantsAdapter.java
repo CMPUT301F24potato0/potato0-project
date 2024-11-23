@@ -63,7 +63,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.entrant_name);
-        entrantName.setText(entrant.getName());
+        entrant.sync(() -> {entrantName.setText(entrant.getName());});
 
         Button inviteButton = convertView.findViewById(R.id.send_invite_button);
         Button removeButton = convertView.findViewById(R.id.remove_button);

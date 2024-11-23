@@ -90,9 +90,6 @@ public class CancelledListActivity extends AppCompatActivity {
                             // Get the EventModel object
                             EventModel FireStoreEvent = doc.toObject(EventModel.class);
 
-                            // Update Waiting List
-                            event.getWaitingList().clear();
-                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
                             // Update Cancelled List
                             event.getCancelledList().clear();
                             event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
