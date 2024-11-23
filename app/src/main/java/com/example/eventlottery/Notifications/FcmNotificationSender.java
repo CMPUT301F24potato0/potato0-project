@@ -38,7 +38,7 @@ public class FcmNotificationSender {
 
     private Boolean SignUp;
 
-    private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery/messages:send";
+    private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery-32085/messages:send";
 
     /**
      * Constructor for FcmNotificationSender

@@ -27,6 +27,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventlottery.Admin.AdminMainActivity;
@@ -46,8 +47,10 @@ import java.io.IOException;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is the profile fragment.
@@ -254,9 +257,26 @@ public class ProfileFragment extends Fragment {
                     Canvas canvas = new Canvas(bitmap);
                     // Get the TextView's text and draw it onto the canvas
                     Paint paint = profile_letter.getPaint();
-//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.gray1));
-                    canvas.drawColor(Color.GRAY);
-                    canvas.drawText(profile_letter.getText().toString(), 20, 80, paint);
+                    paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                    // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
+                    paint.setTextAlign(Paint.Align.CENTER);
+                    int x_pos = (canvas.getWidth() / 2);
+                    int y_pos = (int) (((float) canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
+
+                    int[] colors = {
+                            R.color.red1,
+                            R.color.gold,
+                            R.color.purple,
+                            R.color.n,
+                            R.color.mauve
+                    };
+                    int randColor = colors[new Random().nextInt(colors.length)];
+                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+//                    canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
+//                    canvas.drawColor(Color.GRAY);
+//                    canvas.drawColor(getResources().getColor(R.color.mauve));
+
+                    canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
@@ -333,9 +353,27 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
+                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                                // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
+                                paint.setTextAlign(Paint.Align.CENTER);
+                                int x_pos = (canvas.getWidth() / 2);
+                                int y_pos = (int) (((float) canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
+                                // Add any colours for the profile background
+                                int[] colors = {
+                                        R.color.red1,
+                                        R.color.gold,
+                                        R.color.purple,
+                                        R.color.n,
+                                        R.color.mauve
+                                };
+                                int randColor = colors[new Random().nextInt(colors.length)];
+                                canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+//                                canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
+
 //                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.g));
-                                canvas.drawColor(Color.GRAY);
-                                canvas.drawText(profile_letter.getText().toString(), 20, 80, paint);
+//                                canvas.drawColor(Color.GRAY);
+
+                                canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
