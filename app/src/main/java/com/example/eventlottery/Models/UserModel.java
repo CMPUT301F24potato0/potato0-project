@@ -276,6 +276,7 @@ public class UserModel implements Serializable {
         for (String t : topics) {
             if (t.equals(topic)) {
                 this.topics.remove(topic);
+                return;
             }
         }
     }
