@@ -2,6 +2,7 @@ package com.example.eventlottery.Organizer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -57,8 +58,10 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
         Window window = getDialog().getWindow();
-        window.setBackgroundDrawableResource(R.drawable.gradient_background);
+        window.setBackgroundDrawableResource(R.drawable.gradient_background_dialog);
     }
 
     /**
