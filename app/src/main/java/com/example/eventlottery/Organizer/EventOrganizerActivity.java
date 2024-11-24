@@ -179,6 +179,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
         CharSequence timeFormat  = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
         eventDate.setText(timeFormat);
         eventDescription.setText(event.getEventDescription());
+        // Testing
+        decode();
     }
     public void decode(){
         DocumentReference docref = db.collection("posters").document(eventID);
