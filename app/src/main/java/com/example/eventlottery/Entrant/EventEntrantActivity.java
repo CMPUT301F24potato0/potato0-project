@@ -276,6 +276,29 @@ public class EventEntrantActivity extends AppCompatActivity {
                 }
             }
         });
+        DocumentReference organizerPicRef = db.collection("photos").document(event.getFacilityID()); // FacilityId == UserID
+        organizerPicRef.get().addOnCompleteListener( task1 -> {
+            if(task1.isSuccessful()) {
+                DocumentSnapshot document1 = task1.getResult();
+                if (document1.exists()){
+                    // user has a profile picture (either uploaded or auto-generated)
+                    Blob blob1 = document1.getBlob("Blob");
+                    byte[] bytes1 = blob1.toBytes();
+                    Bitmap bitmap1= BitmapFactory.decodeByteArray(bytes1,0,bytes1.length);
+                    organizerProfilePicture.setImageBitmap(bitmap1);
+                } else {
+                    // user has a default profile picture
+                    Blob blob1 = db.collection("photos")
+                            .document("default")
+                            .get()
+                            .getResult()
+                            .getBlob("Blob");
+                    byte[] bytes1 = blob1.toBytes();
+                    Bitmap bitmap1= BitmapFactory.decodeByteArray(bytes1,0,bytes1.length);
+                    organizerProfilePicture.setImageBitmap(bitmap1);
+                }
+            }
+        });
     }
 
     /**

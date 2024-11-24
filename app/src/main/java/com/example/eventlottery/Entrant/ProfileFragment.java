@@ -372,7 +372,7 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
-                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
+//                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
 //                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
 
                                 // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
