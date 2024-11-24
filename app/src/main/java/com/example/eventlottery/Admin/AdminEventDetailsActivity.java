@@ -19,11 +19,30 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Class that putpose is to open a view that show the information of an event and the ability
+ * to delete the event and delete the QR code related to the event
+ */
 public class AdminEventDetailsActivity extends AppCompatActivity {
     public FirebaseFirestore db;
+
+    /**
+     * Empty Constructor, that grab an instance of the Firebase
+     * to add to teh db variable to be able to interact with the Firebase
+     */
     public AdminEventDetailsActivity() {
-        db = FirebaseFirestore.getInstance();
+        this.db = FirebaseFirestore.getInstance();
     }
+
+    /**
+     * This onCreate creates the activity that show a view of the selected event details
+     * also it generates buttons with the purpose of deleting the selected event
+     * and delete the QR code of the selected event
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
