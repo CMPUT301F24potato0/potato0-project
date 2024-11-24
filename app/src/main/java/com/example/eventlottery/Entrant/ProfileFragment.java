@@ -291,7 +291,7 @@ public class ProfileFragment extends Fragment {
 
                     HashMap<String, Object> hashMap = new HashMap<String, Object>();
                     hashMap.put("Blob",blob);
-                    hashMap.put("type",false);
+                    hashMap.put("personal",false);
                     hashMap.put("Initial",finalInitial);
 
                     db.collection("photos").document(curUser.getiD()).set(hashMap);
@@ -372,7 +372,9 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
-                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
+//                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+
                                 // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                                 paint.setTextAlign(Paint.Align.CENTER);
                                 int x_pos = (canvas.getWidth() / 2);
@@ -403,7 +405,7 @@ public class ProfileFragment extends Fragment {
 
                                 HashMap<String, Object> hashMap = new HashMap<String, Object>();
                                 hashMap.put("Blob",blob);
-                                hashMap.put("type",false);
+                                hashMap.put("personal",false);
                                 hashMap.put("Initial",finalInitial);
 
                                 db.collection("photos").document(curUser.getiD()).set(hashMap);
@@ -508,14 +510,14 @@ public class ProfileFragment extends Fragment {
 
                             HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("Blob",blob);
-                            hashMap.put("type",true);
+                            hashMap.put("personal",true);
                             hashMap.put("Initial","");
 
                             // ****************************************************************************************
 //                            db.collection("photos").document(curUser.getiD()).set(
 //                                    new HashMap<String, Object>(){{
 //                                        put("Blob",blob);
-//                                        put("type",false);
+//                                        put("personal",false);
 //                                    }});
                             db.collection("photos").document(curUser.getiD()).set(hashMap);
                             // ****************************************************************************************
@@ -549,8 +551,8 @@ public class ProfileFragment extends Fragment {
                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                    profilePicture.setImageBitmap(bitmap);
                    // Testing
-                   Boolean type = document.getBoolean("type");
-                   Log.e("type",""+type);
+                   Boolean personal = document.getBoolean("personal");
+                   Log.e("personal",""+personal);
                }
            }
         });
@@ -567,8 +569,8 @@ public class ProfileFragment extends Fragment {
                     Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                     profilePicture.setImageBitmap(bitmap);
                     // Testing
-                    Boolean type = document.getBoolean("type");
-                    Log.e("type",""+type);
+                    Boolean personal = document.getBoolean("personal");
+                    Log.e("personal",""+personal);
                 }
             }
         });
