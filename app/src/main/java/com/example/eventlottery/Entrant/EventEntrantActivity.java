@@ -280,9 +280,9 @@ public class EventEntrantActivity extends AppCompatActivity {
 
     /**
      * Checking if the user is in the event
-     * This method check if the user is already in the event, if thats the case the join buttom
-     * is change to the unjoin buttom, and if the user is not in the event the unjoin buttom become
-     * the join buttom
+     * This method check if the user is already in the event, if thats the case the join button
+     * is change to the unjoin button, and if the user is not in the event the unjoin button become
+     * the join button
      */
     private void checkUserInEvent(){
         if (event.checkUserInList(userList, event.getWaitingList())) {
