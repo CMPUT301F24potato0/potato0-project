@@ -208,4 +208,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         return false; // if nothing was found then return false
     }
+
+    public UserModel getUser() {
+        return curUser;
+    }
+
+    public FacilityModel getFacility() {
+        return facility;
+    }
 }

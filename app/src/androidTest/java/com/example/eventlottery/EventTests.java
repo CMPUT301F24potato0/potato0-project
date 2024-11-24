@@ -148,7 +148,7 @@ public class EventTests {
         pressBack();
 
         waiter.perform(withId(R.id.event_organizer_waitlist_button), click());
-        waiter.check(withId(R.id.event_waitlist), matches(isDisplayed()));
+        waiter.check(withId(R.id.waitList_listview), matches(isDisplayed()));
         pressBack();
 
         waiter.perform(withId(R.id.event_organizer_enrolled_button), click());

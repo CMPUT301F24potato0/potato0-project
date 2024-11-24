@@ -223,9 +223,6 @@ public class ProfileFragment extends Fragment {
         profilePicture = rootView.findViewById(R.id.profilePicture);
         add_pic = rootView.findViewById(R.id.add_picture);
         delete_pic = rootView.findViewById(R.id.delete_picture);
-
-
-
         add_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,8 +231,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
         delete_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -276,10 +271,6 @@ public class ProfileFragment extends Fragment {
                     };
                     int randColor = colors[new Random().nextInt(colors.length)];
                     canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
-//                    canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
-//                    canvas.drawColor(Color.GRAY);
-//                    canvas.drawColor(getResources().getColor(R.color.mauve));
-
                     canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -304,8 +295,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-
 
         profile_letter = rootView.findViewById(R.id.profile_letter_picture);
         DocumentReference userRef = db.collection("users").document(curUser.getiD());
@@ -373,7 +362,6 @@ public class ProfileFragment extends Fragment {
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
                                 paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
-//                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
 
                                 // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                                 paint.setTextAlign(Paint.Align.CENTER);
@@ -389,11 +377,6 @@ public class ProfileFragment extends Fragment {
                                 };
                                 int randColor = colors[new Random().nextInt(colors.length)];
                                 canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
-//                                canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
-
-//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.g));
-//                                canvas.drawColor(Color.GRAY);
-
                                 canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -425,28 +408,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-
-
-
-        // check if document exists in firebase (if user has ever uploaded an image for his profile)
-//        DocumentReference docRef = db.collection("photos").document(curUser.getiD());
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                Log.e("Document","checking document existence");
-//                if (task.getResult().exists()){
-//                    // document exists
-//                    Log.e("Document","exists");
-//                    decode();;
-//                } else{
-//                    // document doesn't exist
-//                    Log.e("Document","Does not exist");
-//                    default_picture();
-//                }
-//            }
-//        });
-
 
         admin_view = (Button) rootView.findViewById(R.id.admin_button);
         admin_view.setOnClickListener(new View.OnClickListener() {
@@ -540,7 +501,6 @@ public class ProfileFragment extends Fragment {
     );
     public void decode(){
         // ****************************************************************************************
-
         DocumentReference docref = db.collection("photos").document(curUser.getiD());
         docref.get().addOnCompleteListener( task -> {
            if (task.isSuccessful()) {
@@ -576,4 +536,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    public UserModel getCurUser() {
+        return curUser;
+    }
 }
