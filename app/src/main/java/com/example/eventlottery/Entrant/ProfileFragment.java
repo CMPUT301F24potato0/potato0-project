@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,8 +70,8 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton off_notifications;
 
     private Button admin_view;
-    private Button temp_add_pic;
-    private Button temp_delete_pic;
+    private ImageButton add_pic;
+    private ImageButton delete_pic;
     private ImageView profilePicture;
     private TextView profile_letter;
 
@@ -220,8 +221,12 @@ public class ProfileFragment extends Fragment {
         });
         // Profile picture
         profilePicture = rootView.findViewById(R.id.profilePicture);
-        temp_add_pic = rootView.findViewById(R.id.temp_add_pic_id);
-        temp_add_pic.setOnClickListener(new View.OnClickListener() {
+        add_pic = rootView.findViewById(R.id.add_picture);
+        delete_pic = rootView.findViewById(R.id.delete_picture);
+
+
+
+        add_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageChoose();
@@ -229,15 +234,14 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        temp_delete_pic = rootView.findViewById(R.id.temp_delete_pic_id);
 
-        temp_delete_pic.setOnClickListener(new View.OnClickListener() {
+
+        delete_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                add_pic.setVisibility(View.VISIBLE);
+                delete_pic.setVisibility(View.GONE);
                 db.collection("photos").document(curUser.getiD()).delete();
-
-
-
 
                 String initial = "";
                 if (!curUser.getfName().isEmpty()){
@@ -333,7 +337,22 @@ public class ProfileFragment extends Fragment {
                                 Log.e("Document","exists");
                                 Log.e("String",""+task.getResult().getString("Initial"));
 //                                decode();
+                                // CHECK
+                                // **************************************************************************************************************
+                                if(!Objects.equals(task.getResult().getString("Initial"), "")){
+                                    add_pic.setVisibility(View.VISIBLE);
+                                    delete_pic.setVisibility(View.GONE);
+                                }
+                                else{
+                                    add_pic.setVisibility(View.GONE);
+                                    delete_pic.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                // document doesn't exist
+                                add_pic.setVisibility(View.VISIBLE);
+                                delete_pic.setVisibility(View.GONE);
                             }
+
                             if(Objects.equals(task.getResult().getString("Initial"), "")){
                                 decode();
                             }
@@ -506,6 +525,8 @@ public class ProfileFragment extends Fragment {
                             Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
                             Log.e("After choosing image","decoding");
                             decode();
+                            add_pic.setVisibility(View.GONE);
+                            delete_pic.setVisibility(View.VISIBLE);
 
                         }
                         catch (IOException e){
