@@ -27,6 +27,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class ScanFragment extends Fragment {
     /**
      * This is the callback for the barcode scanner
      */
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if(result.getText() == null || result.getText().equals(eventScanned)) {
@@ -95,7 +96,7 @@ public class ScanFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_scan, container, false);
 
         barcodeView = rootView.findViewById(R.id.scannerView);
-        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+        Collection<BarcodeFormat> formats = Collections.singletonList(BarcodeFormat.QR_CODE);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.setStatusText("Scanning QR Code");
         barcodeView.decodeContinuous(callback);

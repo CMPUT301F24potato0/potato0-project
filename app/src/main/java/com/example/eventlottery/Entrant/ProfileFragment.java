@@ -186,10 +186,10 @@ public class ProfileFragment extends Fragment {
         ismuted = curUser.isMuted();
 
 
-        if(getIsmute() == true){
+        if(getIsmute()){
             on_notifications.setVisibility(View.GONE);
             off_notifications.setVisibility(View.VISIBLE);
-        } else if (getIsmute() == false) {
+        } else if (!getIsmute()) {
             on_notifications.setVisibility(View.VISIBLE);
             off_notifications.setVisibility(View.GONE);
         }
@@ -324,7 +324,7 @@ public class ProfileFragment extends Fragment {
                             if (task.getResult().exists()){
                                 // document exists
                                 Log.e("Document","exists");
-                                Log.e("String",""+task.getResult().getString("Initial"));
+                                Log.e("String", task.getResult().getString("Initial"));
 //                                decode();
                                 // CHECK
                                 // **************************************************************************************************************
@@ -409,7 +409,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        admin_view = (Button) rootView.findViewById(R.id.admin_button);
+        admin_view = rootView.findViewById(R.id.admin_button);
         admin_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

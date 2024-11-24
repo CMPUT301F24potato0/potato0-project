@@ -105,7 +105,7 @@ public class NotificationsFragment extends Fragment {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
-                            Toast.makeText(getContext(), "error: " + error.toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "error: " + error, Toast.LENGTH_LONG).show();
                             return;
                         }
                         if (value != null && value.exists()) {

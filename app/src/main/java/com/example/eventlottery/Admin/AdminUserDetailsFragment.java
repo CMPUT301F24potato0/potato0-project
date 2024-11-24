@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminUserDetailsFragment extends DialogFragment {
     private final UserModel user;
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
 
     public AdminUserDetailsFragment(UserModel item) {
         user = item;
@@ -34,11 +34,11 @@ public class AdminUserDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.admin_email_info)).setText(String.format("Email: %s", user.getEmail()));
         ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("Phone: %s", user.getPhone()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        ((Button) rootView.findViewById(R.id.admin_delete_user)).setOnClickListener((View view) -> {
+        rootView.findViewById(R.id.admin_delete_user).setOnClickListener((View view) -> {
             user.delete(db);
             dismiss();
-        });;
-        ((Button) rootView.findViewById(R.id.cancel_button)).setOnClickListener((View view) -> {
+        });
+        rootView.findViewById(R.id.cancel_button).setOnClickListener((View view) -> {
             dismiss();
         });
         builder.setView(rootView);

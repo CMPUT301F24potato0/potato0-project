@@ -8,16 +8,16 @@ import java.util.ArrayList;
 
 public class UserModelTest {
     private UserModel mockUser;
-    private String fName = "John";
-    private String lName = "Doe";
-    private String email = "john.mclean@examplepetstore.com";
-    private String phone = "1234567890";
-    private boolean isAdmin = true;
-    private String facilityID = "12345";
-    private String iD = "12345";
-    private String userPhoto = "photo.jpg";
-    private boolean isMuted = false;
-    private ArrayList<String> topics = new ArrayList<>();
+    private final String fName = "John";
+    private final String lName = "Doe";
+    private final String email = "john.mclean@examplepetstore.com";
+    private final String phone = "1234567890";
+    private final boolean isAdmin = true;
+    private final String facilityID = "12345";
+    private final String iD = "12345";
+    private final String userPhoto = "photo.jpg";
+    private final boolean isMuted = false;
+    private final ArrayList<String> topics = new ArrayList<>();
 
     @Test
     public void testSetName() {

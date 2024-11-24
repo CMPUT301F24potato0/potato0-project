@@ -34,7 +34,7 @@ public class CancelledListActivity extends AppCompatActivity {
     private ListView cancelledList;
     private ArrayAdapter<RemoteUserRef> cancelAdapter;
     private EventModel event;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notification_send;
 
     /**
@@ -69,7 +69,7 @@ public class CancelledListActivity extends AppCompatActivity {
         cancelledList.setAdapter(cancelAdapter);
         cancelAdapter.notifyDataSetChanged();
 
-        notification_send = (Button) findViewById(R.id.cancelled_notif_button);
+        notification_send = findViewById(R.id.cancelled_notif_button);
         notification_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

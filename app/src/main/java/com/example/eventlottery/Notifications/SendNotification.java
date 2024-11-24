@@ -20,12 +20,12 @@ public class SendNotification implements Serializable {
 
     private String title;
     private String body;
-    private Context context;
-    private String eventID;
-    private Boolean SignUP;
+    private final Context context;
+    private final String eventID;
+    private final Boolean SignUP;
     private String topic;
     private ArrayList<String> title_text;
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
     private UserModel tempCurUser;
 
 

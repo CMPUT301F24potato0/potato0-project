@@ -12,21 +12,21 @@ import java.util.Date;
 
 public class EventModelTest {
     private EventModel mockEvent;
-    private String eventID = "12345";
-    private String eventTitle = "Test Event";
-    private String facilityID = "67890";
-    private String eventDescription = "This is a test event.";
-    private String eventLocation = "123 Main St";
-    private Boolean geoLocation = true;
-    private Integer waitingListLimit = 10;
-    private Integer capacity = 50;
-    private Date joinDeadline = new Date();
-    private String organizer = "John Doe";
-    private ArrayList<RemoteUserRef> waitingList = new ArrayList<>();
-    private ArrayList<RemoteUserRef> invitedList = new ArrayList<>();
-    private ArrayList<RemoteUserRef> cancelledList = new ArrayList<>();
-    private ArrayList<RemoteUserRef> enrolledList = new ArrayList<>();
-    private ArrayList<RemoteUserRef> chosenList = new ArrayList<>();
+    private final String eventID = "12345";
+    private final String eventTitle = "Test Event";
+    private final String facilityID = "67890";
+    private final String eventDescription = "This is a test event.";
+    private final String eventLocation = "123 Main St";
+    private final Boolean geoLocation = true;
+    private final Integer waitingListLimit = 10;
+    private final Integer capacity = 50;
+    private final Date joinDeadline = new Date();
+    private final String organizer = "John Doe";
+    private final ArrayList<RemoteUserRef> waitingList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> invitedList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> cancelledList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> enrolledList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> chosenList = new ArrayList<>();
 
     @Test
     public void testSetID() {

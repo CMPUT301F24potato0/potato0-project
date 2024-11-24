@@ -39,7 +39,7 @@ public class Waiter {
     }
 
     public void setFrequency(int freq) {
-        this.interval = 1000/freq;;
+        this.interval = 1000/freq;
     }
 
     public int getTimeout() {

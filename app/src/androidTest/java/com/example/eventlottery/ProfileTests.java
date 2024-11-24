@@ -1,11 +1,9 @@
 package com.example.eventlottery;
 
-import static androidx.test.InstrumentationRegistry.getContext;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -13,16 +11,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.isNotEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import android.Manifest;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
@@ -33,9 +27,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.eventlottery.Entrant.ProfileFragment;
-import com.example.eventlottery.Models.UserModel;
-
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,9 +35,6 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ProfileTests {
-
-    private UserModel curUser;
-
     private final Waiter waiter = new Waiter(20, 1);
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule =
