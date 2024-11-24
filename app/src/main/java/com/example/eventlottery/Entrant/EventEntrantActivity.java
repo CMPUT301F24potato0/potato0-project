@@ -201,6 +201,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 // Unjoining
                 try {
                     event.unqueueWaitingList(userList);
+                    event.deregisterUserID(userList);
                     db.collection("events").document(event.getEventID()).set(event);
                 }
                 catch (Exception e) {
@@ -228,6 +229,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 else {
                     try {
                         event.queueWaitingList(userList);
+                        event.registerUserID(userList);
                         db.collection("events").document(event.getEventID()).set(event);
                         joinBtn.setVisibility(View.GONE);
                         unjoinBtn.setVisibility(View.VISIBLE);

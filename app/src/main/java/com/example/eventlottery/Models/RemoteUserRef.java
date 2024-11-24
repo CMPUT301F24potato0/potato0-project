@@ -1,6 +1,7 @@
 package com.example.eventlottery.Models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This class is the RemoteUserRef
@@ -97,4 +98,25 @@ public class RemoteUserRef implements Serializable {
         this.longitude = longitude;
     }
 
+    /**
+     * Function for differentiating between RemoteUserRef objects based on the unique iD
+     * @param o The RemoteUserRef object to compare to
+     * @return True if the objects are the same; False otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RemoteUserRef that = (RemoteUserRef) o;
+        return Objects.equals(iD, that.iD);
+    }
+
+    /**
+     * A function that returns the hash code of the RemoteUserRef object
+     * @return The hash code of the RemoteUserRef object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(iD);
+    }
 }

@@ -102,6 +102,7 @@ public class geo_requirement_dialog extends DialogFragment {
                                 user.setLatitude(lastLocation.getLatitude());
                                 user.setLongitude(lastLocation.getLongitude());
                                 event.queueWaitingList(user);
+                                event.registerUserID(user);
                             } catch (Exception e) {
                                 Toast.makeText(getContext(), "The waiting list is already full or the user is already inside the waiting list", Toast.LENGTH_SHORT).show();
 //                 .setPositiveButton("Accept", (dialog, which) -> {
