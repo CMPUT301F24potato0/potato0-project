@@ -3,6 +3,8 @@ package com.example.eventlottery.Entrant;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -252,6 +255,25 @@ public class EventEntrantActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
                 startActivity(i);
+            }
+        });
+        // ********************************************************************
+        decode();
+        // ********************************************************************
+    }
+
+    public void decode(){
+        DocumentReference docref = db.collection("posters").document(event.getEventID());
+        docref.get().addOnCompleteListener( task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()){
+                    Blob blob = document.getBlob("Blob");
+                    byte[] bytes = blob.toBytes();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    eventPoster.setImageBitmap(bitmap);
+
+                }
             }
         });
     }
