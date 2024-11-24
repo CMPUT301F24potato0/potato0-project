@@ -1,6 +1,8 @@
 package com.example.eventlottery.Organizer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -20,6 +22,9 @@ import com.example.eventlottery.Entrant.qr_code_dialog;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Blob;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -152,6 +157,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 new CreateEventDialogueFragment(event, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
             }
         });
+        // ********************************************************************
+        decode();
+        // ********************************************************************
     }
 
     /**
@@ -171,5 +179,20 @@ public class EventOrganizerActivity extends AppCompatActivity {
         CharSequence timeFormat  = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
         eventDate.setText(timeFormat);
         eventDescription.setText(event.getEventDescription());
+    }
+    public void decode(){
+        DocumentReference docref = db.collection("posters").document(eventID);
+        docref.get().addOnCompleteListener( task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()){
+                    Blob blob = document.getBlob("Blob");
+                    byte[] bytes = blob.toBytes();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    eventPoster.setImageBitmap(bitmap);
+
+                }
+            }
+        });
     }
 }
