@@ -85,7 +85,7 @@ public class ProfileTests {
         onView(withId(R.id.emailEditText)).check(matches(withText("persist@example.com")));
     }
 // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
-    public static ViewAction waitFor(long delay) {
+    private ViewAction waitFor(long delay) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -114,7 +114,7 @@ public class ProfileTests {
             Log.e("Profile Picture Testing", e.toString());
         }
         onView(withId(R.id.add_picture)).perform(click());
-        onView(isRoot()).perform(waitFor(5000));
+        waitFor(5000);
         // Checking if imageView is not empty
         onView(withId(R.id.profilePicture)).check(new ViewAssertion() {
             @Override

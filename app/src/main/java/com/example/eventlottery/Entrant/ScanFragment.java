@@ -1,9 +1,11 @@
 package com.example.eventlottery.Entrant;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -101,6 +103,24 @@ public class ScanFragment extends Fragment {
         barcodeView.setStatusText("Scanning QR Code");
         barcodeView.decodeContinuous(callback);
 
+        Button intentTestGeo = rootView.findViewById(R.id.intentTestGeo);
+
+        intentTestGeo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkEvent("ggpNuxXJVwrk1ABYXYfs", curUser.getiD());
+            }
+        });
+
+        Button intentTestNoGeo = rootView.findViewById(R.id.intentTestNoGeo);
+
+        intentTestNoGeo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkEvent("cTXJ0BLp6QHr5E29cYIC", curUser.getiD());
+            }
+        });
+
         return rootView;
     }
 
@@ -125,10 +145,12 @@ public class ScanFragment extends Fragment {
                         i.putExtra("eventModel", eve);
                         startActivity(i);
                     } else {
-                        Toast.makeText(getContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
+                        Log.e("CheckEventScanFragment", "Event doesn't exist");
+//                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "Task Failed", Toast.LENGTH_SHORT).show();
+                    Log.e("CheckEventScanFragment", "Task Failed");
+//                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
