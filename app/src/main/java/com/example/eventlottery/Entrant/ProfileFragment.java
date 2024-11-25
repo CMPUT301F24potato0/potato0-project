@@ -186,10 +186,10 @@ public class ProfileFragment extends Fragment {
         ismuted = curUser.isMuted();
 
 
-        if(getIsmute() == true){
+        if(getIsmute()){
             on_notifications.setVisibility(View.GONE);
             off_notifications.setVisibility(View.VISIBLE);
-        } else if (getIsmute() == false) {
+        } else if (!getIsmute()) {
             on_notifications.setVisibility(View.VISIBLE);
             off_notifications.setVisibility(View.GONE);
         }
@@ -223,9 +223,6 @@ public class ProfileFragment extends Fragment {
         profilePicture = rootView.findViewById(R.id.profilePicture);
         add_pic = rootView.findViewById(R.id.add_picture);
         delete_pic = rootView.findViewById(R.id.delete_picture);
-
-
-
         add_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,8 +231,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
         delete_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -288,10 +283,6 @@ public class ProfileFragment extends Fragment {
                         Log.e("Context","Context is not null");
                         canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
                     }
-//                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
-//                    canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
-//                    canvas.drawColor(Color.GRAY);
-//                    canvas.drawColor(getResources().getColor(R.color.mauve));
 
                     canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
@@ -317,8 +308,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-
 
         profile_letter = rootView.findViewById(R.id.profile_letter_picture);
         DocumentReference userRef = db.collection("users").document(curUser.getiD());
@@ -348,7 +337,7 @@ public class ProfileFragment extends Fragment {
                             if (task.getResult().exists()){
                                 // document exists
                                 Log.e("Document","exists");
-                                Log.e("String",""+task.getResult().getString("Initial"));
+                                Log.e("String", task.getResult().getString("Initial"));
 //                                decode();
                                 // CHECK
                                 // **************************************************************************************************************
@@ -393,8 +382,6 @@ public class ProfileFragment extends Fragment {
                                     paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
                                 }
 
-//                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
-//                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
 
                                 // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                                 paint.setTextAlign(Paint.Align.CENTER);
@@ -416,11 +403,6 @@ public class ProfileFragment extends Fragment {
                                     Log.e("Context","Context is not null");
                                     canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
                                 }
-//                                canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
-
-//                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.g));
-//                                canvas.drawColor(Color.GRAY);
-
                                 canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -453,29 +435,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
-
-        // check if document exists in firebase (if user has ever uploaded an image for his profile)
-//        DocumentReference docRef = db.collection("photos").document(curUser.getiD());
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                Log.e("Document","checking document existence");
-//                if (task.getResult().exists()){
-//                    // document exists
-//                    Log.e("Document","exists");
-//                    decode();;
-//                } else{
-//                    // document doesn't exist
-//                    Log.e("Document","Does not exist");
-//                    default_picture();
-//                }
-//            }
-//        });
-
-
-        admin_view = (Button) rootView.findViewById(R.id.admin_button);
+        admin_view = rootView.findViewById(R.id.admin_button);
         admin_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -525,31 +485,15 @@ public class ProfileFragment extends Fragment {
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
                             }
-                            // ****************************************************************************************
-
                             Blob blob = Blob.fromBytes(bytes);
-
-
-//                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
-//                            hashMap.put("Blob",blob);
-//                            PhotosModel photosModel = new PhotosModel("personal",hashMap);
-
 
                             HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("Blob",blob);
                             hashMap.put("personal",true);
                             hashMap.put("Initial","");
 
-                            // ****************************************************************************************
-//                            db.collection("photos").document(curUser.getiD()).set(
-//                                    new HashMap<String, Object>(){{
-//                                        put("Blob",blob);
-//                                        put("personal",false);
-//                                    }});
-                            db.collection("photos").document(curUser.getiD()).set(hashMap);
-                            // ****************************************************************************************
 
-//                            db.collection("photos").document(curUser.getiD()).set(photosModel);
+                            db.collection("photos").document(curUser.getiD()).set(hashMap);
 
                             Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
                             Log.e("After choosing image","decoding");
@@ -566,8 +510,6 @@ public class ProfileFragment extends Fragment {
             }
     );
     public void decode(){
-        // ****************************************************************************************
-
         DocumentReference docref = db.collection("photos").document(curUser.getiD());
         docref.get().addOnCompleteListener( task -> {
            if (task.isSuccessful()) {
@@ -603,4 +545,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    public UserModel getCurUser() {
+        return curUser;
+    }
 }

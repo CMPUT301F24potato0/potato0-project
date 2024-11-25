@@ -50,7 +50,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.facility_name)).setText(facility.getName());
         });
 
-        ((Button)findViewById(R.id.admin_delete_event_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.admin_delete_event_button).setOnClickListener((View view) -> {
             db.collection("events").document(event.getEventID()).delete();
             finish();
         });

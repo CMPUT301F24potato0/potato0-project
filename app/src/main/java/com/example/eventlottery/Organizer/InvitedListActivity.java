@@ -33,7 +33,7 @@ public class InvitedListActivity extends AppCompatActivity {
     private ListView invitedList;
     private ArrayAdapter<RemoteUserRef> invitedAdapter;
     private EventModel event;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button notify_invited;
 
@@ -68,7 +68,7 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedAdapter = new InvitedListArrayAdapter(this, userInvitedList, event, db);
         invitedList.setAdapter(invitedAdapter);
 
-        notify_invited = (Button) findViewById(R.id.invited_notif_button);
+        notify_invited = findViewById(R.id.invited_notif_button);
 
         notify_invited.setOnClickListener(new View.OnClickListener() {
             @Override

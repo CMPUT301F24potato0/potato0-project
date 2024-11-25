@@ -25,7 +25,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
  * Taken from https://www.geeksforgeeks.org/how-to-generate-qr-code-in-android/
  */
 public class qr_code_dialog extends DialogFragment {
-    private String eventID;
+    private final String eventID;
     private ImageView qrCodeIV;
 
     /**

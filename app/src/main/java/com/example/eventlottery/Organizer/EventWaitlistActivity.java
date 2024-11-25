@@ -55,7 +55,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
     private EventModel event;
     private WaitlistEventAdapter adapter;
     private Button remove;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button drawSample;
     private EditText drawSampleEditText;

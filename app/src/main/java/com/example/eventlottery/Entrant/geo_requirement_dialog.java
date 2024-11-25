@@ -35,12 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class geo_requirement_dialog extends DialogFragment {
 
-    private RemoteUserRef user;
-    private EventModel event;
-    private FirebaseFirestore db;
+    private final RemoteUserRef user;
+    private final EventModel event;
+    private final FirebaseFirestore db;
     private UserModel cuUser;
-    private Button joinBtn;
-    private Button unjoinBtn;
+    private final Button joinBtn;
+    private final Button unjoinBtn;
 
     /**
      * Constructor
@@ -89,7 +89,7 @@ public class geo_requirement_dialog extends DialogFragment {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

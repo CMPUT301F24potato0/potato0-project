@@ -21,10 +21,10 @@ import java.util.ArrayList;
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
-    private EventModel event;
-    private ArrayList<RemoteUserRef> entrantsListCopy;
-    private FirebaseFirestore db;
-    private ChosenListActivity chosenListActivity;
+    private final EventModel event;
+    private final ArrayList<RemoteUserRef> entrantsListCopy;
+    private final FirebaseFirestore db;
+    private final ChosenListActivity chosenListActivity;
 
     /**
      * Constructor

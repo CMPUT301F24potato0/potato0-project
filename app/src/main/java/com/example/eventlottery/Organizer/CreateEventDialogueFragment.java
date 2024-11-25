@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import android.provider.MediaStore;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -234,16 +235,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         }
                     });
                 }
-
-//                dismiss();
                 break;
             case 1: // switch UI to first page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_1, frameLayout);
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
                 eventTitleEditText.setText(eventTitle);
                 poster = stateView.findViewById(R.id.poster);
-                // ****************************************************************************************************
-
                 if(event != null){
                     // testing
                     Log.e("image","possibly selecting new image");
@@ -285,26 +282,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             }
                         }
                     });
-                    // if creating new event, this is skipped
-//                    DocumentReference posterRef = db.collection("posters").document(event.getEventID());
-//                    posterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            Log.e("Document","checking document existence");
-//                            if (task.isSuccessful()) {
-//                                DocumentSnapshot document = task.getResult();
-//                                if(document.exists()){
-//                                    // document exists
-//                                    Log.e("Document", "exists");
-//                                    Blob blob = document.getBlob("Blob");
-//                                    byte[] bytes = blob.toBytes();
-//                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                                    poster.setImageBitmap(bitmap);
-//                                    uploaded = true;
-//                                }
-//                            }
-//                        }
-//                    });
                 } else{
                     DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
                     checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -335,11 +312,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                         imageChoose();
                     }
                 });
-
-
-
-                // ****************************************************************************************************
-
                 break;
             case 2: // switch UI to second page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_2, frameLayout);
@@ -402,8 +374,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 String eventID = documentReference.getId();
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
-
-                                // ********************************************************************************
                                 Log.e("Saving","Saving new image");
                                 DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
                                 docref.get().addOnCompleteListener( task2 -> {
@@ -422,7 +392,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                         }
                                     }
                                 });
-                                // ********************************************************************************
                             }
                         }
                     });
@@ -466,7 +435,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     });
 
                 }
-//                dismiss();
                 break;
         }
     }
@@ -676,15 +644,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
                             }
-                            // ****************************************************************************************
-
                             Blob blob = Blob.fromBytes(bytes);
 
                             HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("Blob",blob);
-
-
-
                             if (event == null){
                                 // creating new event
                                 Log.e("document","temp");
@@ -715,14 +678,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 });
 
                             }
-
-
-
-                            // ****************************************************************************************
-
-
-
-
                         }
                         catch (IOException e){
                             e.printStackTrace();
@@ -732,9 +687,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
             }
     );
     public void decode(){
-        // ****************************************************************************************
-        // Check if event is null
-
         if (event == null){
             DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
             docref.get().addOnCompleteListener( task -> {
@@ -766,16 +718,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 }
 
             });
-//            Log.e("Document","document exists so decoding from existing database");
-//            Blob blob = db.collection("posters")
-//                    .document("tempt_"+event.getEventID())
-//                    .get()
-//                    .getResult()
-//                    .getBlob("Blob");
-//            byte[] bytes = blob.toBytes();
-//            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//            poster.setImageBitmap(bitmap);
-//            uploaded = true;
         }
     }
 }
