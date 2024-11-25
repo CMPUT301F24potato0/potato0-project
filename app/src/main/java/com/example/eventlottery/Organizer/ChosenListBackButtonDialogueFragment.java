@@ -21,23 +21,17 @@ import com.example.eventlottery.R;
 
 public class ChosenListBackButtonDialogueFragment extends DialogFragment {
 
-    private ChosenListActivity chosenListActivity;
-
     /**
-     * Required empty constructor for the dialogue
+     * Main, empty constructor for the dialogue
      */
     public ChosenListBackButtonDialogueFragment() {
         super();
     }
 
-    /**
-     * Main constructor for the dialogue
-     * @param chosenListActivity A reference to the chosenListActivity
-     */
-    public ChosenListBackButtonDialogueFragment(ChosenListActivity chosenListActivity) {
-        this.chosenListActivity = chosenListActivity;
-    }
 
+    /**
+     * onStart() override to change the background color of the dialogue popup window
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -45,28 +39,24 @@ public class ChosenListBackButtonDialogueFragment extends DialogFragment {
         window.setBackgroundDrawableResource(R.drawable.gradient_background_dialog);
     }
 
+    /**
+     * The onCreateDialog() function where the dialogue is built and its logic defined
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return The dialogue
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_chosen_list_back_button_dialogue, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        Button positive_button = rootView.findViewById(R.id.chosenListBackDialog_positive_button);
-        Button negative_button = rootView.findViewById(R.id.chosenListBackDialog_negative_button);
+        Button positive_button = rootView.findViewById(R.id.chosenListBackDialog_close_button);
 
         positive_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Runs the default code for onBackPressed(), which closes the activity
-                dismiss();
-                chosenListActivity.onBackDialogPositive();
-            }
-        });
-
-        negative_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Simply dismiss the dialog and do not close the activity
                 dismiss();
             }
         });
