@@ -113,15 +113,11 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         adapter = new WaitlistEventAdapter(this, 100, event, db);
         waitlist.setAdapter(adapter);
 
-        // calculate remaining spots for event and update edittext
-        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
-        drawSampleEditText.setText(Integer.toString(remaining_spots));
-
         drawSample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Update remaining spots in case the organizer returns to this page and clicks draw sample button again
-                remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size();
+                remaining_spots = calculateRemainingSpots();
                 // Check for empty input
                 if (drawSampleEditText.getText().toString().equals("")) {
                     Toast.makeText(EventWaitlistActivity.this, "Please enter a number.", Toast.LENGTH_SHORT).show();
@@ -180,9 +176,21 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
                             // Notify adapter of changes
                             adapter.notifyDataSetChanged();
+
+                            // Update remaining spots left for invitation
+                            remaining_spots = calculateRemainingSpots();
+                            drawSampleEditText.setText(Integer.toString(remaining_spots));
                         }
                     }
                 });
+    }
+
+    /**
+     * A helper function that returns the remaining spots left for invitations to the event
+     * @return
+     */
+    private Integer calculateRemainingSpots() {
+        return event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - event.getChosenList().size();
     }
 
     private void updateMapMarkers(ArrayList<RemoteUserRef> entrantsList) {
