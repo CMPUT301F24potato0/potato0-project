@@ -64,7 +64,7 @@ public class ChosenListActivity extends AppCompatActivity {
         chosenEntrantsCount = findViewById(R.id.chosen_entrants_number_chosen);
         send_invites_button = findViewById(R.id.chosen_entrants_send_invites_button);
         resample_button = findViewById(R.id.chosen_entrants_resample_button);
-        searchbar = findViewById(R.id.chosen_entrants_search_edittext);  // TODO: implement in part 4
+        searchbar = findViewById(R.id.chosen_entrants_search_edittext);  // not to be implemented for part 4
         chosenEntrantsListView = findViewById(R.id.chosen_entrants_listview);
 
         // Get data from intent
@@ -78,8 +78,6 @@ public class ChosenListActivity extends AppCompatActivity {
         eventRef = db.collection("events").document(event.getEventID());
         chosenEntrantsModel = event.getChosenList();
 
-        // Empty the chosen list (this happens only once after sample button is clicked)
-        chosenEntrantsModel.clear();
         // Make a copy of waitlist
         ArrayList<RemoteUserRef> waitlist_copy = (ArrayList<RemoteUserRef>) event.getWaitingList().clone();
 
@@ -264,18 +262,10 @@ public class ChosenListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!chosenEntrantsTemp.isEmpty()) {
-            new ChosenListBackButtonDialogueFragment(chosenListActivity).show(getSupportFragmentManager(), "Pressed back button when there are still uninvited chosen entrants");
+            new ChosenListBackButtonDialogueFragment().show(getSupportFragmentManager(), "Pressed back button when there are still uninvited chosen entrants");
         }
         else {
             super.onBackPressed();
         }
     }
-
-    /**
-     * A helper function for closing the activity through the dialog from ChosenListBackButtonDialogueFragment
-     */
-    public void onBackDialogPositive() {
-        super.onBackPressed();
-    }
-
 }
