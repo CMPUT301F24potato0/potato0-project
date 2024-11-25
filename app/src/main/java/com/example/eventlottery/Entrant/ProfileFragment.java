@@ -261,7 +261,13 @@ public class ProfileFragment extends Fragment {
                     Canvas canvas = new Canvas(bitmap);
                     // Get the TextView's text and draw it onto the canvas
                     Paint paint = profile_letter.getPaint();
-                    paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                    if (getContext() == null){
+                        Log.e("Context","Context was null");
+                        paint.setColor(Color.BLACK);
+                    } else{
+                        Log.e("Context","Context is not null");
+                        paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                    }
                     // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                     paint.setTextAlign(Paint.Align.CENTER);
                     int x_pos = (canvas.getWidth() / 2);
@@ -275,7 +281,14 @@ public class ProfileFragment extends Fragment {
                             R.color.mauve
                     };
                     int randColor = colors[new Random().nextInt(colors.length)];
-                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                    if (getContext() == null){
+                        Log.e("Context","Context was null");
+                        canvas.drawColor(Color.BLUE);
+                    } else{
+                        Log.e("Context","Context is not null");
+                        canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                    }
+//                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
 //                    canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
 //                    canvas.drawColor(Color.GRAY);
 //                    canvas.drawColor(getResources().getColor(R.color.mauve));
@@ -372,6 +385,14 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
+                                if (getContext() == null){
+                                    Log.e("Context","Context was null");
+                                    paint.setColor(Color.BLACK);
+                                } else{
+                                    Log.e("Context","Context is not null");
+                                    paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                                }
+
 //                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
 //                                paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
 
@@ -388,7 +409,13 @@ public class ProfileFragment extends Fragment {
                                         R.color.mauve
                                 };
                                 int randColor = colors[new Random().nextInt(colors.length)];
-                                canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                                if (getContext() == null){
+                                    Log.e("Context","Context was null");
+                                    canvas.drawColor(Color.BLUE);
+                                } else{
+                                    Log.e("Context","Context is not null");
+                                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                                }
 //                                canvas.drawColor(ContextCompat.getColor(requireContext(), R.color.mauve));
 
 //                                canvas.drawColor(ContextCompat.getColor(getContext(), R.color.g));
