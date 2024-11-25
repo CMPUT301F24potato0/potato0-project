@@ -69,6 +69,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private ImageView poster;
     private Boolean uploaded = false;
 
+    private HashMap<String, Object> temp_hashmap;
+    private Bitmap temp_bitmap;
+
     /** Empty constructor
      */
     public CreateEventDialogueFragment() {
@@ -200,40 +203,64 @@ public class CreateEventDialogueFragment extends DialogFragment {
         switch (dialogState) {
             case 0: // user selects "cancel"
                 if(event != null){
-                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+event.getEventID());
-                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()){
-                                    db.collection("posters").document("tempt_"+event.getEventID()).delete();
-                                    dismiss();
-                                }
-                                else{
-                                    dismiss();
-                                }
-                            }
-                        }
-                    });
-                }
-                else{
-                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
-                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()){
-                                    db.collection("posters").document("tempt_"+organizer.getiD()).delete();
-                                    dismiss();
-                                }
-                                else{
-                                    dismiss();
+                    if (temp_bitmap != null){
+                        poster.setImageBitmap(temp_bitmap);
+                    } else{
+                        DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
+                        checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()){
+                                        db.collection("posters").document("tempt_"+organizer.getiD()).delete();
+                                        dismiss();
+                                    }
+                                    else{
+                                        dismiss();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+
+                    }
+                    dismiss();
+//                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+event.getEventID());
+//                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()){
+//                                DocumentSnapshot document = task.getResult();
+//                                if (document.exists()){
+//                                    db.collection("posters").document("tempt_"+event.getEventID()).delete();
+//                                    dismiss();
+//                                }
+//                                else{
+//                                    dismiss();
+//                                }
+//                            }
+//                        }
+//                    });
+
+                } else{ // event is null
+                    poster.setImageBitmap(temp_bitmap);
+                    dismiss();
+//                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
+//                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()){
+//                                DocumentSnapshot document = task.getResult();
+//                                if (document.exists()){
+//                                    db.collection("posters").document("tempt_"+organizer.getiD()).delete();
+//                                    dismiss();
+//                                }
+//                                else{
+//                                    dismiss();
+//                                }
+//                            }
+//                        }
+//                    });
                 }
                 break;
             case 1: // switch UI to first page of the dialog
@@ -241,67 +268,106 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
                 eventTitleEditText.setText(eventTitle);
                 poster = stateView.findViewById(R.id.poster);
-                if(event != null){
-                    // testing
-                    Log.e("image","possibly selecting new image");
-                    DocumentReference posterRef = db.collection("posters").document("tempt_"+event.getEventID());
-                    posterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                DocumentSnapshot doc = task.getResult();
-                                if (doc.exists()){
-                                    Log.e("new poster","showing new poster");
-                                    Blob blob = doc.getBlob("Blob");
-                                    byte[] bytes = blob.toBytes();
-                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                    poster.setImageBitmap(bitmap);
-                                    uploaded = true;
-                                }
-                                else{
-                                    DocumentReference posterReference = db.collection("posters").document(event.getEventID());
-                                    posterReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            Log.e("Document","checking document existence");
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if(document.exists()){
-                                                    // document exists
-                                                    Log.e("Document", "exists");
-                                                    Blob blob = document.getBlob("Blob");
-                                                    byte[] bytes = blob.toBytes();
-                                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                    poster.setImageBitmap(bitmap);
-                                                    uploaded = true;
-                                                }
-                                            }
-                                        }
-                                    });
+                // Testing
+                // ************************************************************************************************************************
+                if (event != null) {
+                    // editing event
+                    if (temp_bitmap != null){
+                        // selected a new poster
+                        poster.setImageBitmap(temp_bitmap);
+                    }
+                    else{
+                        // shows current poster
+                        DocumentReference posterReference = db.collection("posters").document(event.getEventID());
+                        posterReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                Log.e("Document","checking document existence");
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()){
+                                        // document exists
+                                        Log.e("Document", "exists");
+                                        Blob blob = document.getBlob("Blob");
+                                        byte[] bytes = blob.toBytes();
+                                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                        poster.setImageBitmap(bitmap);
+                                        uploaded = true;
+                                    }
                                 }
                             }
-                        }
-                    });
-                } else{
-                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
-                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()){
-                                    // while creating an event user selected an image, pressed next then pressed back
-                                    Blob blob = document.getBlob("Blob");
-                                    byte[] bytes = blob.toBytes();
-                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                    poster.setImageBitmap(bitmap);
-                                    uploaded = true;
-                                }
-
-                            }
-                        }
-                    });
+                        });
+                    }
+                }else{
+                    // creating a new event
+                    if (temp_bitmap != null){
+                        // selected a new poster
+                        poster.setImageBitmap(temp_bitmap);
+                    }
                 }
+                // ************************************************************************************************************************
+
+//                if(event != null){
+//                    // testing
+//                    Log.e("image","possibly selecting new image");
+//                    DocumentReference posterRef = db.collection("posters").document("tempt_"+event.getEventID());
+//                    posterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()){
+//                                DocumentSnapshot doc = task.getResult();
+//                                if (doc.exists()){
+//                                    Log.e("new poster","showing new poster");
+//                                    Blob blob = doc.getBlob("Blob");
+//                                    byte[] bytes = blob.toBytes();
+//                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                                    poster.setImageBitmap(bitmap);
+//                                    uploaded = true;
+//                                }
+//                                else{
+//                                    DocumentReference posterReference = db.collection("posters").document(event.getEventID());
+//                                    posterReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            Log.e("Document","checking document existence");
+//                                            if (task.isSuccessful()) {
+//                                                DocumentSnapshot document = task.getResult();
+//                                                if(document.exists()){
+//                                                    // document exists
+//                                                    Log.e("Document", "exists");
+//                                                    Blob blob = document.getBlob("Blob");
+//                                                    byte[] bytes = blob.toBytes();
+//                                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                                                    poster.setImageBitmap(bitmap);
+//                                                    uploaded = true;
+//                                                }
+//                                            }
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        }
+//                    });
+//                } else{
+//                    DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
+//                    checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()){
+//                                DocumentSnapshot document = task.getResult();
+//                                if (document.exists()){
+//                                    // while creating an event user selected an image, pressed next then pressed back
+//                                    Blob blob = document.getBlob("Blob");
+//                                    byte[] bytes = blob.toBytes();
+//                                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                                    poster.setImageBitmap(bitmap);
+//                                    uploaded = true;
+//                                }
+//
+//                            }
+//                        }
+//                    });
+//                }
 
                 Button add_poster = stateView.findViewById(R.id.add_poster);
 
@@ -374,24 +440,27 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 String eventID = documentReference.getId();
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
+
                                 Log.e("Saving","Saving new image");
-                                DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
-                                docref.get().addOnCompleteListener( task2 -> {
-                                    if (task2.isSuccessful()) {
-                                        DocumentSnapshot document = task2.getResult();
-                                        if (document.exists()){
-                                            Log.e("mod","not changing image");
-                                            // creating of new event
-                                            Blob blob = document.getBlob("Blob");
-                                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                                            hashMap.put("Blob",blob);
-                                            hashMap.put("Organizer",organizer.getiD());
-                                            db.collection("posters").document(event.getEventID()).set(hashMap);
-                                            db.collection("posters").document("tempt_"+organizer.getiD()).delete();
-                                            dismiss();
-                                        }
-                                    }
-                                });
+                                db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                                dismiss();
+//                                DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
+//                                docref.get().addOnCompleteListener( task2 -> {
+//                                    if (task2.isSuccessful()) {
+//                                        DocumentSnapshot document = task2.getResult();
+//                                        if (document.exists()){
+//                                            Log.e("mod","not changing image");
+//                                            // creating of new event
+//                                            Blob blob = document.getBlob("Blob");
+//                                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+//                                            hashMap.put("Blob",blob);
+//                                            hashMap.put("Organizer",organizer.getiD());
+//                                            db.collection("posters").document(event.getEventID()).set(hashMap);
+//                                            db.collection("posters").document("tempt_"+organizer.getiD()).delete();
+//                                            dismiss();
+//                                        }
+//                                    }
+//                                });
                             }
                         }
                     });
@@ -405,34 +474,42 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     event.setGeolocationRequired(geolocationRequired);
                     event.setJoinDeadline(joinDeadline);
                     event.setEventDescription(eventDescription);
-                    DocumentReference docref = db.collection("posters").document("tempt_"+event.getEventID());
-                    docref.get().addOnCompleteListener( task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.e("mod","changing image");
-                                // modifying already existing event
-                                Blob blob = document.getBlob("Blob");
-                                HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                                hashMap.put("Blob",blob);
-                                hashMap.put("Organizer",event.getFacilityID());
-                                db.collection("posters").document(event.getEventID()).set(hashMap);
-                                db.collection("posters").document("tempt_"+event.getEventID()).delete();
-                                // if not it dismisses too fast
-                                db.collection("events").document(event.getEventID()).set(event);
-                                eventActivity.updateViews();
-                                dismiss();
-                            }
-                            else {
-                                // document doesn't exist
-                                // therefore we are not changing the poster and can dismiss
-                                db.collection("events").document(event.getEventID()).set(event);
-                                eventActivity.updateViews();
-                                dismiss();
-                            }
-                        }
+                    db.collection("events").document(event.getEventID()).set(event);
+                    // ***
+                    db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                    // ***
+                    eventActivity.updateViews();
+                    dismiss();
 
-                    });
+
+//                    DocumentReference docref = db.collection("posters").document("tempt_"+event.getEventID());
+//                    docref.get().addOnCompleteListener( task -> {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            if (document.exists()) {
+//                                Log.e("mod","changing image");
+//                                // modifying already existing event
+//                                Blob blob = document.getBlob("Blob");
+//                                HashMap<String, Object> hashMap = new HashMap<String, Object>();
+//                                hashMap.put("Blob",blob);
+//                                hashMap.put("Organizer",event.getFacilityID());
+//                                db.collection("posters").document(event.getEventID()).set(hashMap);
+//                                db.collection("posters").document("tempt_"+event.getEventID()).delete();
+//                                // if not it dismisses too fast
+//                                db.collection("events").document(event.getEventID()).set(event);
+//                                eventActivity.updateViews();
+//                                dismiss();
+//                            }
+//                            else {
+//                                // document doesn't exist
+//                                // therefore we are not changing the poster and can dismiss
+//                                db.collection("events").document(event.getEventID()).set(event);
+//                                eventActivity.updateViews();
+//                                dismiss();
+//                            }
+//                        }
+//
+//                    });
 
                 }
                 break;
@@ -649,33 +726,46 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("Blob",blob);
                             if (event == null){
+                                // editing event
+                                // saving temp imageSelected
+                                // saving temp hashmap for db
+                                temp_bitmap = bitmap;
+                                temp_hashmap = hashMap;
+
                                 // creating new event
                                 Log.e("document","temp");
-                                DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
-                                docref.get().addOnCompleteListener( task -> {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-
-                                        db.collection("posters").document("tempt_"+organizer.getiD()).set(hashMap);
-                                        Log.e("document","temp");
-                                        decode();
-                                        Log.e("decoded","decoded");
-
-                                    }
-                                });
+                                Log.e("document","editing event");
+                                decode();
+//                                DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
+//                                docref.get().addOnCompleteListener( task -> {
+//                                    if (task.isSuccessful()) {
+//                                        DocumentSnapshot document = task.getResult();
+//
+//                                        db.collection("posters").document("tempt_"+organizer.getiD()).set(hashMap);
+//                                        Log.e("document","temp");
+//                                        decode();
+//                                        Log.e("decoded","decoded");
+//
+//                                    }
+//                                });
                             } else {
-                                DocumentReference docref = db.collection("posters").document(event.getEventID());
-                                docref.get().addOnCompleteListener( task -> {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()){
-                                            db.collection("posters").document("tempt_"+event.getEventID()).set(hashMap);
-                                            Log.e("document","eventID");
-                                            decode();
-                                            Log.e("decoded","decoded");
-                                        }
-                                    }
-                                });
+                                // creating event
+                                Log.e("creating","Event");
+                                temp_hashmap = hashMap;
+                                temp_bitmap = bitmap;
+                                decode();
+//                                DocumentReference docref = db.collection("posters").document(event.getEventID());
+//                                docref.get().addOnCompleteListener( task -> {
+//                                    if (task.isSuccessful()) {
+//                                        DocumentSnapshot document = task.getResult();
+//                                        if (document.exists()){
+//                                            db.collection("posters").document("tempt_"+event.getEventID()).set(hashMap);
+//                                            Log.e("document","eventID");
+//                                            decode();
+//                                            Log.e("decoded","decoded");
+//                                        }
+//                                    }
+//                                });
 
                             }
                         }
@@ -688,36 +778,54 @@ public class CreateEventDialogueFragment extends DialogFragment {
     );
     public void decode(){
         if (event == null){
-            DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
-            docref.get().addOnCompleteListener( task -> {
-                if (task.isSuccessful()) {
+            poster.setImageBitmap(temp_bitmap);
+            uploaded = true;
+//            DocumentReference docref = db.collection("posters").document("tempt_"+organizer.getiD());
+//            docref.get().addOnCompleteListener( task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()){
+//                        Log.e("temp","temp document exists");
+//                        Blob blob = document.getBlob("Blob");
+//                        byte[] bytes = blob.toBytes();
+//                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                        poster.setImageBitmap(bitmap);
+//                        uploaded = true;
+//                    }
+//
+//                } else {
+//                    Log.e("error","error");
+//                }
+//            });
+        } else{
+            // editing image
+            if(temp_bitmap == null){
+                DocumentReference docref = db.collection("posters").document(event.getEventID());
+                docref.get().addOnCompleteListener( task -> {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()){
-                        Log.e("temp","temp document exists");
                         Blob blob = document.getBlob("Blob");
                         byte[] bytes = blob.toBytes();
                         Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                         poster.setImageBitmap(bitmap);
                         uploaded = true;
                     }
-
-                } else {
-                    Log.e("error","error");
-                }
-            });
-        } else{
-            DocumentReference docref = db.collection("posters").document("tempt_"+event.getEventID());
-            docref.get().addOnCompleteListener( task -> {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()){
-                    Blob blob = document.getBlob("Blob");
-                    byte[] bytes = blob.toBytes();
-                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    poster.setImageBitmap(bitmap);
-                    uploaded = true;
-                }
-
-            });
+                });
+            } else{
+                poster.setImageBitmap(temp_bitmap);
+            }
+//            DocumentReference docref = db.collection("posters").document("tempt_"+event.getEventID());
+//            docref.get().addOnCompleteListener( task -> {
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()){
+//                    Blob blob = document.getBlob("Blob");
+//                    byte[] bytes = blob.toBytes();
+//                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                    poster.setImageBitmap(bitmap);
+//                    uploaded = true;
+//                }
+//
+//            });
         }
     }
 }
