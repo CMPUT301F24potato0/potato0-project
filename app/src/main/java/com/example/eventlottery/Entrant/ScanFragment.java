@@ -109,7 +109,7 @@ public class ScanFragment extends Fragment {
      * If event is not found it creates a new toast displaying error message.
      * @param eventID The eventID scanned from the qr code
      */
-    private void checkEvent(String eventID, String userId) {
+    public void checkEvent(String eventID, String userId) { // Making it public to use it for test cases
         CollectionReference eventRef = db.collection("events");
         Task<DocumentSnapshot> eventTask = eventRef.document(eventID).get();
         eventTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

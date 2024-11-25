@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -247,6 +248,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             if (task.isSuccessful()){
                                 DocumentReference documentReference = task.getResult();
                                 String eventID = documentReference.getId();
+                                Log.e("EventID", eventID);
+                                Log.e("EventID", eventID);
+                                Log.e("EventID", eventID);
+                                Log.e("EventID", eventID);
+                                Log.e("EventID", eventID);
+                                Log.e("EventID", eventID);
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
                             }

@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 else {
                                     Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             else {
                                 Log.d("Firestore", "get failed with ", task.getException());
