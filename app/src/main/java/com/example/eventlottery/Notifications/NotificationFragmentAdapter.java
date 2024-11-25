@@ -14,13 +14,16 @@ import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This is the NotificationFragmentAdapter class
@@ -92,10 +95,20 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 
         title.setText(notification.get("title"));
         message.setText(notification.get("body"));
-        eventID.setText(notification.get("eventID"));
+//        eventID.setText(notification.get("eventID"));
         flagID.setText(notification.get("flag"));
+        DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
+        eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot != null) {
+                    EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+                    eventID.setText(eventFireStore.getEventTitle());
+                }
+            }
+        });
 
-        if (flagID.getText().toString().equals("Chosen")) {
+                    if (flagID.getText().toString().equals("Chosen")) {
             // Make sure the buttons are visible
             cancel_btn.setVisibility(View.VISIBLE);
             signup_btn.setVisibility(View.VISIBLE);
@@ -111,6 +124,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot != null) {
                                 EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+
                                 RemoteUserRef entrantRemoteUserRef = new RemoteUserRef(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
                                 // Update event model after user chooses to join the event
                                 try {
