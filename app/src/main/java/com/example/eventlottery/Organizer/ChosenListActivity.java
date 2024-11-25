@@ -94,41 +94,41 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
             openInvitationNotificationDialog();
         }
 
-        // TODO: reimplement
+        // TODO: reimplement with new dialog fragment that matches the UI theme
         // Set up resample button
-//        resample_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
-//                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
-//                builder.setTitle("Please enter a number up to " + chooseUpto);
-//                EditText input = new EditText(ChosenListActivity.this);
-//                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//                builder.setView(input);
-//                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        if (input.getText().toString().equals("")) {
-//                            Toast.makeText(chosenListActivity, "Please enter a number.", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else {
-//                            sample_amount = Integer.parseInt(input.getText().toString());
-//                            if (waitlist_copy.size() < sample_amount) {
-//                                Toast.makeText(chosenListActivity, "Waiting list only has " + waitlist_copy.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else if (remaining_spots < sample_amount) {
-//                                Toast.makeText(chosenListActivity, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else {
-//                                sampleEntrants(waitlist_copy, Integer.parseInt(input.getText().toString()));
-//                                updateChosenCountAndRemainingSpotsLeft();
-//                            }
-//                        }
-//                    }
-//                });
-//                builder.create().show();
-//            }
-//        });
+        resample_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
+                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
+                builder.setTitle("Please enter a number up to " + chooseUpto);
+                EditText input = new EditText(ChosenListActivity.this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (input.getText().toString().equals("")) {
+                            Toast.makeText(getBaseContext(), "Please enter a number.", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            sample_amount = Integer.parseInt(input.getText().toString());
+                            if (waitlistedEntrants.size() < sample_amount) {
+                                Toast.makeText(getBaseContext(), "Waiting list only has " + waitlistedEntrants.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (remaining_spots < sample_amount) {
+                                Toast.makeText(getBaseContext(), "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                sampleEntrants(Integer.parseInt(input.getText().toString()));
+                                updateChosenCountAndRemainingSpotsLeft();
+                            }
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
 
 
         // Set up invite button
@@ -236,7 +236,7 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
      */
     public void openInvitationNotificationDialog() {
         Boolean sent = false;
-        new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
+        new SendNotificationDialog(event, "Chosen", sent, db, this).show(getSupportFragmentManager(), "Send Notification");
     }
 
 
@@ -248,7 +248,6 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         for (RemoteUserRef entrant : chosenEntrants) {
             try {
                 event.queueInvitedList(entrant);
-                event.unqueueWaitingList(entrant);
                 invitedEntrants.add(entrant);
             } catch (Exception e) {
                 Toast.makeText(ChosenListActivity.this, "Entrant " + entrant.getName() + " is already in the invited list or is not in chosen list anymore.", Toast.LENGTH_SHORT).show();
@@ -256,6 +255,7 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         }
         event.getChosenList().removeAll(invitedEntrants);
         eventRef.set(event);
+        updateChosenCountAndRemainingSpotsLeft();
         Toast.makeText(this, "Sent Notification", Toast.LENGTH_SHORT).show();
     }
 
