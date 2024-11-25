@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,6 +91,12 @@ public class ChosenListActivity extends AppCompatActivity {
         sampleEntrants(waitlist_copy, sample_amount);
         updateChosenCountAndRemainingSpotsLeft();
 
+        // When the sample button is pressed and the activity is launched, after sampling, automatically open
+        // the invitation notification dialog, so the user can immediately send invites (and to prevent them from forgetting)
+        if (!chosenEntrantsTemp.isEmpty()) {
+            openInvitationNotificationDialog();
+        }
+
         // Set up resample button
         resample_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,16 +132,12 @@ public class ChosenListActivity extends AppCompatActivity {
             }
         });
 
-        //ActivityResultContracts<Intent> startActivityIntent =
 
         // Set up invite button
         send_invites_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: implement notifications
-                Boolean sent = false;
-                new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
-//                .show(getSupportFragmentManager(), "Send Notification");
+                openInvitationNotificationDialog();
             }
         });
 
@@ -227,6 +231,14 @@ public class ChosenListActivity extends AppCompatActivity {
     }
 
     /**
+     * A helper function to open the dialog for sending the invitation notification
+     */
+    public void openInvitationNotificationDialog() {
+        Boolean sent = false;
+        new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
+    }
+
+    /**
      * A helper function to send notifications to the entrants
      */
     public void sendNotification(){
@@ -245,4 +257,25 @@ public class ChosenListActivity extends AppCompatActivity {
         eventRef.set(event);
         Toast.makeText(chosenListActivity, "Sent Notification", Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Overwrites the back button functionality, so it warns the organizer about uninvited chosen entrants
+     */
+    @Override
+    public void onBackPressed() {
+        if (!chosenEntrantsTemp.isEmpty()) {
+            new ChosenListBackButtonDialogueFragment(chosenListActivity).show(getSupportFragmentManager(), "Pressed back button when there are still uninvited chosen entrants");
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * A helper function for closing the activity through the dialog from ChosenListBackButtonDialogueFragment
+     */
+    public void onBackDialogPositive() {
+        super.onBackPressed();
+    }
+
 }
