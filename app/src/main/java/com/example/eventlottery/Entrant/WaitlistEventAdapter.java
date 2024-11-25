@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 /**
  * This class is the WaitlistEventAdapter
+ * This method is the adapter that manage the entrants in the waiting list on a specific event
+ * also the ability to delete the entrants on the waiting list
+ * this class configure the elements on the list to look in a specific way
  */
 public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
     private ArrayList<RemoteUserRef> waitList;
@@ -30,16 +33,24 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
     /**
      * This is the constructor for WaitlistEventAdapter
      * @param context The context
-     * @param resource The resource
+     *                The current state of the program
+     * @param resource
+     *                The resource
      */
     public WaitlistEventAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
 
     /**
-     * This is the constructor for WaitlistEventAdapter
-     * @param context The context
-     * @param resource The resource
+     *
+     * @param context
+     *              The current state of the program
+     * @param resource
+     *                The resource
+     * @param event
+     *            The event that the wait list get the entrants from
+     * @param db
+     *          THe Firebase where the information is collected
      */
     public WaitlistEventAdapter(@NonNull Context context, int resource, EventModel event, FirebaseFirestore db) {
         super(context, resource, event.getWaitingList());
@@ -51,7 +62,11 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
 
     /**
      * getView override
+     * It generates the view of the listview, where the elements (entrants) are displayed
+     * in a specific way, also have the ability to remove the user by clicking the button that the
+     * adapter view has on each element of the listview (waiting list)
      * @param position The position
+     *                 Position on a element in the list
      * @param convertView The convertView
      * @param parent The parent
      */
