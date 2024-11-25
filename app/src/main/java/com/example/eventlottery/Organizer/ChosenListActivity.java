@@ -10,10 +10,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
-public class ChosenListActivity extends AppCompatActivity {
+public class ChosenListActivity extends AppCompatActivity implements ChosenEntrantsAdapter.ChosenEntrantsAdapterCallback {
 
     private Integer sample_amount;
     private Integer remaining_spots;
@@ -40,13 +38,14 @@ public class ChosenListActivity extends AppCompatActivity {
     private Button resample_button;
     private EditText searchbar;
     private ListView chosenEntrantsListView;
-    private ChosenEntrantsAdapter adapter;
+    private ChosenEntrantsAdapter chosenAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference eventRef;
-    private ChosenListActivity chosenListActivity = this;
 
-    private ArrayList<RemoteUserRef> chosenEntrantsTemp;  // for storing entrants chosen by the LotterySystem class but not yet added to the event model
-    private ArrayList<RemoteUserRef> chosenEntrantsModel; // a reference to the chosen entrants list from the event model
+    // ArrayLists used for the lottery system
+    private ArrayList<RemoteUserRef> chosenEntrants;
+    private ArrayList<RemoteUserRef> waitlistedEntrants;
+
 
     /**
      * Called when the activity is first created.
@@ -75,60 +74,61 @@ public class ChosenListActivity extends AppCompatActivity {
             remaining_spots = extras.getInt("remaining_spots");
         }
 
+        // Prepare event document reference and necessary lists
         eventRef = db.collection("events").document(event.getEventID());
-        chosenEntrantsModel = event.getChosenList();
-
-        // Make a copy of waitlist
-        ArrayList<RemoteUserRef> waitlist_copy = (ArrayList<RemoteUserRef>) event.getWaitingList().clone();
+        chosenEntrants = event.getChosenList();
+        waitlistedEntrants = event.getWaitingList();
 
         // Set up adapter for ListView
-        adapter = new ChosenEntrantsAdapter(this, waitlist_copy, event, db, chosenListActivity);
-        chosenEntrantsListView.setAdapter(adapter);
+        chosenAdapter = new ChosenEntrantsAdapter(this, chosenEntrants);
+        chosenAdapter.setCallback(this);
+        chosenEntrantsListView.setAdapter(chosenAdapter);
 
         // Initial draw random sample based on provided sample_amount
-        sampleEntrants(waitlist_copy, sample_amount);
+        sampleEntrants(sample_amount);
         updateChosenCountAndRemainingSpotsLeft();
 
         // When the sample button is pressed and the activity is launched, after sampling, automatically open
         // the invitation notification dialog, so the user can immediately send invites (and to prevent them from forgetting)
-        if (!chosenEntrantsTemp.isEmpty()) {
+        if (!chosenEntrants.isEmpty()) {
             openInvitationNotificationDialog();
         }
 
+        // TODO: reimplement
         // Set up resample button
-        resample_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
-                Integer chooseUpto = remaining_spots <= waitlist_copy.size() ? remaining_spots : waitlist_copy.size();
-                builder.setTitle("Please enter a number up to " + chooseUpto);
-                EditText input = new EditText(ChosenListActivity.this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                builder.setView(input);
-                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (input.getText().toString().equals("")) {
-                            Toast.makeText(chosenListActivity, "Please enter a number.", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            sample_amount = Integer.parseInt(input.getText().toString());
-                            if (waitlist_copy.size() < sample_amount) {
-                                Toast.makeText(chosenListActivity, "Waiting list only has " + waitlist_copy.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
-                            }
-                            else if (remaining_spots < sample_amount) {
-                                Toast.makeText(chosenListActivity, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                sampleEntrants(waitlist_copy, Integer.parseInt(input.getText().toString()));
-                                updateChosenCountAndRemainingSpotsLeft();
-                            }
-                        }
-                    }
-                });
-                builder.create().show();
-            }
-        });
+//        resample_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
+//                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
+//                builder.setTitle("Please enter a number up to " + chooseUpto);
+//                EditText input = new EditText(ChosenListActivity.this);
+//                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                builder.setView(input);
+//                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        if (input.getText().toString().equals("")) {
+//                            Toast.makeText(chosenListActivity, "Please enter a number.", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//                            sample_amount = Integer.parseInt(input.getText().toString());
+//                            if (waitlist_copy.size() < sample_amount) {
+//                                Toast.makeText(chosenListActivity, "Waiting list only has " + waitlist_copy.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else if (remaining_spots < sample_amount) {
+//                                Toast.makeText(chosenListActivity, "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else {
+//                                sampleEntrants(waitlist_copy, Integer.parseInt(input.getText().toString()));
+//                                updateChosenCountAndRemainingSpotsLeft();
+//                            }
+//                        }
+//                    }
+//                });
+//                builder.create().show();
+//            }
+//        });
 
 
         // Set up invite button
@@ -139,7 +139,7 @@ public class ChosenListActivity extends AppCompatActivity {
             }
         });
 
-
+        // Keeping the lists updated
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -168,52 +168,54 @@ public class ChosenListActivity extends AppCompatActivity {
                             event.getInvitedList().clear();
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
                             // Notify adapter of changes
-                            adapter.notifyDataSetChanged();
+                            chosenAdapter.notifyDataSetChanged();
                         }
                     }
                 });
     }
 
-    /**
-     * Samples entrants from an ArrayList, removing them from that ArrayList, and updating both event model and Firestore with the chosen entrants
-     * @param entrantsList The ArrayList of entrants to choose and remove entrants from
-     * @param sample_amount How many entrants to sample from the ArrayList of entrants
-     */
-    private void sampleEntrants(ArrayList<RemoteUserRef> entrantsList, Integer sample_amount) {
-        // Sample a subset of entrants
-        chosenEntrantsTemp = LotterySystem.sampleEntrants(entrantsList, sample_amount);
-        // Removing chosen entrants from the provided ArrayList and updating event model with chosen entrants
-        for (RemoteUserRef entrant : chosenEntrantsTemp) {
-            try {
-                removeEntrant(entrantsList, entrant);
-                event.queueChosenList(entrant);
-            }
-            catch (IllegalArgumentException e) {
-                Log.e("Error", e.toString());
-                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e) {
-                Toast.makeText(this, "Entrant " + entrant.getName() + " is already in the chosen list.", Toast.LENGTH_SHORT).show();
-            }
-        }
-        // Updating Firestore with the chosen entrants and notifying ArrayAdapter
-        eventRef.set(event);
-        adapter.notifyDataSetChanged();
-    }
 
     /**
-     * A helper function to remove the provided entrant from the provided ArrayList of entrants
-     * @param entrantsList The ArrayList of entrants
-     * @param entrant The entrant to remove from the ArrayList
+     * The lottery functionality where the waitlisted entrants are sampled and turned into chosen entrants
+     * @param sample_amount How many entrants to sample from the waitlist
      */
-    private void removeEntrant(ArrayList<RemoteUserRef> entrantsList, RemoteUserRef entrant) throws IllegalArgumentException {
-        for (int i = 0; i < entrantsList.size(); i++) {
-            if (entrantsList.get(i).getiD().equals(entrant.getiD())) {
-                entrantsList.remove(i);
-                return;
+    private void sampleEntrants(Integer sample_amount) {
+        Boolean queueUnqueueSuccess = Boolean.TRUE;
+        // Sample a subset of entrants
+        ArrayList<RemoteUserRef> lotteryWinners = LotterySystem.sampleEntrants(waitlistedEntrants, sample_amount);
+
+        // Duplicate the original states of the lists in case of an exception
+        ArrayList<RemoteUserRef> waitlistedEntrantsOriginal = (ArrayList<RemoteUserRef>) waitlistedEntrants.clone();
+        ArrayList<RemoteUserRef> chosenEntrantsOriginal = (ArrayList<RemoteUserRef>) chosenEntrants.clone();
+
+        // Moving lottery winners from waiting list to chosen list
+        for (RemoteUserRef winner : lotteryWinners) {
+            try {
+                event.unqueueWaitingList(winner);
+                event.queueChosenList(winner);
+            } catch (Exception e) {
+                queueUnqueueSuccess = Boolean.FALSE;
+                Toast.makeText(this, "Failed moving winners from wait list to chosen list", Toast.LENGTH_SHORT).show();
             }
         }
-        throw new IllegalArgumentException("Entrant " + entrant.getName() + " (" + entrant.getiD() + ") is not inside the ArrayList provided.");
+
+        if (queueUnqueueSuccess) {
+            // Updating FireStore database if queue and unqueue were all successful
+            eventRef.set(event);
+        }
+        else {
+            // In the case of an exception, revert the state of the ArrayLists
+            Log.e("Event Model Changes Error", "Failed queue and unqueue for all winners.");
+            waitlistedEntrants.clear();
+            chosenEntrants.clear();
+            for (RemoteUserRef entrant : waitlistedEntrantsOriginal) {
+                waitlistedEntrants.add(entrant);
+            }
+            for (RemoteUserRef entrant : chosenEntrantsOriginal) {
+                chosenEntrants.add(entrant);
+            }
+        }
+//        chosenAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -222,11 +224,12 @@ public class ChosenListActivity extends AppCompatActivity {
      */
     public void updateChosenCountAndRemainingSpotsLeft() {
         // Updating how many are chosen in the UI
-        String chosenCount = Integer.toString(chosenEntrantsModel.size());
+        String chosenCount = Integer.toString(chosenEntrants.size());
         chosenEntrantsCount.setText(chosenCount);
         // Updating remaining spots available for the event
-        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrantsModel.size();
+        remaining_spots = event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - chosenEntrants.size();
     }
+
 
     /**
      * A helper function to open the dialog for sending the invitation notification
@@ -236,13 +239,13 @@ public class ChosenListActivity extends AppCompatActivity {
         new SendNotificationDialog(event, "Chosen", sent, db, chosenListActivity).show(getSupportFragmentManager(), "Send Notification");
     }
 
+
     /**
      * A helper function to send notifications to the entrants
      */
     public void sendNotification(){
-
         ArrayList<RemoteUserRef> invitedEntrants = new ArrayList<>();
-        for (RemoteUserRef entrant : chosenEntrantsModel) {
+        for (RemoteUserRef entrant : chosenEntrants) {
             try {
                 event.queueInvitedList(entrant);
                 event.unqueueWaitingList(entrant);
@@ -253,19 +256,39 @@ public class ChosenListActivity extends AppCompatActivity {
         }
         event.getChosenList().removeAll(invitedEntrants);
         eventRef.set(event);
-        Toast.makeText(chosenListActivity, "Sent Notification", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Sent Notification", Toast.LENGTH_SHORT).show();
     }
+
 
     /**
      * Overwrites the back button functionality, so it warns the organizer about uninvited chosen entrants
      */
     @Override
     public void onBackPressed() {
-        if (!chosenEntrantsTemp.isEmpty()) {
+        if (!chosenEntrants.isEmpty()) {
             new ChosenListBackButtonDialogueFragment().show(getSupportFragmentManager(), "Pressed back button when there are still uninvited chosen entrants");
         }
         else {
             super.onBackPressed();
         }
+    }
+
+
+    /**
+     * Implementation of the interface function of ChosenEntrantsAdapter, which removes the chosen entrant from
+     * the chosen list and adds them to the cancelled list
+     * @param entrant The chosen entrant to be removed from the chosen list and added to the cancelled list
+     */
+    @Override
+    public void removeChosenEntrant(RemoteUserRef entrant) {
+        try {
+            event.unqueueChosenList(entrant);
+            event.queueCancelledList(entrant);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Failed to remove entrant", Toast.LENGTH_SHORT).show();
+        }
+        eventRef.set(event);
+        chosenAdapter.notifyDataSetChanged();
     }
 }
