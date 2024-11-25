@@ -152,4 +152,10 @@ public class ScanFragment extends Fragment {
         barcodeView.resume();
     }
 
+    public EventModel getEvent() {
+        Task<DocumentSnapshot> t = db.collection("events")
+                .document(eventScanned)
+                .get();
+        return t.getResult().toObject(EventModel.class);
+    }
 }

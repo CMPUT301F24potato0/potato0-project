@@ -372,6 +372,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             if (task.isSuccessful()){
                                 DocumentReference documentReference = task.getResult();
                                 String eventID = documentReference.getId();
+                                Log.e("EventID","***************");
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID","***************");
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
                                 Log.e("Saving","Saving new image");

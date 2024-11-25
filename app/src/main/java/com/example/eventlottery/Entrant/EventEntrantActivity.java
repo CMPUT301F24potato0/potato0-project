@@ -326,4 +326,8 @@ public class EventEntrantActivity extends AppCompatActivity {
             joinBtn.setVisibility(View.VISIBLE);
         }
     }
+
+    public EventModel getEvent() {
+        return event;
+    }
 }
