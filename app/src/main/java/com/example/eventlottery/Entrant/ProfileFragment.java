@@ -54,8 +54,11 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * This class is the profile fragment.
+ * This class is the profile fragment, it generates the fragment view where the user can interact
  * This class is called when the user clicks the profile button on the bottom.
+ * In this class, the user can update it profile information and profile picture
+ * If the user doesn't have a profile picture, one will be automatically generated, with the first
+ * initial of they name
  */
 public class ProfileFragment extends Fragment {
 
@@ -76,7 +79,7 @@ public class ProfileFragment extends Fragment {
     private TextView profile_letter;
 
     /**
-     * Empty Constructor
+     * Empty Constructor of ProfileFragment
      */
     public ProfileFragment(){
         // require a empty public constructor
@@ -84,6 +87,8 @@ public class ProfileFragment extends Fragment {
 
     /**
      * This constructor is used to pass in the instance of UserModel
+     * it pass the firebase and information of the current User so the user can see they information
+     * before making changes
      * @param db This is the database instance
      * @param curUser This is the information about current user which is passed from MainActivity
      */
@@ -94,6 +99,7 @@ public class ProfileFragment extends Fragment {
 
     /**
      * This method is called when sending a notification.
+     * This method check if the notification are muted or not
      * @return It returns the boolean ismuted, returns either true or false, depending whether wants to receive notifications or not.
      */
     public static boolean getIsmute(){
@@ -459,6 +465,11 @@ public class ProfileFragment extends Fragment {
 
         return rootView;
     }
+
+    /**
+     * This method open the gallery of the phone of the user, so the user can select a image that
+     * will become the profile picture of the current user
+     */
     public void imageChoose(){
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -538,6 +549,11 @@ public class ProfileFragment extends Fragment {
                 }
             }
     );
+
+    /**
+     * This method decode the information of the image in the Firebase so the image can be use
+     * as the profile picture
+     */
     public void decode(){
         // ****************************************************************************************
 
@@ -557,6 +573,11 @@ public class ProfileFragment extends Fragment {
            }
         });
     }
+
+    /**
+     * This method is use when the user doesn't have a profile picture, it generates one
+     * automatically for the current user
+     */
     public void default_picture(){
         DocumentReference docref = db.collection("photos").document("default");
         Log.e("here","here");

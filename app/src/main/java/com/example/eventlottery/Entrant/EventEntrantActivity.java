@@ -45,6 +45,8 @@ import java.util.Date;
 
 /**
  * Event Entrant Activity
+ * This class generates a view where the user can join or unjoin a specific event, it also displays
+ * the details of the events, it location and date
  * All images and poster stuff is left for part 4
  */
 public class EventEntrantActivity extends AppCompatActivity {
@@ -72,6 +74,8 @@ public class EventEntrantActivity extends AppCompatActivity {
 
     /**
      * Overriding on back pressed
+     * Method that makes the user go back to the past activity by pressing the left corner of the
+     * screen and swipe right
      */
     @Override
     public void onBackPressed() {
@@ -110,6 +114,8 @@ public class EventEntrantActivity extends AppCompatActivity {
     }
     /**
      * On create of the View
+     * This method create the view where the entrant can see the details of the event and
+     * join/unjoin an event
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
@@ -258,6 +264,9 @@ public class EventEntrantActivity extends AppCompatActivity {
 
     /**
      * Updating the view
+     * Observer pattern
+     * This method update all the text views of the event detail of the view, this method is call
+     * when the information of the event change, to update it to the actual one
      */
     private void update(){
         eventTitle.setText(event.getEventTitle());
@@ -271,6 +280,9 @@ public class EventEntrantActivity extends AppCompatActivity {
 
     /**
      * Checking if the user is in the event
+     * This method check if the user is already in the event, if thats the case the join button
+     * is change to the unjoin button, and if the user is not in the event the unjoin button become
+     * the join button
      */
     private void checkUserInEvent(){
         if (event.checkUserInList(userList, event.getWaitingList())) {

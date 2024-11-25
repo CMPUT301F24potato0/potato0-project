@@ -31,7 +31,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * This class is the geo_requirement_dialog
+ * This class create a dialog to tell the user that the specific event require geolocation
+ * then the user has the option to accept or reject the geolocation, if they accept the user is
+ * added to the event, if the user decline then nothing happened
  */
 public class geo_requirement_dialog extends DialogFragment {
 
@@ -45,8 +47,11 @@ public class geo_requirement_dialog extends DialogFragment {
     /**
      * Constructor
      * @param user User
+     *             The User that wants to join the event
      * @param event Event Model
+     *              The Event the user wants to join
      * @param db Firebase Firestore
+     *           The Firebase that contains the info of the event and user
      */
     public geo_requirement_dialog(RemoteUserRef user, EventModel event, FirebaseFirestore db, Button joinBtn, Button unjoinBtn ) {
         this.user = user;
@@ -56,6 +61,10 @@ public class geo_requirement_dialog extends DialogFragment {
         this.unjoinBtn = unjoinBtn;
     }
 
+    /**
+     *This method configure the color of the positive button and negative button, also configure
+     * the color of the background of the dialog
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -66,10 +75,11 @@ public class geo_requirement_dialog extends DialogFragment {
     }
 
     /**
-     * On create dialog override
+     * This method create the dialogue view so the user can see it and interact with it
      * @param savedInstanceState If the fragment is being re-created from
      * a previous saved state, this is the state.
      * @return Dialog
+     *      return the generated Dialog
      */
     @Nullable
     @Override

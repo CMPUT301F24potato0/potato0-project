@@ -8,6 +8,9 @@ import java.util.Random;
 
 /**
  * This class is the LotterySystem
+ * This class represent a lottery where some people are select so the organizer can  invited them
+ * to enroll in the event, the draw is random and choose and specif number of entrants, the specific
+ * number is chose by the organizer
  */
 public class LotterySystem {
 

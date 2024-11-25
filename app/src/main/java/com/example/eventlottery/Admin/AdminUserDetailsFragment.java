@@ -16,16 +16,32 @@ import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Fragment that shows the information of an UserModel object
+ */
 public class AdminUserDetailsFragment extends DialogFragment {
     private final UserModel user;
     private FirebaseFirestore db;
 
+    /**
+     * Constructor of AdminUserDetailsFragment
+     * @param item
+     *      UserModel object
+     */
     public AdminUserDetailsFragment(UserModel item) {
         user = item;
         db = FirebaseFirestore.getInstance();
     }
 
 
+    /**
+     * Gerates the view and set the click events
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return
+     *      it return the generated Dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

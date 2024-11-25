@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 /**
  * This class is the RemoteUserRef
+ * The purpose of this class is to make a small version of the UserModel, so the essential information
+ * of the User can be send to the Firebase, so the organizer can have the important information
+ * of the entrants, also it save the geolocation of the user to store in the firebase when the
+ * user join an event that required
  */
 public class RemoteUserRef implements Serializable {
     private String iD;
@@ -12,7 +16,7 @@ public class RemoteUserRef implements Serializable {
     private Double longitude;
 
     /**
-     * This is the empty constructor
+     * This is the empty constructor of RemoteUserRef
      */
     public RemoteUserRef() {
         iD = null;
