@@ -27,18 +27,36 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
     private final ChosenListActivity chosenListActivity;
 
     /**
-     * Constructor
-     * @param context context
-     * @param event event
-     * @param db firebase firestore
+     * Constructor for the ArrayAdapter which sets the given ArrayList as the list of items to show in the ListView
+     * @param context The context that contains the ListView that will use the ArrayAdapter
+     * @param chosenList The ArrayList to display in the ListView
      */
-    public ChosenEntrantsAdapter(Context context, ArrayList<RemoteUserRef> entrantsListCopy, EventModel event, FirebaseFirestore db, ChosenListActivity chosenListActivity) {
-        super(context, 0, event.getChosenList());
-        this.entrantsListCopy = entrantsListCopy;
-        this.event = event;
-        this.db = db;
-        this.chosenListActivity = chosenListActivity;
+    public ChosenEntrantsAdapter(Context context, ArrayList<RemoteUserRef> chosenList) {
+        super(context, 0, chosenList);
     }
+
+
+    /**
+     * An interface for the implementation of the remove button
+     */
+    // The interface implementation for ArrayAdapter is adapted from https://stackoverflow.com/questions/14822902/how-to-call-main-activitys-function-from-custom-arrayadapter
+    public interface ChosenEntrantsAdapterCallback {
+        public void removeChosenEntrant(RemoteUserRef entrant);
+    }
+
+    private ChosenEntrantsAdapterCallback callback;
+
+
+    /**
+     * Sets a callback reference for the interface.
+     * Note that the function(s) in the interface must be implemented, and setCallback must
+     * be called to properly set up the interface.
+     * @param callback The Activity or Fragment that implements the interface
+     */
+    public void setCallback(ChosenEntrantsAdapterCallback callback) {
+        this.callback = callback;
+    }
+
 
     /**
      * Get view override
@@ -74,18 +92,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    entrantsListCopy.remove(entrant);  // removes the entrant from entrants list copy
-                    event.unqueueWaitingList(entrant);
-                    event.queueCancelledList(entrant);
-                    event.unqueueChosenList(entrant);  // equivalent to remove(entrant) because they are referencing the same ArrayList
-                    notifyDataSetChanged();
-                    db.collection("events").document(event.getEventID()).set(event);
-                    chosenListActivity.updateChosenCountAndRemainingSpotsLeft();
-                }
-                catch (Exception e) {
-                    Log.e("Event Queue/Unqueue Error", "Error: " + e);
-                }
+                callback.removeChosenEntrant(entrant);
             }
         });
 
