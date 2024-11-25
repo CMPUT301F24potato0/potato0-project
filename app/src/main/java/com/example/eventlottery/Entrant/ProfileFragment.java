@@ -256,7 +256,13 @@ public class ProfileFragment extends Fragment {
                     Canvas canvas = new Canvas(bitmap);
                     // Get the TextView's text and draw it onto the canvas
                     Paint paint = profile_letter.getPaint();
-                    paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                    if (getContext() == null){
+                        Log.e("Context","Context was null");
+                        paint.setColor(Color.BLACK);
+                    } else{
+                        Log.e("Context","Context is not null");
+                        paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                    }
                     // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                     paint.setTextAlign(Paint.Align.CENTER);
                     int x_pos = (canvas.getWidth() / 2);
@@ -270,7 +276,14 @@ public class ProfileFragment extends Fragment {
                             R.color.mauve
                     };
                     int randColor = colors[new Random().nextInt(colors.length)];
-                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                    if (getContext() == null){
+                        Log.e("Context","Context was null");
+                        canvas.drawColor(Color.BLUE);
+                    } else{
+                        Log.e("Context","Context is not null");
+                        canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                    }
+
                     canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -361,7 +374,14 @@ public class ProfileFragment extends Fragment {
                                 Canvas canvas = new Canvas(bitmap);
                                 // Get the TextView's text and draw it onto the canvas
                                 Paint paint = profile_letter.getPaint();
-                                paint.setColor(ContextCompat.getColor(getContext(), R.color.black));
+                                if (getContext() == null){
+                                    Log.e("Context","Context was null");
+                                    paint.setColor(Color.BLACK);
+                                } else{
+                                    Log.e("Context","Context is not null");
+                                    paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
+                                }
+
 
                                 // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
                                 paint.setTextAlign(Paint.Align.CENTER);
@@ -376,7 +396,13 @@ public class ProfileFragment extends Fragment {
                                         R.color.mauve
                                 };
                                 int randColor = colors[new Random().nextInt(colors.length)];
-                                canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                                if (getContext() == null){
+                                    Log.e("Context","Context was null");
+                                    canvas.drawColor(Color.BLUE);
+                                } else{
+                                    Log.e("Context","Context is not null");
+                                    canvas.drawColor(ContextCompat.getColor(requireContext(), randColor));
+                                }
                                 canvas.drawText(profile_letter.getText().toString(), x_pos, y_pos, paint);
 
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -459,31 +485,15 @@ public class ProfileFragment extends Fragment {
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
                             }
-                            // ****************************************************************************************
-
                             Blob blob = Blob.fromBytes(bytes);
-
-
-//                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
-//                            hashMap.put("Blob",blob);
-//                            PhotosModel photosModel = new PhotosModel("personal",hashMap);
-
 
                             HashMap<String, Object> hashMap = new HashMap<String, Object>();
                             hashMap.put("Blob",blob);
                             hashMap.put("personal",true);
                             hashMap.put("Initial","");
 
-                            // ****************************************************************************************
-//                            db.collection("photos").document(curUser.getiD()).set(
-//                                    new HashMap<String, Object>(){{
-//                                        put("Blob",blob);
-//                                        put("personal",false);
-//                                    }});
-                            db.collection("photos").document(curUser.getiD()).set(hashMap);
-                            // ****************************************************************************************
 
-//                            db.collection("photos").document(curUser.getiD()).set(photosModel);
+                            db.collection("photos").document(curUser.getiD()).set(hashMap);
 
                             Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
                             Log.e("After choosing image","decoding");
@@ -500,7 +510,6 @@ public class ProfileFragment extends Fragment {
             }
     );
     public void decode(){
-        // ****************************************************************************************
         DocumentReference docref = db.collection("photos").document(curUser.getiD());
         docref.get().addOnCompleteListener( task -> {
            if (task.isSuccessful()) {
