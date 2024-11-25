@@ -28,6 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
+/**
+ * This class purpose is to show the entrants that are Chosen to sign up for the event they want to
+ * join, it display the chosen entrants in a listview where the organizer can send a notification
+ * to this entrants so they have the opportunity to enroll for the specific event
+ */
 public class ChosenListActivity extends AppCompatActivity {
 
     private Integer sample_amount;
@@ -48,6 +53,7 @@ public class ChosenListActivity extends AppCompatActivity {
 
     /**
      * Called when the activity is first created.
+     * it creates the view where the organizer can see the listview and interact with the activity
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 /**
  * This class is the ChosenEntrantsAdapter
+ * It manages the entrants that are in the array to be displayed in the list in a specific way
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
@@ -27,7 +28,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
     private ChosenListActivity chosenListActivity;
 
     /**
-     * Constructor
+     * Constructor of ChosenEntrantsAdapter
      * @param context context
      * @param event event
      * @param db firebase firestore
@@ -41,7 +42,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
     }
 
     /**
-     * Get view override
+     * This method get view of the adapter make to display the entrants in the chosen list
      * @param position The position of the item within the adapter's data set of the item whose view
      *        we want.
      * @param convertView The old view to reuse, if possible. Note: You should check that this view
@@ -51,7 +52,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
      *        always of the right type (see {@link #getViewTypeCount()} and
      *        {@link #getItemViewType(int)}).
      * @param parent The parent that this view will eventually be attached to
-     * @return the view for the specified position
+     * @return the view for the whole array in the listview
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

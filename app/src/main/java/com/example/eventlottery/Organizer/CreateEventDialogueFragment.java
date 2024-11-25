@@ -31,6 +31,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ *This class creates a dialogue fragment where the organizer can input information to create an
+ * event, this information is then collected to the Firebase so it can be use in other places
+ */
 public class CreateEventDialogueFragment extends DialogFragment {
 
     private FrameLayout frameLayout;
@@ -51,7 +55,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private EventModel event;
     private EventOrganizerActivity eventActivity;
 
-    /** Empty constructor
+    /** Empty  of CreateEventDialogueFragment
      */
     public CreateEventDialogueFragment() {
         // initial values
@@ -64,6 +68,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
+    /**
+     * It personalize the color of the button and background of the Dialog when the Dialog is created
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -74,7 +81,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
     }
 
     /**
-     * Constructor
+     * Constructor of CreateEventDialogueFragment
      * @param organizer The organizer
      * @param db The database
      */
@@ -87,7 +94,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
     }
 
     /**
-     * Constructor
+     * Constructor of CreateEventDialogueFragment
      * @param event The event
      * @param db The database
      * @param eventActivity A reference to the event activity
@@ -109,10 +116,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * On create override
+     * This method create the dialogue view so the user can interact with it
      * @param savedInstanceState The last saved instance state of the Fragment,
      * or null if this is a freshly created Fragment.
      *
-     * @return the view
+     * @return the view created
      */
     @NonNull
     @Override
@@ -325,6 +333,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * From https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * This method get the date from a calendar that is going to be use as the deadline to join
+     * the event
      * @param joinDeadlineButton Button to set the date on
      * @param year Year
      * @param month Month
@@ -354,6 +364,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * This method transform the month that is number to words
      * @param month Month
      * @return String representation of the month
      */

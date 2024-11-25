@@ -26,6 +26,9 @@ import java.util.ArrayList;
 
 /**
  * Enrolled List Activity
+ * This class purpose is to show the entrants that are enroll to the event
+ * it display the enroll entrants in a listview where the organizer can send a notification
+ * so they know they are enrolled
  */
 public class EnrolledListActivity extends AppCompatActivity {
 
@@ -38,6 +41,7 @@ public class EnrolledListActivity extends AppCompatActivity {
 
     /**
      * Overriding on create
+     * it creates the view where the organizer can see the listview and interact with the activity
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>

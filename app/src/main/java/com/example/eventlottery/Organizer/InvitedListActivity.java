@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 /**
  * This class is the InvitedListActivity
+ * This activity displays a list of users who have been invited by the organizer of the event.
  */
 public class InvitedListActivity extends AppCompatActivity {
 
@@ -39,6 +40,8 @@ public class InvitedListActivity extends AppCompatActivity {
 
     /**
      * On create Override
+     * Called when the activity is first created.
+     * It creates the activity view so the user can see it and interact with it
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
