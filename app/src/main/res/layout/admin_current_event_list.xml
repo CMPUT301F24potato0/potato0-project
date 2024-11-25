@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/adminEventPage">
+    android:id="@+id/adminEventPage"
+    android:background="@drawable/admin_gradient_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CurrentEventPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_orange_dark">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/current_event_page_text"
@@ -31,8 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="12dp"
-            android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="#FFE5B4"
+            android:background="@color/orange_transparent"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
