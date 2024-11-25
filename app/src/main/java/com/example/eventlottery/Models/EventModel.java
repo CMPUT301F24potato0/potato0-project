@@ -6,6 +6,11 @@ import java.util.Date;
 
 /**
  * Event Model
+ * This class represent an event where user can join/unjoin to the waitlist,
+ * and be selected by a lottery system so they can enroll in the event
+ * Also this class has all the information of the event, it include it deadlines, if geolocation
+ * is available or not
+ * It also contains the facility that the event belong
  */
 public class EventModel implements Serializable {
     private String facilityID;
@@ -52,7 +57,8 @@ public class EventModel implements Serializable {
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with parameters, when the event is already created and we need to grab the event
+     * information from firebase
      * @param facilityID The facility ID of the event
      * @param geolocationRequired Whether geolocation is required for the event
      * @param waitingListLimit The waiting list limit of the event
@@ -88,7 +94,8 @@ public class EventModel implements Serializable {
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with parameters, when the event is already created and we need to grab the event
+     *        information from firebase
      * @param facilityID The facility ID of the event
      * @param eventID The event ID of the event. Calling the above constructor and setting event ID in this constructor
      * @param geolocationRequired Whether geolocation is required for the event

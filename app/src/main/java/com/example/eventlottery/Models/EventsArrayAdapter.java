@@ -19,12 +19,14 @@ Most of the code from lab 3.
 
 /**
  * Events Array Adapter
+ * This class is an adapter that manage the listview of events to configure the view of the elements
+ * on the listview in a specific way
  */
 public class EventsArrayAdapter extends ArrayAdapter<EventModel> {
 
     /**
      * Constructor for EventsArrayAdapter
-     * @param context The context
+     * @param context The context, current state of the app
      * @param events An ArrayList of EventModel objects
      */
     public EventsArrayAdapter(Context context, ArrayList<EventModel> events) {
@@ -33,6 +35,8 @@ public class EventsArrayAdapter extends ArrayAdapter<EventModel> {
 
     /**
      * Get view override
+     * This method create the view of the elements in the listview in the desire way, so the user
+     * can see the events that exists
      * @param pos The position of the item within the adapter's data set of the item whose view
      *        we want.
      * @param convertView The old view to reuse, if possible. Note: You should check that this view

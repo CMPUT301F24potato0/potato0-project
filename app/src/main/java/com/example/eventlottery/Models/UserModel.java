@@ -10,6 +10,10 @@ import java.util.HashMap;
 
 /**
  * This Class stores the current user's information
+ * This class represent a User on the app, it contains all the information of the user, it name,
+ * phone, email, profile picture and if the user has a facility where they can make events,
+ * it also check if the user has notification on/off
+ * This class provides setter and getter for the attributes of this class
  */
 public class UserModel implements Serializable {
     private String fName;
