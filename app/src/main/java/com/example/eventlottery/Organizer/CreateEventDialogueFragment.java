@@ -71,6 +71,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     private HashMap<String, Object> temp_hashmap;
     private Bitmap temp_bitmap;
+    private Boolean fileTooLarge = false;
 
     /** Empty constructor
      */
@@ -565,6 +566,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             int compressedSize = 0;
 
                             // Compress the image and check the size after each compression
+
+
                             while (compressedSize > targetSize || quality >= 10){
                                 if (compressedSize < targetSize && compressedSize > 0){
                                     // Stops when the JPEG size is just under 1 mb
@@ -574,11 +577,18 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
                                 bytes = stream.toByteArray();
                                 compressedSize = bytes.length;
+                                if (compressedSize > 5000000){ // set size limit to 5mb for a picture
+                                    Log.e("fileSize","fileTooLarge");
+                                    Toast.makeText(getContext(), "File too large", Toast.LENGTH_LONG).show();
+                                    fileTooLarge = true;
+                                    break;
+                                }
 
                                 Log.e("Image compression","Compressed size: " + compressedSize + " bytes");
                                 Log.e("Image quality", "Image qualit is: " + quality + "/100");
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
+                                fileTooLarge = false;
                             }
                             Blob blob = Blob.fromBytes(bytes);
 
@@ -612,26 +622,29 @@ public class CreateEventDialogueFragment extends DialogFragment {
             }
     );
     public void decode(){
-        if (event == null){
-            poster.setImageBitmap(temp_bitmap);
-            uploaded = true;
-        } else{
-            // editing image
-            if(temp_bitmap == null){
-                DocumentReference docref = db.collection("posters").document(event.getEventID());
-                docref.get().addOnCompleteListener( task -> {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()){
-                        Blob blob = document.getBlob("Blob");
-                        byte[] bytes = blob.toBytes();
-                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        poster.setImageBitmap(bitmap);
-                        uploaded = true;
-                    }
-                });
-            } else{
+        if(!fileTooLarge){
+            if (event == null){
                 poster.setImageBitmap(temp_bitmap);
+                uploaded = true;
+            } else{
+                // editing image
+                if(temp_bitmap == null){
+                    DocumentReference docref = db.collection("posters").document(event.getEventID());
+                    docref.get().addOnCompleteListener( task -> {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()){
+                            Blob blob = document.getBlob("Blob");
+                            byte[] bytes = blob.toBytes();
+                            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                            poster.setImageBitmap(bitmap);
+                            uploaded = true;
+                        }
+                    });
+                } else{
+                    poster.setImageBitmap(temp_bitmap);
+                }
             }
         }
+
     }
 }

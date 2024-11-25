@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment {
     private ImageButton delete_pic;
     private ImageView profilePicture;
     private TextView profile_letter;
+    private Boolean fileTooLarge = false;
 
     /**
      * Empty Constructor
@@ -338,7 +339,6 @@ public class ProfileFragment extends Fragment {
                                 // document exists
                                 Log.e("Document","exists");
                                 Log.e("String", task.getResult().getString("Initial"));
-//                                decode();
                                 // CHECK
                                 // **************************************************************************************************************
                                 if(!Objects.equals(task.getResult().getString("Initial"), "")){
@@ -479,27 +479,44 @@ public class ProfileFragment extends Fragment {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
                                 bytes = stream.toByteArray();
                                 compressedSize = bytes.length;
+                                if (compressedSize > 5000000){ // set size limit to 5mb for a picture
+                                    Log.e("fileSize","fileTooLarge");
+                                    Log.e("fileSize",""+compressedSize);
+                                    Toast.makeText(getContext(), "File too large", Toast.LENGTH_LONG).show();
+                                    fileTooLarge = true;
+                                    break;
+                                }
 
                                 Log.e("Image compression","Compressed size: " + compressedSize + " bytes");
                                 Log.e("Image quality", "Image qualit is: " + quality + "/100");
                                 // Reduce the quality by 10% for the next iteration if the image is still too large
                                 quality -= 10;
+                                fileTooLarge = false;
+                                break;
                             }
-                            Blob blob = Blob.fromBytes(bytes);
-
-                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                            hashMap.put("Blob",blob);
-                            hashMap.put("personal",true);
-                            hashMap.put("Initial","");
 
 
-                            db.collection("photos").document(curUser.getiD()).set(hashMap);
+                            if(fileTooLarge){
+                                Log.e("fileSize","The File is too large");
+                                add_pic.setVisibility(View.VISIBLE);
+                                delete_pic.setVisibility(View.GONE);
+                            } else{
+                                Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
+                                Log.e("After choosing image","decoding");
+                                Blob blob = Blob.fromBytes(bytes);
 
-                            Log.e("Image uploaded","The image uploaded is " + compressedSize + " bytes, and the quality is " + quality + "/100");
-                            Log.e("After choosing image","decoding");
-                            decode();
-                            add_pic.setVisibility(View.GONE);
-                            delete_pic.setVisibility(View.VISIBLE);
+                                HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                                hashMap.put("Blob",blob);
+                                hashMap.put("personal",true);
+                                hashMap.put("Initial","");
+
+
+                                db.collection("photos").document(curUser.getiD()).set(hashMap);
+                                decode();
+                                add_pic.setVisibility(View.GONE);
+                                delete_pic.setVisibility(View.VISIBLE);
+                            }
+
 
                         }
                         catch (IOException e){
