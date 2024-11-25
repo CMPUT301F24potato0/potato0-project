@@ -146,11 +146,11 @@ public class ScanFragment extends Fragment {
                         startActivity(i);
                     } else {
                         Log.e("CheckEventScanFragment", "Event doesn't exist");
-//                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.e("CheckEventScanFragment", "Task Failed");
-//                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
