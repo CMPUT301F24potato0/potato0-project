@@ -55,6 +55,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         task = db.collection("facilities").document(id).get();
         task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
             FacilityModel facility = posttask.getResult().toObject(FacilityModel.class);
+            if (facility == null) return;
             ((TextView)findViewById(R.id.facility_name)).setText(facility.getName());
         });
 
