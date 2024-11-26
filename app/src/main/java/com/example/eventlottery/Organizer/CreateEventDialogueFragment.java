@@ -345,6 +345,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     db.collection("events").document(event.getEventID()).set(event);
                     // ***
                     db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+//                    db.collection("posters").document("default").set(temp_hashmap);
                     // ***
                     eventActivity.updateViews();
                     dismiss();
@@ -607,6 +608,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 // editing image
                 if(temp_bitmap == null){
                     DocumentReference docref = db.collection("posters").document(event.getEventID());
+//                    DocumentReference docref = db.collection("posters").document("default");
                     docref.get().addOnCompleteListener( task -> {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()){

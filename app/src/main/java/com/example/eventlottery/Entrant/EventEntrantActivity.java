@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -269,11 +270,25 @@ public class EventEntrantActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()){
+                    // Document exists
                     Blob blob = document.getBlob("Blob");
                     byte[] bytes = blob.toBytes();
                     Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                     eventPoster.setImageBitmap(bitmap);
 
+                } else {
+                    DocumentReference docref1 = db.collection("posters").document("default");
+                    docref1.get().addOnCompleteListener( task1 -> {
+                        if(task1.isSuccessful()){
+                            DocumentSnapshot document1 = task1.getResult();
+                            if(document1.exists()){
+                                Blob blob = document1.getBlob("Blob");
+                                byte[] bytes = blob.toBytes();
+                                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                eventPoster.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
                 }
             }
         });
