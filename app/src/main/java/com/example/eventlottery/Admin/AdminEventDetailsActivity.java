@@ -2,6 +2,7 @@ package com.example.eventlottery.Admin;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,6 +31,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
     public AdminEventDetailsActivity() {
         db = FirebaseFirestore.getInstance();
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,10 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
             db.collection("events").document(event.getEventID()).delete();
             db.collection("posters").document(event.getEventID()).delete();
             finish();
+        });
+        findViewById(R.id.qr_code_delete_button).setOnClickListener(v -> {
+            event.randomizeHashQR();
+            db.collection("events").document(event.getEventID()).set(event);
         });
         ImageView poster = findViewById(R.id.event_poster);
         ImageView pfp = findViewById(R.id.organizer_picture);

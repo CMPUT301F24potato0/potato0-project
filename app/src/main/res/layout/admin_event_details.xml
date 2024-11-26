@@ -115,7 +115,7 @@
                         android:minHeight="0dp"
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
-                        android:text="Delete QR"
+                        android:text="Delete/Reset QR"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
