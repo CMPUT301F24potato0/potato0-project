@@ -108,7 +108,7 @@ public class ScanFragment extends Fragment {
         intentTestGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkEvent("ggpNuxXJVwrk1ABYXYfs", curUser.getiD());
+                checkEvent("uNPJbcufvyr7uXObK9dK", curUser.getiD());
             }
         });
 
@@ -117,7 +117,7 @@ public class ScanFragment extends Fragment {
         intentTestNoGeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkEvent("cTXJ0BLp6QHr5E29cYIC", curUser.getiD());
+                checkEvent("vntgy8S97V1omKhRZSHO", curUser.getiD());
             }
         });
 
@@ -146,11 +146,11 @@ public class ScanFragment extends Fragment {
                         startActivity(i);
                     } else {
                         Log.e("CheckEventScanFragment", "Event doesn't exist");
-                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.e("CheckEventScanFragment", "Task Failed");
-                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
