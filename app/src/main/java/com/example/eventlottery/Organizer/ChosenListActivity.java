@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
-public class ChosenListActivity extends AppCompatActivity implements ChosenEntrantsAdapter.ChosenEntrantsAdapterCallback {
+public class ChosenListActivity extends AppCompatActivity implements ChosenEntrantsAdapter.ChosenEntrantsAdapterCallback, NumberPickerDialogFragment.NumberPickerDialogFragmentListener {
 
     private Integer sample_amount;
     private Integer remaining_spots;
@@ -86,7 +86,6 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
 
         // Initial draw random sample based on provided sample_amount
         sampleEntrants(sample_amount);
-        updateChosenCountAndRemainingSpotsLeft();
 
         // When the sample button is pressed and the activity is launched, after sampling, automatically open
         // the invitation notification dialog, so the user can immediately send invites (and to prevent them from forgetting)
@@ -98,37 +97,54 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         // Set up resample button
         resample_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
-                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
-                builder.setTitle("Please enter a number up to " + chooseUpto);
-                EditText input = new EditText(ChosenListActivity.this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                builder.setView(input);
-                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (input.getText().toString().equals("")) {
-                            Toast.makeText(getBaseContext(), "Please enter a number.", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            sample_amount = Integer.parseInt(input.getText().toString());
-                            if (waitlistedEntrants.size() < sample_amount) {
-                                Toast.makeText(getBaseContext(), "Waiting list only has " + waitlistedEntrants.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
-                            }
-                            else if (remaining_spots < sample_amount) {
-                                Toast.makeText(getBaseContext(), "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                sampleEntrants(Integer.parseInt(input.getText().toString()));
-                                updateChosenCountAndRemainingSpotsLeft();
-                            }
-                        }
-                    }
-                });
-                builder.create().show();
+            public void onClick(View v) {
+                if (remaining_spots == 0) {
+                    Toast.makeText(ChosenListActivity.this, "There is no more capacity in the event!", Toast.LENGTH_SHORT).show();
+                }
+                else if (waitlistedEntrants.size() == 0) {
+                    Toast.makeText(ChosenListActivity.this, "There are no more entrants in the waiting list!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // Allow organizer to sample only up to remaining spots left, and cannot pick more than the number of entrants inside the waitlist
+                    Integer numberSampleable = Integer.min(remaining_spots, waitlistedEntrants.size());
+                    new NumberPickerDialogFragment(0, numberSampleable).show(getSupportFragmentManager(), "NumberPickerDialogFragment");
+                }
             }
         });
+
+//        resample_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
+//                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
+//                builder.setTitle("Please enter a number up to " + chooseUpto);
+//                EditText input = new EditText(ChosenListActivity.this);
+//                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                builder.setView(input);
+//                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        if (input.getText().toString().equals("")) {
+//                            Toast.makeText(getBaseContext(), "Please enter a number.", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//                            sample_amount = Integer.parseInt(input.getText().toString());
+//                            if (waitlistedEntrants.size() < sample_amount) {
+//                                Toast.makeText(getBaseContext(), "Waiting list only has " + waitlistedEntrants.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else if (remaining_spots < sample_amount) {
+//                                Toast.makeText(getBaseContext(), "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else {
+//                                sampleEntrants(Integer.parseInt(input.getText().toString()));
+//                                updateChosenCountAndRemainingSpotsLeft();
+//                            }
+//                        }
+//                    }
+//                });
+//                builder.create().show();
+//            }
+//        });
 
 
         // Set up invite button
@@ -169,6 +185,8 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
                             // Notify adapter of changes
                             chosenAdapter.notifyDataSetChanged();
+                            // Update counts and remaining spots left
+                            updateChosenCountAndRemainingSpotsLeft();
                         }
                     }
                 });
@@ -215,7 +233,7 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
                 chosenEntrants.add(entrant);
             }
         }
-//        chosenAdapter.notifyDataSetChanged();
+//        chosenAdapter.notifyDataSetChanged(); // unnecessary due to snapshot listener
     }
 
     /**
@@ -255,7 +273,6 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         }
         event.getChosenList().removeAll(invitedEntrants);
         eventRef.set(event);
-        updateChosenCountAndRemainingSpotsLeft();
         Toast.makeText(this, "Sent Notification", Toast.LENGTH_SHORT).show();
     }
 
@@ -290,5 +307,15 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         }
         eventRef.set(event);
         chosenAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Implementation of the interface function of NumberPickerDialogFragment,
+     * which uses the lottery system by the amount picked from the number picker
+     * @param numberPicked The number picked by the number picker
+     */
+    @Override
+    public void numberPickerResult(Integer numberPicked) {
+        sampleEntrants(numberPicked);
     }
 }
