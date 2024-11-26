@@ -32,7 +32,7 @@ public class AdminMainActivity extends AppCompatActivity implements BottomNaviga
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getOnBackPressedDispatcher().onBackPressed();
+                onBackPressed();
             }
         });
 
