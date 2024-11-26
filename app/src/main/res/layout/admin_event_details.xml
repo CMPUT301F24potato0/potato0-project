@@ -172,6 +172,12 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <ImageView
+                    android:id="@+id/event_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

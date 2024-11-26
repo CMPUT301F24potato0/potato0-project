@@ -50,17 +50,12 @@ public class AdminUserDetailsFragment extends DialogFragment {
         });
         ImageView pfp = rootView.findViewById(R.id.view_profile_pic);
         db.collection("photos").document(user.getiD()).get().addOnCompleteListener( task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()){
-                    Blob blob = document.getBlob("Blob");
-                    byte[] bytes = blob.toBytes();
-                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    pfp.setImageBitmap(bitmap);
-                    // Testing
-                    Boolean personal = document.getBoolean("personal");
-                    Log.e("personal",""+personal);
-                }
+            DocumentSnapshot document = task.getResult();
+            if (document.exists()){
+                Blob blob = document.getBlob("Blob");
+                byte[] bytes = blob.toBytes();
+                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                pfp.setImageBitmap(bitmap);
             }
         });
         builder.setView(rootView);
