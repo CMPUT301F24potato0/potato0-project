@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         android:id="@+id/main_activity_view"
         android:visibility="visible">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/ic_back_fab"
+            android:backgroundTint="@color/gold"
+            android:id="@+id/back_main"
+            />
         <FrameLayout
             android:id="@+id/adminFragments"
             android:layout_width="match_parent"
