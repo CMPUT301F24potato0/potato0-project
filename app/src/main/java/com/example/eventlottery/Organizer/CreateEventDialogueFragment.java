@@ -203,34 +203,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
         frameLayout.removeAllViews();
         switch (dialogState) {
             case 0: // user selects "cancel"
-                if(event != null){
-                    if (temp_bitmap != null){
-                        poster.setImageBitmap(temp_bitmap);
-                    } else{
-                        DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
-                        checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()){
-                                        db.collection("posters").document("tempt_"+organizer.getiD()).delete();
-                                        dismiss();
-                                    }
-                                    else{
-                                        dismiss();
-                                    }
-                                }
-                            }
-                        });
 
-                    }
-                    dismiss();
-
-                } else{ // event is null
-                    poster.setImageBitmap(temp_bitmap);
-                    dismiss();
-                }
+                dismiss();
                 break;
             case 1: // switch UI to first page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_1, frameLayout);
@@ -358,7 +332,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             }
                         }
                     });
-
+                    dismiss();
                 }
                 else {  // editing (updating) an existing event)
                     event.setEventTitle(eventTitle);
@@ -374,8 +348,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     // ***
                     eventActivity.updateViews();
                     dismiss();
-
-
                 }
                 break;
         }

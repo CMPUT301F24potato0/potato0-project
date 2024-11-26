@@ -26,6 +26,8 @@ public class AdminMainActivity extends AppCompatActivity implements BottomNaviga
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         bottomNavigationView.setSelectedItemId(R.id.eventsAdmin);
+
+
         back = findViewById(R.id.back_main);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -253,8 +253,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
-                startActivity(i);
+                onBackPressed();
             }
         });
         // ********************************************************************
