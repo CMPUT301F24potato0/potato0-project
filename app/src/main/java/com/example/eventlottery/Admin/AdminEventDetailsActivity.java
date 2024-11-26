@@ -80,5 +80,10 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 pfp.setImageBitmap(bitmap);
             }
         });
+        Button delete_poster = findViewById(R.id.delete_poster);
+        delete_poster.setOnClickListener((view) -> {
+            db.collection("posters").document(event.getEventID()).delete();
+            poster.setImageBitmap(null);
+        });
     }
 }

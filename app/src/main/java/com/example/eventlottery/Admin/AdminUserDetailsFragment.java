@@ -58,6 +58,11 @@ public class AdminUserDetailsFragment extends DialogFragment {
                 pfp.setImageBitmap(bitmap);
             }
         });
+        Button delete_poster = rootView.findViewById(R.id.admin_delete_pfp);
+        delete_poster.setOnClickListener((view) -> {
+            db.collection("photos").document(user.getiD()).delete();
+            pfp.setImageBitmap(null);
+        });
         builder.setView(rootView);
         return builder.create();
     }
