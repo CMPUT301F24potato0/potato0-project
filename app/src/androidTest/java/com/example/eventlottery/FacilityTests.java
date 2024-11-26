@@ -21,6 +21,7 @@ import androidx.test.rule.GrantPermissionRule;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.Models.UserModel;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,14 @@ import org.junit.runner.RunWith;
 public class FacilityTests {
     private FacilityModel facilityModel;
     private UserModel curUser;
+
+    @Before
+    public void setup() {
+        activityRule.getScenario().onActivity(activity -> {
+            facilityModel = activity.getFacility();
+            curUser = activity.getUser();
+        });
+    }
     private final Waiter waiter = new Waiter(20, 1);
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule =
@@ -40,10 +49,6 @@ public class FacilityTests {
             .grant(Manifest.permission.CAMERA);
 
     private void NavigateToFacility() {
-        activityRule.getScenario().onActivity(activity -> {
-            facilityModel = activity.getFacility();
-            curUser = activity.getUser();
-        });
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());

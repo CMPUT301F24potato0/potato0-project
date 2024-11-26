@@ -203,6 +203,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
         frameLayout.removeAllViews();
         switch (dialogState) {
             case 0: // user selects "cancel"
+
                 dismiss();
                 break;
             case 1: // switch UI to first page of the dialog
@@ -317,6 +318,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             if (task.isSuccessful()){
                                 DocumentReference documentReference = task.getResult();
                                 String eventID = documentReference.getId();
+                                Log.e("EventID","***************");
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID","***************");
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
 
@@ -326,7 +332,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             }
                         }
                     });
-
+                    dismiss();
                 }
                 else {  // editing (updating) an existing event)
                     event.setEventTitle(eventTitle);
@@ -342,8 +348,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     // ***
                     eventActivity.updateViews();
                     dismiss();
-
-
                 }
                 break;
         }

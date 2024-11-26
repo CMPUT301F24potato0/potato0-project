@@ -253,8 +253,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
-                startActivity(i);
+                onBackPressed();
             }
         });
         // ********************************************************************
@@ -325,5 +324,9 @@ public class EventEntrantActivity extends AppCompatActivity {
             unjoinBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
         }
+    }
+
+    public EventModel getEvent() {
+        return event;
     }
 }
