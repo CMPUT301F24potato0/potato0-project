@@ -21,11 +21,6 @@ import java.util.ArrayList;
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
-    private final EventModel event;
-    private final ArrayList<RemoteUserRef> entrantsListCopy;
-    private final FirebaseFirestore db;
-    private final ChosenListActivity chosenListActivity;
-
     /**
      * Constructor for the ArrayAdapter which sets the given ArrayList as the list of items to show in the ListView
      * @param context The context that contains the ListView that will use the ArrayAdapter

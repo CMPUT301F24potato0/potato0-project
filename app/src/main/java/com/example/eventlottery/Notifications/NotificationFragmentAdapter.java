@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -124,8 +125,14 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot != null) {
                                 EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-
-                                RemoteUserRef entrantRemoteUserRef = new RemoteUserRef(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                // Getting the RemoteUserRef object that represents the same entrant (has the same unique ID)
+                                RemoteUserRef entrantRemoteUserRef = null;
+                                for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
+                                    if (entrant.getiD().equals(currentUser.getiD())) {
+                                        entrantRemoteUserRef = entrant;
+                                        break;
+                                    }
+                                }
                                 // Update event model after user chooses to join the event
                                 try {
                                     eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
@@ -159,7 +166,14 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot != null) {
                                 EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                                RemoteUserRef entrantRemoteUserRef = new RemoteUserRef(currentUser.getiD(), currentUser.getfName() + " " + currentUser.getlName());
+                                // Getting the RemoteUserRef object that represents the same entrant (has the same unique ID)
+                                RemoteUserRef entrantRemoteUserRef = null;
+                                for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
+                                    if (entrant.getiD().equals(currentUser.getiD())) {
+                                        entrantRemoteUserRef = entrant;
+                                        break;
+                                    }
+                                }
                                 // Update event model after user chooses to not join the event
                                 try {
                                     eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
