@@ -72,7 +72,7 @@ public class InvitedListArrayAdapter extends ArrayAdapter {
 
         // Set up the views in chosen_entrant_item.xml
         TextView entrantName = convertView.findViewById(R.id.listview_user_name);
-        entrantName.setText(entrant.getName());
+        entrant.sync(() -> {entrantName.setText(entrant.getName());});
 
         Button inviteButton = convertView.findViewById(R.id.listview_send_invite_button);
         inviteButton.setVisibility(View.GONE);
