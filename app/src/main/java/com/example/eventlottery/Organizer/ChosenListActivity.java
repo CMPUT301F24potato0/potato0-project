@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.RemoteUserRef;
+import com.example.eventlottery.Notifications.SendNotification;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.DocumentReference;
@@ -111,41 +112,6 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
                 }
             }
         });
-
-//        resample_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(ChosenListActivity.this);
-//                Integer chooseUpto = remaining_spots <= waitlistedEntrants.size() ? remaining_spots : waitlistedEntrants.size();
-//                builder.setTitle("Please enter a number up to " + chooseUpto);
-//                EditText input = new EditText(ChosenListActivity.this);
-//                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//                builder.setView(input);
-//                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        if (input.getText().toString().equals("")) {
-//                            Toast.makeText(getBaseContext(), "Please enter a number.", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else {
-//                            sample_amount = Integer.parseInt(input.getText().toString());
-//                            if (waitlistedEntrants.size() < sample_amount) {
-//                                Toast.makeText(getBaseContext(), "Waiting list only has " + waitlistedEntrants.size() + " entrants remaining!", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else if (remaining_spots < sample_amount) {
-//                                Toast.makeText(getBaseContext(), "Your event only has " + remaining_spots + " remaining spots left!", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else {
-//                                sampleEntrants(Integer.parseInt(input.getText().toString()));
-//                                updateChosenCountAndRemainingSpotsLeft();
-//                            }
-//                        }
-//                    }
-//                });
-//                builder.create().show();
-//            }
-//        });
-
 
         // Set up invite button
         send_invites_button.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +225,7 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
 
 
     /**
-     * A helper function to send notifications to the entrants
+     * A helper function to move all chosen entrants into the invited list after being sent an invitation notification
      */
     public void sendNotification(){
         ArrayList<RemoteUserRef> invitedEntrants = new ArrayList<>();
@@ -274,6 +240,25 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
         event.getChosenList().removeAll(invitedEntrants);
         eventRef.set(event);
         Toast.makeText(this, "Sent Notification", Toast.LENGTH_SHORT).show();
+        if (event.getCapacity() == event.getInvitedList().size() + event.getEnrolledList().size()) {
+            sendLostNotification();
+        }
+    }
+
+
+    /**
+     * Sends a notification to all entrants who lost the lottery
+     */
+    public void sendLostNotification() {
+        Boolean sent = false;
+        String notification_title = "You lost this event's lottery";
+        String notification_body = "Unfortunately, you were not picked to be invited to this event. Don't worry though, if anyone cancels, you'll have a second chance at winning.";
+        String notification_flag = "Waitlist";
+        SendNotification sendNotification = new SendNotification(ChosenListActivity.this, event.getEventID(), sent, db);
+        for (RemoteUserRef losingEntrant : waitlistedEntrants) {
+            String topic = event.getEventID() + "_" + losingEntrant.getiD();
+            sendNotification.NotificationCreate(notification_title, notification_body, losingEntrant.getiD(), notification_flag, topic);
+        }
     }
 
 
