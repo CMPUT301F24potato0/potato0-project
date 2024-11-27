@@ -58,6 +58,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private EventModel event;
     private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
+    private String hashQR;
 
     /**
      * On create override
@@ -102,7 +103,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             eventID = extra.getString("event_id");
-            String hashQR = extra.getString("hashQR");
+            hashQR = extra.getString("hashQR");
             event = (EventModel) extra.getSerializable("eventModel");
         }
         updateViews();
@@ -111,7 +112,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         QRCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new qr_code_dialog(eventID).show(getSupportFragmentManager(), "qr_code_dialog");
+                new qr_code_dialog(hashQR).show(getSupportFragmentManager(), "qr_code_dialog");
             }
         });
 
