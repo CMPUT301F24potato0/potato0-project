@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WaitlistedEventsFragment">
+    tools:context=".Entrant.WaitlistedEventsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -31,6 +31,17 @@
     </Button>
 
     <Button
+        android:id="@+id/open_upload_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="200dp"
+        android:text="Open Upload Image"
+        android:textSize="30dp">
+
+    </Button>
+
+    <Button
         android:id="@+id/Button_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,5 +60,6 @@
         android:textSize="30dp">
 
     </Button>
+
 
 </FrameLayout>

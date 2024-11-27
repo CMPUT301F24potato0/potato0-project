@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_orange_dark">
+
+    <!-- Title for Image Gallery -->
+    <TextView
+        android:id="@+id/title_image_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image Gallery"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Rounded Container for Image Gallery ListView -->
+    <LinearLayout
+        android:id="@+id/list_container"
+        android:layout_width="340dp"
+        android:layout_height="593dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/rounded_corner_background"
+        android:backgroundTint="#FFE5B4"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_image_gallery"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!-- Image Gallery ListView -->
+        <GridView
+            android:id="@+id/image_gallery_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:numColumns="2"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- THIS IS A PLACEHOLDER FOR THE IMAGE GALLERY. IMAGE GALLERY WILL NOT BE A LIST -->

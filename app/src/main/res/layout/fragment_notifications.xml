@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationsFragment"
-    android:background="@color/black">
+    tools:context=".Notifications.NotificationsFragment"
+    android:background="@drawable/gradient_background">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,17 +17,52 @@
             android:layout_height="wrap_content"
             android:text="Your notifications are off"
             android:textSize="30dp"
+            android:textColor="@color/space_cadet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <ListView
-        android:id="@+id/notification_listview"
+    <LinearLayout
+        android:id="@+id/notification_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
         android:padding="10dp"
-        >
-    </ListView>
+        android:visibility="visible"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textSize="50dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/space_cadet"
+            android:paddingTop="20dp"/>
 
+                <Button
+                    android:id="@+id/clearAll_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clear all"
+                    android:textSize="16dp"
+                    android:textColor="@color/white"
+                    android:layout_gravity="right"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp"
+                    android:paddingStart="7dp"
+                    android:paddingEnd="7dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="7dp"
+                    android:backgroundTint="@color/darkRed"/>
+                <view class="androidx.appcompat.app.AlertController$RecycleListView"
+                    android:id="@+id/notification_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+                </view>
+            </LinearLayout>
 </FrameLayout>

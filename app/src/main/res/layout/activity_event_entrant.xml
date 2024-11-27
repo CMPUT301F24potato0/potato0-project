@@ -5,13 +5,8 @@
     android:id="@+id/main1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventEntrantActivity">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-28dp">
+    android:background="@drawable/gradient_background"
+    tools:context=".Entrant.EventEntrantActivity">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -19,9 +14,12 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:contentDescription="@string/fab_back_event_activity"
+            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_media_previous" />
+            app:srcCompat="@drawable/ic_back_fab"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2.5dp" />
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -37,21 +35,18 @@
             android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/event_entrant_page_event_poster1"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@color/black" />
+            
 
             <TextView
                 android:id="@+id/event_entrant_page_event_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="50dp"
                 android:text="Event Title"
+                android:textColor="@color/space_cadet"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -60,7 +55,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:text="Location"
+                android:textColor="@color/space_cadet"
                 android:textSize="20sp" />
 
             <TextView
@@ -69,6 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Event Date"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/space_cadet"
                 android:textSize="20sp" />
 
             <Button
@@ -91,14 +90,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp">
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp">
 
-                <ImageView
-                    android:id="@+id/event_entrant_page_profile_picture1"
+                <androidx.cardview.widget.CardView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@mipmap/ic_person"
-                    android:visibility="visible" />
+                    android:id="@+id/profile_cardview"
+                    app:cardCornerRadius="40dp">
+                    <ImageView
+                        android:id="@+id/event_entrant_page_profile_picture1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@tools:sample/avatars"
+                        android:visibility="visible"
+                        />
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/event_entrant_page_organizer_name1"
@@ -107,22 +114,23 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:text="Organizer name"
+                    android:textColor="@color/space_cadet"
                     android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="15dp"
-                android:background="#D9D9D9"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/pale_azure"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:text="Event Details:"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -136,10 +144,13 @@
                     android:text="@string/event_details" />
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/event_entrant_page_event_poster1"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:src="@color/indigo" />
+
         </LinearLayout>
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

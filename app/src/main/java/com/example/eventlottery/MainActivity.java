@@ -3,7 +3,6 @@ package com.example.eventlottery;
 import android.Manifest;
 import android.content.pm.PackageManager;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -18,6 +17,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.eventlottery.Entrant.ProfileFragment;
+import com.example.eventlottery.Entrant.ScanFragment;
+import com.example.eventlottery.Entrant.WaitlistedEventsFragment;
+import com.example.eventlottery.Models.UserModel;
+import com.example.eventlottery.Models.FacilityModel;
+import com.example.eventlottery.Notifications.NotificationsFragment;
+import com.example.eventlottery.Organizer.FacilityFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
-    private CurrentUser curUser;
+    private UserModel curUser;
 //    public CollectionReference facilitiesRef;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 
-        curUser = new CurrentUser("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
+        curUser = new UserModel("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        curUser = document.toObject(CurrentUser.class);
+                        curUser = document.toObject(UserModel.class);
                     } else {
                         newUser(curUser);
                     }
@@ -106,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 else {
                                     Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             else {
                                 Log.d("Firestore", "get failed with ", task.getException());
@@ -125,7 +130,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         task.onSuccessTask(task1 -> {
             mainActivityProgressBar.setVisibility(View.GONE);
             mainActivityView.setVisibility(View.VISIBLE);
-            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            Bundle getExtras = getIntent().getExtras();
+            if (getExtras != null){
+                String redirect = getExtras.getString("redirect");
+                if (redirect != null){
+                    if (redirect.equals("NotificationsFragment")){
+                        bottomNavigationView.setSelectedItemId(R.id.notifications);
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.flFragment, new NotificationsFragment(db, curUser, curUser.getNotifications()))
+                                .commit();
+                    }
+                }
+            } else {
+                bottomNavigationView.setSelectedItemId(R.id.scanQR);
+            }
             return null;
         });
     }
@@ -133,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     /**
      * This method is to add a new user to the database
      */
-    public void newUser(CurrentUser cUser) {
+    public void newUser(UserModel cUser) {
         // Adding a new User
         usersRef.document(androidIDStr).set(cUser);
     }
@@ -187,5 +206,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
         }
         return false; // if nothing was found then return false
+    }
+
+    public UserModel getUser() {
+        return curUser;
+    }
+
+    public FacilityModel getFacility() {
+        return facility;
+    }
+
+    public FirebaseFirestore getDb() {
+        return db;
     }
 }

@@ -4,19 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send a Notification"
+        android:textColor="@color/space_cadet"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:padding="40dp"
+        android:background="@drawable/rounded_corner_background"
+        android:backgroundTint="@color/violet_transparent"
         android:orientation="vertical"
+        android:padding="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/rounded_corner_background"
-        android:backgroundTint="@color/darkgreen">
+        app:layout_constraintTop_toBottomOf="@+id/editText">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,27 +44,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
             <EditText
                 android:id="@+id/message_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Message"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
         </LinearLayout>
 
-<!--        <Button-->
-<!--            android:id="@+id/send_id"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="right"-->
-<!--            android:text="Send"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent">-->
+        <!--        <Button-->
+        <!--            android:id="@+id/send_id"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="right"-->
+        <!--            android:text="Send"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent">-->
 
-<!--        </Button>-->
+        <!--        </Button>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

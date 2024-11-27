@@ -71,7 +71,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class EventModel" class="title">Class EventModel</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.example.eventlottery.EventModel</div>
+<div class="inheritance">com.example.eventlottery.Models.EventModel</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -87,7 +87,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
-<li><a href="../../../serialized-form.html#com.example.eventlottery.EventModel">Serialized Form</a></li>
+<li><a href="../../../serialized-form.html#com.example.eventlottery.Models.EventModel">Serialized Form</a></li>
 </ul>
 </dd>
 </dl>
@@ -146,7 +146,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#checkUserInList(com.example.eventlottery.UsersList,java.util.ArrayList)" class="member-name-link">checkUserInList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#checkUserInList(com.example.eventlottery.Models.RemoteUserRef,java.util.ArrayList)" class="member-name-link">checkUserInList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&gt;&nbsp;list)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Check if user is in list</div>
@@ -232,27 +232,27 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Getter for waiting list limit</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueCancelledList(com.example.eventlottery.UsersList)" class="member-name-link">queueCancelledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueCancelledList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">queueCancelledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function adds another user to the cancelled list.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueChosenList(com.example.eventlottery.UsersList)" class="member-name-link">queueChosenList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueChosenList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">queueChosenList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the chosen list.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueEnrolledList(com.example.eventlottery.UsersList)" class="member-name-link">queueEnrolledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueEnrolledList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">queueEnrolledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function adds another user to the enrolled list.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueInvitedList(com.example.eventlottery.UsersList)" class="member-name-link">queueInvitedList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueInvitedList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">queueInvitedList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function adds another user to the invited list.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueWaitingList(com.example.eventlottery.UsersList)" class="member-name-link">queueWaitingList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queueWaitingList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">queueWaitingList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function adds another user to the waiting list only if the waiting list
  has not reached its limit, and if the user has not been added yet.</div>
@@ -338,27 +338,27 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Setter for waiting list limit</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueCancelledList(com.example.eventlottery.UsersList)" class="member-name-link">unqueueCancelledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueCancelledList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">unqueueCancelledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the cancelled list.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueChosenList(com.example.eventlottery.UsersList)" class="member-name-link">unqueueChosenList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueChosenList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">unqueueChosenList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the chosen list.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueEnrolledList(com.example.eventlottery.UsersList)" class="member-name-link">unqueueEnrolledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueEnrolledList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">unqueueEnrolledList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the enrolled list.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueInvitedList(com.example.eventlottery.UsersList)" class="member-name-link">unqueueInvitedList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueInvitedList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">unqueueInvitedList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the invited list.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueWaitingList(com.example.eventlottery.UsersList)" class="member-name-link">unqueueWaitingList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unqueueWaitingList(com.example.eventlottery.Models.RemoteUserRef)" class="member-name-link">unqueueWaitingList</a><wbr>(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">This function removes the provided user from the waiting list.</div>
 </div>
@@ -456,7 +456,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="queueWaitingList(com.example.eventlottery.UsersList)">
+<section class="detail" id="queueWaitingList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>queueWaitingList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">queueWaitingList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -471,7 +471,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="unqueueWaitingList(com.example.eventlottery.UsersList)">
+<section class="detail" id="unqueueWaitingList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>unqueueWaitingList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unqueueWaitingList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -496,7 +496,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="queueInvitedList(com.example.eventlottery.UsersList)">
+<section class="detail" id="queueInvitedList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>queueInvitedList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">queueInvitedList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -510,7 +510,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="unqueueInvitedList(com.example.eventlottery.UsersList)">
+<section class="detail" id="unqueueInvitedList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>unqueueInvitedList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unqueueInvitedList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -524,7 +524,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="queueCancelledList(com.example.eventlottery.UsersList)">
+<section class="detail" id="queueCancelledList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>queueCancelledList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">queueCancelledList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -538,7 +538,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="unqueueCancelledList(com.example.eventlottery.UsersList)">
+<section class="detail" id="unqueueCancelledList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>unqueueCancelledList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unqueueCancelledList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -552,7 +552,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="queueEnrolledList(com.example.eventlottery.UsersList)">
+<section class="detail" id="queueEnrolledList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>queueEnrolledList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">queueEnrolledList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -566,7 +566,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="unqueueEnrolledList(com.example.eventlottery.UsersList)">
+<section class="detail" id="unqueueEnrolledList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>unqueueEnrolledList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unqueueEnrolledList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -580,7 +580,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="queueChosenList(com.example.eventlottery.UsersList)">
+<section class="detail" id="queueChosenList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>queueChosenList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">queueChosenList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -594,7 +594,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="unqueueChosenList(com.example.eventlottery.UsersList)">
+<section class="detail" id="unqueueChosenList(com.example.eventlottery.Models.RemoteUserRef)">
 <h3>unqueueChosenList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unqueueChosenList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -960,7 +960,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="checkUserInList(com.example.eventlottery.UsersList,java.util.ArrayList)">
+<section class="detail" id="checkUserInList(com.example.eventlottery.Models.RemoteUserRef,java.util.ArrayList)">
 <h3>checkUserInList</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">checkUserInList</span><wbr><span class="parameters">(<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&nbsp;user,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="UsersList.html" title="class in com.example.eventlottery">UsersList</a>&gt;&nbsp;list)</span></div>

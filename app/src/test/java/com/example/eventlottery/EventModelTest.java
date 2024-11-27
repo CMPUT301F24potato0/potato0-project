@@ -2,6 +2,9 @@ package com.example.eventlottery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.RemoteUserRef;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,21 +12,21 @@ import java.util.Date;
 
 public class EventModelTest {
     private EventModel mockEvent;
-    private String eventID = "12345";
-    private String eventTitle = "Test Event";
-    private String facilityID = "67890";
-    private String eventDescription = "This is a test event.";
-    private String eventLocation = "123 Main St";
-    private Boolean geoLocation = true;
-    private Integer waitingListLimit = 10;
-    private Integer capacity = 50;
-    private Date joinDeadline = new Date();
-    private String organizer = "John Doe";
-    private ArrayList<UsersList> waitingList = new ArrayList<>();
-    private ArrayList<UsersList> invitedList = new ArrayList<>();
-    private ArrayList<UsersList> cancelledList = new ArrayList<>();
-    private ArrayList<UsersList> enrolledList = new ArrayList<>();
-    private ArrayList<UsersList> chosenList = new ArrayList<>();
+    private final String eventID = "12345";
+    private final String eventTitle = "Test Event";
+    private final String facilityID = "67890";
+    private final String eventDescription = "This is a test event.";
+    private final String eventLocation = "123 Main St";
+    private final Boolean geoLocation = true;
+    private final Integer waitingListLimit = 10;
+    private final Integer capacity = 50;
+    private final Date joinDeadline = new Date();
+    private final String organizer = "John Doe";
+    private final ArrayList<RemoteUserRef> waitingList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> invitedList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> cancelledList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> enrolledList = new ArrayList<>();
+    private final ArrayList<RemoteUserRef> chosenList = new ArrayList<>();
 
     @Test
     public void testSetID() {
@@ -120,14 +123,14 @@ public class EventModelTest {
     public void checkUserInList() {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setWaitingList(waitingList);
-        assertFalse(mockEvent.checkUserInList(new UsersList("12345", "John Doe"), waitingList));
+        assertFalse(mockEvent.checkUserInList(new RemoteUserRef("12345", "John Doe"), waitingList));
     }
     @Test
     public void queueWaitingList() {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setWaitingList(waitingList);
         try {
-            mockEvent.queueWaitingList(new UsersList("12345", "John Doe"));
+            mockEvent.queueWaitingList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,12 +141,12 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setWaitingList(waitingList);
         try {
-            mockEvent.queueWaitingList(new UsersList("12345", "John Doe"));
+            mockEvent.queueWaitingList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            mockEvent.unqueueWaitingList(new UsersList("12345", "John Doe"));
+            mockEvent.unqueueWaitingList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -154,7 +157,7 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, 1, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setWaitingList(waitingList);
         try {
-            mockEvent.queueWaitingList(new UsersList("12345", "John Doe"));
+            mockEvent.queueWaitingList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +168,7 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setInvitedList(invitedList);
         try {
-            mockEvent.queueInvitedList(new UsersList("12345", "John Doe"));
+            mockEvent.queueInvitedList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,12 +179,12 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setInvitedList(invitedList);
         try {
-            mockEvent.queueInvitedList(new UsersList("12345", "John Doe"));
+            mockEvent.queueInvitedList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            mockEvent.unqueueInvitedList(new UsersList("12345", "John Doe"));
+            mockEvent.unqueueInvitedList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,7 +195,7 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setCancelledList(cancelledList);
         try {
-            mockEvent.queueCancelledList(new UsersList("12345", "John Doe"));
+            mockEvent.queueCancelledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,12 +206,12 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setCancelledList(cancelledList);
         try {
-            mockEvent.queueCancelledList(new UsersList("12345", "John Doe"));
+            mockEvent.queueCancelledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            mockEvent.unqueueCancelledList(new UsersList("12345", "John Doe"));
+            mockEvent.unqueueCancelledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,7 +222,7 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setEnrolledList(enrolledList);
         try {
-            mockEvent.queueEnrolledList(new UsersList("12345", "John Doe"));
+            mockEvent.queueEnrolledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -230,12 +233,12 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setEnrolledList(enrolledList);
         try {
-            mockEvent.queueEnrolledList(new UsersList("12345", "John Doe"));
+            mockEvent.queueEnrolledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            mockEvent.unqueueEnrolledList(new UsersList("12345", "John Doe"));
+            mockEvent.unqueueEnrolledList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -246,7 +249,7 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setChosenList(chosenList);
         try {
-            mockEvent.queueChosenList(new UsersList("12345", "John Doe"));
+            mockEvent.queueChosenList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -257,12 +260,12 @@ public class EventModelTest {
         mockEvent = new EventModel(facilityID, eventID, geoLocation, waitingListLimit, capacity, joinDeadline, eventLocation, eventTitle, eventDescription, organizer);
         mockEvent.setChosenList(chosenList);
         try {
-            mockEvent.queueChosenList(new UsersList("12345", "John Doe"));
+            mockEvent.queueChosenList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            mockEvent.unqueueChosenList(new UsersList("12345", "John Doe"));
+            mockEvent.unqueueChosenList(new RemoteUserRef("12345", "John Doe"));
         } catch (Exception e) {
             e.printStackTrace();
         }

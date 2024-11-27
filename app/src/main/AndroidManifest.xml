@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,32 +18,31 @@
         android:theme="@style/Theme.EventLottery"
         tools:targetApi="31">
         <activity
-            android:name=".SendNotificationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.EventLottery" />
-        <activity
-            android:name=".SignUpActivity"
+            android:name=".Admin.AdminMainActivity"
             android:exported="false" />
         <activity
-            android:name=".ChosenListActivity"
+            android:name=".Admin.AdminEventDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".EnrolledListActivity"
+            android:name=".Organizer.ChosenListActivity"
             android:exported="false" />
         <activity
-            android:name=".CancelledListActivity"
+            android:name=".Organizer.EnrolledListActivity"
             android:exported="false" />
         <activity
-            android:name=".InvitedListActivity"
+            android:name=".Organizer.CancelledListActivity"
             android:exported="false" />
         <activity
-            android:name=".EventWaitlistActivity"
+            android:name=".Organizer.InvitedListActivity"
             android:exported="false" />
         <activity
-            android:name=".EventOrganizerActivity"
+            android:name=".Organizer.EventWaitlistActivity"
             android:exported="false" />
         <activity
-            android:name=".EventEntrantActivity"
+            android:name=".Organizer.EventOrganizerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Entrant.EventEntrantActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -50,6 +54,12 @@
             </intent-filter>
         </activity>
 
+        <!--
+        Used for Google Maps API
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
 
         <!--
  Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -78,7 +88,7 @@
         <!-- </intent-filter> -->
         <!-- </service> -->
         <service
-            android:name=".PushNotificationService"
+            android:name=".Notifications.PushNotificationService"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>
@@ -89,7 +99,7 @@
         </service>
 
         <receiver
-            android:name=".MyBroadcastReceiver"
+            android:name=".Entrant.MyBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="MyBroadcastReceiver" />
