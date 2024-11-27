@@ -14,12 +14,14 @@
 
     <Button
         android:id="@+id/intentTestGeo"
+        android:background="@color/zxing_transparent"
         android:layout_width="5dp"
         android:layout_height="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:background="@color/zxing_transparent"
         android:id="@+id/intentTestNoGeo"
         android:layout_width="5dp"
         android:layout_height="5dp"
