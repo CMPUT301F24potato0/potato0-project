@@ -1,8 +1,15 @@
 package com.example.eventlottery.Models;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HexFormat;
+import java.util.Random;
 
 /**
  * Event Model
@@ -32,6 +39,7 @@ public class EventModel implements Serializable {
     /**
      * Default constructor
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public EventModel() {
         // default values
         facilityID = "";
@@ -51,6 +59,17 @@ public class EventModel implements Serializable {
         enrolledList = new ArrayList<RemoteUserRef>();
         chosenList = new ArrayList<RemoteUserRef>();
         entrantIDs = new ArrayList<String>();
+        randomizeHashQR();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void randomizeHashQR() {
+        byte[] rand = new byte[32];
+        new Random().nextBytes(rand);
+        hashQR = Base64.getEncoder().encodeToString(rand);
+
+      
+
     }
 
     /**

@@ -1,11 +1,17 @@
 package com.example.eventlottery.Admin;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +22,7 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -24,6 +31,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
     public AdminEventDetailsActivity() {
         db = FirebaseFirestore.getInstance();
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +55,43 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         task = db.collection("facilities").document(id).get();
         task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
             FacilityModel facility = posttask.getResult().toObject(FacilityModel.class);
+            if (facility == null) return;
             ((TextView)findViewById(R.id.facility_name)).setText(facility.getName());
         });
 
         findViewById(R.id.admin_delete_event_button).setOnClickListener((View view) -> {
             db.collection("events").document(event.getEventID()).delete();
+            db.collection("posters").document(event.getEventID()).delete();
             finish();
+        });
+        findViewById(R.id.qr_code_delete_button).setOnClickListener(v -> {
+            event.randomizeHashQR();
+            db.collection("events").document(event.getEventID()).set(event);
+        });
+        ImageView poster = findViewById(R.id.event_poster);
+        ImageView pfp = findViewById(R.id.organizer_picture);
+        db.collection("posters").document(event.getEventID()).get().addOnCompleteListener( t -> {
+            DocumentSnapshot document = t.getResult();
+            if (document.exists()) {
+                Blob blob = document.getBlob("Blob");
+                byte[] bytes = blob.toBytes();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                poster.setImageBitmap(bitmap);
+            }
+        });
+        db.collection("photos").document(id).get().addOnCompleteListener( t -> {
+            DocumentSnapshot document = t.getResult();
+            if (document.exists()){
+                Blob blob = document.getBlob("Blob");
+                byte[] bytes = blob.toBytes();
+                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                pfp.setImageBitmap(bitmap);
+            }
+        });
+        Button delete_poster = findViewById(R.id.delete_poster);
+        delete_poster.setOnClickListener((view) -> {
+            db.collection("posters").document(event.getEventID()).delete();
+            poster.setImageBitmap(null);
         });
     }
 }

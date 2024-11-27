@@ -145,10 +145,8 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("facilities").document(user.getiD()).delete();
+                facility.delete(db);
                 facilityFragment.changeView(0);
-                user.setFacilityID("");
-                db.collection("users").document(user.getiD()).set(user);
                 // after updating or creating a facility, update the view
                 facilityFragment.updateViews();
                 dismiss();

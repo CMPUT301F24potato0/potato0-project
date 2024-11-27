@@ -102,6 +102,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             eventID = extra.getString("event_id");
+            String hashQR = extra.getString("hashQR");
             event = (EventModel) extra.getSerializable("eventModel");
         }
         updateViews();

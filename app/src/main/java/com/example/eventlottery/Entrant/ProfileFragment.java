@@ -338,6 +338,9 @@ public class ProfileFragment extends Fragment {
         });
 
         admin_view = rootView.findViewById(R.id.admin_button);
+        if (curUser.isAdmin()) {
+            admin_view.setVisibility(View.VISIBLE);
+        }
         admin_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

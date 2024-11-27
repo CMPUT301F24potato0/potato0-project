@@ -115,7 +115,7 @@
                         android:minHeight="0dp"
                         android:paddingStart="25dp"
                         android:paddingEnd="25dp"
-                        android:text="Delete"
+                        android:text="Delete/Reset QR"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
@@ -171,6 +171,24 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/delete_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/darkRed"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:text="Delete poster"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/event_poster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             </LinearLayout>
         </LinearLayout>

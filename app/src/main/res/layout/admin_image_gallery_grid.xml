@@ -37,11 +37,12 @@
         app:layout_constraintVertical_bias="0.0">
 
         <!-- Image Gallery ListView -->
-        <ListView
+        <GridView
             android:id="@+id/image_gallery_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:numColumns="2"
             android:divider="@android:color/transparent"
             android:dividerHeight="10dp" />
 

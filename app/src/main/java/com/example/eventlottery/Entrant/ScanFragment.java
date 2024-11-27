@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -68,6 +69,7 @@ public class ScanFragment extends Fragment {
     private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            Log.e("QR", "Scanned " + result.getText());
             if(result.getText() == null || result.getText().equals(eventScanned)) {
                 return;
             }
@@ -127,17 +129,16 @@ public class ScanFragment extends Fragment {
     /**
      * This function gets the events collection and then loops through to find the event that was scanned.
      * If event is not found it creates a new toast displaying error message.
-     * @param eventID The eventID scanned from the qr code
+     * @param hashQR The hashQR scanned from the qr code
      */
-    public void checkEvent(String eventID, String userId) { // Making it public to use it for test cases
+    public void checkEvent(String hashQR, String userId) { // Making it public to use it for test cases
         CollectionReference eventRef = db.collection("events");
-        Task<DocumentSnapshot> eventTask = eventRef.document(eventID).get();
-        eventTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        Task<QuerySnapshot> eventTask = eventRef.whereEqualTo("hashQR", hashQR).get();
+        eventTask.addOnCompleteListener((@NonNull Task<QuerySnapshot> task)  -> {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    if (!documents.isEmpty()) {
+                        DocumentSnapshot document = documents.get(0);
                         EventModel eve = document.toObject(EventModel.class);
                         Intent i = new Intent(getActivity(), EventEntrantActivity.class);
                         RemoteUserRef userList = new RemoteUserRef(userId, curUser.getfName() + " " + curUser.getlName());
@@ -153,7 +154,7 @@ public class ScanFragment extends Fragment {
 //                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        );
     }
 
     /**
