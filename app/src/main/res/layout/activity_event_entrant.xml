@@ -153,4 +153,15 @@
                 android:src="@color/indigo" />
 
         </LinearLayout>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:id="@+id/profileLetter"
+        android:text=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textSize="30sp"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

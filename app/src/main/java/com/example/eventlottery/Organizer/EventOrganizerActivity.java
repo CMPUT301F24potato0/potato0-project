@@ -196,18 +196,20 @@ public class EventOrganizerActivity extends AppCompatActivity {
                     eventPoster.setImageBitmap(bitmap);
 
                 } else {
-                    DocumentReference docref1 = db.collection("posters").document("default");
-                    docref1.get().addOnCompleteListener( task1 -> {
-                        if(task1.isSuccessful()){
-                            DocumentSnapshot document1 = task1.getResult();
-                            if(document1.exists()){
-                                Blob blob = document1.getBlob("Blob");
-                                byte[] bytes = blob.toBytes();
-                                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                eventPoster.setImageBitmap(bitmap);
-                            }
-                        }
-                    });
+//                    DocumentReference docref1 = db.collection("posters").document("default");
+//                    docref1.get().addOnCompleteListener( task1 -> {
+//                        if(task1.isSuccessful()){
+//                            DocumentSnapshot document1 = task1.getResult();
+//                            if(document1.exists()){
+//                                Blob blob = document1.getBlob("Blob");
+//                                byte[] bytes = blob.toBytes();
+//                                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                                eventPoster.setImageBitmap(bitmap);
+//                            }
+//                        }
+//                    });
+                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+
                 }
             }
         });
