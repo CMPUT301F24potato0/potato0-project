@@ -236,6 +236,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                         Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                                         poster.setImageBitmap(bitmap);
                                         uploaded = true;
+                                    } else {
+                                        // deleted poster
+                                        // letting the user choose whether he wants to add a poster or not when editing
+                                        uploaded = true;
                                     }
                                 }
                             }
