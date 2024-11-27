@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/facilityHomePage">
+    android:id="@+id/facilityHomePage"
+    android:background="@drawable/admin_gradient_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/UserListPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_orange_dark">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/admin_user_list_page_text"
@@ -32,7 +32,7 @@
             android:layout_height="0dp"
             android:layout_margin="12dp"
             android:background="@drawable/rounded_corner_background"
-            android:backgroundTint="#FFE5B4"
+            android:backgroundTint="@color/orange_transparent"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
