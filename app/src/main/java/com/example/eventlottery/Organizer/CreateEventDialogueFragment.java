@@ -344,7 +344,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     event.setEventDescription(eventDescription);
                     db.collection("events").document(event.getEventID()).set(event);
                     // ***
-                    db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                    if (temp_hashmap != null){
+                        db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+
+                    }
 //                    db.collection("posters").document("default").set(temp_hashmap);
                     // ***
                     eventActivity.updateViews();
