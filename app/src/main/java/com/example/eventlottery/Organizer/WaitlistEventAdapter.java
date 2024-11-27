@@ -26,6 +26,7 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
     private ArrayList<RemoteUserRef> cancelList;
     private EventModel event;
     private FirebaseFirestore db;
+    private TextView waitListCount;
 
     /**
      * This is the constructor for WaitlistEventAdapter
@@ -41,12 +42,17 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
      * @param context The context
      * @param resource The resource
      */
-    public WaitlistEventAdapter(@NonNull Context context, int resource, EventModel event, FirebaseFirestore db) {
+    public WaitlistEventAdapter(@NonNull Context context,
+                                int resource,
+                                EventModel event,
+                                FirebaseFirestore db,
+                                TextView waitListCount) {
         super(context, resource, event.getWaitingList());
         this.waitList = event.getWaitingList();
         this.cancelList = event.getCancelledList();
         this.event = event;
         this.db = db;
+        this.waitListCount = waitListCount;
     }
 
     /**
@@ -81,6 +87,7 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
                     event.queueCancelledList(user);
 
                     db.collection("events").document(event.getEventID()).set(event);
+                    waitListCount.setText(event.getWaitingList().size() + "");
                 }
                 catch (Exception e) {
                     Log.e("Event Queue/Unqueue Error", "Error: " + e);

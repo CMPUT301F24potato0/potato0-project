@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -61,7 +62,10 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
     private int remaining_spots;
     private String title;
     private String body;
-
+    private TextView waitListLimit;
+    private TextView eventCapacity;
+    private TextView geoLocationRequired;
+    private TextView waitListCount;
     private SendNotification sendNotification;
 
     /**
@@ -92,6 +96,15 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         mapView = findViewById(R.id.waitlist_mapview);
         drawSample = findViewById(R.id.draw_sample_button);
         drawSampleEditText = findViewById(R.id.draw_sample_edittext);
+        waitListLimit = findViewById(R.id.eventWaitlistActivity_waitListLimit);
+        eventCapacity = findViewById(R.id.eventWaitlistActivity_eventCapacity);
+        geoLocationRequired = findViewById(R.id.eventWaitlistActivity_geolocationRequired);
+        waitListCount = findViewById(R.id.eventWaitlistActivity_waitListCount);
+
+        waitListLimit.setText(event.getWaitingListLimit().toString());
+        eventCapacity.setText(event.getCapacity().toString());
+        geoLocationRequired.setText(event.getGeolocationRequired() ? "Yes" : "No");
+        waitListCount.setText(event.getWaitingList().size() + "");
 
         // MapView implementation adapted from Google Maps SDK for Android Samples (RawMapViewDemoActivity.java)
         // https://github.com/googlemaps-samples/android-samples/blob/main/ApiDemos/java/app/src/main/java/com/example/mapdemo/RawMapViewDemoActivity.java
@@ -109,7 +122,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        adapter = new WaitlistEventAdapter(this, 100, event, db);
+        adapter = new WaitlistEventAdapter(this, 100, event, db, waitListCount);
         waitlist.setAdapter(adapter);
 
         // calculate remaining spots for event and update edittext
