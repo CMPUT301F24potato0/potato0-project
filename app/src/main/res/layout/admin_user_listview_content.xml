@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="@drawable/rounded_corner_background"
-    android:backgroundTint="#947979">
+    android:background="@color/space_cadet">
 
     <TextView
         android:id="@+id/listview_user_name"
@@ -16,7 +15,7 @@
         android:maxLines="1"
         android:paddingHorizontal="10dp"
         android:text="User Name here"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
