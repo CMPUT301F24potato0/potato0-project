@@ -203,34 +203,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
         frameLayout.removeAllViews();
         switch (dialogState) {
             case 0: // user selects "cancel"
-                if(event != null){
-                    if (temp_bitmap != null){
-                        poster.setImageBitmap(temp_bitmap);
-                    } else{
-                        DocumentReference checknewposterRef = db.collection("posters").document("tempt_"+organizer.getiD());
-                        checknewposterRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()){
-                                        db.collection("posters").document("tempt_"+organizer.getiD()).delete();
-                                        dismiss();
-                                    }
-                                    else{
-                                        dismiss();
-                                    }
-                                }
-                            }
-                        });
 
-                    }
-                    dismiss();
-
-                } else{ // event is null
-                    poster.setImageBitmap(temp_bitmap);
-                    dismiss();
-                }
+                dismiss();
                 break;
             case 1: // switch UI to first page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_1, frameLayout);
@@ -344,6 +318,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             if (task.isSuccessful()){
                                 DocumentReference documentReference = task.getResult();
                                 String eventID = documentReference.getId();
+                                Log.e("EventID","***************");
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID","***************");
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
 
@@ -353,7 +332,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             }
                         }
                     });
-
+                    dismiss();
                 }
                 else {  // editing (updating) an existing event)
                     event.setEventTitle(eventTitle);
@@ -366,11 +345,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     db.collection("events").document(event.getEventID()).set(event);
                     // ***
                     db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+//                    db.collection("posters").document("default").set(temp_hashmap);
                     // ***
                     eventActivity.updateViews();
                     dismiss();
-
-
                 }
                 break;
         }
@@ -630,6 +608,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 // editing image
                 if(temp_bitmap == null){
                     DocumentReference docref = db.collection("posters").document(event.getEventID());
+//                    DocumentReference docref = db.collection("posters").document("default");
                     docref.get().addOnCompleteListener( task -> {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()){

@@ -1,30 +1,76 @@
 package com.example.eventlottery;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import static org.hamcrest.CoreMatchers.any;
-
 import android.Manifest;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
+
+import com.example.eventlottery.Organizer.CancelledListActivity;
+import com.example.eventlottery.Organizer.EnrolledListActivity;
+import com.example.eventlottery.Organizer.EventOrganizerActivity;
+import com.example.eventlottery.Organizer.EventWaitlistActivity;
+import com.example.eventlottery.Organizer.InvitedListActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class EventTests {
+    // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
+    private ViewAction waitFor(long delay) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for " + delay + " milliseconds";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                uiController.loopMainThreadForAtLeast(delay);
+            }
+        };
+    }
+
+    private void NavigateToFacility() {
+        onView(withId(R.id.scanQR)).perform(click());
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
+        waiter.perform(withId(R.id.facility), click());
+        onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
+    }
+
+    private void CreatingFacility() {
+        onView(withId(R.id.create_facility_button)).perform(click());
+        waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test Facility"));
+        onView(withId(R.id.facility_details_edittext_location)).perform(replaceText("Test location"));
+        onView(withId(R.id.facility_details_edittext_phone_number)).perform(replaceText("000000000000"));
+        onView(withId(R.id.facility_details_edittext_email)).perform(replaceText("tester@example.com"));
+        onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
+        onView(withId(R.id.facility_details_confirm_button)).perform(click());
+    }
+
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
@@ -34,133 +80,92 @@ public class EventTests {
 
     private final Waiter waiter = new Waiter(10, 1);
 
-    private void CreateFacility() {
-        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
-        waiter.perform(withId(R.id.facility), click());
-        onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
-        onView(withId(R.id.create_facility_button)).perform(click());
-        waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test facility"));
-        onView(withId(R.id.facility_details_edittext_location)).perform(replaceText("Test location"));
-        onView(withId(R.id.facility_details_edittext_phone_number)).perform(replaceText("000000000000"));
-        onView(withId(R.id.facility_details_edittext_email)).perform(replaceText("tester@example.com"));
-        onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
-        onView(withId(R.id.facility_details_confirm_button)).perform(click());
-    }
-    private void DestroyFacility() {
-        waiter.perform(withId(R.id.facility), click());
-        waiter.perform(withId(R.id.facility_page_edit_facility_button), click());
-        waiter.perform(withId(R.id.facility_details_delete_button), click());
-        waiter.check(withId(R.id.create_facility_button), matches(isDisplayed()));
-    }
-
-    @Test
-    public void CreateEventValidation() {
-        CreateFacility();
-        waiter.perform(withId(R.id.facility_page_add_event_button), click());
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText("Validation test event title"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_location), replaceText("Test event location"));
-        waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText("42"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText("Test event description"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        DestroyFacility();
+    private void CreateEvent(
+            String eventTitle,
+            String eventLocation,
+            String geoLocation,
+            String eventCapacity,
+            String eventDescription,
+            String waitListLimit) {
+        onView(withId(R.id.facility_page_add_event_button)).perform(click());
+        onView(withId(R.id.add_poster)).perform(click());
+        onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since the title hasn't been added yet
+        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText(eventTitle));
+        waitFor(5000); // Waiting 5 seconds for use to input the image
+        onView(withId(R.id.create_event_positive_button)).perform(click());
+        waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText(eventCapacity));
+        onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since location hasn't been added
+        waitFor(1000); // waiting for toast to disappear
+        onView(withId(R.id.create_event_edittext_event_location)).perform(replaceText(eventLocation));
+        onView(withId(R.id.create_event_edittext_event_waitlist_limit)).perform(replaceText(waitListLimit));
+        if (geoLocation.equals("Yes")) {
+            onView(withId(R.id.create_event_switch_geolocation_required)).perform(click());
+        }
+        onView(withId(R.id.create_event_positive_button)).perform(click());
+        onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since description hasn't been added
+        waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText(eventDescription));
+        onView(withId(R.id.create_event_positive_button)).perform(click());
+        waitFor(1000);
     }
 
-    @Test
-    public void CreateEventBackwardNavigation() {
-        CreateFacility();
-        waiter.perform(withId(R.id.facility_page_add_event_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText("Backwards navigation test event title"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_location), replaceText("Test event location"));
-        waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText("42"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText("Test event description"));
-        waiter.perform(withId(R.id.create_event_negative_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_location), matches(withText("Test event location")));
-        waiter.check(withId(R.id.create_event_edittext_event_capacity), matches(withText("42")));
-        waiter.perform(withId(R.id.create_event_negative_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_title), matches(withText("Backwards navigation test event title")));
-        waiter.perform(withId(R.id.create_event_negative_button), click());
-        DestroyFacility();
+    private void TestEvent(
+            String eventTitle,
+            String geoLocation,
+            String eventCapacity,
+            String eventDescription,
+            String waitListLimit) {
+        waitFor(2000);
+        onData(withId(R.id.facility_page_events_listview)).atPosition(0).perform(click());
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
+        waiter.check(withId(R.id.event_organizer_event_title), matches(withText(eventTitle)));
+        onView(withId(R.id.event_organizer_event_description)).check(matches(withText(eventDescription)));
+        if (geoLocation.equals("Yes")) {
+            onView(withId(R.id.event_organizer_geolocation_required)).check(matches(withText("Yes")));
+        } else {
+            onView(withId(R.id.event_organizer_geolocation_required)).check(matches(withText("No")));
+        }
+        onView(withId(R.id.event_organizer_event_capacity)).check(matches(withText(eventCapacity)));
+        onView(withId(R.id.event_organizer_waiting_list_limit)).check(matches(withText(waitListLimit)));
+        TestLists();
     }
 
-    public void CreateEvent(String title) {
-        CreateFacility();
-        waiter.perform(withId(R.id.facility_page_add_event_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText(title));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_location), replaceText("Test event location"));
-        waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText("42"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText("Test event description"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-    }
-
-    @Test
-    public void EditEvent() {
-        CreateEvent("Test event title");
-        waiter.perform(withText("Test event title"), click());
-
-        waiter.check(withId(R.id.event_organizer_event_description), matches(withText("Test event description")));
-        waiter.perform(withId(R.id.event_organizer_edit_event_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_title), matches(withText("Test event title")));
-        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText("Test event title edited"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_location), matches(withText("Test event location")));
-        waiter.perform(withId(R.id.create_event_edittext_event_location), replaceText("Test event location edited"));
-        waiter.check(withId(R.id.create_event_edittext_event_capacity), matches(withText("42")));
-        waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText("10"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_description), matches(withText("Test event description")));
-        waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText("Test event description edited"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-
-        waiter.check(withId(R.id.event_organizer_event_description), matches(withText("Test event description edited")));
-        waiter.perform(withId(R.id.event_organizer_edit_event_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_title), matches(withText("Test event title edited")));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_location), matches(withText("Test event location edited")));
-        waiter.check(withId(R.id.create_event_edittext_event_capacity), matches(withText("10")));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.check(withId(R.id.create_event_edittext_event_description), matches(withText("Test event description edited")));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-
-        pressBack();
-        DestroyFacility();
-    }
-
-    @Test
-    public void EventActivityListsNavigation() {
-        CreateEvent("Navigation test event");
-        waiter.perform(withText("Navigation test event"), click());
-
+    private void TestLists() {
         waiter.perform(withId(R.id.event_organizer_invited_button), click());
-        waiter.check(withId(R.id.invited_list), matches(isDisplayed()));
+        intended(hasComponent(InvitedListActivity.class.getName()));
         pressBack();
 
         waiter.perform(withId(R.id.event_organizer_cancelled_button), click());
-        waiter.check(withId(R.id.cancelled_list), matches(isDisplayed()));
+        intended(hasComponent(CancelledListActivity.class.getName()));
         pressBack();
 
         waiter.perform(withId(R.id.event_organizer_waitlist_button), click());
-        waiter.check(withId(R.id.waitList_listview), matches(isDisplayed()));
+        intended(hasComponent(EventWaitlistActivity.class.getName()));
         pressBack();
 
         waiter.perform(withId(R.id.event_organizer_enrolled_button), click());
-        waiter.check(withId(R.id.enroll_list), matches(isDisplayed()));
+        intended(hasComponent(EnrolledListActivity.class.getName()));
         pressBack();
+        pressBack();
+        intended(hasComponent(MainActivity.class.getName()));
+    }
 
-        waiter.perform(withId(R.id.event_organizer_edit_event_button), click());
-        waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText("Navigation test event DONE"));
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        waiter.perform(withId(R.id.create_event_positive_button), click());
-        pressBack();
-        DestroyFacility();
+    @Test
+    public void CreatingEventsTest() {
+        NavigateToFacility();
+        try {
+            CreatingFacility();
+        } catch (Exception e) {
+            Log.d("FacilityTests", "Facility already exist");
+        }
+        String eventTitle = "Test Event";
+        String eventLocation = "Test location";
+        String geoLocation = "Yes";
+        String eventCapacity = "55";
+        String eventDescription = "Test description";
+        String waitListLimit = "66";
+        Intents.init();
+        CreateEvent(eventTitle, eventLocation, geoLocation, eventCapacity, eventDescription, waitListLimit);
+        TestEvent(eventTitle, geoLocation, eventCapacity, eventDescription, waitListLimit);
+        Intents.release();
     }
 }

@@ -215,4 +215,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public FacilityModel getFacility() {
         return facility;
     }
+
+    public FirebaseFirestore getDb() {
+        return db;
+    }
 }
