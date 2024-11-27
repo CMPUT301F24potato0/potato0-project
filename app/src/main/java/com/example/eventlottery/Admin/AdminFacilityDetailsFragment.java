@@ -2,10 +2,14 @@ package com.example.eventlottery.Admin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +18,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
+import com.google.firebase.firestore.Blob;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminFacilityDetailsFragment extends DialogFragment {
     private final FirebaseFirestore db;
-    private FacilityModel facility;
+    private final FacilityModel facility;
 
     public AdminFacilityDetailsFragment(FacilityModel item) {
         db = FirebaseFirestore.getInstance();
@@ -34,11 +40,11 @@ public class AdminFacilityDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.facility_details_text_phone_number)).setText(String.format("Phone: %s", facility.getPhone()));
         ((TextView)rootView.findViewById(R.id.facility_details_text_email)).setText(String.format("Email: %s", facility.getEmail()));
         ((TextView)rootView.findViewById(R.id.facility_details_text_capacity)).setText(String.format("Capacity: %d", facility.getCapacity()));AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        ((Button) rootView.findViewById(R.id.delete_button)).setOnClickListener((View view) -> {
+        rootView.findViewById(R.id.delete_button).setOnClickListener((View view) -> {
             facility.delete(db);
             dismiss();
         });
-        ((Button) rootView.findViewById(R.id.cancel_button)).setOnClickListener((View view) -> {
+        rootView.findViewById(R.id.cancel_button).setOnClickListener((View view) -> {
             dismiss();
         });
         builder.setView(rootView);

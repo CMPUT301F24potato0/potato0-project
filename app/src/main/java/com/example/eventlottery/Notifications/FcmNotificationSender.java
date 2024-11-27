@@ -34,9 +34,9 @@ public class FcmNotificationSender {
 
     private final String topic;
 
-    private String eventID;
+    private final String eventID;
 
-    private Boolean SignUp;
+    private final Boolean SignUp;
 
     private final String postUrl = "https://fcm.googleapis.com/v1/projects/eventlottery-32085/messages:send";
 
@@ -99,7 +99,7 @@ public class FcmNotificationSender {
             }, volleyError -> {
                 // code run error
                 volleyError.getCause();
-                Log.d("volleyError", ""+volleyError.getMessage());
+                Log.d("volleyError", volleyError.getMessage());
             }){
 
                 @NonNull
@@ -112,7 +112,7 @@ public class FcmNotificationSender {
                     header.put("Content-Type","application/json; UTF-8");
                     header.put("Authorization","Bearer " + accessKey);
 
-                    Log.e("Notificaiton Sender: ", "" + accessKey);
+                    Log.e("Notificaiton Sender: ", accessKey);
 
                     return header;
                 }

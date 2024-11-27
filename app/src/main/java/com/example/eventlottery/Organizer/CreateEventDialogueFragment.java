@@ -1,15 +1,25 @@
 package com.example.eventlottery.Organizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.provider.MediaStore;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +27,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -25,11 +36,16 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class CreateEventDialogueFragment extends DialogFragment {
 
@@ -50,6 +66,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private FirebaseFirestore db;
     private EventModel event;
     private EventOrganizerActivity eventActivity;
+    private ImageView poster;
+    private Boolean uploaded = false;
+
+    private HashMap<String, Object> temp_hashmap;
+    private Bitmap temp_bitmap;
+    private Boolean fileTooLarge = false;
 
     /** Empty constructor
      */
@@ -181,12 +203,61 @@ public class CreateEventDialogueFragment extends DialogFragment {
         frameLayout.removeAllViews();
         switch (dialogState) {
             case 0: // user selects "cancel"
+
                 dismiss();
                 break;
             case 1: // switch UI to first page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_1, frameLayout);
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
                 eventTitleEditText.setText(eventTitle);
+                poster = stateView.findViewById(R.id.poster);
+                // Testing
+                // ************************************************************************************************************************
+                if (event != null) {
+                    // editing event
+                    if (temp_bitmap != null){
+                        // selected a new poster
+                        poster.setImageBitmap(temp_bitmap);
+                    }
+                    else{
+                        // shows current poster
+                        DocumentReference posterReference = db.collection("posters").document(event.getEventID());
+                        posterReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                Log.e("Document","checking document existence");
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()){
+                                        // document exists
+                                        Log.e("Document", "exists");
+                                        Blob blob = document.getBlob("Blob");
+                                        byte[] bytes = blob.toBytes();
+                                        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                        poster.setImageBitmap(bitmap);
+                                        uploaded = true;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }else{
+                    // creating a new event
+                    if (temp_bitmap != null){
+                        // selected a new poster
+                        poster.setImageBitmap(temp_bitmap);
+                    }
+                }
+
+                Button add_poster = stateView.findViewById(R.id.add_poster);
+
+                add_poster.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("Clicked Upload Image","Choosing image");
+                        imageChoose();
+                    }
+                });
                 break;
             case 2: // switch UI to second page of the dialog
                 stateView = inflater.inflate(R.layout.fragment_create_event_2, frameLayout);
@@ -247,11 +318,21 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             if (task.isSuccessful()){
                                 DocumentReference documentReference = task.getResult();
                                 String eventID = documentReference.getId();
+                                Log.e("EventID","***************");
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID",eventID);
+                                Log.e("EventID","***************");
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
+
+                                Log.e("Saving","Saving new image");
+                                db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                                dismiss();
                             }
                         }
                     });
+                    dismiss();
                 }
                 else {  // editing (updating) an existing event)
                     event.setEventTitle(eventTitle);
@@ -262,9 +343,16 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     event.setJoinDeadline(joinDeadline);
                     event.setEventDescription(eventDescription);
                     db.collection("events").document(event.getEventID()).set(event);
+                    // ***
+                    if (temp_hashmap != null){
+                        db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+
+                    }
+//                    db.collection("posters").document("default").set(temp_hashmap);
+                    // ***
                     eventActivity.updateViews();
+                    dismiss();
                 }
-                dismiss();
                 break;
         }
     }
@@ -278,11 +366,14 @@ public class CreateEventDialogueFragment extends DialogFragment {
         Boolean validInput = Boolean.FALSE;
         switch (dialogState) {
             case 1: // get input from state 1
+                // if poster has been uploaded
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
-                if (isValidString(eventTitleEditText.getText().toString())) {
+
+                if (isValidString(eventTitleEditText.getText().toString()) && uploaded) {
                     eventTitle = eventTitleEditText.getText().toString();
                     validInput = Boolean.TRUE;
                 }
+                // if poster has been uploaded
                 break;
             case 2: // get input from state 2
                 EditText capacityEditText = stateView.findViewById(R.id.create_event_edittext_event_capacity);
@@ -430,5 +521,112 @@ public class CreateEventDialogueFragment extends DialogFragment {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
+    }
+
+    public void imageChoose(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        imageChooser.launch(intent);
+    }
+    ActivityResultLauncher<Intent> imageChooser = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if(result.getResultCode() == Activity.RESULT_OK){
+                    Intent data = result.getData();
+                    if(data != null && data.getData() != null){
+                        Uri uri = data.getData();
+                        try{
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
+                            // initialize byte stream
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            byte[] bytes = new byte[0];
+                            // ****************************************************************************************
+                            final int targetSize = 1024 * 1024;
+                            // Start with 100% quality, and reduce quality until we get under the target size
+                            int quality = 100;
+                            int compressedSize = 0;
+
+                            // Compress the image and check the size after each compression
+
+
+                            while (compressedSize > targetSize || quality >= 10){
+                                if (compressedSize < targetSize && compressedSize > 0){
+                                    // Stops when the JPEG size is just under 1 mb
+                                    break;
+                                }
+                                stream.reset();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+                                bytes = stream.toByteArray();
+                                compressedSize = bytes.length;
+                                if (compressedSize > 5000000){ // set size limit to 5mb for a picture
+                                    Log.e("fileSize","fileTooLarge");
+                                    Toast.makeText(getContext(), "File too large", Toast.LENGTH_LONG).show();
+                                    fileTooLarge = true;
+                                    break;
+                                }
+
+                                Log.e("Image compression","Compressed size: " + compressedSize + " bytes");
+                                Log.e("Image quality", "Image qualit is: " + quality + "/100");
+                                // Reduce the quality by 10% for the next iteration if the image is still too large
+                                quality -= 10;
+                                fileTooLarge = false;
+                            }
+                            Blob blob = Blob.fromBytes(bytes);
+
+                            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                            hashMap.put("Blob",blob);
+                            if (event == null){
+                                // editing event
+                                // saving temp imageSelected
+                                // saving temp hashmap for db
+                                temp_bitmap = bitmap;
+                                temp_hashmap = hashMap;
+
+                                // creating new event
+                                Log.e("document","temp");
+                                Log.e("document","editing event");
+                                decode();
+                            } else {
+                                // creating event
+                                Log.e("creating","Event");
+                                temp_hashmap = hashMap;
+                                temp_bitmap = bitmap;
+                                decode();
+
+                            }
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
+    public void decode(){
+        if(!fileTooLarge){
+            if (event == null){
+                poster.setImageBitmap(temp_bitmap);
+                uploaded = true;
+            } else{
+                // editing image
+                if(temp_bitmap == null){
+                    DocumentReference docref = db.collection("posters").document(event.getEventID());
+//                    DocumentReference docref = db.collection("posters").document("default");
+                    docref.get().addOnCompleteListener( task -> {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()){
+                            Blob blob = document.getBlob("Blob");
+                            byte[] bytes = blob.toBytes();
+                            Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                            poster.setImageBitmap(bitmap);
+                            uploaded = true;
+                        }
+                    });
+                } else{
+                    poster.setImageBitmap(temp_bitmap);
+                }
+            }
+        }
+
     }
 }

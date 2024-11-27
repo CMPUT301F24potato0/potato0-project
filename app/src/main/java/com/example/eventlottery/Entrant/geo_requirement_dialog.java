@@ -35,12 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class geo_requirement_dialog extends DialogFragment {
 
-    private RemoteUserRef user;
-    private EventModel event;
-    private FirebaseFirestore db;
+    private final RemoteUserRef user;
+    private final EventModel event;
+    private final FirebaseFirestore db;
     private UserModel cuUser;
-    private Button joinBtn;
-    private Button unjoinBtn;
+    private final Button joinBtn;
+    private final Button unjoinBtn;
 
     /**
      * Constructor
@@ -89,7 +89,7 @@ public class geo_requirement_dialog extends DialogFragment {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -102,21 +102,9 @@ public class geo_requirement_dialog extends DialogFragment {
                                 user.setLatitude(lastLocation.getLatitude());
                                 user.setLongitude(lastLocation.getLongitude());
                                 event.queueWaitingList(user);
+                                event.registerUserID(user);
                             } catch (Exception e) {
                                 Toast.makeText(getContext(), "The waiting list is already full or the user is already inside the waiting list", Toast.LENGTH_SHORT).show();
-//                 .setPositiveButton("Accept", (dialog, which) -> {
-//                     try {
-//                         event.queueWaitingList(user);
-//                     } catch (Exception e) {
-//                         Toast.makeText(getContext(), "Event is full", Toast.LENGTH_SHORT).show();
-//                         return;
-//                     }
-//                     Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
-//                     task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                         @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                cuUser = documentSnapshot.toObject(UserModel.class);
                             }
                             Task<DocumentSnapshot> task = db.collection("users").document(user.getiD()).get();
                             task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -139,14 +127,6 @@ public class geo_requirement_dialog extends DialogFragment {
                                 joinBtn.setVisibility(View.GONE);
                                 unjoinBtn.setVisibility(View.VISIBLE);
                                 return null;
-
-//                                cuUser.addTopics(event.getEventID() + "_" + user.getiD());
-//                                SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + user.getiD(),getContext());
-//                                subscribeToTopic.subscribe();
-//                                db.collection("users").document(user.getiD()).set(cuUser);
-//                                joinBtn.setVisibility(View.GONE);
-//                                unjoinBtn.setVisibility(View.VISIBLE);
-//                                return null;
                             });
                             alertDialog.dismiss();
                         } else {
@@ -159,21 +139,5 @@ public class geo_requirement_dialog extends DialogFragment {
             }
         });
         return alertDialog;
-//                     });
-//                     db.collection("events").document(event.getEventID()).set(event);
-//                     task.onSuccessTask(t1 -> {
-//                         cuUser.addTopics(event.getEventID() + "_" + user.getiD());
-//                         // Subscribing to topic when joining event to receive notification
-//                         SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + user.getiD(),getContext());
-//                         subscribeToTopic.subscribe();
-//                         cuUser.addTopics(event.getEventID() + "_" + user.getiD());
-//                         // ****************************************************************************************
-//                         db.collection("users").document(user.getiD()).set(cuUser);
-//                         joinBtn.setVisibility(View.GONE);
-//                         unjoinBtn.setVisibility(View.VISIBLE);
-//                         return null;
-//                     });
-//                 })
-//                 .create();
     }
 }

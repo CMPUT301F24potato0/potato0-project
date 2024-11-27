@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 else {
                                     Toast.makeText(MainActivity.this, "User doesn't have a facility", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             else {
                                 Log.d("Firestore", "get failed with ", task.getException());
@@ -207,5 +206,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
         }
         return false; // if nothing was found then return false
+    }
+
+    public UserModel getUser() {
+        return curUser;
+    }
+
+    public FacilityModel getFacility() {
+        return facility;
+    }
+
+    public FirebaseFirestore getDb() {
+        return db;
     }
 }

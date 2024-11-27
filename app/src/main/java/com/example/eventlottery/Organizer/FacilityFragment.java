@@ -133,6 +133,7 @@ public class FacilityFragment extends Fragment {
                     eventClicked = (EventModel) eventListView.getAdapter().getItem(position);
                     Intent i = new Intent(getActivity(), EventOrganizerActivity.class);
                     i.putExtra("event_id", eventClicked.getEventID());
+                    i.putExtra("hashQR", eventClicked.getHashQR());
                     i.putExtra("eventModel", eventClicked);
                     i.putExtra("currentUser", curUser);
                     startActivity(i);

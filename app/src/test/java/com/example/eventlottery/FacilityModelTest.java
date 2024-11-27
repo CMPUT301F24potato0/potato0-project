@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class FacilityModelTest {
     private FacilityModel mockFacility;
-    private String name = "Test Facility";
-    private String location = "123 Main St";
-    private String phone = "555-555-5555";
-    private String email = "john.c.breckinridge@altostrat.com";
-    private Integer capacity = 100;
-    private String userID = "12345";
+    private final String name = "Test Facility";
+    private final String location = "123 Main St";
+    private final String phone = "555-555-5555";
+    private final String email = "john.c.breckinridge@altostrat.com";
+    private final Integer capacity = 100;
+    private final String userID = "12345";
 
     @Test
     public void setName() {

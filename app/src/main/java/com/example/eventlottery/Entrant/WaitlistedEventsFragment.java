@@ -52,12 +52,12 @@ public class WaitlistedEventsFragment extends Fragment{
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_waitlisted_events, container, false);
 
-        notification_btn = (Button) rootview.findViewById(R.id.notification_button_id);
-        subscribe = (Button) rootview.findViewById(R.id.Button_id);
-        mute_btn = (Button) rootview.findViewById(R.id.mute);
-        unmute_btn = (Button) rootview.findViewById(R.id.unmute);
+        notification_btn = rootview.findViewById(R.id.notification_button_id);
+        subscribe = rootview.findViewById(R.id.Button_id);
+        mute_btn = rootview.findViewById(R.id.mute);
+        unmute_btn = rootview.findViewById(R.id.unmute);
 
-        upload_image_btn = (Button) rootview.findViewById(R.id.open_upload_image);
+        upload_image_btn = rootview.findViewById(R.id.open_upload_image);
 
         notification_btn.setOnClickListener(view -> {
             this.context = requireContext();

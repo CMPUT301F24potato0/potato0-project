@@ -1,8 +1,15 @@
 package com.example.eventlottery.Models;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HexFormat;
+import java.util.Random;
 
 /**
  * Event Model
@@ -16,6 +23,7 @@ public class EventModel implements Serializable {
     private ArrayList<RemoteUserRef> cancelledList;
     private ArrayList<RemoteUserRef> enrolledList;
     private ArrayList<RemoteUserRef> chosenList;
+    private ArrayList<String> entrantIDs;
     private Boolean geolocationRequired;
     private Integer waitingListLimit;
     private Integer capacity;
@@ -31,6 +39,7 @@ public class EventModel implements Serializable {
     /**
      * Default constructor
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public EventModel() {
         // default values
         facilityID = "";
@@ -49,6 +58,18 @@ public class EventModel implements Serializable {
         cancelledList = new ArrayList<RemoteUserRef>();
         enrolledList = new ArrayList<RemoteUserRef>();
         chosenList = new ArrayList<RemoteUserRef>();
+        entrantIDs = new ArrayList<String>();
+        randomizeHashQR();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void randomizeHashQR() {
+        byte[] rand = new byte[32];
+        new Random().nextBytes(rand);
+        hashQR = Base64.getEncoder().encodeToString(rand);
+
+      
+
     }
 
     /**
@@ -182,6 +203,22 @@ public class EventModel implements Serializable {
             return Boolean.FALSE;
         }
         return waitingList.size() >= waitingListLimit;
+    }
+
+    /**
+     * Registers the user's ID into the event
+     * @param user The RemoteUserRef representing the entrant
+     */
+    public void registerUserID(RemoteUserRef user) {
+        entrantIDs.add(user.getiD());
+    }
+
+    /**
+     * Removes the registration of the user's ID from the event
+     * @param user The RemoteUserRef representing the entrant
+     */
+    public void deregisterUserID(RemoteUserRef user) {
+        entrantIDs.remove(user.getiD());
     }
 
     /**
@@ -512,6 +549,22 @@ public class EventModel implements Serializable {
      */
     public void setChosenList(ArrayList<RemoteUserRef> chosenList) {
         this.chosenList = chosenList;
+    }
+
+    /**
+     * Getter for entrant IDs
+     * @return An array of Strings representing entrant IDs
+     */
+    public ArrayList<String> getEntrantIDs() {
+        return entrantIDs;
+    }
+
+    /**
+     * Setter for entrant IDs
+     * @param entrantIDs An array of Strings representing entrant IDs
+     */
+    public void setEntrantIDs(ArrayList<String> entrantIDs) {
+        this.entrantIDs = entrantIDs;
     }
 
     /**

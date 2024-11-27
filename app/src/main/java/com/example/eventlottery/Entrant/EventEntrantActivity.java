@@ -3,6 +3,9 @@ package com.example.eventlottery.Entrant;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +38,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -201,6 +205,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 // Unjoining
                 try {
                     event.unqueueWaitingList(userList);
+                    event.deregisterUserID(userList);
                     db.collection("events").document(event.getEventID()).set(event);
                 }
                 catch (Exception e) {
@@ -228,6 +233,7 @@ public class EventEntrantActivity extends AppCompatActivity {
                 else {
                     try {
                         event.queueWaitingList(userList);
+                        event.registerUserID(userList);
                         db.collection("events").document(event.getEventID()).set(event);
                         joinBtn.setVisibility(View.GONE);
                         unjoinBtn.setVisibility(View.VISIBLE);
@@ -250,8 +256,63 @@ public class EventEntrantActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
-                startActivity(i);
+                onBackPressed();
+            }
+        });
+        // ********************************************************************
+        decode();
+        // ********************************************************************
+    }
+
+    public void decode(){
+        DocumentReference docref = db.collection("posters").document(event.getEventID());
+        docref.get().addOnCompleteListener( task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()){
+                    // Document exists
+                    Blob blob = document.getBlob("Blob");
+                    byte[] bytes = blob.toBytes();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    eventPoster.setImageBitmap(bitmap);
+
+                } else {
+                    DocumentReference docref1 = db.collection("posters").document("default");
+                    docref1.get().addOnCompleteListener( task1 -> {
+                        if(task1.isSuccessful()){
+                            DocumentSnapshot document1 = task1.getResult();
+                            if(document1.exists()){
+                                Blob blob = document1.getBlob("Blob");
+                                byte[] bytes = blob.toBytes();
+                                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                eventPoster.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        DocumentReference organizerPicRef = db.collection("photos").document(event.getFacilityID()); // FacilityId == UserID
+        organizerPicRef.get().addOnCompleteListener( task1 -> {
+            if(task1.isSuccessful()) {
+                DocumentSnapshot document1 = task1.getResult();
+                if (document1.exists()){
+                    // user has a profile picture (either uploaded or auto-generated)
+                    Blob blob1 = document1.getBlob("Blob");
+                    byte[] bytes1 = blob1.toBytes();
+                    Bitmap bitmap1= BitmapFactory.decodeByteArray(bytes1,0,bytes1.length);
+                    organizerProfilePicture.setImageBitmap(bitmap1);
+                } else {
+                    // user has a default profile picture
+                    Blob blob1 = db.collection("photos")
+                            .document("default")
+                            .get()
+                            .getResult()
+                            .getBlob("Blob");
+                    byte[] bytes1 = blob1.toBytes();
+                    Bitmap bitmap1= BitmapFactory.decodeByteArray(bytes1,0,bytes1.length);
+                    organizerProfilePicture.setImageBitmap(bitmap1);
+                }
             }
         });
     }
@@ -280,5 +341,9 @@ public class EventEntrantActivity extends AppCompatActivity {
             unjoinBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
         }
+    }
+
+    public EventModel getEvent() {
+        return event;
     }
 }

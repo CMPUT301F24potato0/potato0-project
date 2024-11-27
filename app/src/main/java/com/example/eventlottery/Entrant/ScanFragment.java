@@ -1,9 +1,11 @@
 package com.example.eventlottery.Entrant;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -27,6 +30,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,9 +66,10 @@ public class ScanFragment extends Fragment {
     /**
      * This is the callback for the barcode scanner
      */
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            Log.e("QR", "Scanned " + result.getText());
             if(result.getText() == null || result.getText().equals(eventScanned)) {
                 return;
             }
@@ -95,10 +100,28 @@ public class ScanFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_scan, container, false);
 
         barcodeView = rootView.findViewById(R.id.scannerView);
-        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+        Collection<BarcodeFormat> formats = Collections.singletonList(BarcodeFormat.QR_CODE);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.setStatusText("Scanning QR Code");
         barcodeView.decodeContinuous(callback);
+
+        Button intentTestGeo = rootView.findViewById(R.id.intentTestGeo);
+
+        intentTestGeo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkEvent("uNPJbcufvyr7uXObK9dK", curUser.getiD());
+            }
+        });
+
+        Button intentTestNoGeo = rootView.findViewById(R.id.intentTestNoGeo);
+
+        intentTestNoGeo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkEvent("vntgy8S97V1omKhRZSHO", curUser.getiD());
+            }
+        });
 
         return rootView;
     }
@@ -106,17 +129,16 @@ public class ScanFragment extends Fragment {
     /**
      * This function gets the events collection and then loops through to find the event that was scanned.
      * If event is not found it creates a new toast displaying error message.
-     * @param eventID The eventID scanned from the qr code
+     * @param hashQR The hashQR scanned from the qr code
      */
-    private void checkEvent(String eventID, String userId) {
+    public void checkEvent(String hashQR, String userId) { // Making it public to use it for test cases
         CollectionReference eventRef = db.collection("events");
-        Task<DocumentSnapshot> eventTask = eventRef.document(eventID).get();
-        eventTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        Task<QuerySnapshot> eventTask = eventRef.whereEqualTo("hashQR", hashQR).get();
+        eventTask.addOnCompleteListener((@NonNull Task<QuerySnapshot> task)  -> {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    if (!documents.isEmpty()) {
+                        DocumentSnapshot document = documents.get(0);
                         EventModel eve = document.toObject(EventModel.class);
                         Intent i = new Intent(getActivity(), EventEntrantActivity.class);
                         RemoteUserRef userList = new RemoteUserRef(userId, curUser.getfName() + " " + curUser.getlName());
@@ -124,13 +146,15 @@ public class ScanFragment extends Fragment {
                         i.putExtra("eventModel", eve);
                         startActivity(i);
                     } else {
-                        Toast.makeText(getContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
+                        Log.e("CheckEventScanFragment", "Event doesn't exist");
+//                        Toast.makeText(requireContext(), "Event doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "Task Failed", Toast.LENGTH_SHORT).show();
+                    Log.e("CheckEventScanFragment", "Task Failed");
+//                    Toast.makeText(requireContext(), "Task Failed", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        );
     }
 
     /**
@@ -151,4 +175,10 @@ public class ScanFragment extends Fragment {
         barcodeView.resume();
     }
 
+    public EventModel getEvent() {
+        Task<DocumentSnapshot> t = db.collection("events")
+                .document(eventScanned)
+                .get();
+        return t.getResult().toObject(EventModel.class);
+    }
 }

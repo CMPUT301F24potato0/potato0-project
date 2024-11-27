@@ -33,7 +33,7 @@ public class EnrolledListActivity extends AppCompatActivity {
     private ListView enrollList;
     private ArrayAdapter<RemoteUserRef> enrollAdapter;
     private EventModel event;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notif_enrolled;
 
     /**
@@ -68,7 +68,7 @@ public class EnrolledListActivity extends AppCompatActivity {
         enrollAdapter = new EnrolledListArrayAdapter(this, 0, userEnrollList, "enrolled", event, db);
         enrollList.setAdapter(enrollAdapter);
 
-        notif_enrolled = (Button) findViewById(R.id.enroll_notif_button);
+        notif_enrolled = findViewById(R.id.enroll_notif_button);
         notif_enrolled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -39,9 +39,9 @@ public class ChosenListActivity extends AppCompatActivity {
     private EditText searchbar;
     private ListView chosenEntrantsListView;
     private ChosenEntrantsAdapter adapter;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DocumentReference eventRef;
-    private ChosenListActivity chosenListActivity = this;
+    private final ChosenListActivity chosenListActivity = this;
 
     private ArrayList<RemoteUserRef> chosenEntrantsTemp;  // for storing entrants chosen by the LotterySystem class but not yet added to the event model
     private ArrayList<RemoteUserRef> chosenEntrantsModel; // a reference to the chosen entrants list from the event model

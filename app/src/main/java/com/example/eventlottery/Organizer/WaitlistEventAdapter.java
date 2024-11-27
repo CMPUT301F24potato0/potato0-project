@@ -1,4 +1,4 @@
-package com.example.eventlottery.Entrant;
+package com.example.eventlottery.Organizer;
 
 import android.content.Context;
 import android.util.Log;
@@ -69,7 +69,8 @@ public class WaitlistEventAdapter extends ArrayAdapter<RemoteUserRef> {
         sendInvite.setVisibility(View.GONE);
         RemoteUserRef user = getItem(position);
         TextView userName = view.findViewById(R.id.listview_user_name);
-        userName.setText(user.getName());
+        assert user != null;
+        user.sync(() -> {userName.setText(user.getName());});
 
         remove.setOnClickListener(new View.OnClickListener() {
             @Override

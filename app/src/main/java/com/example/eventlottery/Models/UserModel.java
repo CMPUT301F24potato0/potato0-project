@@ -1,12 +1,23 @@
 package com.example.eventlottery.Models;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirestoreKt;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This Class stores the current user's information
@@ -319,14 +330,46 @@ public class UserModel implements Serializable {
     }
 
     /**
-     * Deletes the user from firebase, taking care to also delete associated facilities and events
+     * Deletes the user from firebase, taking care to also delete associated facilities and events,
+     * as well as removing the user from events they joined
      */
     public void delete(FirebaseFirestore db) {
         db.collection("facilities").document(getiD()).get().addOnCompleteListener((Task<DocumentSnapshot> facilityTask) -> {
             FacilityModel facility = facilityTask.getResult().toObject(FacilityModel.class);
+            removeFromEvents(db);
             if (facility == null) return;
             facility.delete(db);
         });
         db.collection("users").document(getiD()).delete();
+    }
+
+    /**
+     * A helper function that removes the user from all events they joined
+     * @param db
+     */
+    private void removeFromEvents(FirebaseFirestore db) {
+        db.collection("events").whereArrayContains("entrantIDs", getiD()).get().addOnCompleteListener((Task<QuerySnapshot> eventTask) -> {
+            if (eventTask.isSuccessful()) {
+                for (QueryDocumentSnapshot eventDocSnapshot : eventTask.getResult()) {
+                    EventModel event = eventDocSnapshot.toObject(EventModel.class);
+                    RemoteUserRef tempRemoteUserRef = new RemoteUserRef(getiD(), getfName() + " " + getlName());
+                    List<ArrayList<RemoteUserRef>> eventArrayLists = Arrays.asList(
+                            event.getWaitingList(),
+                            event.getChosenList(),
+                            event.getCancelledList(),
+                            event.getEnrolledList(),
+                            event.getInvitedList()
+                    );
+                    for (ArrayList<RemoteUserRef> currentArrayList : eventArrayLists) {
+                        currentArrayList.remove(tempRemoteUserRef);  // removes a different RemoteUserRef object but with the same unique ID
+                    }
+                    event.deregisterUserID(tempRemoteUserRef);  // removes the RemoteUserRef with the same unique ID
+                    db.collection("events").document(event.getEventID()).set(event);
+                }
+            }
+            else {
+                Log.e("FireStore Task Error", "Task of retrieving events the entrant joined has failed");
+            }
+        });
     }
 }

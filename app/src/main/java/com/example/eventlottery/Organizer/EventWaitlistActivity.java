@@ -28,7 +28,6 @@ import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Notifications.SendNotification;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
-import com.example.eventlottery.Entrant.WaitlistEventAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -55,7 +54,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
     private EventModel event;
     private WaitlistEventAdapter adapter;
     private Button remove;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button drawSample;
     private EditText drawSampleEditText;
