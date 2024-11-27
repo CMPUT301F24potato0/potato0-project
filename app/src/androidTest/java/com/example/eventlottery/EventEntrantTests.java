@@ -33,6 +33,7 @@ import com.example.eventlottery.Models.UserModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,15 +55,14 @@ public class EventEntrantTests {
 
     @Before
     public void setup(){
-        try{
-            Intents.release();
-        } catch (Exception e) {
-            Log.e("Intents.release() failed", e.toString());
-        }
         Intents.init();
         init();
     }
 
+    @After
+    public void teardown(){
+        Intents.release();
+    }
 
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
     private ViewAction waitFor(long delay) {
@@ -117,7 +117,6 @@ public class EventEntrantTests {
         onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
         pressBack();
         intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
     }
 
     @Test
@@ -133,13 +132,12 @@ public class EventEntrantTests {
         onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
         pressBack();
         intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
     }
 
     private void JoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
-        // Waiting for use to accept the permissions
+        // Waiting for use to accept the notification permissions
         waitFor(4000);
         // checking if the geo requirement dialog fragment is being displayed
         onView(withId(R.id.geo_requirement_dialog_fragment_linear_layout)).check(matches(isDisplayed()));
