@@ -1,5 +1,8 @@
 package com.example.eventlottery.Models;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -150,11 +153,19 @@ public class FacilityModel implements Serializable {
                 document.getReference().delete();
         });
         Task<DocumentSnapshot> task = db.collection("users").document(getUserID()).get();
-        task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
-            UserModel owner = posttask.getResult().toObject(UserModel.class);
-            if (owner == null) return;
-            owner.setFacilityID("");
-            db.collection("users").document(owner.getiD()).set(owner);
+        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        UserModel owner = document.toObject(UserModel.class);
+                        if (owner == null) return;
+                        owner.setFacilityID("");
+                        db.collection("users").document(owner.getiD()).set(owner);
+                    }
+                }
+            }
         });
     }
 }

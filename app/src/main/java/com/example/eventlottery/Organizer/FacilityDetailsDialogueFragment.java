@@ -127,7 +127,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                     facility.setPhone(facilityPhoneEditText.getText().toString());
                     facility.setEmail(facilityEmailEditText.getText().toString());
                     facility.setCapacity(Integer.parseInt(facilityCapacityEditText.getText().toString()));
-                    db.collection("facilities").document(user.getiD()).set(facility);
+                    db.collection("facilities").document(facility.getUserID()).set(facility);
                     if (user.getFacilityID().equals("")) {  // after creating a facility, change the view and update user to have a faciltyID
                         facilityFragment.changeView(1);
                         user.setFacilityID(user.getiD());
@@ -149,6 +149,8 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
                 facilityFragment.changeView(0);
                 // after updating or creating a facility, update the view
                 facilityFragment.updateViews();
+                user.setFacilityID("");
+                db.collection("users").document(user.getiD()).set(user);
                 dismiss();
             }
         });

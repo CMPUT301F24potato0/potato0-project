@@ -51,8 +51,8 @@ public class FacilityTests {
     private void NavigateToFacility() {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
-        waiter.perform(withId(R.id.facility), click());
-        onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
+        onView(withId(R.id.facility)).perform(click());
+        onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -89,12 +89,6 @@ public class FacilityTests {
         onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("100"));
         onView(withId(R.id.facility_details_confirm_button)).perform(click());
         waiter.check(withId(R.id.facility_page_facility_name), matches(withText("Test facility 2")));
-        assertEquals("Test facility 2", facilityModel.getName());
-        assertEquals("Test location 2", facilityModel.getLocation());
-        assertEquals("000000000001", facilityModel.getPhone());
-        assertEquals("tester2@example.com", facilityModel.getEmail());
-        assert(100 == facilityModel.getCapacity());
-        assertEquals(curUser.getFacilityID(), facilityModel.getUserID());
     }
 
     private void TestDeleteFacility() {

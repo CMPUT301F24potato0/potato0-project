@@ -33,6 +33,8 @@ import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public class EventTests {
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
     private ViewAction waitFor(long delay) {
@@ -58,7 +60,7 @@ public class EventTests {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());
-        onView(withId(R.id.facilityHomePage)).check(matches(isDisplayed()));
+        onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
     }
 
     private void CreatingFacility() {
@@ -115,7 +117,7 @@ public class EventTests {
             String eventDescription,
             String waitListLimit) {
         waitFor(2000);
-        onData(withId(R.id.facility_page_events_listview)).atPosition(0).perform(click());
+        onView(withText(eventTitle)).perform(click());
         intended(hasComponent(EventOrganizerActivity.class.getName()));
         waiter.check(withId(R.id.event_organizer_event_title), matches(withText(eventTitle)));
         onView(withId(R.id.event_organizer_event_description)).check(matches(withText(eventDescription)));
@@ -133,20 +135,24 @@ public class EventTests {
         waiter.perform(withId(R.id.event_organizer_invited_button), click());
         intended(hasComponent(InvitedListActivity.class.getName()));
         pressBack();
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
 
         waiter.perform(withId(R.id.event_organizer_cancelled_button), click());
         intended(hasComponent(CancelledListActivity.class.getName()));
         pressBack();
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
 
         waiter.perform(withId(R.id.event_organizer_waitlist_button), click());
         intended(hasComponent(EventWaitlistActivity.class.getName()));
         pressBack();
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
 
         waiter.perform(withId(R.id.event_organizer_enrolled_button), click());
         intended(hasComponent(EnrolledListActivity.class.getName()));
         pressBack();
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
         pressBack();
-        intended(hasComponent(MainActivity.class.getName()));
+        intended(hasComponent(EventOrganizerActivity.class.getName()));
     }
 
     @Test
@@ -165,7 +171,13 @@ public class EventTests {
         String waitListLimit = "66";
         Intents.init();
         CreateEvent(eventTitle, eventLocation, geoLocation, eventCapacity, eventDescription, waitListLimit);
-        TestEvent(eventTitle, geoLocation, eventCapacity, eventDescription, waitListLimit);
+        String eventTitle2 = UUID.randomUUID().toString();
+        String geoLocation2 = "No";
+        String eventCapacity2 = "77";
+        String eventDescription2 = UUID.randomUUID().toString();
+        String waitListLimit2 = "88";
+        CreateEvent(eventTitle2, eventLocation, geoLocation2, eventCapacity2, eventDescription2, waitListLimit2);
+        TestEvent(eventTitle2, geoLocation2, eventCapacity2, eventDescription2, waitListLimit2);
         Intents.release();
     }
 }
