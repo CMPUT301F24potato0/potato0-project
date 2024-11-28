@@ -174,7 +174,14 @@ public class EventOrganizerActivity extends AppCompatActivity {
         Log.d("TESTING", "Views updated");
         eventTitle.setText(event.getEventTitle());
         eventCapacity.setText(event.getCapacity().toString());
-        waitlistLimit.setText(event.getWaitingListLimit().toString());
+
+        // Update waitlist limit display
+        if (event.getWaitingListLimit() == -1) {
+            waitlistLimit.setText("No Limit");
+        } else {
+            waitlistLimit.setText(event.getWaitingListLimit().toString());
+        }
+
         if (event.getGeolocationRequired().equals(Boolean.TRUE)) {
             geolocationRequired.setText("Yes");
         } else {
@@ -192,6 +199,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
         decode();
     }
+
 
     /**
      * Sets up Firestore snapshot listeners to observe real-time updates
