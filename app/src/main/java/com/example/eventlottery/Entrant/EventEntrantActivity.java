@@ -278,36 +278,17 @@ public class EventEntrantActivity extends AppCompatActivity {
                     Log.e("EventEntrantActivity", error.toString());
                 }
                 if (value != null) {
-
-                    Blob blob = value.getBlob("Blob");
-                    byte[] bytes = blob.toBytes();
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    eventPoster.setImageBitmap(bitmap);
-                } else {
-                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+                    if (value.exists()) {
+                        Blob blob = value.getBlob("Blob");
+                        byte[] bytes = blob.toBytes();
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        eventPoster.setImageBitmap(bitmap);
+                    } else {
+                        eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+                    }
                 }
             }
         });
-
-//        docref.get().addOnCompleteListener( task -> {
-//            if (task.isSuccessful()) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    // Document exists
-//                    Blob blob = document.getBlob("Blob");
-//                    byte[] bytes = blob.toBytes();
-//                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                    eventPoster.setImageBitmap(bitmap);
-//                }
-//                else{
-////                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
-//                    eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
-//
-//
-//                }
-//            }
-//
-//        });
         DocumentReference organizerPicRef = db.collection("photos").document(event.getFacilityID()); // FacilityId == UserID
         organizerPicRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
