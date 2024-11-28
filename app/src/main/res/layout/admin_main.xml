@@ -30,8 +30,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:src="@drawable/ic_back_fab"
-            android:backgroundTint="@color/gold"
+            android:backgroundTint="@color/space_cadet"
             android:id="@+id/back_main"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
             />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
