@@ -94,42 +94,7 @@ public class EventEntrantTests {
         fragment.checkEvent("InvalidEvent", "userID");
         onView(withId(R.id.scannerView)).check(matches(isDisplayed()));
     }
-//    @Test
-//    public void OpenGeoEvent() {
-//        init();
-//        // Event that requires geo location
-//        // This is a hard coded event in the firebase for testing purposes only
-//        // Testing if a hardcoded geo location event is being opened
-//        Intents.init();
-//        waiter.perform(withId(R.id.intentTestGeo), click());
-//        intended(hasComponent(EventEntrantActivity.class.getName()));
-//        JoinGeoEvent();
-//        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
-//        UnjoinGeoEvent();
-//        onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
-//        pressBack();
-//        intended(hasComponent(MainActivity.class.getName()));
-//        Intents.release();
-//    }
-//
-//    @Test
-//    public void OpenNoGeoEvent() {
-//        init();
-//        // Event that requires geo location
-//        // This is a hard coded event in the firebase for testing purposes only
-//        // Testing if a hardcoded no geo location event is being opened
-//        Intents.init();
-//        waiter.perform(withId(R.id.intentTestNoGeo), click());
-//        intended(hasComponent(EventEntrantActivity.class.getName()));
-//        JoinNoGeoEvent();
-//        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
-//        UnjoinNoGeoEvent();
-//        onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
-//        pressBack();
-//        intended(hasComponent(MainActivity.class.getName()));
-//        Intents.release();
-//    }
-//
+
     private void JoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
