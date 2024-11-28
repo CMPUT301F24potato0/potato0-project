@@ -25,19 +25,24 @@
         <LinearLayout
             android:id="@+id/progressBar2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
-            <ProgressBar
+            <LinearLayout
+                android:id="@+id/progressBar2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
-        <LinearLayout
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+            <LinearLayout
                 android:id="@+id/event_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -162,7 +167,6 @@
 <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -181,8 +185,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-
-
                         <Button
                             android:id="@+id/event_organizer_edit_event_button"
                             android:layout_width="wrap_content"
@@ -198,8 +200,9 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:strokeColor="@color/black"
-                            app:strokeWidth="2.5dp"/>
+                            app:strokeWidth="2.5dp" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -213,12 +216,12 @@
                             android:minHeight="0dp"
                             android:paddingStart="32dp"
                             android:paddingEnd="32dp"
-                            android:text="Invited"
+                            android:text="Invited: 0"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:strokeColor="@color/black"
-                            app:strokeWidth="2.5dp"/>
+                            app:strokeWidth="2.5dp" />
 
                         <Button
                             android:id="@+id/event_organizer_cancelled_button"
@@ -229,7 +232,7 @@
                             android:minHeight="0dp"
                             android:paddingStart="20dp"
                             android:paddingEnd="20dp"
-                            android:text="Cancelled"
+                            android:text="Cancelled: 0"
                             android:textColor="@color/black"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -245,7 +248,7 @@
                             android:minHeight="0dp"
                             android:paddingStart="30dp"
                             android:paddingEnd="30dp"
-                            android:text="Waitlist"
+                            android:text="Waitlist: 0"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -262,7 +265,7 @@
                             android:minHeight="0dp"
                             android:paddingStart="25dp"
                             android:paddingEnd="25dp"
-                            android:text="Enrolled"
+                            android:text="Enrolled: 0"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

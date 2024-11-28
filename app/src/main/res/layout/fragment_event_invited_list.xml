@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    android:layout_height="match_parent">
+    tools:context=".Organizer.InvitedListActivity">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintTop"
@@ -54,23 +61,61 @@
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-
+    <!-- Container for invited entrants -->
     <LinearLayout
         android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/violet_transparent"
         android:background="@drawable/rounded_corner_background"
+        android:backgroundTint="@color/violet_transparent"
+        android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintTop"
         android:orientation="vertical">
+<!-- app:layout_constraintTop_toBottomOf="@+id/textView2"> -->
 
+        <!-- Row for invited entrants count and notification button -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <!-- Invited Entrants Count -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invited Entrants: "
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/invited_confirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginStart="5dp" />
+
+
+            <!-- Notification Button -->
+            <Button
+                android:id="@+id/invited_notif_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/indigo"
+                android:text="Send notification"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp" />
+<!--             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -142,16 +187,18 @@
 
                 </Button>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+ -->
         </LinearLayout>
 
-
+        <!-- ListView for displaying invited entrants -->
         <ListView
             android:id="@+id/invited_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="10dp"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:padding="5dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
