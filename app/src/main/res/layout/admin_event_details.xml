@@ -58,14 +58,10 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/admin_delete_event_button"
+                        android:id="@+id/admin_event_details_delete_event_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/darkRed"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
                         android:text="Delete Event"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
