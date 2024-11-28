@@ -229,32 +229,38 @@ public class EventEntrantActivity extends AppCompatActivity {
         joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askNotificationPermission();
-                if (event.getGeolocationRequired()) {
-                    // Joining
-                    new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
-                    // Getting event specific topic
-                }
-                else {
-                    try {
-                        event.queueWaitingList(userList);
-                        event.registerUserID(userList);
-                        db.collection("events").document(event.getEventID()).set(event);
+                Date currentDate = new Date();
+                if (currentDate.before(event.getJoinDeadline())) {
+                    askNotificationPermission();
+                    if (event.getGeolocationRequired()) {
+                        // Joining
+                        new geo_requirement_dialog(userList, event, db, joinBtn, unjoinBtn).show(getSupportFragmentManager(), "geo_requirement_dialog");
+                        // Getting event specific topic
+                    }
+                    else {
+                        try {
+                            event.queueWaitingList(userList);
+                            event.registerUserID(userList);
+                            db.collection("events").document(event.getEventID()).set(event);
+                            joinBtn.setVisibility(View.GONE);
+                            unjoinBtn.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            Toast.makeText(EventEntrantActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        // ****************************************************************************************
+                        // Subscribing to topic when joining event to receive notification
+                        SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
+                        subscribeToTopic.subscribe();
+                        currentUser.addTopics(event.getEventID() + "_" + userList.getiD());
+                        // ****************************************************************************************
+                        db.collection("users").document(userList.getiD()).set(currentUser);
+                        // ****************************************************************************************
                         joinBtn.setVisibility(View.GONE);
                         unjoinBtn.setVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        Toast.makeText(EventEntrantActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    // ****************************************************************************************
-                    // Subscribing to topic when joining event to receive notification
-                    SubscribeToTopic subscribeToTopic = new SubscribeToTopic(event.getEventID() + "_" + userList.getiD(),getApplicationContext());
-                    subscribeToTopic.subscribe();
-                    currentUser.addTopics(event.getEventID() + "_" + userList.getiD());
-                    // ****************************************************************************************
-                    db.collection("users").document(userList.getiD()).set(currentUser);
-                    // ****************************************************************************************
-                    joinBtn.setVisibility(View.GONE);
-                    unjoinBtn.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(EventEntrantActivity.this, "This event's join deadline has already passed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
