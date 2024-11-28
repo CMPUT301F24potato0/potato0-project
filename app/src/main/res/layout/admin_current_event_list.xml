@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/CurrentEventPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_orange_dark">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/current_event_page_text"
