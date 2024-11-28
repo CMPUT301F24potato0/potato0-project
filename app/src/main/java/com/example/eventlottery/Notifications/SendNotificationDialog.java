@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -113,7 +114,11 @@ public class SendNotificationDialog extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    if (flag.equals("Chosen")) {
+                        Toast.makeText(chosenListActivity, "Invitations have not been sent", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .setPositiveButton("Send", (dialog, which) -> {
                     title_text = title.getText().toString();
                     body_text = message.getText().toString();
