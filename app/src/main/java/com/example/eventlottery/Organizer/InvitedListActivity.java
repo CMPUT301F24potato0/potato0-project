@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class InvitedListActivity extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button notify_invited;
+    private TextView invitedConfirmed;
 
     /**
      * On create Override
@@ -55,7 +57,7 @@ public class InvitedListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userInvitedList = new ArrayList<RemoteUserRef>();
+        userInvitedList = new ArrayList<>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {
@@ -69,6 +71,9 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedList.setAdapter(invitedAdapter);
 
         notify_invited = findViewById(R.id.invited_notif_button);
+        invitedConfirmed = findViewById(R.id.invited_confirmed);
+
+        invitedConfirmed.setText(String.valueOf(event.getInvitedList().size()));
 
         notify_invited.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,34 +81,25 @@ public class InvitedListActivity extends AppCompatActivity {
                 new SendNotificationDialog(event, "Invited", false, db).show(getSupportFragmentManager(), "Send Notification");
             }
         });
-        // Updates all the event's lists
+
+        // Update
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.e("EventWaitlistActivity", e.toString());
+                            Log.e("InvitedListActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
                             // Get the EventModel object
                             EventModel FireStoreEvent = doc.toObject(EventModel.class);
 
-                            // Update Waiting List
-                            event.getWaitingList().clear();
-                            event.getWaitingList().addAll(FireStoreEvent.getWaitingList());
-                            // Update Cancelled List
-                            event.getCancelledList().clear();
-                            event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
-                            // Update Chosen List
-                            event.getChosenList().clear();
-                            event.getChosenList().addAll(FireStoreEvent.getChosenList());
-                            // Update Enrolled List
-                            event.getEnrolledList().clear();
-                            event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
                             // Update Invited List
                             event.getInvitedList().clear();
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
+                            invitedConfirmed.setText(String.valueOf(event.getInvitedList().size()));
+
                             // Notify adapter of changes
                             invitedAdapter.notifyDataSetChanged();
                         }
