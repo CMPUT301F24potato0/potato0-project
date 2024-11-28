@@ -45,6 +45,12 @@ import java.util.UUID;
 @LargeTest
 public class AdminTests {
 
+    class EventDisplayed extends Exception {
+        public EventDisplayed(String message) {
+            super(message);
+        }
+    }
+
     private ViewAction waitFor(long delay) {
         return new ViewAction() {
             @Override
@@ -89,6 +95,7 @@ public class AdminTests {
     );
     @Test
     public void TestAdmin() {
+        NavigateToFacility();
         try {
             CreatingFacility();
         } catch (Exception e) {
@@ -113,25 +120,49 @@ public class AdminTests {
         onView(withId(R.id.admin_event_title)).check(matches(withText(eventTitle)));
         onView(withId(R.id.admin_event_organizer_event_description)).check(matches(withText(eventDescription)));
         onView(withId(R.id.organizer_name)).check(matches(withText(curUser.getfName() + " " + curUser.getlName())));
-//        onView(withId(R.id.facility_name)).check(matches(withText(facilityModel.getName())));
-        waiter.perform(withId(R.id.admin_delete_event_button), click());
+
+        /*
+            Clicking this button for some reason doesn't go back to the AdminMainActivity
+            Need to fix this bug.
+            Works fine when debugging
+            but not when running the tests
+         */
         try {
-            onView(withText(eventTitle)).check(matches(isDisplayed()));
+            /*
+                This checks if the event title is still displayed
+                If the event title still exists on the view, then the event was not deleted
+                Throw a new Exception
+             */
+            waiter.perform(withId(R.id.admin_event_details_delete_event_btn), click());
+            waiter.check(withId(R.id.adminEventPage), matches(isDisplayed()));
+            waiter.check(withText(eventTitle), matches(isDisplayed()));
+            throw new EventDisplayed("Event not deleted");
+        } catch (NoMatchingViewException e) {
+            /*
+                This catches the exception if the event title is no longer displayed
+                This means the event was deleted
+             */
+            Log.d("AdminTests","Event deleted");
+        } catch (EventDisplayed e) {
+            /*
+                This catches the exception if the event title is still displayed
+                This means the event was not deleted
+             */
+            throw new RuntimeException(e);
+        }
+        intended(hasComponent(AdminMainActivity.class.getName()));
+        waiter.perform(withId(R.id.facilitiesAdmin), click());
+        onView(withText(facilityModel.getName())).perform(scrollTo(), click());
+        waiter.check(withId(R.id.facility_details_text_facility_name), matches(withText(facilityModel.getName())));
+        onView(withId(R.id.delete_button)).perform(click());
+        try {
+            onView(withText(facilityModel.getName())).check(matches(isDisplayed()));
             throw new Exception("Event not deleted");
         } catch (NoMatchingViewException e) {
             Log.d("AdminTests","Event deleted");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Intents.release();
-        Intents.init();
-        pressBack();
-        intended(hasComponent(AdminMainActivity.class.getName()));
-        waiter.perform(withId(R.id.facilitiesAdmin), click());
-        onView(withText(facilityModel.getName())).perform(scrollTo(), click());
-        waiter.check(withId(R.id.facility_details_text_facility_name), matches(withText(facilityModel.getName())));
-        onView(withId(R.id.delete_button)).perform(click());
-        onView(withText(facilityModel.getName())).check(matches(not(isDisplayed())));
         Intents.release();
     }
 
@@ -144,11 +175,10 @@ public class AdminTests {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());
-        onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
+        waiter.check(withId(R.id.facilityOrganizerHomePage), matches(isDisplayed()));
     }
 
     private void CreatingFacility() {
-        NavigateToFacility();
         onView(withId(R.id.create_facility_button)).perform(click());
         waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Admin Intents Test Facility"));
         onView(withId(R.id.facility_details_edittext_location)).perform(replaceText("Admin Intent Test Location"));
