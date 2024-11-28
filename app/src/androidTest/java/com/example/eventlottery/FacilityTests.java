@@ -45,37 +45,18 @@ public class FacilityTests {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Rule
-    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
-            .grant(Manifest.permission.CAMERA);
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS
+    );
 
     private void NavigateToFacility() {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         onView(withId(R.id.facility)).perform(click());
         onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void TestFacility() {
-        NavigateToFacility();
-        try {
-            onView(withId(R.id.facility_page_edit_facility_button)).perform(click());
-            waiter.perform(withId(R.id.facility_details_delete_button), click());
-            waiter.check(withId(R.id.create_facility_button), matches(isDisplayed()));
-        } catch (Exception e) {
-            Log.d("FacilityTests", "Facility does not exist");
-        }
-        onView(withId(R.id.create_facility_button)).perform(click());
-        waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test facility"));
-        onView(withId(R.id.facility_details_edittext_location)).perform(replaceText("Test location"));
-        onView(withId(R.id.facility_details_edittext_phone_number)).perform(replaceText("000000000000"));
-        onView(withId(R.id.facility_details_edittext_email)).perform(replaceText("tester@example.com"));
-        onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
-        onView(withId(R.id.facility_details_confirm_button)).perform(click());
-
-        TestEditFacility();
-        TestDeleteFacility();
-        TestInvalidFacilityCreation();
     }
 
     private void TestEditFacility() {
@@ -110,5 +91,28 @@ public class FacilityTests {
         onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
         onView(withId(R.id.facility_details_confirm_button)).perform(click());
         waiter.check(withId(R.id.facility_details_cancel_button), matches(isDisplayed()));
+    }
+
+    @Test
+    public void TestFacility() {
+        NavigateToFacility();
+        try {
+            onView(withId(R.id.facility_page_edit_facility_button)).perform(click());
+            waiter.perform(withId(R.id.facility_details_delete_button), click());
+            waiter.check(withId(R.id.create_facility_button), matches(isDisplayed()));
+        } catch (Exception e) {
+            Log.d("FacilityTests", "Facility does not exist");
+        }
+        onView(withId(R.id.create_facility_button)).perform(click());
+        waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test facility"));
+        onView(withId(R.id.facility_details_edittext_location)).perform(replaceText("Test location"));
+        onView(withId(R.id.facility_details_edittext_phone_number)).perform(replaceText("000000000000"));
+        onView(withId(R.id.facility_details_edittext_email)).perform(replaceText("tester@example.com"));
+        onView(withId(R.id.facility_details_edittext_capacity)).perform(replaceText("99"));
+        onView(withId(R.id.facility_details_confirm_button)).perform(click());
+
+        TestEditFacility();
+        TestDeleteFacility();
+        TestInvalidFacilityCreation();
     }
 }
