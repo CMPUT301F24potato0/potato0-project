@@ -17,6 +17,7 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
 import com.example.eventlottery.Models.RemoteUserRef;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +36,7 @@ public class EnrolledListActivity extends AppCompatActivity {
     private EventModel event;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notif_enrolled;
+    private FloatingActionButton backFAB;
 
     /**
      * Overriding on create
@@ -63,7 +65,7 @@ public class EnrolledListActivity extends AppCompatActivity {
         }
 
         userEnrollList = event.getEnrolledList();
-
+        backFAB = findViewById(R.id.back);
         enrollList = findViewById(R.id.enroll_list);
         enrollAdapter = new EnrolledListArrayAdapter(this, 0, userEnrollList, "enrolled", event, db);
         enrollList.setAdapter(enrollAdapter);
@@ -109,5 +111,11 @@ public class EnrolledListActivity extends AppCompatActivity {
                         }
                     }
                 });
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

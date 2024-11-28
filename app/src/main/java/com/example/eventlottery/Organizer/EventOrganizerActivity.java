@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -59,6 +60,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
     private String hashQR;
+    private FloatingActionButton backFAB;
 
     /**
      * On create override
@@ -99,6 +101,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         enrolled = findViewById(R.id.event_organizer_enrolled_button);
         eventView = findViewById(R.id.event_view);
         progessBar = findViewById(R.id.progressBar2);
+        backFAB = findViewById(R.id.back);
 
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
@@ -159,9 +162,15 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 new CreateEventDialogueFragment(event, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
             }
         });
-        // ********************************************************************
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         decode();
-        // ********************************************************************
+
+
     }
 
     /**
@@ -196,19 +205,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
                     eventPoster.setImageBitmap(bitmap);
 
                 } else {
-//                    DocumentReference docref1 = db.collection("posters").document("default");
-//                    docref1.get().addOnCompleteListener( task1 -> {
-//                        if(task1.isSuccessful()){
-//                            DocumentSnapshot document1 = task1.getResult();
-//                            if(document1.exists()){
-//                                Blob blob = document1.getBlob("Blob");
-//                                byte[] bytes = blob.toBytes();
-//                                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                                eventPoster.setImageBitmap(bitmap);
-//                            }
-//                        }
-//                    });
-                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+                    eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
+
 
                 }
             }

@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
@@ -31,34 +32,20 @@ public class PushNotificationService extends FirebaseMessagingService{
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        // TESTING
+
 
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
-
-//        String SignUP = remoteMessage.getData().get("SignUP");
-//        String eventID = "";
-//        if(Objects.equals(SignUP, "true")) {
-//            eventID = remoteMessage.getData().get("eventID");
-//        }
 
 
 
         String topic = remoteMessage.getFrom();
 
-//        String topic = remoteMessage.getFrom().substring(8).replace("_"," ");
 
-//        String check = "signup";
         Log.d("Recieved notification", title);
         Log.d("Recieved notification", text);
         Log.d("Topic",topic);
-//        if(eventID != ""){
-//            Log.d("eventId",eventID);
-//        }
 
-
-
-        // TESTING
 
         final String channel_id = "notification_popup";
 
@@ -81,29 +68,16 @@ public class PushNotificationService extends FirebaseMessagingService{
                     this, channel_id)
                     .setContentTitle(title)
                     .setContentText(text)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.drawable.ic_launcher_round)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_round))
+                    .setStyle(new NotificationCompat.BigTextStyle())
                     .setAutoCancel(true);
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-
 
 
             if(!ismuted) {
                 Log.e("Ismuted??", ""+ false);
                 // https://www.youtube.com/watch?v=Hj8mjY4znEo&ab_channel=TechnicalSkillz
 
-                // TEST THIS MORE
-                // SHOULD BE ABLE TO OPEN NOTIFICATION FRAGMENT
 
                 // CAlls activity when notification pressed
                 Intent notificationIntent = new Intent(this, MainActivity.class);
