@@ -1,6 +1,5 @@
 package com.example.eventlottery;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -21,6 +20,7 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.eventlottery.Organizer.CancelledListActivity;
@@ -34,7 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.UUID;
-
+@LargeTest
 public class EventTests {
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
     private ViewAction waitFor(long delay) {
@@ -77,8 +77,12 @@ public class EventTests {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
     @Rule
-    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
-            .grant(Manifest.permission.CAMERA);
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS
+    );
 
     private final Waiter waiter = new Waiter(10, 1);
 
@@ -97,7 +101,6 @@ public class EventTests {
         onView(withId(R.id.create_event_positive_button)).perform(click());
         waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText(eventCapacity));
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since location hasn't been added
-        waitFor(1000); // waiting for toast to disappear
         onView(withId(R.id.create_event_edittext_event_location)).perform(replaceText(eventLocation));
         onView(withId(R.id.create_event_edittext_event_waitlist_limit)).perform(replaceText(waitListLimit));
         if (geoLocation.equals("Yes")) {

@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.AdminMainActivity">
+    tools:context=".Admin.AdminMainActivity"
+    android:background="@drawable/admin_gradient_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,12 +38,14 @@
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="@color/gold"
+            android:background="@drawable/admin_gradient_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/admin_botton_nav_menu" />
+            app:menu="@menu/admin_botton_nav_menu"
+            app:itemIconTint="@drawable/nav_item_color_state"
+            app:itemTextColor="@color/white"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
