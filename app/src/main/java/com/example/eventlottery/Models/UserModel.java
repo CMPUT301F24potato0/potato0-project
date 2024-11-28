@@ -322,11 +322,15 @@ public class UserModel implements Serializable {
      * @param notification notification to be removed
      */
     public void removeNotifications(HashMap<String, String> notification){
-        for (HashMap<String, String> n : notifications) {
-            if (n.equals(notification)) {
-                this.notifications.remove(notification);
-            }
+        Boolean notFinished = Boolean.TRUE;
+        while (notFinished) {
+            notFinished = notifications.remove(notification);
         }
+//        for (HashMap<String, String> n : notifications) {
+//            if (n.equals(notification)) {
+//                this.notifications.remove(notification);
+//            }
+//        }
     }
 
     /**
