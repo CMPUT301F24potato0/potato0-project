@@ -18,6 +18,7 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
 import com.example.eventlottery.Models.RemoteUserRef;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +39,8 @@ public class CancelledListActivity extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notification_send;
     private TextView cancelledConfirmed; // TextView for displaying the number of cancelled entrants
+    private FloatingActionButton backFAB;
+
 
     /**
      * Called when the activity is first created.
@@ -72,6 +75,8 @@ public class CancelledListActivity extends AppCompatActivity {
         cancelAdapter.notifyDataSetChanged();
 
         cancelledConfirmed = findViewById(R.id.cancelled_confirmed); // Initialize the TextView
+
+        backFAB = findViewById(R.id.back);
         notification_send = findViewById(R.id.cancelled_notif_button);
 
         notification_send.setOnClickListener(new View.OnClickListener() {
@@ -114,5 +119,11 @@ public class CancelledListActivity extends AppCompatActivity {
                         }
                     }
                 });
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

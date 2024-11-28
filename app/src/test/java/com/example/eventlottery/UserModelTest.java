@@ -2,9 +2,14 @@ package com.example.eventlottery;
 
 import com.example.eventlottery.Models.UserModel;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserModelTest {
     private UserModel mockUser;
@@ -18,6 +23,7 @@ public class UserModelTest {
     private final String userPhoto = "photo.jpg";
     private final boolean isMuted = false;
     private final ArrayList<String> topics = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> notifications = new ArrayList<>();
 
     @Test
     public void testSetName() {
@@ -92,5 +98,64 @@ public class UserModelTest {
         mockUser.removeTopics("topic1");
         assert !mockUser.getTopics().contains("topic1");
         assert mockUser.getTopics().contains("topic2");
+    }
+
+    @Test
+    public void testSetNotifications() {
+        mockUser = new UserModel(fName, lName, email, phone, isAdmin, facilityID, iD, isMuted, topics, notifications);
+        ArrayList<HashMap<String, String>> notifications = new ArrayList<>();
+        notifications.add(makeNotification("title1", "body1", "eventID1", "flag1"));
+        notifications.add(makeNotification("title2", "body2", "eventID2", "flag2"));
+        mockUser.setNotifications(notifications);
+        assertEquals(mockUser.getNotifications(), notifications);
+        assertEquals(mockUser.getNotifications().size(), 2);
+    }
+
+    @Test
+    public void testAddNotifications() {
+        mockUser = new UserModel(fName, lName, email, phone, isAdmin, facilityID, iD, isMuted, topics, notifications);
+        HashMap<String, String> notification1 = makeNotification("title1", "body1", "eventID1", "flag1");
+        HashMap<String, String> notification2 = makeNotification("title2", "body2", "eventID2", "flag2");
+        assertEquals(mockUser.getNotifications().size(), 0);
+        mockUser.addNotifications(notification1);
+        assertEquals(mockUser.getNotifications().size(), 1);
+        mockUser.addNotifications(notification2);
+        assertEquals(mockUser.getNotifications().size(), 2);
+    }
+
+    @Test
+    public void testRemoveNotifications() {
+        mockUser = new UserModel(fName, lName, email, phone, isAdmin, facilityID, iD, isMuted, topics, notifications);
+        HashMap<String, String> notification1 = makeNotification("title1", "body1", "eventID1", "flag1");
+        HashMap<String, String> notification2 = makeNotification("title2", "body2", "eventID2", "flag2");
+        // testing for each notification added once and deleted once
+        mockUser.addNotifications(notification1);
+        mockUser.addNotifications(notification2);
+        assertEquals(mockUser.getNotifications().size(), 2);
+        mockUser.removeNotifications(notification1);
+        assertEquals(mockUser.getNotifications().size(), 1);
+        mockUser.removeNotifications(notification2);
+        assertEquals(mockUser.getNotifications().size(), 0);
+        // testing for one notification added twice and deleted once
+        mockUser.addNotifications(notification1);
+        mockUser.addNotifications(notification1);
+        assertEquals(mockUser.getNotifications().size(), 2);
+        mockUser.removeNotifications(notification1);
+        assertEquals(mockUser.getNotifications().size(), 0);
+        // testing for different notification objects but same contents
+        HashMap<String, String> notification1Replica = makeNotification("title1", "body1", "eventID1", "flag1");
+        mockUser.addNotifications(notification1);
+        assertEquals(mockUser.getNotifications().size(), 1);
+        mockUser.removeNotifications(notification1Replica);
+        assertEquals(mockUser.getNotifications().size(), 0);
+    }
+
+    public HashMap<String, String> makeNotification(String title, String body, String eventID, String flag) {
+        HashMap<String, String> notification = new HashMap<>();
+        notification.put("title", title);
+        notification.put("body", body);
+        notification.put("eventID", eventID);
+        notification.put("flag", flag);
+        return notification;
     }
 }
