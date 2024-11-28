@@ -277,8 +277,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 else {
                     waitListLimitEditText.setText(waitListLimit.toString());
                 }
-                if (event != null && organizer == null) {  // if editing an event, disable changing geolocation requirement
-                    geolocationRequiredSwitch.setEnabled(Boolean.FALSE);
+                if (event != null && organizer == null) {  // if editing an event
+                    geolocationRequiredSwitch.setEnabled(Boolean.FALSE);  // disable changing geolocation requirement
+                    if (event.getWaitingListLimit().equals(-1)) { // if no limit to waitlist, disable changing it
+                        waitListLimitEditText.setText("No limit");
+                        waitListLimitEditText.setEnabled(Boolean.FALSE);
+                    }
                 }
                 strLocationEditText.setText(strLocation);
                 geolocationRequiredSwitch.setChecked(geolocationRequired);
@@ -393,8 +397,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 String waitListLimit_before_validation = waitListLimitEditText.getText().toString();
                 String strLocation_before_validation = strLocationEditText.getText().toString();
 
-                if (isValidCapacity(capacity_before_validation) && isValidString(strLocation_before_validation)) {
-                    if (isValidWaitlistLimit(waitListLimit_before_validation)) {
+                if (isValidNewLimit(capacity_before_validation, "Capacity") && isValidString(strLocation_before_validation)) {
+                    if (isValidNewLimit(waitListLimit_before_validation, "Waitlist")) {
                         waitListLimit = Integer.parseInt(waitListLimit_before_validation);
                     }
                     else if (waitListLimit_before_validation.equals("")) {
@@ -543,12 +547,12 @@ public class CreateEventDialogueFragment extends DialogFragment {
     }
 
     /**
-     * Checks to see if the inputted capacity is valid
+     * Checks to see if the inputted capacity or waiting list limit is valid
      * @param str passed string
+     * @param flag used to identify which field the function is validating, and must be either "Capacity" or "Waitlist"
      * @return true if valid, false otherwise
      */
-    private Boolean isValidCapacity(String str) {
-        // makes sure input is a number
+    private Boolean isValidNewLimit(String str, String flag) {
         if (!isValidNumber(str)) {
             return Boolean.FALSE;
         }
@@ -556,41 +560,32 @@ public class CreateEventDialogueFragment extends DialogFragment {
         if (event == null && organizer != null) {
             return Boolean.TRUE;
         }
-        // otherwise, if editing an existing event, only allow organizer to increase the capacity
+        // otherwise, if editing an existing event, only allow organizer to increase the capacity or waiting list limit
         else {
-            Integer newCapacity = Integer.parseInt(str);
-            if (newCapacity >= event.getCapacity()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        }
-    }
+            // set up
+            Integer newValue = Integer.parseInt(str);
+            Integer compareTo = null;
+            String titleWhenInvalid = null;
 
-    /**
-     * Checks to see if the inputted waitlist limit is valid
-     * @param str passed string
-     * @return true if valid, false otherwise
-     */
-    private Boolean isValidWaitlistLimit(String str) {
-        // make sure input is a number
-        if (!isValidNumber(str)) {
-            return Boolean.FALSE;
-        }
-        // if it is a new (not yet created) event, simply return true
-        if (event == null && organizer != null) {
-            return Boolean.TRUE;
-        }
-        // otherwise, if editing an existing event, only allow organizer to change waitlist limit to at least the size of the waiting list
-        else {
-            Integer newWaitlistLimit = Integer.parseInt(str);
-            // -1 represents no limit to the waitlist, so simply return true
-            if (newWaitlistLimit == -1) {
+            // setting up values used to compare and the title in the toast when the new value is invalid
+            if (flag.equals("Capacity")) {
+                compareTo = event.getCapacity();
+                titleWhenInvalid = "Event capacity";
+            }
+            else if (flag.equals("Waitlist")) {
+                compareTo = event.getWaitingListLimit();
+                titleWhenInvalid = "Waiting list limit";
+            }
+            else {
+                Log.e("CreateEventDialogueFragment", "Invalid flag used for isValidNewLimit");
+                return Boolean.FALSE;
+            }
+
+            // capacity/waitlist limit must be at least the event current capacity/waitlist limit
+            if (newValue >= compareTo) {
                 return Boolean.TRUE;
             }
-            // Organizer is able to change waitlist limit to at least the size of the waiting list
-            else if (newWaitlistLimit >= event.getWaitingList().size()) {
-                return Boolean.TRUE;
-            }
+            Toast.makeText(getActivity(), titleWhenInvalid + " must be at least " + compareTo, Toast.LENGTH_SHORT).show();
             return Boolean.FALSE;
         }
     }
