@@ -23,6 +23,7 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.eventlottery.Entrant.EventEntrantActivity;
@@ -53,17 +54,6 @@ public class EventEntrantTests {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(Manifest.permission.CAMERA);
 
-    @Before
-    public void setup(){
-        Intents.init();
-        init();
-    }
-
-    @After
-    public void teardown(){
-        Intents.release();
-    }
-
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
     private ViewAction waitFor(long delay) {
         return new ViewAction() {
@@ -87,6 +77,7 @@ public class EventEntrantTests {
     private final Waiter waiter = new Waiter(10, 1);
 
     private void init() {
+        waiter.perform(withId(R.id.scanQR), click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         activityRule.getScenario().onActivity(activity -> {
             db = activity.getDb();
@@ -95,43 +86,13 @@ public class EventEntrantTests {
             fragment = new ScanFragment(db, curUser); // this is used to check an invalid event
         });
     }
-
-    @Test
-    public void ScanInvalidEvent() {
+    private void ScanInvalidEvent() {
+        init();
         // This is basically checking if the user scans an invalid event
         // The way our code is setup is that if the user scans a valid event it automatically opens a new activity
         // This should pop a Toast saying invalid event therefore I am checking if scannerView is being displayed
         fragment.checkEvent("InvalidEvent", "userID");
         onView(withId(R.id.scannerView)).check(matches(isDisplayed()));
-    }
-    @Test
-    public void OpenGeoEvent() {
-        // Event that requires geo location
-        // This is a hard coded event in the firebase for testing purposes only
-        // Testing if a hardcoded geo location event is being opened
-        waiter.perform(withId(R.id.intentTestGeo), click());
-        intended(hasComponent(EventEntrantActivity.class.getName()));
-        JoinGeoEvent();
-        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
-        UnjoinGeoEvent();
-        onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
-        pressBack();
-        intended(hasComponent(MainActivity.class.getName()));
-    }
-
-    @Test
-    public void OpenNoGeoEvent() {
-        // Event that requires geo location
-        // This is a hard coded event in the firebase for testing purposes only
-        // Testing if a hardcoded no geo location event is being opened
-        waiter.perform(withId(R.id.intentTestNoGeo), click());
-        intended(hasComponent(EventEntrantActivity.class.getName()));
-        JoinNoGeoEvent();
-        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
-        UnjoinNoGeoEvent();
-        onView(withId(R.id.event_entrant_page_join_button1)).check(matches(isDisplayed()));
-        pressBack();
-        intended(hasComponent(MainActivity.class.getName()));
     }
 
     private void JoinGeoEvent() {
@@ -152,19 +113,48 @@ public class EventEntrantTests {
     private void UnjoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_unjoin_button1)).perform(click());
+        waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
     }
 
     private void JoinNoGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         waiter.perform(withId(R.id.event_entrant_page_join_button1), click());
-//        onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
         // The un join button should appear if there is no geo location required.
-//        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
     }
 
     private void UnjoinNoGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_unjoin_button1)).perform(click());
+        waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
+    }
+
+    @Test
+    public void EventEntrantTest() {
+        init();
+        Intents.init();
+        ScanInvalidEvent();
+        onView(withId(R.id.scannerView)).check(matches(isDisplayed()));
+        Intents.release();
+
+        // Testing joining geo event
+        Intents.init();
+        waiter.perform(withId(R.id.intentTestGeo), click());
+        intended(hasComponent(EventEntrantActivity.class.getName()));
+        JoinGeoEvent();
+        UnjoinGeoEvent();
+        pressBack(); // Goes back to the MainActivity
+        intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
+
+        // Testing joining no geo event
+        Intents.init();
+        waiter.perform(withId(R.id.intentTestNoGeo), click());
+        intended(hasComponent(EventEntrantActivity.class.getName()));
+        JoinNoGeoEvent();
+        UnjoinNoGeoEvent();
+        pressBack();
+        intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
     }
 }
