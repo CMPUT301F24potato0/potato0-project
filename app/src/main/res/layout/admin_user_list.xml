@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/facilityHomePage"
-    android:background="@drawable/admin_gradient_background">
+    android:background="@drawable/background_admin_res_file">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/UserListPage"
@@ -20,10 +20,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="@color/space_cadet"
+                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="User List:"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="29sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -43,6 +46,9 @@
 
             <LinearLayout
                 android:id="@+id/admin_user_list_page_details"
+                android:padding="5dp"
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="@color/space_cadet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -54,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Search:"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
                 <EditText
                     android:id="@+id/search_bar"
