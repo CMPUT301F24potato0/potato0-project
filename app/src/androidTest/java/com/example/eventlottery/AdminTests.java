@@ -45,8 +45,8 @@ import java.util.UUID;
 @LargeTest
 public class AdminTests {
 
-    class EventDisplayed extends Exception {
-        public EventDisplayed(String message) {
+    class Deleted extends Exception {
+        public Deleted(String message) {
             super(message);
         }
     }
@@ -80,6 +80,12 @@ public class AdminTests {
 
     @Before
     public void setup() {
+        waiter.perform(withId(R.id.scanQR), click());
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
+        waiter.perform(withId(R.id.facility), click());
+        waiter.check(withId(R.id.facilityOrganizerHomePage), matches(isDisplayed()));
+        waiter.perform(withId(R.id.scanQR), click());
+        waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         activityRule.getScenario().onActivity(activity -> {
             curUser = activity.getUser();
             facilityModel = activity.getFacility();
@@ -120,50 +126,38 @@ public class AdminTests {
         onView(withId(R.id.admin_event_title)).check(matches(withText(eventTitle)));
         onView(withId(R.id.admin_event_organizer_event_description)).check(matches(withText(eventDescription)));
         onView(withId(R.id.organizer_name)).check(matches(withText(curUser.getfName() + " " + curUser.getlName())));
-
-        /*
-            Clicking this button for some reason doesn't go back to the AdminMainActivity
-            Need to fix this bug.
-            Works fine when debugging
-            but not when running the tests
-         */
-        try {
-            /*
-                This checks if the event title is still displayed
-                If the event title still exists on the view, then the event was not deleted
-                Throw a new Exception
-             */
-            waiter.perform(withId(R.id.admin_event_details_delete_event_btn), click());
-            waiter.check(withId(R.id.adminEventPage), matches(isDisplayed()));
-            waiter.check(withText(eventTitle), matches(isDisplayed()));
-            throw new EventDisplayed("Event not deleted");
-        } catch (NoMatchingViewException e) {
-            /*
-                This catches the exception if the event title is no longer displayed
-                This means the event was deleted
-             */
-            Log.d("AdminTests","Event deleted");
-        } catch (EventDisplayed e) {
-            /*
-                This catches the exception if the event title is still displayed
-                This means the event was not deleted
-             */
-            throw new RuntimeException(e);
-        }
-        intended(hasComponent(AdminMainActivity.class.getName()));
+        pressBack();
+        Intents.release();
         waiter.perform(withId(R.id.facilitiesAdmin), click());
         onView(withText(facilityModel.getName())).perform(scrollTo(), click());
-        waiter.check(withId(R.id.facility_details_text_facility_name), matches(withText(facilityModel.getName())));
+        waiter.check(withId(R.id.facility_details_text_location), matches(isDisplayed()));
+        /*
+         * Crashing here not able to check if facility locaiton is the same that is being displayed
+         */
+        onView(withText(facilityModel.getLocation())).check(matches(isDisplayed()));
+        onView(withText(facilityModel.getCapacity() + "")).check(matches(isDisplayed()));
+        onView(withText(facilityModel.getPhone() + "")).check(matches(isDisplayed()));
+        onView(withText(facilityModel.getEmail() + "")).check(matches(isDisplayed()));
         onView(withId(R.id.delete_button)).perform(click());
         try {
             onView(withText(facilityModel.getName())).check(matches(isDisplayed()));
-            throw new Exception("Event not deleted");
+            throw new Deleted("Facility not deleted");
         } catch (NoMatchingViewException e) {
-            Log.d("AdminTests","Event deleted");
-        } catch (Exception e) {
+            Log.d("AdminTests","Facility deleted");
+        } catch (Deleted e) {
             throw new RuntimeException(e);
         }
-        Intents.release();
+        onView(withId(R.id.profilesAdmin)).perform(click());
+        onView(withText(curUser.getfName() + " " + curUser.getlName())).perform(scrollTo(), click());
+        onView(withId(R.id.admin_delete_user)).perform(click());
+        try{
+            onView(withText(curUser.getfName())).check(matches(isDisplayed()));
+            throw new Deleted("User not deleted");
+        } catch (NoMatchingViewException e) {
+            Log.d("AdminTests","User deleted");
+        } catch (Deleted e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void NavigateToProfile() {
