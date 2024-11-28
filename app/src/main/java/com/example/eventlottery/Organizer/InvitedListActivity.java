@@ -17,6 +17,7 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.RemoteUserRef;
 import com.example.eventlottery.Notifications.SendNotificationDialog;
 import com.example.eventlottery.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +37,7 @@ public class InvitedListActivity extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Button notify_invited;
+    private FloatingActionButton backFab;
 
     /**
      * On create Override
@@ -67,7 +69,7 @@ public class InvitedListActivity extends AppCompatActivity {
         invitedList = findViewById(R.id.invited_list);
         invitedAdapter = new InvitedListArrayAdapter(this, userInvitedList, event, db);
         invitedList.setAdapter(invitedAdapter);
-
+        backFab = findViewById(R.id.back);
         notify_invited = findViewById(R.id.invited_notif_button);
 
         notify_invited.setOnClickListener(new View.OnClickListener() {
@@ -109,5 +111,11 @@ public class InvitedListActivity extends AppCompatActivity {
                         }
                     }
                 });
+        backFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }
