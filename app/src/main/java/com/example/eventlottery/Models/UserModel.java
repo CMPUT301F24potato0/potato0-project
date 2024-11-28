@@ -339,6 +339,7 @@ public class UserModel implements Serializable {
             removeFromEvents(db);
             if (facility == null) return;
             facility.delete(db);
+            db.collection("photos").document(getiD()).delete();
         });
         db.collection("users").document(getiD()).delete();
     }
