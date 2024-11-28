@@ -47,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -175,6 +176,20 @@ public class ProfileFragment extends Fragment {
                 curUser.setPhone(phoneStr);
 
                 userRef.document(id).set(curUser);
+                Toast.makeText(getActivity(),"Profile Updated",Toast.LENGTH_SHORT).show();
+                Task<QuerySnapshot> renameOrganizerInEvent = db.collection("events").whereEqualTo("facilityID", curUser.getFacilityID()).get();
+
+                renameOrganizerInEvent.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                document.getReference().update("organizer", curUser.getfName() + " " + curUser.getlName());
+                            }
+                        }
+                    }
+                });
+
                 editUser.setBackgroundColor(getResources().getColor(R.color.red1));
                 editUser.setEnabled(false);
             }
