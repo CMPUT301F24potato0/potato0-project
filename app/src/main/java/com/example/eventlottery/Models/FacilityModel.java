@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -149,8 +150,10 @@ public class FacilityModel implements Serializable {
         String selfID = getUserID();
         db.collection("facilities").document(selfID).delete();
         db.collection("events").whereEqualTo("facilityID", selfID).get().addOnCompleteListener((Task<QuerySnapshot> task) -> {
-            for (QueryDocumentSnapshot document : task.getResult())
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                db.collection("posters").document(document.getId()).delete();
                 document.getReference().delete();
+            }
         });
         Task<DocumentSnapshot> task = db.collection("users").document(getUserID()).get();
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
