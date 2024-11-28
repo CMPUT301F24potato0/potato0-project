@@ -35,6 +35,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,6 +68,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
     private TextView geoLocationRequired;
     private TextView waitListCount;
     private SendNotification sendNotification;
+    private FloatingActionButton backFAB;
 
     /**
      * On create Override
@@ -100,6 +102,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         eventCapacity = findViewById(R.id.eventWaitlistActivity_eventCapacity);
         geoLocationRequired = findViewById(R.id.eventWaitlistActivity_geolocationRequired);
         waitListCount = findViewById(R.id.eventWaitlistActivity_waitListCount);
+        backFAB = findViewById(R.id.back);
 
         waitListLimit.setText(event.getWaitingListLimit().toString());
         eventCapacity.setText(event.getCapacity().toString());
@@ -195,6 +198,12 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
                         }
                     }
                 });
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     /**
