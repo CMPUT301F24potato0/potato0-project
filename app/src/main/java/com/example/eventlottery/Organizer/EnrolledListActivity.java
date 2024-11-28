@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class EnrolledListActivity extends AppCompatActivity {
     private EventModel event;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notif_enrolled;
+    private TextView enrollConfirmed; // TextView for displaying the number of enrolled entrants
 
     /**
      * Overriding on create
@@ -55,7 +57,7 @@ public class EnrolledListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userEnrollList = new ArrayList<RemoteUserRef>();
+        userEnrollList = new ArrayList<>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {
@@ -69,6 +71,8 @@ public class EnrolledListActivity extends AppCompatActivity {
         enrollList.setAdapter(enrollAdapter);
 
         notif_enrolled = findViewById(R.id.enroll_notif_button);
+        enrollConfirmed = findViewById(R.id.enroll_confirmed); // Initialize the TextView
+
         notif_enrolled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,14 +80,14 @@ public class EnrolledListActivity extends AppCompatActivity {
             }
         });
 
-        // Updates all the event's lists
+        // Updates all the event's lists and the number of enrolled entrants
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.e("EventWaitlistActivity", e.toString());
+                            Log.e("EnrolledListActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
                             // Get the EventModel object
@@ -101,6 +105,7 @@ public class EnrolledListActivity extends AppCompatActivity {
                             // Update Enrolled List
                             event.getEnrolledList().clear();
                             event.getEnrolledList().addAll(FireStoreEvent.getEnrolledList());
+                            enrollConfirmed.setText(String.valueOf(event.getEnrolledList().size())); // Update count
                             // Update Invited List
                             event.getInvitedList().clear();
                             event.getInvitedList().addAll(FireStoreEvent.getInvitedList());
