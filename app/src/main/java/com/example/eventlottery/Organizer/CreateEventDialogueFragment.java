@@ -277,6 +277,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 else {
                     waitListLimitEditText.setText(waitListLimit.toString());
                 }
+                if (event != null && organizer == null) {  // if editing an event, disable changing geolocation requirement
+                    geolocationRequiredSwitch.setEnabled(Boolean.FALSE);
+                }
                 strLocationEditText.setText(strLocation);
                 geolocationRequiredSwitch.setChecked(geolocationRequired);
                 if (joinDeadline == null) {
@@ -390,8 +393,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 String waitListLimit_before_validation = waitListLimitEditText.getText().toString();
                 String strLocation_before_validation = strLocationEditText.getText().toString();
 
-                if (isValidNumber(capacity_before_validation) && isValidString(strLocation_before_validation)) {
-                    if (isValidNumber(waitListLimit_before_validation)) {
+                if (isValidCapacity(capacity_before_validation) && isValidString(strLocation_before_validation)) {
+                    if (isValidWaitlistLimit(waitListLimit_before_validation)) {
                         waitListLimit = Integer.parseInt(waitListLimit_before_validation);
                     }
                     else if (waitListLimit_before_validation.equals("")) {
@@ -404,6 +407,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                     strLocation = strLocation_before_validation;
                     geolocationRequired = geolocationRequiredSwitch.isChecked();
                     // joinDeadline's value is set from inside initDatePicker onDateSet
+                    // joinDeadline also does not need validation because it restricts input values already
                     validInput = Boolean.TRUE;
                 }
                 break;
@@ -434,6 +438,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 cal.set(Calendar.YEAR, year);
                 cal.set(Calendar.MONTH, month);
                 cal.set(Calendar.DAY_OF_MONTH, day);
+                cal.set(Calendar.HOUR, 11);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                cal.set(Calendar.MILLISECOND, 999);
+                cal.set(Calendar.AM_PM, Calendar.PM);
                 joinDeadline = cal.getTime();
                 month += 1;
                 String joinDeadlineStr = getMonth(month) + " " + day + ", " + year;
@@ -444,7 +453,13 @@ public class CreateEventDialogueFragment extends DialogFragment {
         int style =  android.R.style.Theme_Material_Dialog_Alert;
 
         datePickerDialog = new DatePickerDialog(requireContext(), style, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        if (event == null && organizer != null) {  // for new events, set minimum date able to set to today
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        }
+        else {  // if editing an existing event, set minimum date able to set to tomorrow
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + (24 * 60 * 60 * 1000)); // adds one more day in milliseconds to today's date
+        }
+
     }
 
     /**
@@ -525,6 +540,59 @@ public class CreateEventDialogueFragment extends DialogFragment {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
+    }
+
+    /**
+     * Checks to see if the inputted capacity is valid
+     * @param str passed string
+     * @return true if valid, false otherwise
+     */
+    private Boolean isValidCapacity(String str) {
+        // makes sure input is a number
+        if (!isValidNumber(str)) {
+            return Boolean.FALSE;
+        }
+        // if it is a new (not yet created) event, simply return true
+        if (event == null && organizer != null) {
+            return Boolean.TRUE;
+        }
+        // otherwise, if editing an existing event, only allow organizer to increase the capacity
+        else {
+            Integer newCapacity = Integer.parseInt(str);
+            if (newCapacity >= event.getCapacity()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Checks to see if the inputted waitlist limit is valid
+     * @param str passed string
+     * @return true if valid, false otherwise
+     */
+    private Boolean isValidWaitlistLimit(String str) {
+        // make sure input is a number
+        if (!isValidNumber(str)) {
+            return Boolean.FALSE;
+        }
+        // if it is a new (not yet created) event, simply return true
+        if (event == null && organizer != null) {
+            return Boolean.TRUE;
+        }
+        // otherwise, if editing an existing event, only allow organizer to change waitlist limit to at least the size of the waiting list
+        else {
+            Integer newWaitlistLimit = Integer.parseInt(str);
+            // -1 represents no limit to the waitlist, so simply return true
+            if (newWaitlistLimit == -1) {
+                return Boolean.TRUE;
+            }
+            // Organizer is able to change waitlist limit to at least the size of the waiting list
+            else if (newWaitlistLimit >= event.getWaitingList().size()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        }
     }
 
     public void imageChoose(){
