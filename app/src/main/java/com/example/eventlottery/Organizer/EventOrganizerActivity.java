@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -208,7 +209,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
 //                            }
 //                        }
 //                    });
-                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+//                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+                    eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
+
 
                 }
             }
