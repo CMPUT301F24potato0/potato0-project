@@ -156,9 +156,11 @@ public class EventEntrantTests {
 
     private void JoinNoGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
-        onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
+        waiter.perform(withId(R.id.event_entrant_page_join_button1), click());
+//        onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
         // The un join button should appear if there is no geo location required.
-        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
+//        onView(withId(R.id.event_entrant_page_unjoin_button1)).check(matches(isDisplayed()));
+        waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
     }
 
     private void UnjoinNoGeoEvent() {
