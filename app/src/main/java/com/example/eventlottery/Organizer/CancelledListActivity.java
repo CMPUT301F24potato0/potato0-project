@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class CancelledListActivity extends AppCompatActivity {
     private EventModel event;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Button notification_send;
+    private TextView cancelledConfirmed; // TextView for displaying the number of cancelled entrants
 
     /**
      * Called when the activity is first created.
@@ -55,7 +57,7 @@ public class CancelledListActivity extends AppCompatActivity {
             return insets;
         });
 
-        userCancelList = new ArrayList<RemoteUserRef>();
+        userCancelList = new ArrayList<>();
 
         Bundle e = getIntent().getExtras();
         if (e != null) {
@@ -69,7 +71,9 @@ public class CancelledListActivity extends AppCompatActivity {
         cancelledList.setAdapter(cancelAdapter);
         cancelAdapter.notifyDataSetChanged();
 
+        cancelledConfirmed = findViewById(R.id.cancelled_confirmed); // Initialize the TextView
         notification_send = findViewById(R.id.cancelled_notif_button);
+
         notification_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,14 +81,14 @@ public class CancelledListActivity extends AppCompatActivity {
             }
         });
 
-        // Updates all the event's lists
+        // Updates all the event's lists and the number of cancelled
         db.collection("events")
                 .document(event.getEventID())
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.e("EventWaitlistActivity", e.toString());
+                            Log.e("CancelledListActivity", e.toString());
                         }
                         if (doc != null && doc.exists()) {
                             // Get the EventModel object
@@ -93,6 +97,9 @@ public class CancelledListActivity extends AppCompatActivity {
                             // Update Cancelled List
                             event.getCancelledList().clear();
                             event.getCancelledList().addAll(FireStoreEvent.getCancelledList());
+                            // Update the cancelled count
+                            cancelledConfirmed.setText(String.valueOf(event.getCancelledList().size()));
+
                             // Update Chosen List
                             event.getChosenList().clear();
                             event.getChosenList().addAll(FireStoreEvent.getChosenList());
