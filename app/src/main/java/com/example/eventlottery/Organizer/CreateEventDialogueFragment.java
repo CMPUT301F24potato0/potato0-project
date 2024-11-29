@@ -749,7 +749,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             uploaded = true;
                         }
                         else{
-                            poster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));;
+//                            poster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+                            if (getContext() != null){
+                                poster.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.defaultposter));
+                            }
                         }
                     });
                 } else{
