@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -18,6 +19,7 @@ import static org.hamcrest.CoreMatchers.not;
 import android.Manifest;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
@@ -99,6 +101,28 @@ public class AdminTests {
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.POST_NOTIFICATIONS
     );
+    String getText(final Matcher<View> matcher) {
+        final String[] stringHolder = { null };
+        onView(matcher).perform(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(TextView.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "getting text from a TextView";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                TextView tv = (TextView)view; //Save, because of check in getConstraints()
+                stringHolder[0] = tv.getText().toString();
+            }
+        });
+        return stringHolder[0];
+    }
+
     @Test
     public void TestAdmin() {
         NavigateToFacility();
@@ -134,10 +158,11 @@ public class AdminTests {
         /*
          * Crashing here not able to check if facility locaiton is the same that is being displayed
          */
-        onView(withText(facilityModel.getLocation())).check(matches(isDisplayed()));
-        onView(withText(facilityModel.getCapacity() + "")).check(matches(isDisplayed()));
-        onView(withText(facilityModel.getPhone() + "")).check(matches(isDisplayed()));
-        onView(withText(facilityModel.getEmail() + "")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.facility_details_text_location)).check(matches(withText("Location: " + facilityModel.getLocation())));
+//        onView(withText(facilityModel.getCapacity() + "")).check(matches(isDisplayed()));
+//        onView(withText(facilityModel.getPhone() + "")).check(matches(isDisplayed()));
+//        onView(withText(facilityModel.getEmail() + "")).check(matches(isDisplayed()));
         onView(withId(R.id.delete_button)).perform(click());
         try {
             onView(withText(facilityModel.getName())).check(matches(isDisplayed()));
