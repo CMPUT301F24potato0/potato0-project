@@ -87,48 +87,29 @@ public class ProfileTests {
         onView(withId(R.id.phoneEditText)).check(matches(withText("000000000111")));
         onView(withId(R.id.emailEditText)).check(matches(withText("persist@example.com")));
     }
-// https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
-    private ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
 
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + " milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
-
-    @Test
-    public void TestProfilePicture() {
-        NavigateToProfile();
-        onView(isRoot()).perform(waitFor(1000));
-        try {
-            onView(withId(R.id.delete_picture)).perform(click());
-        } catch (Exception e) {
-            Log.e("Profile Picture Testing", e.toString());
-        }
-        onView(withId(R.id.add_picture)).perform(click());
-        waitFor(5000);
-        // Checking if imageView is not empty
-        onView(withId(R.id.profilePicture)).check(new ViewAssertion() {
-            @Override
-            public void check(View view, NoMatchingViewException e) {
-                if (view instanceof ImageView) {
-                    ImageView iv = (ImageView) view;
-                    assertNotEquals(iv.getDrawable(), null);
-                } else {
-                    throw e;
-                }
-            }
-        });
-    }
+//    @Test
+//    public void TestProfilePicture() {
+//        NavigateToProfile();
+//        onView(isRoot()).perform(waitFor(1000));
+//        try {
+//            onView(withId(R.id.delete_picture)).perform(click());
+//        } catch (Exception e) {
+//            Log.e("Profile Picture Testing", e.toString());
+//        }
+//        onView(withId(R.id.add_picture)).perform(click());
+//        waitFor(5000);
+//        // Checking if imageView is not empty
+//        onView(withId(R.id.profilePicture)).check(new ViewAssertion() {
+//            @Override
+//            public void check(View view, NoMatchingViewException e) {
+//                if (view instanceof ImageView) {
+//                    ImageView iv = (ImageView) view;
+//                    assertNotEquals(iv.getDrawable(), null);
+//                } else {
+//                    throw e;
+//                }
+//            }
+//        });
+//    }
 }

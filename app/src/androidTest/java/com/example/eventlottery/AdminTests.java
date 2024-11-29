@@ -125,6 +125,11 @@ public class AdminTests {
 
     @Test
     public void TestAdmin() {
+        String fName = "IntentTestAdmin";
+        String lName = "IntentTestAdmin";
+        String email = "tester@example.com";
+        String phone = "000000000000";
+        CreateAProfile(fName, lName, email, phone);
         NavigateToFacility();
         try {
             CreatingFacility();
@@ -155,14 +160,12 @@ public class AdminTests {
         waiter.perform(withId(R.id.facilitiesAdmin), click());
         onView(withText(facilityModel.getName())).perform(scrollTo(), click());
         waiter.check(withId(R.id.facility_details_text_location), matches(isDisplayed()));
-        /*
-         * Crashing here not able to check if facility locaiton is the same that is being displayed
-         */
 
+        onView(withId(R.id.facility_details_text_facility_name)).check(matches(withText("Name: " + facilityModel.getName())));
         onView(withId(R.id.facility_details_text_location)).check(matches(withText("Location: " + facilityModel.getLocation())));
-//        onView(withText(facilityModel.getCapacity() + "")).check(matches(isDisplayed()));
-//        onView(withText(facilityModel.getPhone() + "")).check(matches(isDisplayed()));
-//        onView(withText(facilityModel.getEmail() + "")).check(matches(isDisplayed()));
+        onView(withId(R.id.facility_details_text_phone_number)).check(matches(withText("Phone: " + facilityModel.getPhone())));
+        onView(withId(R.id.facility_details_text_email)).check(matches(withText("Email: " + facilityModel.getEmail())));
+        onView(withId(R.id.facility_details_text_capacity)).check(matches(withText("Capacity: " + facilityModel.getCapacity().toString())));
         onView(withId(R.id.delete_button)).perform(click());
         try {
             onView(withText(facilityModel.getName())).check(matches(isDisplayed()));
@@ -174,6 +177,9 @@ public class AdminTests {
         }
         onView(withId(R.id.profilesAdmin)).perform(click());
         onView(withText(curUser.getfName() + " " + curUser.getlName())).perform(scrollTo(), click());
+        onView(withId(R.id.admin_name_info)).check(matches(withText("Name: " + curUser.getfName() + " " + curUser.getlName())));
+        onView(withId(R.id.admin_email_info)).check(matches(withText("Email: " + curUser.getEmail())));
+        onView(withId(R.id.admin_phone_info)).check(matches(withText("Phone: " + curUser.getPhone())));
         onView(withId(R.id.admin_delete_user)).perform(click());
         try{
             onView(withText(curUser.getfName())).check(matches(isDisplayed()));
@@ -183,6 +189,9 @@ public class AdminTests {
         } catch (Deleted e) {
             throw new RuntimeException(e);
         }
+        Intents.init();
+        onView(withId(R.id.back_main)).perform(click());
+        Intents.release();
     }
 
     private void NavigateToProfile() {
@@ -195,6 +204,20 @@ public class AdminTests {
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.facility), click());
         waiter.check(withId(R.id.facilityOrganizerHomePage), matches(isDisplayed()));
+    }
+
+    private void CreateAProfile(
+            String firstName,
+            String lastName,
+            String email,
+            String phone
+    ) {
+        NavigateToProfile();
+        waiter.perform(withId(R.id.fNameEditText), replaceText(firstName));
+        waiter.perform(withId(R.id.lNameEditText), replaceText(lastName));
+        waiter.perform(withId(R.id.phoneEditText), replaceText(phone));
+        waiter.perform(withId(R.id.emailEditText), replaceText(email));
+        waiter.perform(withId(R.id.saveProfileBtn), click());
     }
 
     private void CreatingFacility() {
