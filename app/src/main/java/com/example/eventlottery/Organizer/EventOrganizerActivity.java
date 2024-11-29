@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventlottery.Entrant.qr_code_dialog;
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Blob;
@@ -59,6 +60,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
+    private FacilityModel facility;
     private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
     private String hashQR;
@@ -108,6 +110,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             eventID = extra.getString("event_id");
             hashQR = extra.getString("hashQR");
             event = (EventModel) extra.getSerializable("eventModel");
+            facility = (FacilityModel) extra.getSerializable("facilityModel");
         }
         updateViews();
         progessBar.setVisibility(View.GONE);
@@ -161,7 +164,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Date currentDate = new Date();
                 if (currentDate.before(event.getJoinDeadline())) {
-                    new CreateEventDialogueFragment(event, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
+                    new CreateEventDialogueFragment(event, facility, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
                 }
                 else {
                     Toast.makeText(currentActivity, "Cannot edit event after the join deadline", Toast.LENGTH_SHORT).show();

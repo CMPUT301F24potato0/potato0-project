@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.R;
@@ -63,6 +64,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private String eventDescription;
 
     private UserModel organizer;
+    private FacilityModel facility;
     private FirebaseFirestore db;
     private EventModel event;
     private EventOrganizerActivity eventActivity;
@@ -80,7 +82,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventTitle = "";
         capacity = 0;
         waitListLimit = -1;
-        joinDeadline = new Date();
+        joinDeadline = createCalendarTodayMidnight().getTime();
         strLocation = "";
         geolocationRequired = Boolean.FALSE;
         eventDescription = "";
@@ -98,12 +100,14 @@ public class CreateEventDialogueFragment extends DialogFragment {
     /**
      * Constructor
      * @param organizer The organizer
+     * @param facility The facility
      * @param db The database
      */
     // for creating a new event (organizer information required)
-    public CreateEventDialogueFragment(UserModel organizer, FirebaseFirestore db) {
+    public CreateEventDialogueFragment(UserModel organizer, FacilityModel facility, FirebaseFirestore db) {
         this();
         this.organizer = organizer;
+        this.facility = facility;
         this.event = null;
         this.db = db;
     }
@@ -111,12 +115,14 @@ public class CreateEventDialogueFragment extends DialogFragment {
     /**
      * Constructor
      * @param event The event
+     * @param facility The facility
      * @param db The database
      * @param eventActivity A reference to the event activity
      */
     // for editing an existing event (event information required, organizer information not required)
-    public CreateEventDialogueFragment(EventModel event, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
+    public CreateEventDialogueFragment(EventModel event, FacilityModel facility, FirebaseFirestore db, EventOrganizerActivity eventActivity) {
         this.eventTitle = event.getEventTitle();
+        this.facility = facility;
         this.capacity = event.getCapacity();
         this.waitListLimit = event.getWaitingListLimit();
         this.joinDeadline = event.getJoinDeadline();
@@ -287,7 +293,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 strLocationEditText.setText(strLocation);
                 geolocationRequiredSwitch.setChecked(geolocationRequired);
                 if (joinDeadline == null) {
-                    joinDeadline = new Date();
+                    joinDeadline = createCalendarTodayMidnight().getTime();
                 }
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(joinDeadline);
@@ -397,24 +403,52 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 String waitListLimit_before_validation = waitListLimitEditText.getText().toString();
                 String strLocation_before_validation = strLocationEditText.getText().toString();
 
-                if (isValidNewLimit(capacity_before_validation, "Capacity") && isValidString(strLocation_before_validation)) {
-                    if (isValidNewLimit(waitListLimit_before_validation, "Waitlist")) {
-                        waitListLimit = Integer.parseInt(waitListLimit_before_validation);
-                    }
-                    else if (waitListLimit_before_validation.equals("")) {
-                        waitListLimit = -1; // default value for no limit on waiting list
-                    }
-                    else {
-                        break;
-                    }
-                    capacity = Integer.parseInt(capacity_before_validation);
-                    strLocation = strLocation_before_validation;
-                    geolocationRequired = geolocationRequiredSwitch.isChecked();
-                    // joinDeadline's value is set from inside initDatePicker onDateSet
-                    // joinDeadline also does not need validation because it restricts input values already
-                    validInput = Boolean.TRUE;
+                // if no number for capacity or empty string for location, do not allow user to proceed
+                if (!isValidNumber(capacity_before_validation) || !isValidString(strLocation_before_validation)) {
+                    break;
                 }
+                // waitlist limit can only either be a valid number or empty
+                if (!(isValidNumber(waitListLimit_before_validation) || waitListLimit_before_validation.equals(""))) {
+                    break;
+                }
+                // after the basic input checks, parse the numbers into Integer objects
+                Integer newCapacity = Integer.parseInt(capacity_before_validation);
+                Integer newWaitlistLimit = -1;  // assume initially no limit
+                if (!waitListLimit_before_validation.equals("")) {
+                    newWaitlistLimit = Integer.parseInt(waitListLimit_before_validation);
+                }
+
+                // making sure the new capacity and waiting list limits are valid
+                if (!isValidNewLimits(newCapacity, newWaitlistLimit)) {
+                    break;
+                }
+
+                capacity = newCapacity;
+                waitListLimit = newWaitlistLimit;
+                strLocation = strLocation_before_validation;
+                geolocationRequired = geolocationRequiredSwitch.isChecked();
+                // joinDeadline's value is set from inside initDatePicker onDateSet
+                // joinDeadline also does not need validation because it restricts input values already
+                validInput = Boolean.TRUE;
                 break;
+
+//                if (isValidNewLimit(capacity_before_validation, "Capacity") && isValidString(strLocation_before_validation)) {
+//                    if (isValidNewLimit(waitListLimit_before_validation, "Waitlist")) {
+//                        waitListLimit = Integer.parseInt(waitListLimit_before_validation);
+//                    }
+//                    else if (waitListLimit_before_validation.equals("")) {
+//                        waitListLimit = -1; // default value for no limit on waiting list
+//                    }
+//                    else {
+//                        break;
+//                    }
+//                    capacity = Integer.parseInt(capacity_before_validation);
+//                    strLocation = strLocation_before_validation;
+//                    geolocationRequired = geolocationRequiredSwitch.isChecked();
+//                    // joinDeadline's value is set from inside initDatePicker onDateSet
+//                    // joinDeadline also does not need validation because it restricts input values already
+//                    validInput = Boolean.TRUE;
+//                }
             case 3: // get input from state 3
                 EditText eventDescriptionEditText = stateView.findViewById(R.id.create_event_edittext_event_description);
                 if (isValidString(eventDescriptionEditText.getText().toString())) {
@@ -457,13 +491,23 @@ public class CreateEventDialogueFragment extends DialogFragment {
         int style =  android.R.style.Theme_Material_Dialog_Alert;
 
         datePickerDialog = new DatePickerDialog(requireContext(), style, dateSetListener, year, month, day);
-        if (event == null && organizer != null) {  // for new events, set minimum date able to set to today
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        }
-        else {  // if editing an existing event, set minimum date able to set to tomorrow
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() + (24 * 60 * 60 * 1000)); // adds one more day in milliseconds to today's date
-        }
+        Calendar cal = createCalendarTodayMidnight();
+        datePickerDialog.getDatePicker().setMinDate(cal.getTime().getTime());
+    }
 
+    /**
+     * A helper function that creates a Calendar instance that is set to the current date, and the time is set at 11:59:59PM
+     * @return The Calendar object representing the current date just before midnight
+     */
+    private Calendar createCalendarTodayMidnight() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.set(Calendar.HOUR, 11);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        cal.set(Calendar.AM_PM, Calendar.PM);
+        return cal;
     }
 
     /**
@@ -535,7 +579,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
             return Boolean.FALSE;
         }
         try {
-            Integer number = Integer.parseInt(str);
+            int number = Integer.parseInt(str);
             if (number < 0) {
                 return Boolean.FALSE;
             }
@@ -547,47 +591,74 @@ public class CreateEventDialogueFragment extends DialogFragment {
     }
 
     /**
-     * Checks to see if the inputted capacity or waiting list limit is valid
-     * @param str passed string
-     * @param flag used to identify which field the function is validating, and must be either "Capacity" or "Waitlist"
-     * @return true if valid, false otherwise
+     * Validates both the capacity and waiting list limit inputted by the organizer
+     * @param newCapacity The new capacity
+     * @param newWaitlistLimit The new waiting list limit
+     * @return True if both capacity and waiting list limit are valid, false otherwise
      */
-    private Boolean isValidNewLimit(String str, String flag) {
-        if (!isValidNumber(str)) {
+    private Boolean isValidNewLimits(Integer newCapacity, Integer newWaitlistLimit) {
+        if (newCapacity > newWaitlistLimit && !newWaitlistLimit.equals(-1)) {
+            // compares new capacity to new waitlist limit if there is a specified waitlist limit (not limitless)
+            Toast.makeText(getActivity(), "Waiting list limit must be at least the capacity", Toast.LENGTH_SHORT).show();
             return Boolean.FALSE;
         }
-        // if it is a new (not yet created) event, simply return true
+        if (!isValidNewCapacity(newCapacity)) {
+            return Boolean.FALSE;
+        }
+        if (!isValidNewWaitlistLimit(newWaitlistLimit)) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    /**
+     * Validates that the new capacity is valid. This function ensures that the facility can accommodate
+     * the event's capacity, and that the organizer can only edit the capacity before the join deadline
+     * @param newCapacity Integer representing the new capacity
+     * @return true if the new capacity is valid, false otherwise
+     */
+    private Boolean isValidNewCapacity(Integer newCapacity) {
+        // Event capacity must be at most the facility's capacity
+        if (newCapacity > facility.getCapacity()) {
+            Toast.makeText(getActivity(), "Event capacity cannot be greater than the facility capacity of " + facility.getCapacity(), Toast.LENGTH_SHORT).show();
+            return Boolean.FALSE;
+        }
+
+        // When creating an event, simply return true (there is nothing else to compare)
         if (event == null && organizer != null) {
             return Boolean.TRUE;
         }
-        // otherwise, if editing an existing event, only allow organizer to increase the capacity or waiting list limit
-        else {
-            // set up
-            Integer newValue = Integer.parseInt(str);
-            Integer compareTo = null;
-            String titleWhenInvalid = null;
 
-            // setting up values used to compare and the title in the toast when the new value is invalid
-            if (flag.equals("Capacity")) {
-                compareTo = event.getCapacity();
-                titleWhenInvalid = "Event capacity";
-            }
-            else if (flag.equals("Waitlist")) {
-                compareTo = event.getWaitingListLimit();
-                titleWhenInvalid = "Waiting list limit";
-            }
-            else {
-                Log.e("CreateEventDialogueFragment", "Invalid flag used for isValidNewLimit");
-                return Boolean.FALSE;
-            }
-
-            // capacity/waitlist limit must be at least the event current capacity/waitlist limit
-            if (newValue >= compareTo) {
-                return Boolean.TRUE;
-            }
-            Toast.makeText(getActivity(), titleWhenInvalid + " must be at least " + compareTo, Toast.LENGTH_SHORT).show();
-            return Boolean.FALSE;
+        // Otherwise, when editing an event, make sure organizer can only edit the capacity before the join deadline
+        Date currentDate = new Date();
+        if (currentDate.before(event.getJoinDeadline())) {
+            return Boolean.TRUE;
         }
+        Toast.makeText(getActivity(), "Cannot edit the event capacity after the join deadline has passed.", Toast.LENGTH_SHORT).show();
+        return Boolean.FALSE;
+    }
+
+    /**
+     * Validates that the new waiting list limit is valid. This function ensures that when organizer is editing
+     * the event, they can only increase the waiting list limit.
+     * @param newWaitlistLimit Integer representing the new waitlist limit
+     * @return true if the new waitlist limit is valid, false otherwise
+     */
+    private Boolean isValidNewWaitlistLimit(Integer newWaitlistLimit) {
+        // When creating a new event, simply return True (there is no previous limit to compare to)
+        if (event == null && organizer != null) {
+            return Boolean.TRUE;
+        }
+
+        // Otherwise, when editing an event, only allow organizer to increase the waiting list limit
+        if (newWaitlistLimit.equals(-1)) {  // return true when removing limit
+            return Boolean.TRUE;
+        }
+        else if (newWaitlistLimit.compareTo(event.getWaitingListLimit()) >= 0) {  // new limit is greater than or equal to the old limit
+            return Boolean.TRUE;
+        }
+        Toast.makeText(getActivity(), "Waiting list limit must be at least the previous limit of " + event.getWaitingListLimit(), Toast.LENGTH_SHORT).show();
+        return Boolean.FALSE;
     }
 
     public void imageChoose(){

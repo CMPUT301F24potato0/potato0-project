@@ -135,6 +135,7 @@ public class FacilityFragment extends Fragment {
                     i.putExtra("event_id", eventClicked.getEventID());
                     i.putExtra("hashQR", eventClicked.getHashQR());
                     i.putExtra("eventModel", eventClicked);
+                    i.putExtra("facilityModel", facilityModel);
                     i.putExtra("currentUser", curUser);
                     startActivity(i);
                 }
@@ -161,7 +162,7 @@ public class FacilityFragment extends Fragment {
         addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CreateEventDialogueFragment(curUser, db).show(getFragmentManager(), "CreateEventDialogueFragment");
+                new CreateEventDialogueFragment(curUser, facilityModel, db).show(getFragmentManager(), "CreateEventDialogueFragment");
             }
         });
 
