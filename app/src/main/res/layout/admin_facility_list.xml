@@ -4,13 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_dark">
+    android:background="@drawable/background_admin_res_file">
 
     <!-- Title for Facilities List -->
 
     <!-- Rounded Container for Total Users, Search, and Facilities List -->
     <LinearLayout
-
         android:id="@+id/title_facilities_list"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -18,11 +17,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:background="@drawable/rounded_corner_background"
+            android:backgroundTint="@color/space_cadet"
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Facilities List"
-            android:textColor="@color/black"
-            android:textSize="29sp" />
+            android:textColor="@color/white"
+            android:textSize="29sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="12dp"
-        android:background="@drawable/rounded_corner_background"
+        android:background="@color/orange_transparent"
         android:backgroundTint="#FFE5B4"
         android:orientation="vertical"
         android:padding="16dp"
@@ -44,6 +47,10 @@
 
         <!-- Search Bar -->
         <LinearLayout
+            android:background="@drawable/rounded_corner_background"
+            android:backgroundTint="@color/space_cadet"
+            android:gravity="center_vertical"
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -53,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search:"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <EditText
                 android:id="@+id/search_bar"

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,7 +28,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Date;
 
@@ -64,6 +67,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
     private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
     private String hashQR;
+    private FloatingActionButton backFAB;
 
     /**
      * On create override
@@ -104,6 +108,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
         enrolled = findViewById(R.id.event_organizer_enrolled_button);
         eventView = findViewById(R.id.event_view);
         progessBar = findViewById(R.id.progressBar2);
+        backFAB = findViewById(R.id.back);
 
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
@@ -113,6 +118,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             facility = (FacilityModel) extra.getSerializable("facilityModel");
         }
         updateViews();
+        setupSnapshotListeners(); // Setting up snapshot listeners
         progessBar.setVisibility(View.GONE);
         eventView.setVisibility(View.VISIBLE);
         QRCode.setOnClickListener(new View.OnClickListener() {
@@ -171,9 +177,15 @@ public class EventOrganizerActivity extends AppCompatActivity {
                 }
             }
         });
-        // ********************************************************************
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         decode();
-        // ********************************************************************
+
+
     }
 
     /**
@@ -183,34 +195,78 @@ public class EventOrganizerActivity extends AppCompatActivity {
         Log.d("TESTING", "Views updated");
         eventTitle.setText(event.getEventTitle());
         eventCapacity.setText(event.getCapacity().toString());
-        waitlistLimit.setText(event.getWaitingListLimit().toString());
+
+        // Update waitlist limit display
+        if (event.getWaitingListLimit() == -1) {
+            waitlistLimit.setText("No Limit");
+        } else {
+            waitlistLimit.setText(event.getWaitingListLimit().toString());
+        }
+
         if (event.getGeolocationRequired().equals(Boolean.TRUE)) {
             geolocationRequired.setText("Yes");
-        }
-        else {
+        } else {
             geolocationRequired.setText("No");
         }
-        CharSequence timeFormat  = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
+        CharSequence timeFormat = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
         eventDate.setText(timeFormat);
         eventDescription.setText(event.getEventDescription());
-        // Testing
+
+        // Update button text with counters
+        invited.setText("Invited: " + event.getInvitedList().size());
+        cancelled.setText("Cancelled: " + event.getCancelledList().size());
+        waitlist.setText("Waitlist: " + event.getWaitingList().size());
+        enrolled.setText("Enrolled: " + event.getEnrolledList().size());
+
         decode();
     }
-    public void decode(){
+
+
+    /**
+     * Sets up Firestore snapshot listeners to observe real-time updates
+     */
+    private void setupSnapshotListeners() {
+        DocumentReference docRef = db.collection("events").document(eventID);
+
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("EventOrganizerActivity", "Snapshot listener failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    event = snapshot.toObject(EventModel.class);
+
+                    if (event != null) {
+                        // Update the button text dynamically
+                        invited.setText("Invited: " + event.getInvitedList().size());
+                        cancelled.setText("Cancelled: " + event.getCancelledList().size());
+                        waitlist.setText("Waitlist: " + event.getWaitingList().size());
+                        enrolled.setText("Enrolled: " + event.getEnrolledList().size());
+                    }
+                }
+            }
+        });
+    }
+
+    public void decode() {
         DocumentReference docref = db.collection("posters").document(eventID);
-        docref.get().addOnCompleteListener( task -> {
+        docref.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if (document.exists()){
+                if (document.exists()) {
                     Blob blob = document.getBlob("Blob");
                     byte[] bytes = blob.toBytes();
-                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     eventPoster.setImageBitmap(bitmap);
 
                 } else {
 
-                    eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+//                     eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
 
+                    eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
                 }
             }
         });

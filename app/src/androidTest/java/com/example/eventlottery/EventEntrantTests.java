@@ -38,7 +38,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+@LargeTest
 public class EventEntrantTests {
 
     private FirebaseFirestore db;
@@ -51,8 +51,12 @@ public class EventEntrantTests {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
     @Rule
-    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
-            .grant(Manifest.permission.CAMERA);
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS
+    );
 
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
     private ViewAction waitFor(long delay) {
@@ -98,16 +102,9 @@ public class EventEntrantTests {
     private void JoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
-        // Waiting for use to accept the notification permissions
-        waitFor(4000);
         // checking if the geo requirement dialog fragment is being displayed
         onView(withId(R.id.geo_requirement_dialog_fragment_linear_layout)).check(matches(isDisplayed()));
-        waitFor(500);
-        onView(withText("Accept")).perform(click());
-        // Waiting for user to accept the geo location permission
-        waitFor(4000);
-        // Have to click accept again
-        onView(withText("Accept")).perform(click());
+        waiter.perform(withText("Accept"), click());
     }
 
     private void UnjoinGeoEvent() {

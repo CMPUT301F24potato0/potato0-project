@@ -63,13 +63,11 @@ public class EventModel implements Serializable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void randomizeHashQR() {
+    public String randomizeHashQR() {
         byte[] rand = new byte[32];
         new Random().nextBytes(rand);
         hashQR = Base64.getEncoder().encodeToString(rand);
-
-      
-
+        return hashQR;
     }
 
     /**

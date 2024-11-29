@@ -35,6 +35,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,6 +68,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
     private TextView geoLocationRequired;
     private TextView waitListCount;
     private SendNotification sendNotification;
+    private FloatingActionButton backFAB;
 
     /**
      * On create Override
@@ -100,14 +102,20 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         eventCapacity = findViewById(R.id.eventWaitlistActivity_eventCapacity);
         geoLocationRequired = findViewById(R.id.eventWaitlistActivity_geolocationRequired);
         waitListCount = findViewById(R.id.eventWaitlistActivity_waitListCount);
+        backFAB = findViewById(R.id.back);
 
-        waitListLimit.setText(event.getWaitingListLimit().toString());
+        // Updated Logic for Waiting List Limit
+        if (event.getWaitingListLimit() == -1) {
+            waitListLimit.setText("No Limit");
+        } else {
+            waitListLimit.setText(event.getWaitingListLimit().toString());
+        }
+
         eventCapacity.setText(event.getCapacity().toString());
         geoLocationRequired.setText(event.getGeolocationRequired() ? "Yes" : "No");
         waitListCount.setText(event.getWaitingList().size() + "");
 
         // MapView implementation adapted from Google Maps SDK for Android Samples (RawMapViewDemoActivity.java)
-        // https://github.com/googlemaps-samples/android-samples/blob/main/ApiDemos/java/app/src/main/java/com/example/mapdemo/RawMapViewDemoActivity.java
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
@@ -195,6 +203,12 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
                         }
                     }
                 });
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     /**
@@ -216,24 +230,19 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    // The following overrides are adapted from
-    // https://github.com/googlemaps-samples/android-samples/blob/main/ApiDemos/java/app/src/v3/java/com/example/mapdemo/RawMapViewDemoActivity.java
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
-        // Check if location permission is granted
-        if (ActivityCompat.checkSelfPermission(EventWaitlistActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            // Permission not yet granted, request for location permission
-            ActivityCompat.requestPermissions(EventWaitlistActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
         }
-        if (ActivityCompat.checkSelfPermission(EventWaitlistActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // Permission is granted, zoom map to area of the organizer
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Double latitude = lastLocation.getLatitude();
-            Double longitube = lastLocation.getLongitude();
-            LatLng latLng = new LatLng(latitude, longitube);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9f));
+        googleMap.setMyLocationEnabled(true);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            LatLng organizerLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(organizerLocation, 12.0f));
         }
     }
 
