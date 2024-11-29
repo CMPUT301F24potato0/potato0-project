@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventlottery.Entrant.qr_code_dialog;
 import com.example.eventlottery.Models.EventModel;
+import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Blob;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.Date;
 
 /**
  * Event Organizer Activity
@@ -59,6 +63,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     private String eventID;
     private EventModel event;
+    private FacilityModel facility;
     private LinearLayout progessBar;
     EventOrganizerActivity currentActivity = this;
     private String hashQR;
@@ -110,6 +115,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
             eventID = extra.getString("event_id");
             hashQR = extra.getString("hashQR");
             event = (EventModel) extra.getSerializable("eventModel");
+            facility = (FacilityModel) extra.getSerializable("facilityModel");
         }
         updateViews();
         setupSnapshotListeners(); // Setting up snapshot listeners
@@ -162,7 +168,13 @@ public class EventOrganizerActivity extends AppCompatActivity {
         editEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CreateEventDialogueFragment(event, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
+                Date currentDate = new Date();
+                if (currentDate.before(event.getJoinDeadline())) {
+                    new CreateEventDialogueFragment(event, facility, db, currentActivity).show(getSupportFragmentManager(), "EditEventDialogueFragment");
+                }
+                else {
+                    Toast.makeText(currentActivity, "Cannot edit event after the join deadline", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         backFAB.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +263,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
                     eventPoster.setImageBitmap(bitmap);
 
                 } else {
+
+//                     eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
+
                     eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
                 }
             }
