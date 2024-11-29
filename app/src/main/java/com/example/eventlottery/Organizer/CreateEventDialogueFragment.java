@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.provider.MediaStore;
@@ -71,8 +72,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
     private ImageView poster;
     private Boolean uploaded = false;
 
-    private HashMap<String, Object> temp_hashmap;
-    private Bitmap temp_bitmap;
+    private HashMap<String, Object> temp_hashmap = null;
+    private Bitmap temp_bitmap = null;
     private Boolean fileTooLarge = false;
 
     /** Empty constructor
@@ -329,6 +330,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             eventDescription,
                             organizer.getfName() + " " + organizer.getlName()
                     );
+
                     db.collection("events").add(event).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -343,12 +345,16 @@ public class CreateEventDialogueFragment extends DialogFragment {
                                 event.setEventID(eventID);
                                 db.collection("events").document(eventID).set(event);
 
-                                Log.e("Saving","Saving new image");
-                                db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                                if(temp_bitmap != null){
+                                    Log.e("Saving","Saving new image");
+                                    db.collection("posters").document(event.getEventID()).set(temp_hashmap);
+                                }
                                 dismiss();
                             }
                         }
                     });
+
+
                     dismiss();
                 }
                 else {  // editing (updating) an existing event)
@@ -386,11 +392,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 // if poster has been uploaded
                 EditText eventTitleEditText = stateView.findViewById(R.id.create_event_edittext_event_title);
 
-                if (isValidString(eventTitleEditText.getText().toString()) && uploaded) {
+                if (isValidString(eventTitleEditText.getText().toString())) {
                     eventTitle = eventTitleEditText.getText().toString();
                     validInput = Boolean.TRUE;
                 }
-                // if poster has been uploaded
+                // doesn't force user to upload a poster
                 break;
             case 2: // get input from state 2
                 EditText capacityEditText = stateView.findViewById(R.id.create_event_edittext_event_capacity);
@@ -432,23 +438,6 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 validInput = Boolean.TRUE;
                 break;
 
-//                if (isValidNewLimit(capacity_before_validation, "Capacity") && isValidString(strLocation_before_validation)) {
-//                    if (isValidNewLimit(waitListLimit_before_validation, "Waitlist")) {
-//                        waitListLimit = Integer.parseInt(waitListLimit_before_validation);
-//                    }
-//                    else if (waitListLimit_before_validation.equals("")) {
-//                        waitListLimit = -1; // default value for no limit on waiting list
-//                    }
-//                    else {
-//                        break;
-//                    }
-//                    capacity = Integer.parseInt(capacity_before_validation);
-//                    strLocation = strLocation_before_validation;
-//                    geolocationRequired = geolocationRequiredSwitch.isChecked();
-//                    // joinDeadline's value is set from inside initDatePicker onDateSet
-//                    // joinDeadline also does not need validation because it restricts input values already
-//                    validInput = Boolean.TRUE;
-//                }
             case 3: // get input from state 3
                 EditText eventDescriptionEditText = stateView.findViewById(R.id.create_event_edittext_event_description);
                 if (isValidString(eventDescriptionEditText.getText().toString())) {
@@ -758,6 +747,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
                             Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                             poster.setImageBitmap(bitmap);
                             uploaded = true;
+                        }
+                        else{
+                            poster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));;
                         }
                     });
                 } else{
