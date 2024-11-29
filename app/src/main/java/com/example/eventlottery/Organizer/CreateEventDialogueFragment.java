@@ -287,7 +287,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
                 if (event != null && organizer == null) {  // if editing an event
                     geolocationRequiredSwitch.setEnabled(Boolean.FALSE);  // disable changing geolocation requirement
                     if (event.getWaitingListLimit().equals(-1)) { // if no limit to waitlist, disable changing it
-                        waitListLimitEditText.setText("No limit");
+                        waitListLimitEditText.setHint("No limit");
                         waitListLimitEditText.setEnabled(Boolean.FALSE);
                     }
                 }
