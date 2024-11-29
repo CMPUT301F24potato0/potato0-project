@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
-    private UserModel curUser;
+    public static UserModel curUser;
 //    public CollectionReference facilitiesRef;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
