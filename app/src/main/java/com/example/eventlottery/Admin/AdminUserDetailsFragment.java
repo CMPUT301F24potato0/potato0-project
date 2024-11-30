@@ -34,6 +34,7 @@ import java.util.Random;
 
 import java.util.Objects;
 
+
 public class AdminUserDetailsFragment extends DialogFragment {
     private final UserModel user;
     private final FirebaseFirestore db;
