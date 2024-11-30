@@ -461,8 +461,6 @@ public class ProfileFragment extends Fragment {
             Log.e("Context","Context is not null");
             paint.setColor(ContextCompat.getColor(requireContext(), R.color.black));
         }
-
-
         // Citation: https://stackoverflow.com/questions/11120392/android-center-text-on-canvas
         paint.setTextAlign(Paint.Align.CENTER);
         int x_pos = (canvas.getWidth() / 2);
@@ -484,19 +482,7 @@ public class ProfileFragment extends Fragment {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
         profilePicture.setImageBitmap(bitmap);
-
-//        byte[] bytes = stream.toByteArray();
         profile_letter.setVisibility(View.GONE);
-
-//        Blob blob = Blob.fromBytes(bytes);
-//
-//        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-//        hashMap.put("Blob",blob);
-//        hashMap.put("personal",false);
-//        hashMap.put("Initial",finalInitial);
-//
-//        db.collection("photos").document(curUser.getiD()).set(hashMap);
-//        decode();
     }
 
     public UserModel getCurUser() {

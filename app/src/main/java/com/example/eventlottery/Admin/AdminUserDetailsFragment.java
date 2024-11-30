@@ -37,17 +37,19 @@ public class AdminUserDetailsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.admin_user_details, null);
-        ((TextView)rootView.findViewById(R.id.admin_name_info)).setText(String.format("Name: %s %s", user.getfName(), user.getlName()));
-        ((TextView)rootView.findViewById(R.id.admin_email_info)).setText(String.format("Email: %s", user.getEmail()));
-        ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("Phone: %s", user.getPhone()));
+        ((TextView)rootView.findViewById(R.id.admin_name_info)).setText(String.format("%s %s", user.getfName(), user.getlName()));
+        ((TextView)rootView.findViewById(R.id.admin_email_info)).setText(String.format("%s", user.getEmail()));
+        ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("%s", user.getPhone()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         rootView.findViewById(R.id.admin_delete_user).setOnClickListener((View view) -> {
             user.delete(db);
             dismiss();
         });
-        rootView.findViewById(R.id.cancel_button).setOnClickListener((View view) -> {
+        rootView.findViewById(R.id.admin_user_cancel_button).setOnClickListener((View view) -> {
             dismiss();
         });
+        Button delete_pfp = rootView.findViewById(R.id.admin_delete_pfp);
+
         ImageView pfp = rootView.findViewById(R.id.view_profile_pic);
         db.collection("photos").document(user.getiD()).get().addOnCompleteListener( task -> {
             DocumentSnapshot document = task.getResult();
@@ -56,12 +58,16 @@ public class AdminUserDetailsFragment extends DialogFragment {
                 byte[] bytes = blob.toBytes();
                 Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                 pfp.setImageBitmap(bitmap);
+            } else {
+                pfp.setImageResource(R.drawable.defaultprofilepicture);
+                delete_pfp.setVisibility(View.GONE);
             }
         });
-        Button delete_poster = rootView.findViewById(R.id.admin_delete_pfp);
-        delete_poster.setOnClickListener((view) -> {
+        delete_pfp.setOnClickListener((view) -> {
             db.collection("photos").document(user.getiD()).delete();
             pfp.setImageBitmap(null);
+            pfp.setImageResource(R.drawable.defaultprofilepicture);
+            delete_pfp.setVisibility(View.GONE);
         });
         builder.setView(rootView);
         return builder.create();
