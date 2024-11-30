@@ -163,17 +163,16 @@
                         android:id="@+id/qr_code_delete_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:backgroundTint="@color/darkRed"
-                        android:minWidth="0dp"
-                        android:minHeight="0dp"
                         android:padding="5dp"
-                        android:text="Delete/Reset QR"
+                        android:text="Reset QR"
                         android:textColor="@color/white"
-                        app:strokeColor="@color/black"
-                        app:strokeWidth="2.5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginEnd="10dp" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="2.5dp" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -185,20 +184,30 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:visibility="gone"/>
 
-                    <ImageView
-                        android:id="@+id/organizer_picture"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:layout_marginStart="10dp"
+                        android:id="@+id/cardview"
+                        android:layout_gravity="center"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView5"
-                        tools:srcCompat="@tools:sample/avatars"
-                        android:layout_marginStart="10dp"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:cardCornerRadius="50dp">
+                        <ImageView
+                            android:id="@+id/organizer_picture"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            tools:srcCompat="@tools:sample/avatars" />
+                    </androidx.cardview.widget.CardView>
 
                     <HorizontalScrollView
                         android:id="@+id/horizontal_organizer"
                         android:layout_width="175dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                        android:layout_marginHorizontal="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/cardview"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@+id/horizontal_facility"
                         app:layout_constraintEnd_toStartOf="@+id/qr_code_delete_button">
@@ -220,33 +229,26 @@
                         android:id="@+id/horizontal_facility"
                         android:layout_width="125dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                        android:layout_marginHorizontal="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/qr_code_delete_button"
+                        app:layout_constraintStart_toEndOf="@+id/cardview"
                         app:layout_constraintTop_toBottomOf="@id/horizontal_organizer">
 
                         <TextView
                             android:id="@+id/facility_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:paddingEnd="10dp"
                             android:text="Facility Name"
                             android:textColor="@color/white"
                             android:textSize="15sp"
-                            app:layout_constraintStart_toEndOf="@+id/organizer_picture"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/organizer_name"
-                            android:layout_marginStart="10dp"
-                            android:paddingEnd="10dp"/>
+                            app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                            app:layout_constraintTop_toBottomOf="@id/organizer_name" />
                     </HorizontalScrollView>
-                    <TextView
-                        android:id="@+id/here_will_be_the_qr_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="QR here"
-                        android:textColor="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/qr_code_delete_button"
-                        android:layout_marginEnd="20dp"/>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
