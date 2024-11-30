@@ -2,12 +2,8 @@ package com.example.eventlottery.Admin;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,7 +12,6 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,9 +25,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Random;
 
 public class AdminEventDetailsActivity extends AppCompatActivity {
     public FirebaseFirestore db;
@@ -105,7 +97,6 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 pfp.setImageResource(R.drawable.defaultprofilepicture);
             }
         });
-        Button delete_poster = findViewById(R.id.delete_poster);
         delete_poster.setOnClickListener((view) -> {
             db.collection("posters").document(event.getEventID()).delete();
             poster.setImageBitmap(null);
