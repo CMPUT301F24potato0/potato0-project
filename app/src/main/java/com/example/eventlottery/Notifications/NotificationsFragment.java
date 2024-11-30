@@ -36,7 +36,6 @@ public class NotificationsFragment extends Fragment {
     private UserModel curUser;
     private ArrayList<HashMap<String, String>> notifications;
     private ListView notification_listview;
-    private ConstraintLayout notification_off_textView;
     private LinearLayout notification_view;
     private Button clearAll;
     private NotificationFragmentAdapter adapter;
@@ -80,15 +79,8 @@ public class NotificationsFragment extends Fragment {
 
         notification_view = view.findViewById(R.id.notification_view);
         notification_listview = view.findViewById(R.id.notification_listview);
-        notification_off_textView = view.findViewById(R.id.notification_off_textView);
 
-        if (curUser.isMuted()) {
-            notification_off_textView.setVisibility(View.VISIBLE);
-            notification_view.setVisibility(View.GONE);
-        } else {
-            notification_off_textView.setVisibility(View.GONE);
-            notification_view.setVisibility(View.VISIBLE);
-        }
+        notification_view.setVisibility(View.VISIBLE);
         notifications = curUser.getNotifications();
         adapter = new NotificationFragmentAdapter(
                 requireContext(),
