@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public DocumentReference userDocRef;
     private String androidIDStr;
     private UserModel curUser;
-//    public CollectionReference facilitiesRef;
+    private boolean isNewUser;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
     ConstraintLayout mainActivityProgressBar;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
         curUser = new UserModel("", "", "","", true, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
+        isNewUser = true;
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
@@ -97,8 +98,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         curUser = document.toObject(UserModel.class);
+                        isNewUser = false;
                     } else {
                         newUser(curUser);
+                        isNewUser = true;
                     }
                     userFacility.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -140,19 +143,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                 .beginTransaction()
                                 .replace(R.id.flFragment, new NotificationsFragment(db, curUser, curUser.getNotifications()))
                                 .commit();
+                    } else {
+                        checkUser();
                     }
+                } else {
+                    checkUser();
                 }
             } else {
-                bottomNavigationView.setSelectedItemId(R.id.scanQR);
+                checkUser();
             }
             return null;
         });
     }
 
+    private void checkUser() {
+        if (isNewUser) {
+            bottomNavigationView.setSelectedItemId(R.id.profile);
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.scanQR);
+        }
+    }
+
     /**
      * This method is to add a new user to the database
      */
-    public void newUser(UserModel cUser) {
+    private void newUser(UserModel cUser) {
         // Adding a new User
         usersRef.document(androidIDStr).set(cUser);
     }
