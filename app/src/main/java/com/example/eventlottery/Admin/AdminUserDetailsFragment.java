@@ -11,17 +11,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.eventlottery.MainActivity;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class AdminUserDetailsFragment extends DialogFragment {
     private final UserModel user;
@@ -42,7 +46,10 @@ public class AdminUserDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("Phone: %s", user.getPhone()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         rootView.findViewById(R.id.admin_delete_user).setOnClickListener((View view) -> {
-            user.delete(db);
+            if (!Objects.equals(user.getiD(), MainActivity.curUser.getiD()))
+                user.delete(db);
+            else
+                Toast.makeText(getContext(), "Can't delete yourself", Toast.LENGTH_SHORT).show();
             dismiss();
         });
         rootView.findViewById(R.id.cancel_button).setOnClickListener((View view) -> {
