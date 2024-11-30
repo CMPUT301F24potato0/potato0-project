@@ -56,10 +56,11 @@ public class AdminUserDetailsFragment extends DialogFragment {
         ((TextView)rootView.findViewById(R.id.admin_phone_info)).setText(String.format("%s", user.getPhone()));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         rootView.findViewById(R.id.admin_delete_user).setOnClickListener((View view) -> {
-            if (!Objects.equals(user.getiD(), MainActivity.curUser.getiD()))
-                user.delete(db);
-            else
-                Toast.makeText(getContext(), "Can't delete yourself", Toast.LENGTH_SHORT).show();
+            user.delete(db);
+//            if (!Objects.equals(user.getiD(), MainActivity.curUser.getiD()))
+//                user.delete(db);
+//            else
+//                Toast.makeText(getContext(), "Can't delete yourself", Toast.LENGTH_SHORT).show();
             dismiss();
         });
         rootView.findViewById(R.id.admin_user_cancel_button).setOnClickListener((View view) -> {
