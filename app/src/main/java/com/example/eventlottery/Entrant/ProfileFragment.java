@@ -124,6 +124,7 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         userRef = db.collection("users");
 
+
         EditText f_name = rootView.findViewById(R.id.fNameEditText);
         EditText l_name = rootView.findViewById(R.id.lNameEditText);
         EditText email = rootView.findViewById(R.id.emailEditText);

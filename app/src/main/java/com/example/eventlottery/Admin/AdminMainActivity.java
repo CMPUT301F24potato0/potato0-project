@@ -21,7 +21,7 @@ public class AdminMainActivity extends AppCompatActivity implements BottomNaviga
         setContentView(R.layout.admin_main);
 
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.admin_bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
