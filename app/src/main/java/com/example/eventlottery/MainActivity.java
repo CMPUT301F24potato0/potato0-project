@@ -17,9 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.eventlottery.Entrant.EntrantEventsFragment;
 import com.example.eventlottery.Entrant.ProfileFragment;
 import com.example.eventlottery.Entrant.ScanFragment;
+import com.example.eventlottery.Entrant.WaitlistedEventsFragment;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.Notifications.NotificationsFragment;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public CollectionReference facilitiesRef;
     public DocumentReference userDocRef;
     private String androidIDStr;
-    public static UserModel curUser;
+    private UserModel curUser;
     private boolean isNewUser;
     private FacilityModel facility;
     ConstraintLayout mainActivityView;
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.waitlist:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.flFragment, new EntrantEventsFragment())
+                        .replace(R.id.flFragment, new WaitlistedEventsFragment())
                         .commit();
                 return true;
 
