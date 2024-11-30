@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,7 +58,8 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         EventModel event = (EventModel) getIntent().getExtras().getSerializable("item");
         ((TextView)findViewById(R.id.admin_event_title)).setText(event.getEventTitle());
         ((TextView)findViewById(R.id.admin_event_organizer_event_description)).setText(event.getEventDescription());
-        ((TextView)findViewById(R.id.admin_event_date)).setText(event.getJoinDeadline().toString());
+        CharSequence timeFormat  = DateFormat.format("MMMM d, yyyy ", event.getJoinDeadline().getTime());
+        ((TextView)findViewById(R.id.admin_event_date)).setText(timeFormat);
         String id = event.getFacilityID();
         Task<DocumentSnapshot> task = db.collection("users").document(id).get();
         task.addOnCompleteListener((Task<DocumentSnapshot> posttask) -> {
