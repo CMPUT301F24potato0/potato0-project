@@ -15,8 +15,8 @@
         android:icon="@drawable/ic_facility_foreground" />
     <item
         android:id="@+id/waitlist"
-        android:title="Wait listed Events"
-        android:icon="@drawable/ic_waitlist_foreground" />
+        android:icon="@drawable/ic_waitlist_foreground"
+        android:title="Events" />
     <item
         android:id="@+id/profile"
         android:title="Profile"
