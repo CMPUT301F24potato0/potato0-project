@@ -80,8 +80,6 @@ public class NotificationsFragment extends Fragment {
 
         notification_view = view.findViewById(R.id.notification_view);
         notification_listview = view.findViewById(R.id.notification_listview);
-        notification_off_textView = view.findViewById(R.id.notification_off_textView);
-
 
         notification_off_textView.setVisibility(View.GONE);
         notification_view.setVisibility(View.VISIBLE);
