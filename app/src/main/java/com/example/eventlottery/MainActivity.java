@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mainActivityView = findViewById(R.id.main_activity_view);
         mainActivityProgressBar = findViewById(R.id.main_activity_progressbar);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setVisibility(View.GONE);
 
 
+//         curUser = new UserModel("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
         curUser = new UserModel("", "", "","", true, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
         isNewUser = true;
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         task.onSuccessTask(task1 -> {
             mainActivityProgressBar.setVisibility(View.GONE);
             mainActivityView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setVisibility(View.VISIBLE);
             Bundle getExtras = getIntent().getExtras();
             if (getExtras != null){
                 String redirect = getExtras.getString("redirect");
@@ -233,5 +236,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public FirebaseFirestore getDb() {
         return db;
+    }
+
+    public void makeUserAdmin() {
+        curUser.setAdmin(true);
+        usersRef.document(androidIDStr).set(curUser);
     }
 }
