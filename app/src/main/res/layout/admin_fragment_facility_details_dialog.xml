@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@drawable/rounded_corner_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,10 +11,9 @@
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corner_background"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/admin_gradient_background"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,8 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:text="Facility Details:"
-            android:textColor="@android:color/black"
+            android:text="Facility Details"
+            android:textColor="@android:color/white"
             android:textSize="30sp" />
 
         <!-- Facility Name -->
@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Facility's name here"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/facility_details_text_location"
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Address of facility"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/facility_details_text_phone_number"
@@ -56,8 +56,8 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Phone Number (Optional)"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/facility_details_text_email"
@@ -65,8 +65,8 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Email address"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/facility_details_text_capacity"
@@ -74,38 +74,50 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Max number of people allowed"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="4dp">
+            android:layout_marginVertical="10dp">
 
             <Button
                 android:id="@+id/delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/holo_red_dark"
+                android:backgroundTint="@color/darkRed"
+                android:textSize="15sp"
                 android:text="Delete"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp"/>
 
             <Button
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="@android:color/holo_orange_light"
+                android:textSize="15sp"
+                android:backgroundTint="@color/darkRed"
                 android:text="Cancel"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2.5dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
