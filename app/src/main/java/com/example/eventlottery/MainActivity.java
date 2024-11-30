@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 
-        curUser = new UserModel("", "", "","", true, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
+        curUser = new UserModel("", "", "","", false, "", androidIDStr, false, new ArrayList<String>(), new ArrayList<HashMap<String, String>>());
         facility = new FacilityModel("", "", "", "", 0, androidIDStr);
         usersRef = db.collection("users");
         facilitiesRef = db.collection("facilities");
@@ -218,5 +218,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public FirebaseFirestore getDb() {
         return db;
+    }
+
+    public void makeUserAdmin() {
+        curUser.setAdmin(true);
+        usersRef.document(androidIDStr).set(curUser);
     }
 }

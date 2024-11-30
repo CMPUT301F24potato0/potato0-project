@@ -94,6 +94,7 @@ public class AdminTests {
         activityRule.getScenario().onActivity(activity -> {
             curUser = activity.getUser();
             facilityModel = activity.getFacility();
+            activity.makeUserAdmin();
         });
     }
 
@@ -183,7 +184,7 @@ public class AdminTests {
         onView(withId(R.id.admin_name_info)).check(matches(withText(curUser.getfName() + " " + curUser.getlName())));
         onView(withId(R.id.admin_email_info)).check(matches(withText(curUser.getEmail())));
         onView(withId(R.id.admin_phone_info)).check(matches(withText(curUser.getPhone())));
-        onView(withId(R.id.admin_delete_user)).perform(click());
+        waiter.perform(withId(R.id.admin_delete_user), click());
         try{
             onView(withText(curUser.getfName())).check(matches(isDisplayed()));
             throw new Deleted("User not deleted");
