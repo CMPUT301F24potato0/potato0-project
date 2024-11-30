@@ -13,36 +13,69 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/event_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/event_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="630dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/orange_transparent"
-                android:backgroundTint="#FFE5B4"
-                android:orientation="vertical"
-                android:paddingHorizontal="10dp">
-
-                <TextView
-                    android:id="@+id/admin_event_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Event Title Here"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:paddingHorizontal="10dp">-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/event_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_back_fab"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:backgroundTint="@color/space_cadet"/>
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_marginStart="75dp"
+                        android:layout_marginEnd="75dp"
+                        >
+                        <TextView
+                            android:id="@+id/admin_event_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Event Title Here"
+                            android:textColor="@color/white"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"/>
+                    </HorizontalScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/temp_id_constraint1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/event_title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
 
                     <TextView
                         android:id="@+id/admin_event_date"
@@ -52,10 +85,11 @@
                         android:maxWidth="250dp"
                         android:maxLines="1"
                         android:text="October 20, 2024"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
@@ -65,43 +99,65 @@
                         android:backgroundTint="@color/darkRed"
                         android:text="Delete Event"
                         android:textColor="@color/white"
+                        android:layout_marginEnd="10dp"
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="2.5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ScrollView
+                    android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:background="@drawable/rounded_corner_background"
-                    android:backgroundTint="@color/gray2"
-                    android:padding="10dp">
+                    android:backgroundTint="@color/space_cadet"
+                    android:padding="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/temp_id_constraint1">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Description:"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintLeft_toRightOf="parent"/>
 
                         <TextView
                             android:id="@+id/admin_event_organizer_event_description"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="@string/event_sample_description"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
+                            android:textColor="@color/white"
+                            app:layout_constraintTop_toBottomOf="@id/title"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintLeft_toRightOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </ScrollView>
 
                 <!-- Buttons for Invited, Cancelled, Waitlist, and Enrolled counters -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="103dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/description"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:id="@+id/temp_id_constraint"
+                    >
 
                     <Button
                         android:id="@+id/qr_code_delete_button"
@@ -110,62 +166,87 @@
                         android:backgroundTint="@color/darkRed"
                         android:minWidth="0dp"
                         android:minHeight="0dp"
-                        android:paddingStart="25dp"
-                        android:paddingEnd="25dp"
+                        android:padding="5dp"
                         android:text="Delete/Reset QR"
                         android:textColor="@color/white"
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="2.5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="10dp" />
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Organizer:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/organizer_picture"
-                        android:layout_width="67dp"
-                        android:layout_height="49dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView5"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        tools:srcCompat="@tools:sample/avatars"
+                        android:layout_marginStart="10dp"/>
 
-                    <TextView
-                        android:id="@+id/organizer_name"
-                        android:layout_width="wrap_content"
+                    <HorizontalScrollView
+                        android:id="@+id/horizontal_organizer"
+                        android:layout_width="175dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="Organizer name"
-                        android:textColor="@color/black"
-                        app:layout_constraintStart_toEndOf="@+id/textView5"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/horizontal_facility"
+                        app:layout_constraintEnd_toStartOf="@+id/qr_code_delete_button">
+                        <TextView
+                            android:id="@+id/organizer_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Organizer name"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/facility_name"
+                            android:layout_marginStart="10dp"
+                            android:paddingEnd="10dp"/>
+                    </HorizontalScrollView>
 
-                    <TextView
-                        android:id="@+id/facility_name"
-                        android:layout_width="wrap_content"
+                    <HorizontalScrollView
+                        android:id="@+id/horizontal_facility"
+                        android:layout_width="125dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Facility Name"
-                        android:textColor="@color/black"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/organizer_name" />
+                        app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/horizontal_organizer">
 
+                        <TextView
+                            android:id="@+id/facility_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Facility Name"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:layout_constraintStart_toEndOf="@+id/organizer_picture"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/organizer_name"
+                            android:layout_marginStart="10dp"
+                            android:paddingEnd="10dp"/>
+                    </HorizontalScrollView>
                     <TextView
                         android:id="@+id/here_will_be_the_qr_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="16dp"
                         android:text="QR here"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/qr_code_delete_button"
+                        android:layout_marginEnd="20dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,19 +257,29 @@
                     android:backgroundTint="@color/darkRed"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:paddingStart="25dp"
-                    android:paddingEnd="25dp"
                     android:text="Delete poster"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="2.5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/temp_id_constraint"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"/>
 
                 <ImageView
                     android:id="@+id/event_poster"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                    app:layout_constraintTop_toBottomOf="@+id/delete_poster"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_height="170dp"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic"
+                    android:layout_marginTop="10dp"/>
 
-            </LinearLayout>
-        </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        </LinearLayout>-->
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

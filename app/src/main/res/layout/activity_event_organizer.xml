@@ -75,8 +75,6 @@
                             android:id="@+id/event_organizer_event_title"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:ellipsize="end"
-                            android:maxLines="1"
                             android:text="Event Title Here"
                             android:textColor="@color/space_cadet"
                             android:textSize="30sp"

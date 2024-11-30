@@ -22,6 +22,7 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -92,6 +93,10 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         delete_poster.setOnClickListener((view) -> {
             db.collection("posters").document(event.getEventID()).delete();
             poster.setImageBitmap(null);
+        });
+        FloatingActionButton back = findViewById(R.id.back);
+        back.setOnClickListener((view) -> {
+            onBackPressed();
         });
     }
 }
