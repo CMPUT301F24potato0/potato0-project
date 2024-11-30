@@ -2,6 +2,9 @@ package com.example.eventlottery.Admin;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,8 +31,12 @@ import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Random;
+
 public class AdminEventDetailsActivity extends AppCompatActivity {
     public FirebaseFirestore db;
+    private boolean posterExists = false;
     public AdminEventDetailsActivity() {
         db = FirebaseFirestore.getInstance();
     }
@@ -69,15 +77,21 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
             event.randomizeHashQR();
             db.collection("events").document(event.getEventID()).set(event);
         });
+        Button delete_poster = findViewById(R.id.delete_poster);
+
         ImageView poster = findViewById(R.id.event_poster);
         ImageView pfp = findViewById(R.id.organizer_picture);
         db.collection("posters").document(event.getEventID()).get().addOnCompleteListener( t -> {
             DocumentSnapshot document = t.getResult();
             if (document.exists()) {
+                posterExists = true;
                 Blob blob = document.getBlob("Blob");
                 byte[] bytes = blob.toBytes();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 poster.setImageBitmap(bitmap);
+            } else {
+                poster.setImageResource(R.drawable.defaultposter);
+                delete_poster.setVisibility(View.GONE);
             }
         });
         db.collection("photos").document(id).get().addOnCompleteListener( t -> {
@@ -87,6 +101,8 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 byte[] bytes = blob.toBytes();
                 Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                 pfp.setImageBitmap(bitmap);
+            } else {
+                pfp.setImageResource(R.drawable.defaultprofilepicture);
             }
         });
         Button delete_poster = findViewById(R.id.delete_poster);

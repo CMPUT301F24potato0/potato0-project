@@ -1,5 +1,6 @@
 package com.example.eventlottery;
 
+import static androidx.test.InstrumentationRegistry.getContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -17,9 +18,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
 import android.Manifest;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
@@ -91,6 +94,7 @@ public class AdminTests {
         activityRule.getScenario().onActivity(activity -> {
             curUser = activity.getUser();
             facilityModel = activity.getFacility();
+            activity.makeUserAdmin();
         });
     }
 
@@ -177,10 +181,10 @@ public class AdminTests {
         }
         onView(withId(R.id.profilesAdmin)).perform(click());
         onView(withText(curUser.getfName() + " " + curUser.getlName())).perform(scrollTo(), click());
-        onView(withId(R.id.admin_name_info)).check(matches(withText("Name: " + curUser.getfName() + " " + curUser.getlName())));
-        onView(withId(R.id.admin_email_info)).check(matches(withText("Email: " + curUser.getEmail())));
-        onView(withId(R.id.admin_phone_info)).check(matches(withText("Phone: " + curUser.getPhone())));
-        onView(withId(R.id.admin_delete_user)).perform(click());
+        onView(withId(R.id.admin_name_info)).check(matches(withText(curUser.getfName() + " " + curUser.getlName())));
+        onView(withId(R.id.admin_email_info)).check(matches(withText(curUser.getEmail())));
+        onView(withId(R.id.admin_phone_info)).check(matches(withText(curUser.getPhone())));
+        waiter.perform(withId(R.id.admin_delete_user), click());
         try{
             onView(withText(curUser.getfName())).check(matches(isDisplayed()));
             throw new Deleted("User not deleted");
@@ -189,9 +193,6 @@ public class AdminTests {
         } catch (Deleted e) {
             throw new RuntimeException(e);
         }
-        Intents.init();
-        onView(withId(R.id.back_main)).perform(click());
-        Intents.release();
     }
 
     private void NavigateToProfile() {
@@ -238,10 +239,8 @@ public class AdminTests {
             String eventDescription,
             String waitListLimit) {
         onView(withId(R.id.facility_page_add_event_button)).perform(click());
-        onView(withId(R.id.add_poster)).perform(click());
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since the title hasn't been added yet
         waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText(eventTitle));
-        waitFor(5000); // Waiting 5 seconds for use to input the image
         onView(withId(R.id.create_event_positive_button)).perform(click());
         waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText(eventCapacity));
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since location hasn't been added
@@ -254,6 +253,5 @@ public class AdminTests {
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since description hasn't been added
         waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText(eventDescription));
         onView(withId(R.id.create_event_positive_button)).perform(click());
-        waitFor(1000);
     }
 }

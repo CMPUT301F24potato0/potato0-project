@@ -1,5 +1,6 @@
 package com.example.eventlottery;
 
+import static androidx.test.InstrumentationRegistry.getContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -16,8 +17,10 @@ import static org.hamcrest.CoreMatchers.not;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -59,24 +62,6 @@ public class EventEntrantTests {
     );
 
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
-    private ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + " milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
 
     private final Waiter waiter = new Waiter(10, 1);
 
@@ -101,7 +86,7 @@ public class EventEntrantTests {
 
     private void JoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
-        onView(withId(R.id.event_entrant_page_join_button1)).perform(click());
+        waiter.perform(withId(R.id.event_entrant_page_join_button1), click());
         // checking if the geo requirement dialog fragment is being displayed
         onView(withId(R.id.geo_requirement_dialog_fragment_linear_layout)).check(matches(isDisplayed()));
         waiter.perform(withText("Accept"), click());

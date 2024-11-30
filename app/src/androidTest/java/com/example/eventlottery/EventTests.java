@@ -37,24 +37,7 @@ import java.util.UUID;
 @LargeTest
 public class EventTests {
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
-    private ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
 
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + " milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
 
     private void NavigateToFacility() {
         onView(withId(R.id.scanQR)).perform(click());
@@ -94,10 +77,8 @@ public class EventTests {
             String eventDescription,
             String waitListLimit) {
         onView(withId(R.id.facility_page_add_event_button)).perform(click());
-        onView(withId(R.id.add_poster)).perform(click());
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since the title hasn't been added yet
         waiter.perform(withId(R.id.create_event_edittext_event_title), replaceText(eventTitle));
-        waitFor(5000); // Waiting 5 seconds for use to input the image
         onView(withId(R.id.create_event_positive_button)).perform(click());
         waiter.perform(withId(R.id.create_event_edittext_event_capacity), replaceText(eventCapacity));
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since location hasn't been added
@@ -110,7 +91,6 @@ public class EventTests {
         onView(withId(R.id.create_event_positive_button)).perform(click()); // This should not allow user since description hasn't been added
         waiter.perform(withId(R.id.create_event_edittext_event_description), replaceText(eventDescription));
         onView(withId(R.id.create_event_positive_button)).perform(click());
-        waitFor(1000);
     }
 
     private void TestEvent(
@@ -119,7 +99,6 @@ public class EventTests {
             String eventCapacity,
             String eventDescription,
             String waitListLimit) {
-        waitFor(2000);
         onView(withText(eventTitle)).perform(click());
         intended(hasComponent(EventOrganizerActivity.class.getName()));
         waiter.check(withId(R.id.event_organizer_event_title), matches(withText(eventTitle)));

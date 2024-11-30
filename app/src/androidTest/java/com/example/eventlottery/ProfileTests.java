@@ -62,7 +62,6 @@ public class ProfileTests {
         onView(withId(R.id.emailEditText)).perform(replaceText("persist@example.com"));
         onView(withId(R.id.saveProfileBtn)).check(matches(isEnabled()));
         onView(withId(R.id.saveProfileBtn)).perform(click());
-
         // Navigating to scanner and navigating back to profile
         onView(withId(R.id.scanQR)).perform(click());
         NavigateToProfile();
@@ -87,29 +86,4 @@ public class ProfileTests {
         onView(withId(R.id.phoneEditText)).check(matches(withText("000000000111")));
         onView(withId(R.id.emailEditText)).check(matches(withText("persist@example.com")));
     }
-
-//    @Test
-//    public void TestProfilePicture() {
-//        NavigateToProfile();
-//        onView(isRoot()).perform(waitFor(1000));
-//        try {
-//            onView(withId(R.id.delete_picture)).perform(click());
-//        } catch (Exception e) {
-//            Log.e("Profile Picture Testing", e.toString());
-//        }
-//        onView(withId(R.id.add_picture)).perform(click());
-//        waitFor(5000);
-//        // Checking if imageView is not empty
-//        onView(withId(R.id.profilePicture)).check(new ViewAssertion() {
-//            @Override
-//            public void check(View view, NoMatchingViewException e) {
-//                if (view instanceof ImageView) {
-//                    ImageView iv = (ImageView) view;
-//                    assertNotEquals(iv.getDrawable(), null);
-//                } else {
-//                    throw e;
-//                }
-//            }
-//        });
-//    }
 }
