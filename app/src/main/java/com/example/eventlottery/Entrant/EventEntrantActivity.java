@@ -79,15 +79,6 @@ public class EventEntrantActivity extends AppCompatActivity {
     private UserModel currentUser;
     private TextView profile_letter;
 
-    /**
-     * Overriding on back pressed
-     */
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(EventEntrantActivity.this, MainActivity.class);
-        startActivity(i);
-    }
 
     /**
      * Making a toast depending on the user's choice whether to allow the app to send notifications
@@ -184,8 +175,13 @@ public class EventEntrantActivity extends AppCompatActivity {
                 }
                 if (value != null) {
                     event = value.toObject(EventModel.class);
-                    update();
-                    checkUserInEvent();
+                    if (event != null) {
+                        update();
+                        checkUserInEvent();
+                    } else {
+                        Toast.makeText(EventEntrantActivity.this, "Event is deleted", Toast.LENGTH_SHORT).show();
+                        back.performClick();
+                    }
                 }
             }
         });
@@ -267,7 +263,7 @@ public class EventEntrantActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                finish();
             }
         });
         // ********************************************************************

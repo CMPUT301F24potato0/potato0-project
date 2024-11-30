@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,18 +97,31 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 
         title.setText(notification.get("title"));
         message.setText(notification.get("body"));
-//        eventID.setText(notification.get("eventID"));
         flagID.setText(notification.get("flag"));
         DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
-        eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot != null) {
-                    EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                    eventID.setText(eventFireStore.getEventTitle());
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        EventModel eventFireStore = document.toObject(EventModel.class);
+                        eventID.setText(eventFireStore.getEventTitle());
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Event Doesn't Exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+//        eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot != null) {
+//                    EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+//                    eventID.setText(eventFireStore.getEventTitle());
+//                }
+//            }
+//        });
 
                     if (flagID.getText().toString().equals("Chosen")) {
             // Make sure the buttons are visible
