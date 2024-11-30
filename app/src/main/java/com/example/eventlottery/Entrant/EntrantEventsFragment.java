@@ -27,6 +27,8 @@ import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Notifications.SubscribeToTopic;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -67,11 +69,11 @@ public class EntrantEventsFragment extends Fragment{
         events_list.setAdapter(adapter);
         FirebaseFirestore.getInstance().collection("events")
                 .whereArrayContains("entrantIDs", MainActivity.curUser.getiD())
-                .get().addOnCompleteListener(task -> {
+                .addSnapshotListener((task, t) -> {
                     events.clear();
-                    for (QueryDocumentSnapshot eventDoc : task.getResult()) {
+                    for (DocumentSnapshot eventDoc : task.getDocuments()) {
                         EventModel event = eventDoc.toObject(EventModel.class);
-                        if (!event.checkUserInList(userRef, event.getCancelledList()))
+                        if (event != null && !event.checkUserInList(userRef, event.getCancelledList()))
                             events.add(event);
                     };
                     adapter.notifyDataSetChanged();
