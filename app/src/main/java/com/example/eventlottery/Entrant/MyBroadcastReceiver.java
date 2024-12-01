@@ -10,9 +10,14 @@ import androidx.core.app.NotificationManagerCompat;
 
 /**
  * This is the MyBroadcastReceiver class
- * Not being used
+ * This class handles the actions from notifications
  */
 public class MyBroadcastReceiver extends BroadcastReceiver {
+    /**
+     * On receive
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("Notification","Button");
