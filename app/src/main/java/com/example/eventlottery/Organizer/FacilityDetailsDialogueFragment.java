@@ -23,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Facility Details Dialogue Fragment
+ * This class is in charge of generationg a dialog where the user can put information to create a
+ * facility, and the firebase save the information of this facility and also who the owner of the
+ * facility
  */
 public class FacilityDetailsDialogueFragment extends DialogFragment {
 
@@ -33,14 +36,14 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
     private FacilityFragment facilityFragment;
 
     /**
-     * Constructor
+     * Constructor of FacilityDetailsDialogueFragment
      */
     public FacilityDetailsDialogueFragment() {
         super();
     }
 
     /**
-     * Constructor
+     * Constructor of FacilityDetailsDialogueFragment
      * @param db Firebase Firestore
      * @param curUser Current User
      * @param facilityDne If the facility exists or not
@@ -55,6 +58,10 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         this.facilityFragment = facilityFragment;
     }
 
+    /**
+     * This method purpose is to personalize the color of the buttons and background of the Dialogue
+     * when is created (at the start)
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -66,6 +73,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
 
     /**
      * On create Dialog override
+     * This method create the view of the Dialogue so the user can interact with it
      * @param savedInstanceState The last saved instance state of the Fragment,
      * or null if this is a freshly created Fragment.
      *

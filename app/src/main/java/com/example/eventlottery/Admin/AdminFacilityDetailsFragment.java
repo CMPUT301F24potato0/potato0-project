@@ -22,15 +22,34 @@ import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * class that generates a fragment that shows the details or information of a FacilityModel object
+ * and also the ability of delete that facility
+ */
 public class AdminFacilityDetailsFragment extends DialogFragment {
     private final FirebaseFirestore db;
     private final FacilityModel facility;
 
+    /**
+     * Constructor of AdminFacilityDetailsFragment
+     * @param item
+     *      A FacilityModel object
+     */
     public AdminFacilityDetailsFragment(FacilityModel item) {
         db = FirebaseFirestore.getInstance();
         facility = item;
     }
 
+    /**
+     * This method generate the fragment with the information of the facility
+     * it has 2 buttons one for deleting the event and the other one
+     * for going back
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return
+     *      It return the fragment that was create so the user can see it and interact with it
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

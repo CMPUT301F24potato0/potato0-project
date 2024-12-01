@@ -36,6 +36,9 @@ import java.util.Date;
 
 /**
  * Event Organizer Activity
+ * The purpose of this class is to give the ability to the organizer to manage it event
+ * this class contain the information of the event, the Entrant that join the event and the differences
+ * list for each stage the entrant is in the event selection
  * All the poster and images are for part 4
  */
 public class EventOrganizerActivity extends AppCompatActivity {
@@ -71,6 +74,7 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     /**
      * On create override
+     * This method create the view so the organizer can interact and manage they event
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
@@ -190,6 +194,8 @@ public class EventOrganizerActivity extends AppCompatActivity {
 
     /**
      * Updates the views
+     * If the event was modify in someway, this method, change the information so the view has the
+     * update information of the event in actual real time
      */
     public void updateViews() {
         Log.d("TESTING", "Views updated");
@@ -251,6 +257,9 @@ public class EventOrganizerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * the code the image to make it available as the poster of the event
+     */
     public void decode() {
         DocumentReference docref = db.collection("posters").document(eventID);
         docref.get().addOnCompleteListener(task -> {

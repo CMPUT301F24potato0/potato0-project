@@ -33,11 +33,15 @@ import java.util.ArrayList;
 /**
  * This class is the facility fragment
  * This class inflates fragment_facility
+ * This class represent the management of the facility, so the organizer can manage the they facility
+ * This class purposes is to check if a faciliy doesn't exist if the facility doesn't exist, the class will
+ * generate a button to open a dialoge to create a facility
+ * If a facility exist the class will show the list of events the facility has and the ability to edit the facility
+ * or create new events
  */
-
 public class FacilityFragment extends Fragment {
     /**
-     * Constructor
+     * Constructor of FacilityFragment
      */
     public FacilityFragment(){
         // require a empty public constructor
@@ -58,10 +62,13 @@ public class FacilityFragment extends Fragment {
     private EventModel eventClicked;
 
     /**
-     * Constructor
-     * @param db Firebase Firestore
+     * Constructor of Facility Fragment
+     * @param db Firebase Firestore\
+     *                          The database connection
      * @param curUser Current User
+     *                          The user using the app at the moment
      * @param facility Facility Model
+     *                          A facility object that belong to the current user
      */
     public FacilityFragment(FirebaseFirestore db, UserModel curUser, FacilityModel facility) {
         this.db = db;
@@ -71,8 +78,10 @@ public class FacilityFragment extends Fragment {
     }
     private ConstraintLayout createFacilityFirstPage;
     private ConstraintLayout facilityPage;
+
     /**
      * On create view override
+     * This method create the view of the class so the user can interact with it
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's

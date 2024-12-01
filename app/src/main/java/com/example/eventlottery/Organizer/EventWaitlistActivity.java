@@ -45,6 +45,10 @@ import java.util.ArrayList;
 
 /**
  * Event Waitlist Activity
+ * This class create the view where the organizer can see the people on the waitlist and manage them
+ * it also in this class the user can draw some user that will be chosen, so they can enroll to the event
+ * if the geolocation is on, this class shows the location in a map of the moment where the user join the event
+ * wait list
  */
 public class EventWaitlistActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -72,6 +76,7 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
 
     /**
      * On create Override
+     * Create the view so the organizer can interact with the event wait list
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
@@ -219,6 +224,12 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         return event.getCapacity() - event.getEnrolledList().size() - event.getInvitedList().size() - event.getChosenList().size();
     }
 
+    /**
+     * This method put in the map the location that is recorded on the firebase of the moment the entrant
+     * join the waitlist
+     * @param entrantsList
+     *                  Arraylist with the entrants that are in the wait list
+     */
     private void updateMapMarkers(ArrayList<RemoteUserRef> entrantsList) {
         googleMap.clear();
         for (RemoteUserRef entrant : entrantsList) {
@@ -230,6 +241,11 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    /**
+     * This method check for permission and if is true, zoom to the location of the organizer
+     * @param googleMap
+     *              GoogleMap object
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -246,6 +262,9 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    /**
+     * This method start the map to show in the view
+     */
     @Override
     protected void onStart() {
         super.onStart();

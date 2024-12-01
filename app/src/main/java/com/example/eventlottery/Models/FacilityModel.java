@@ -14,6 +14,9 @@ import java.io.Serializable;
 
 /**
  * Facility Model
+ * This class represent a Facility where events can be created by the organizer, this Facility has
+ * details about the facility, an owner (userID), the purpose of this class is to have a representation
+ * of a place where the event can take place
  */
 public class FacilityModel implements Serializable {
     private String name;

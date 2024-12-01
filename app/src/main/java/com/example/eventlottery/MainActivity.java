@@ -42,7 +42,6 @@ import java.util.HashMap;
  * This is the MainActivity class
  * This class currently handles checking the user in the database, if the user exists then updating the current instance of the user
  */
-
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
@@ -159,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
     }
 
+    /**
+     * check if their user is new or not, if they are new they are send the user to the profile fragment
+     * to fill with his info, if the user is not new they are send to the scan fragment to scan
+     * a code
+     */
     private void checkUser() {
         if (isNewUser) {
             bottomNavigationView.setSelectedItemId(R.id.profile);
@@ -226,18 +230,34 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return false; // if nothing was found then return false
     }
 
+    /**
+     * for intent testing get the current user
+     * @return return the current user
+     */
     public UserModel getUser() {
         return curUser;
     }
 
+    /**
+     * for intent testing get the facility
+     * @return return the facility
+     */
     public FacilityModel getFacility() {
         return facility;
     }
 
+    /**
+     * for intent testing get the firebase
+     * @return return the firebase
+     */
     public FirebaseFirestore getDb() {
         return db;
     }
 
+    /**
+     * for intent testing makes the current user admin
+     * @return return the usar as an admin now
+     */
     public void makeUserAdmin() {
         curUser.setAdmin(true);
         usersRef.document(androidIDStr).set(curUser);

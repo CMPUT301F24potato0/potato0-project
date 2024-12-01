@@ -22,6 +22,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 /**
  * This class is the QR code dialog.
+ * It generates the image of a QR code, so that the organizer can use it so that entrants can join
+ * the organizer event
  * Taken from https://www.geeksforgeeks.org/how-to-generate-qr-code-in-android/
  */
 public class qr_code_dialog extends DialogFragment {
@@ -30,6 +32,7 @@ public class qr_code_dialog extends DialogFragment {
 
     /**
      * This constructor is used to pass in the eventID.
+     * It pass the event information so that the QR code is connected with the events
      * @param eventID This is the eventID
      */
     public qr_code_dialog(String eventID) {
@@ -37,11 +40,12 @@ public class qr_code_dialog extends DialogFragment {
     }
 
     /**
-     * onCreateDialog override
+     * This method generates the Dialog, in other words generate the view where the QR code is
+     * located so that it can be use
      * @param savedInstanceState The last saved instance state of the Fragment,
      * or null if this is a freshly created Fragment.
      *
-     * @return returns the Dialog
+     * @return returns the Dialog (the view)
      */
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.qr_code_dialog, null);
@@ -78,6 +82,10 @@ public class qr_code_dialog extends DialogFragment {
         }
     }
 
+    /**
+     * This method configure the color of the buttons of the Dialog and the colors of the background
+     * when the dialog is generated
+     */
     @Override
     public void onStart() {
         super.onStart();

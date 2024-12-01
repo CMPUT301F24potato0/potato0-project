@@ -37,6 +37,8 @@ import java.util.List;
  * This class is the Scan Fragment
  * This is the "home" page for the app
  * This class inflates fragment_scan
+ * The purposes of this fragment is to scan QR codes of events in the app, that send the user
+ * to the event page so the usar can join/unjoin the event
  */
 public class ScanFragment extends Fragment {
 
@@ -65,6 +67,8 @@ public class ScanFragment extends Fragment {
 
     /**
      * This is the callback for the barcode scanner
+     * This method gave the ability to the user to going back to the past activity by touching the
+     * left corner of the screen and swipe right
      */
     private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -84,6 +88,7 @@ public class ScanFragment extends Fragment {
 
     /**
      * This function inflates the fragment_scan layout
+     * It generates the view of the scanner so the user can scan a QR code
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -127,9 +132,12 @@ public class ScanFragment extends Fragment {
     }
 
     /**
-     * This function gets the events collection and then loops through to find the event that was scanned.
-     * If event is not found it creates a new toast displaying error message.
-     * @param hashQR The hashQR scanned from the qr code
+     * This function gets the events collection and then loops through to find the event that was scanned
+     * when the event is found, the program takes the user to the event page activity so the user
+     * can see the event details and join/unjoin the event
+     * If event is not found it creates a new toast displaying error message
+     * @param hashQR   The QR code that is in a hash
+     * @param userId    The userID to be able to join the event
      */
     public void checkEvent(String hashQR, String userId) { // Making it public to use it for test cases
         CollectionReference eventRef = db.collection("events");
@@ -175,6 +183,10 @@ public class ScanFragment extends Fragment {
         barcodeView.resume();
     }
 
+    /**
+     * getter to get the event
+     * @return   return the event
+     */
     public EventModel getEvent() {
         Task<DocumentSnapshot> t = db.collection("events")
                 .document(eventScanned)

@@ -13,6 +13,11 @@ import java.util.Random;
 
 /**
  * Event Model
+ * This class represent an event where user can join/unjoin to the waitlist,
+ * and be selected by a lottery system so they can enroll in the event
+ * Also this class has all the information of the event, it include it deadlines, if geolocation
+ * is available or not
+ * It also contains the facility that the event belong
  */
 public class EventModel implements Serializable {
     private String facilityID;
@@ -31,10 +36,21 @@ public class EventModel implements Serializable {
     private String eventStrLocation;
     private String eventTitle;
     private String eventDescription;
-    private String hashQR; // TODO: part 4
+    private String hashQR;
     private String organizer;
 
-    // TODO: part 4 - poster image
+
+    /**
+     * get a randomize code to hash the qr code
+     * @return   the hash QR
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String randomizeHashQR() {
+        byte[] rand = new byte[32];
+        new Random().nextBytes(rand);
+        hashQR = Base64.getEncoder().encodeToString(rand);
+        return hashQR;
+    }
 
     /**
      * Default constructor
@@ -62,16 +78,11 @@ public class EventModel implements Serializable {
         randomizeHashQR();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public String randomizeHashQR() {
-        byte[] rand = new byte[32];
-        new Random().nextBytes(rand);
-        hashQR = Base64.getEncoder().encodeToString(rand);
-        return hashQR;
-    }
+
 
     /**
-     * Constructor with parameters
+     * Constructor with parameters, when the event is already created and we need to grab the event
+     * information from firebase
      * @param facilityID The facility ID of the event
      * @param geolocationRequired Whether geolocation is required for the event
      * @param waitingListLimit The waiting list limit of the event
@@ -107,7 +118,8 @@ public class EventModel implements Serializable {
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with parameters, when the event is already created and we need to grab the event
+     *        information from firebase
      * @param facilityID The facility ID of the event
      * @param eventID The event ID of the event. Calling the above constructor and setting event ID in this constructor
      * @param geolocationRequired Whether geolocation is required for the event
@@ -274,9 +286,9 @@ public class EventModel implements Serializable {
     }
 
     /**
-     * This function removes the provided user from the chosen list.
+     * This function adds another user to the enrolled list.
      * @param user The entrant's unique user
-     * @throws Exception Throws an exception if the user is already in the chosen list
+     * @throws Exception Throws an exception if the user is already in the enrolled list
      */
     public void queueChosenList(RemoteUserRef user) throws Exception {
         queueList(user, chosenList, "chosen list");

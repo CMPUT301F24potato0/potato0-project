@@ -11,10 +11,22 @@ import com.example.eventlottery.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+/**
+ * Class that creates a bottom Navigation View, that makes the user able to navigate between
+ * fragments
+ */
 public class AdminMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
     private FloatingActionButton back;
+
+    /**
+     * This method generates the bottom Navigation View
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +50,13 @@ public class AdminMainActivity extends AppCompatActivity implements BottomNaviga
 
     }
 
+    /**
+     * This method makes the bottom navigation view interactable, making the user navigate between
+     * the fragments that the botton navigation view offers
+     * @param item The selected item
+     * @return
+     *      It creates a new fragment depening on the button the user clicked
+     */
     @Override
     public boolean
     onNavigationItemSelected(@NonNull MenuItem item) {

@@ -49,6 +49,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ *This class creates a dialogue fragment where the organizer can input information to create an
+ * event, this information is then collected to the Firebase so it can be use in other places
+ */
 public class CreateEventDialogueFragment extends DialogFragment {
 
     private FrameLayout frameLayout;
@@ -89,6 +93,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         eventDescription = "";
     }
 
+    /**
+     * It personalize the color of the button and background of the Dialog when the Dialog is created
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -99,10 +106,10 @@ public class CreateEventDialogueFragment extends DialogFragment {
     }
 
     /**
-     * Constructor
-     * @param organizer The organizer
-     * @param facility The facility
-     * @param db The database
+     * Constructor of CreateEventDialogueFragment
+     * @param organizer   The organizer of the event
+     * @param facility    The facility that the event takes places
+     * @param db          The firebase that holds the information
      */
     // for creating a new event (organizer information required)
     public CreateEventDialogueFragment(UserModel organizer, FacilityModel facility, FirebaseFirestore db) {
@@ -138,10 +145,11 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * On create override
+     * This method create the dialogue view so the user can interact with it
      * @param savedInstanceState The last saved instance state of the Fragment,
      * or null if this is a freshly created Fragment.
      *
-     * @return the view
+     * @return the view created
      */
     @NonNull
     @Override
@@ -201,6 +209,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * from https://stackoverflow.com/questions/25737817/using-a-single-fragment-with-multiple-layout-in-android
+     *
      */
     private void dialogStateSwitch() {
         assert (0 <= dialogState) && (dialogState <= 4);
@@ -451,6 +460,8 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * From https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * This method get the date from a calendar that is going to be use as the deadline to join
+     * the event
      * @param joinDeadlineButton Button to set the date on
      * @param year Year
      * @param month Month
@@ -501,6 +512,7 @@ public class CreateEventDialogueFragment extends DialogFragment {
 
     /**
      * https://youtu.be/qCoidM98zNk?si=1rTgJIFOLwVypGbi
+     * This method transform the month that is number to words
      * @param month Month
      * @return String representation of the month
      */
@@ -650,6 +662,9 @@ public class CreateEventDialogueFragment extends DialogFragment {
         return Boolean.FALSE;
     }
 
+    /**
+     * choose a image of your gallery to be the event poster
+     */
     public void imageChoose(){
         Intent intent = new Intent();
         intent.setType("image/*");

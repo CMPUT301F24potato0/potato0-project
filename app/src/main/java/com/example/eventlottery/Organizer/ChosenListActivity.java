@@ -31,6 +31,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
+/**
+ * This class purpose is to show the entrants that are Chosen to sign up for the event they want to
+ * join, it display the chosen entrants in a listview where the organizer can send a notification
+ * to this entrants so they have the opportunity to enroll for the specific event
+ */
 public class ChosenListActivity extends AppCompatActivity implements ChosenEntrantsAdapter.ChosenEntrantsAdapterCallback, NumberPickerDialogFragment.NumberPickerDialogFragmentListener {
 
     private Integer sample_amount;
@@ -52,6 +57,7 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
 
     /**
      * Called when the activity is first created.
+     * it creates the view where the organizer can see the listview and interact with the activity
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down then this Bundle contains the data it most
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
@@ -162,8 +168,8 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
 
 
     /**
-     * The lottery functionality where the waitlisted entrants are sampled and turned into chosen entrants
-     * @param sample_amount How many entrants to sample from the waitlist
+     * Samples entrants from an ArrayList, removing them from that ArrayList, and updating both event model and Firestore with the chosen entrants
+     * @param sample_amount How many entrants to sample from the ArrayList of entrants
      */
     private void sampleEntrants(Integer sample_amount) {
         Boolean queueUnqueueSuccess = Boolean.TRUE;
@@ -227,7 +233,8 @@ public class ChosenListActivity extends AppCompatActivity implements ChosenEntra
 
 
     /**
-     * A helper function to move all chosen entrants into the invited list after being sent an invitation notification
+     *This class creates a dialogue fragment where the organizer can input information to create an
+     * event, this information is then collected to the Firebase so it can be use in other places
      */
     public void sendNotification(){
         ArrayList<RemoteUserRef> invitedEntrants = new ArrayList<>();

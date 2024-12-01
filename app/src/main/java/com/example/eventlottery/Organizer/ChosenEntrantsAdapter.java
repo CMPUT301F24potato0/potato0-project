@@ -18,13 +18,14 @@ import java.util.ArrayList;
 
 /**
  * This class is the ChosenEntrantsAdapter
+ * It manages the entrants that are in the array to be displayed in the list in a specific way
  */
 public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
     /**
-     * Constructor for the ArrayAdapter which sets the given ArrayList as the list of items to show in the ListView
-     * @param context The context that contains the ListView that will use the ArrayAdapter
-     * @param chosenList The ArrayList to display in the ListView
+     * constructor of this class
+     * @param context context for the super class
+     * @param chosenList the list of choosen entrants that win the lottery
      */
     public ChosenEntrantsAdapter(Context context, ArrayList<RemoteUserRef> chosenList) {
         super(context, 0, chosenList);
@@ -54,7 +55,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
 
 
     /**
-     * Get view override
+     * This method get view of the adapter make to display the entrants in the chosen list
      * @param position The position of the item within the adapter's data set of the item whose view
      *        we want.
      * @param convertView The old view to reuse, if possible. Note: You should check that this view
@@ -64,7 +65,7 @@ public class ChosenEntrantsAdapter extends ArrayAdapter<RemoteUserRef> {
      *        always of the right type (see {@link #getViewTypeCount()} and
      *        {@link #getItemViewType(int)}).
      * @param parent The parent that this view will eventually be attached to
-     * @return the view for the specified position
+     * @return the view for the whole array in the listview
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
