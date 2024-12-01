@@ -210,7 +210,16 @@ public class EventEntrantActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Unjoining
                 try {
-                    event.unqueueWaitingList(userList);
+                    event.getWaitingList().remove(userList);
+                    Log.e("RemoveUserEventEntrantActivity", "Waitlist passed");
+                    event.getEnrolledList().remove(userList);
+                    Log.e("RemoveUserEventEntrantActivity", "Enrolled list passed");
+                    event.getChosenList().remove(userList);
+                    Log.e("RemoveUserEventEntrantActivity", "Chosen list passed");
+                    event.getInvitedList().remove(userList);
+                    Log.e("RemoveUserEventEntrantActivity", "invited list passed");
+                    event.getCancelledList().remove(userList);
+                    Log.e("RemoveUserEventEntrantActivity", "cancelled list passed");
                     event.deregisterUserID(userList);
                     db.collection("events").document(event.getEventID()).set(event);
                 }
@@ -353,10 +362,14 @@ public class EventEntrantActivity extends AppCompatActivity {
      * the join button
      */
     private void checkUserInEvent(){
-        if (event.checkUserInList(userList, event.getWaitingList())) {
-            unjoinBtn.setVisibility(View.VISIBLE);
+        if (event.getEntrantIDs().contains(userList.getiD())) {
             joinBtn.setVisibility(View.GONE);
-        } else {
+            unjoinBtn.setVisibility(View.VISIBLE);
+        }
+//        if (event.checkUserInList(userList, event.getWaitingList())) {
+//            unjoinBtn.setVisibility(View.VISIBLE);
+//            joinBtn.setVisibility(View.GONE);
+         else {
             unjoinBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
         }
