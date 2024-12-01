@@ -271,30 +271,48 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         mapView.onStart();
     }
 
+    /**
+     * Override of onResume(), which uses a callback for the map View
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
+    /**
+     * Override of onPause(), which uses a callback for the map View
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     * Override of onStop(), which uses a callback for the map View
+     */
     @Override
     protected void onStop() {
         super.onStop();
         mapView.onStop();
     }
 
+    /**
+     * Override of onDestroy(), which uses a callback for the map View
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     * Override of onSaveInstanceState(), which uses a callback for the map View, which uses
+     * a specific Bundle object specifically for the map that is stored in the passed Bundle
+     * @param outState Bundle in which to place your saved state.
+     *
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -306,6 +324,9 @@ public class EventWaitlistActivity extends AppCompatActivity implements OnMapRea
         mapView.onSaveInstanceState(mapViewBundle);
     }
 
+    /**
+     * Override of onLowMemory(), which uses a callback for the map View
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
