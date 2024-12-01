@@ -152,6 +152,7 @@
             android:background="@drawable/rounded_corner_background"
             android:backgroundTint="@color/indigo"
             android:textColorHint="@color/white"
+            android:inputType="number"
             android:paddingHorizontal="10dp"
             android:hint="Required"/>
     </LinearLayout>
