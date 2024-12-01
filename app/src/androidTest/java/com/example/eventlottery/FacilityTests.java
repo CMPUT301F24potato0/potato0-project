@@ -53,7 +53,8 @@ public class FacilityTests {
     );
 
     private void NavigateToFacility() {
-        onView(withId(R.id.scanQR)).perform(click());
+        waiter.perform(withId(R.id.scanQR), click());
+//        onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         onView(withId(R.id.facility)).perform(click());
         onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));

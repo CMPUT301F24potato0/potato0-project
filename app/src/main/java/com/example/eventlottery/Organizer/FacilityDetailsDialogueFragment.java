@@ -155,6 +155,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 deleteFac(facility,db,facilityFragment,user);
+                dismiss();
             }
         });
 
@@ -208,6 +209,5 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         facilityFragment.updateViews();
         user.setFacilityID("");
         db.collection("users").document(user.getiD()).set(user);
-        dismiss();
     }
 }
