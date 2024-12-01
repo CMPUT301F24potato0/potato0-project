@@ -630,7 +630,15 @@ public class CreateEventDialogueFragment extends DialogFragment {
             return Boolean.TRUE;
         }
 
-        // Otherwise, when editing an event, make sure organizer can only edit the capacity before the join deadline
+        // Otherwise, when editing an event
+        // Event capacity must be at least the number of people enrolled, invited and chosen by the lottery system
+        Integer minCapacity = event.getEnrolledList().size() + event.getInvitedList().size() + event.getChosenList().size();
+        if (newCapacity < minCapacity) {
+            Toast.makeText(getActivity(), "Event capacity must be at least " + minCapacity, Toast.LENGTH_SHORT).show();
+            return Boolean.FALSE;
+        }
+
+        // Make sure organizer can only edit the capacity before the join deadline
         Date currentDate = new Date();
         if (currentDate.before(event.getJoinDeadline())) {
             return Boolean.TRUE;
