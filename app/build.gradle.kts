@@ -72,7 +72,7 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation ("com.github.bumptech.glide:glide:4.16.0")
-//    implementation(files("/home/chirayu/Android/Sdk/platforms/android-34/android.jar"))
+    implementation(files("C:/Users/User/AppData/Local/Android/Sdk/platforms/android-35/android.jar"))
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

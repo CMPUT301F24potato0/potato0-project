@@ -1,1 +1,6 @@
 com.example.eventlottery
+com.example.eventlottery.Admin
+com.example.eventlottery.Entrant
+com.example.eventlottery.Models
+com.example.eventlottery.Notifications
+com.example.eventlottery.Organizer
