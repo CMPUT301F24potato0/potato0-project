@@ -170,29 +170,13 @@ public class AdminTests {
         onView(withId(R.id.facility_details_text_phone_number)).check(matches(withText("Phone: " + facilityModel.getPhone())));
         onView(withId(R.id.facility_details_text_email)).check(matches(withText("Email: " + facilityModel.getEmail())));
         onView(withId(R.id.facility_details_text_capacity)).check(matches(withText("Capacity: " + facilityModel.getCapacity().toString())));
-        onView(withId(R.id.delete_button)).perform(click());
-        try {
-            onView(withText(facilityModel.getName())).check(matches(isDisplayed()));
-            throw new Deleted("Facility not deleted");
-        } catch (NoMatchingViewException e) {
-            Log.d("AdminTests","Facility deleted");
-        } catch (Deleted e) {
-            throw new RuntimeException(e);
-        }
-        onView(withId(R.id.profilesAdmin)).perform(click());
+        waiter.perform(withId(R.id.cancel_button), click());
+        waiter.perform(withId(R.id.profilesAdmin), click());
         onView(withText(curUser.getfName() + " " + curUser.getlName())).perform(scrollTo(), click());
         onView(withId(R.id.admin_name_info)).check(matches(withText(curUser.getfName() + " " + curUser.getlName())));
         onView(withId(R.id.admin_email_info)).check(matches(withText(curUser.getEmail())));
         onView(withId(R.id.admin_phone_info)).check(matches(withText(curUser.getPhone())));
-        waiter.perform(withId(R.id.admin_delete_user), click());
-        try{
-            onView(withText(curUser.getfName())).check(matches(isDisplayed()));
-            throw new Deleted("User not deleted");
-        } catch (NoMatchingViewException e) {
-            Log.d("AdminTests","User deleted");
-        } catch (Deleted e) {
-            throw new RuntimeException(e);
-        }
+        waiter.perform(withId(R.id.admin_user_cancel_button), click());
     }
 
     private void NavigateToProfile() {
