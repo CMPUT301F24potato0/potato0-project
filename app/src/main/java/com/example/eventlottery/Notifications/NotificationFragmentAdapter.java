@@ -1,6 +1,7 @@
 package com.example.eventlottery.Notifications;
 
 import android.content.Context;
+import android.media.metrics.Event;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -106,7 +107,10 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         EventModel eventFireStore = document.toObject(EventModel.class);
-                        eventID.setText(eventFireStore.getEventTitle());
+                        if (eventFireStore != null)
+                            eventID.setText(eventFireStore.getEventTitle());
+                        else
+                            Toast.makeText(getContext(), "This event was deleted.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(), "Event Doesn't Exist", Toast.LENGTH_SHORT).show();
@@ -123,7 +127,7 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
 //            }
 //        });
 
-                    if (flagID.getText().toString().equals("Chosen")) {
+        if (flagID.getText().toString().equals("Chosen")) {
             // Make sure the buttons are visible
             cancel_btn.setVisibility(View.VISIBLE);
             signup_btn.setVisibility(View.VISIBLE);
@@ -132,40 +136,47 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
             signup_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HashMap<String, String> notification = getItem(position);
                     DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
-                    eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot != null) {
-                                EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                                // Getting the RemoteUserRef object that represents the same entrant (has the same unique ID)
-                                RemoteUserRef entrantRemoteUserRef = null;
-                                for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
-                                    if (entrant.getiD().equals(currentUser.getiD())) {
-                                        entrantRemoteUserRef = entrant;
-                                        break;
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                if (documentSnapshot.exists() && documentSnapshot != null) {
+                                    EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+                                    if (eventFireStore != null){
+                                        RemoteUserRef entrantRemoteUserRef = null;
+                                        for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
+                                            if (entrant.getiD().equals(currentUser.getiD())) {
+                                                entrantRemoteUserRef = entrant;
+                                                break;
+                                            }
+                                        }
+                                        // Update event model after user chooses to join the event
+                                        try {
+                                            eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
+                                            eventFireStore.queueEnrolledList(entrantRemoteUserRef);
+                                            // Update event in FireStore database
+                                            db.collection("events").document(notification.get("eventID")).set(eventFireStore);
+                                            // Remove notification and update the user on FireStore
+                                            remove(notification);
+                                            currentUser.removeNotifications(notification);
+                                            db.collection("users").document(currentUser.getiD()).set(currentUser);
+                                            notifyDataSetChanged();
+                                        } catch (Exception e) {
+                                            Toast.makeText(getContext(), "There was an error. Please contact the organizer/admin.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getContext(), "This event was deleted", Toast.LENGTH_SHORT).show();
+                                        remove(notification);
                                     }
+                                } else {
+                                    Toast.makeText(getContext(), "This event was deleted", Toast.LENGTH_SHORT).show();
+                                    remove(notification);
                                 }
-                                // Update event model after user chooses to join the event
-                                try {
-                                    eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
-                                    eventFireStore.queueEnrolledList(entrantRemoteUserRef);
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                                // Update event in FireStore database
-                                db.collection("events").document(notification.get("eventID")).set(eventFireStore);
-                                // Remove notification and update the user on FireStore
-                                remove(notification);
-                                currentUser.removeNotifications(notification);
-                                db.collection("users").document(currentUser.getiD()).set(currentUser);
-                                notifyDataSetChanged();
                             }
                         }
                     });
-
-
                 }
             });
 
@@ -173,35 +184,45 @@ public class NotificationFragmentAdapter extends ArrayAdapter<HashMap<String, St
             cancel_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HashMap<String, String> notification = getItem(position);
                     DocumentReference eventRef = db.collection("events").document(notification.get("eventID"));
-                    eventRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot != null) {
-                                EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
-                                // Getting the RemoteUserRef object that represents the same entrant (has the same unique ID)
-                                RemoteUserRef entrantRemoteUserRef = null;
-                                for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
-                                    if (entrant.getiD().equals(currentUser.getiD())) {
-                                        entrantRemoteUserRef = entrant;
-                                        break;
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                if (documentSnapshot.exists() && documentSnapshot != null) {
+                                    EventModel eventFireStore = documentSnapshot.toObject(EventModel.class);
+                                    if (eventFireStore != null) {
+                                        // Getting the RemoteUserRef object that represents the same entrant (has the same unique ID)
+                                        RemoteUserRef entrantRemoteUserRef = null;
+                                        for (RemoteUserRef entrant : eventFireStore.getInvitedList()) {
+                                            if (entrant.getiD().equals(currentUser.getiD())) {
+                                                entrantRemoteUserRef = entrant;
+                                                break;
+                                            }
+                                        }
+                                        // Update event model after user chooses to not join the event
+                                        try {
+                                            eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
+                                            eventFireStore.queueCancelledList(entrantRemoteUserRef);
+                                            // Update event in FireStore database
+                                            db.collection("events").document(notification.get("eventID")).set(eventFireStore);
+                                            // Remove notification and update the user on FireStore
+                                            remove(notification);
+                                            currentUser.removeNotifications(notification);
+                                            db.collection("users").document(currentUser.getiD()).set(currentUser);
+                                            notifyDataSetChanged();
+                                        } catch (Exception e) {
+                                            Toast.makeText(getContext(), "There was an error. Please contact the organizer/admin.", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
+                                } else {
+                                    Toast.makeText(getContext(), "This event was deleted", Toast.LENGTH_SHORT).show();
+                                    remove(notification);
                                 }
-                                // Update event model after user chooses to not join the event
-                                try {
-                                    eventFireStore.unqueueInvitedList(entrantRemoteUserRef);
-                                    eventFireStore.queueCancelledList(entrantRemoteUserRef);
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                                // Update event in FireStore database
-                                db.collection("events").document(notification.get("eventID")).set(eventFireStore);
-                                // Remove notification and update the user on FireStore
+                            } else {
+                                Toast.makeText(getContext(), "This event was deleted", Toast.LENGTH_SHORT).show();
                                 remove(notification);
-                                currentUser.removeNotifications(notification);
-                                db.collection("users").document(currentUser.getiD()).set(currentUser);
-                                notifyDataSetChanged();
                             }
                         }
                     });
