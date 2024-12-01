@@ -21,13 +21,16 @@ import com.example.eventlottery.Models.EventModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 
 /**
@@ -60,6 +63,8 @@ public class FacilityFragment extends Fragment {
     private ArrayList<EventModel> events;
 
     private EventModel eventClicked;
+
+    private FacilityFragment thisFragment = this;
 
     /**
      * Constructor of Facility Fragment
@@ -150,12 +155,12 @@ public class FacilityFragment extends Fragment {
                 }
             }
         });
-
+        FacilityDetailsDialogueFragment facilityDetailsDF = new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facilityModel, currentFragment);
         Button createFacilityBtn = rootview.findViewById(R.id.create_facility_button);
         createFacilityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FacilityDetailsDialogueFragment(db, curUser, facility_dne, facilityModel, currentFragment).show(getFragmentManager(), "FacilityDetailsDialogueFragment");
+                facilityDetailsDF.show(getFragmentManager(), "FacilityDetailsDialogueFragment");
             }
         });
 
@@ -172,6 +177,26 @@ public class FacilityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new CreateEventDialogueFragment(curUser, facilityModel, db).show(getFragmentManager(), "CreateEventDialogueFragment");
+            }
+        });
+
+        CollectionReference facilityCol = db.collection("facilities");
+        facilityCol.whereEqualTo(FieldPath.documentId(), curUser.getiD()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("ProfileFragment", "listen:error", error);
+                    return;
+                }
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case REMOVED:
+                            Log.d("ProfileFragment", "Removed user: " + dc.getDocument().getData());
+                            facilityDetailsDF.deleteFac(facilityModel, db, thisFragment, curUser);
+                            break;
+                    }
+                }
             }
         });
 

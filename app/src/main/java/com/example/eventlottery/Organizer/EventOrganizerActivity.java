@@ -272,9 +272,6 @@ public class EventOrganizerActivity extends AppCompatActivity {
                     eventPoster.setImageBitmap(bitmap);
 
                 } else {
-
-//                     eventPoster.setImageDrawable(getResources().getDrawable(R.drawable.defaultposter));
-
                     eventPoster.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.defaultposter));
                 }
             }

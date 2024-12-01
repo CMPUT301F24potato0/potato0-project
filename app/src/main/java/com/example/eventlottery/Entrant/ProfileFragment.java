@@ -32,15 +32,18 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventlottery.Admin.AdminMainActivity;
+import com.example.eventlottery.MainActivity;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -50,6 +53,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
@@ -196,7 +200,6 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 });
-
                 editUser.setBackgroundColor(getResources().getColor(R.color.red1));
                 editUser.setEnabled(false);
             }
@@ -282,6 +285,35 @@ public class ProfileFragment extends Fragment {
         });
 
         profile_letter = rootView.findViewById(R.id.profile_letter_picture);
+
+        CollectionReference userCol = db.collection("users");
+
+        userCol.whereEqualTo(FieldPath.documentId(), curUser.getiD()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("ProfileFragment", "listen:error", error);
+                    return;
+                }
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case REMOVED:
+                            Log.d("ProfileFragment", "Removed user: " + dc.getDocument().getData());
+                            // Remove the EditText text and disable the edit profile btn
+                            f_name.setText("");
+                            l_name.setText("");
+                            email.setText("");
+                            phone.setText("");
+                            editUser.setEnabled(true);
+                            editUser.callOnClick();
+                            delete_pic.callOnClick();
+                            break;
+                    }
+                }
+            }
+        });
+
         DocumentReference userRef = db.collection("users").document(curUser.getiD());
         userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -521,5 +553,9 @@ public class ProfileFragment extends Fragment {
      */
     public UserModel getCurUser() {
         return curUser;
+    }
+
+    public void update() {
+        curUser = MainActivity.curUser;
     }
 }

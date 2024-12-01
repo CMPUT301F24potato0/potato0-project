@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private String androidIDStr;
     public static UserModel curUser;
     private boolean isNewUser;
-    private FacilityModel facility;
+    private static FacilityModel facility;
     ConstraintLayout mainActivityView;
     ConstraintLayout mainActivityProgressBar;
 
@@ -141,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if (redirect != null){
                     if (redirect.equals("NotificationsFragment")){
                         bottomNavigationView.setSelectedItemId(R.id.notifications);
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.flFragment, new NotificationsFragment(db, curUser, curUser.getNotifications()))
-                                .commit();
                     } else {
                         checkUser();
                     }
