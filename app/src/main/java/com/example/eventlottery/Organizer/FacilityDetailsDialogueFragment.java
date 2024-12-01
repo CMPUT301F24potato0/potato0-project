@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.eventlottery.Models.UserModel;
 import com.example.eventlottery.Models.FacilityModel;
 import com.example.eventlottery.R;
+import com.google.firebase.Firebase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -153,13 +154,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                facility.delete(db);
-                facilityFragment.changeView(0);
-                // after updating or creating a facility, update the view
-                facilityFragment.updateViews();
-                user.setFacilityID("");
-                db.collection("users").document(user.getiD()).set(user);
-                dismiss();
+                deleteFac(facility,db,facilityFragment,user);
             }
         });
 
@@ -205,4 +200,14 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
         }
     }
 
+
+    public void deleteFac(FacilityModel facility, FirebaseFirestore db, FacilityFragment facilityFragment, UserModel user) {
+        facility.delete(db);
+        facilityFragment.changeView(0);
+        // after updating or creating a facility, update the view
+        facilityFragment.updateViews();
+        user.setFacilityID("");
+        db.collection("users").document(user.getiD()).set(user);
+        dismiss();
+    }
 }
