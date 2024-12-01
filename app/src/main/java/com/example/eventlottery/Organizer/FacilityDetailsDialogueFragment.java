@@ -192,7 +192,7 @@ public class FacilityDetailsDialogueFragment extends DialogFragment {
             return Boolean.FALSE;
         }
         try {
-            Integer number = Integer.parseInt(str);
+            Long number = Long.parseLong(str);
             if (number < 0) {
                 return Boolean.FALSE;
             }
