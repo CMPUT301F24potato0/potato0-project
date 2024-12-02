@@ -22,11 +22,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+/**
+ * This class is the PushNotificationService
+ * This class is used to receive notifications from the Firebase
+ * This overrides the onMessageReceived method to receive notifications from the Firebase
+ */
 public class PushNotificationService extends FirebaseMessagingService{
 
     // https://medium.com/@Codeible/android-notifications-with-firebase-cloud-messaging-914623716dea
     FirebaseFirestore db;
     /**
+     * Here we are overriding the onMessageReceived method to receive notifications from the Firebase
+     * This sends the notification to the user
      * @param remoteMessage Remote message that has been received.
      */
     @Override

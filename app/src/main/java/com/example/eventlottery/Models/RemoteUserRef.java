@@ -19,6 +19,10 @@ public class RemoteUserRef implements Serializable {
     private Double latitude;
     private Double longitude;
 
+    /**
+     * This is the interface for the observer
+     * This interface is used to check if the information has been changed in the firebase
+     */
     public interface UserObserver {
         public void call();
     }
