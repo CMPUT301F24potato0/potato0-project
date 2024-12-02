@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+/**
+ * This is the lottery system test class
+ * This class tests the lottery system class
+ */
 public class LotterySystemTest {
     @Test
     public void drawSampleTest() {

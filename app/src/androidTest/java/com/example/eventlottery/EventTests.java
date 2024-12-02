@@ -34,11 +34,20 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.UUID;
+
+/**
+ * This is EventTests
+ * This class is used to test the event functionality
+ * Permissions are auto granted
+ */
 @LargeTest
 public class EventTests {
     // https://stackoverflow.com/questions/52818524/delay-test-in-espresso-android-without-freezing-main-thread
 
-
+    /**
+     * This method navigates to the facility page
+     * Similar to the AdminTests
+     */
     private void NavigateToFacility() {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
@@ -46,6 +55,9 @@ public class EventTests {
         onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
     }
 
+    /**
+     * This method creates a testing facility
+     */
     private void CreatingFacility() {
         onView(withId(R.id.create_facility_button)).perform(click());
         waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Test Facility"));
@@ -69,6 +81,15 @@ public class EventTests {
 
     private final Waiter waiter = new Waiter(10, 1);
 
+    /**
+     * This method creates an event using the parameters passed in
+     * @param eventTitle Event title
+     * @param eventLocation Event location
+     * @param geoLocation if geo location is required
+     * @param eventCapacity Event capacity
+     * @param eventDescription Event description
+     * @param waitListLimit Waitlist limit
+     */
     private void CreateEvent(
             String eventTitle,
             String eventLocation,
@@ -93,6 +114,17 @@ public class EventTests {
         onView(withId(R.id.create_event_positive_button)).perform(click());
     }
 
+    /**
+     * This method tests the event created
+     * This tries to open the event using the event title
+     * Clicks on the event title and checks the data of the event is the same
+     * This method also calls TestLists
+     * @param eventTitle event title
+     * @param geoLocation Geo location requirement
+     * @param eventCapacity Event capacity
+     * @param eventDescription Event description
+     * @param waitListLimit Waitlist limit
+     */
     private void TestEvent(
             String eventTitle,
             String geoLocation,
@@ -113,6 +145,10 @@ public class EventTests {
         TestLists();
     }
 
+    /**
+     * This method tests the lists that were created along side the event
+     * Click on each list button and checks if the intended activity is opened
+     */
     private void TestLists() {
         waiter.perform(withId(R.id.event_organizer_invited_button), click());
         intended(hasComponent(InvitedListActivity.class.getName()));
@@ -137,6 +173,10 @@ public class EventTests {
         intended(hasComponent(EventOrganizerActivity.class.getName()));
     }
 
+    /**
+     * This method is the large test that is being run
+     * This method calls the CreateEvent method and then tests the event using the TestEvent method
+     */
     @Test
     public void CreatingEventsTest() {
         NavigateToFacility();

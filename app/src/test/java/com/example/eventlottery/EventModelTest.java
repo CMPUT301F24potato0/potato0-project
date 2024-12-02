@@ -14,6 +14,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * This is the event model test class
+ * This class tests the event model class
+ */
 public class EventModelTest {
     private EventModel mockEvent;
     private final String eventID = "12345";

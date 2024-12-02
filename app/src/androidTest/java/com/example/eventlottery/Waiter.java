@@ -13,8 +13,9 @@ import androidx.test.espresso.ViewInteraction;
 
 import org.hamcrest.Matcher;
 
-/** @noinspection BusyWait*/ /*
-    Waits for an element to become visible or for a set amount of time.
+/**
+ * This is the waiter class
+ * This class waits for an element to become visible or for a set amount of time.
 */
 public class Waiter {
     private int interval; // in milliseconds
@@ -30,22 +31,42 @@ public class Waiter {
         this.timeout = timeout * 1000;  // convert seconds to milliseconds
     }
 
+    /**
+     * Getter for interval
+     * @return interval in milliseconds
+     */
     public int getInterval() {
         return interval;
     }
 
+    /**
+     * Setter for interval
+     * @param interval in milliseconds
+     */
     public void setInterval(int interval) {
         this.interval = interval * 1000;
     }
 
+    /**
+     * Setter for frequency
+     * @param freq frequency
+     */
     public void setFrequency(int freq) {
         this.interval = 1000/freq;
     }
 
+    /**
+     * Getter for timeout
+     * @return timeout in milliseconds
+     */
     public int getTimeout() {
         return timeout;
     }
 
+    /**
+     * Setter for timeout
+     * @param timeout timeout in milliseconds
+     */
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
@@ -58,10 +79,21 @@ public class Waiter {
         }
     }
 
+    /**
+     * This is the ViewInteractionCallback interface
+     * This interface is used to call a method on a ViewInteraction object
+     */
     public interface ViewInteractionCallback {
         ViewInteraction action(ViewInteraction vi);
     }
 
+    /**
+     * This is the waitWithCallback method
+     * This method is waits for the view to match and the performs the action
+     * @param matcher the view to match
+     * @param action the action to perform
+     * @return the view interaction
+     */
     public ViewInteraction waitWithCallback(Matcher<View> matcher, ViewInteractionCallback action) {
         try {
             int time = 0;
@@ -80,11 +112,26 @@ public class Waiter {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * This is the perform method
+     * This method performs the action on the view using the waitWithCallBack method
+     * @param matcher the view to match
+     * @param action the action to perform
+     * @return the view interaction
+     */
     public ViewInteraction perform(Matcher<View> matcher, ViewAction action) {
         return waitWithCallback(matcher, (ViewInteraction interaction) -> {
             return interaction.perform(action);
         });
     }
+    /**
+     * This is the check method
+     * This method checks if the view is matching the ViewAssertion using the waitWithCallBack method
+     * @param matcher the view to match
+     * @param assertion the assertion to perform
+     * @return the view interaction
+     */
     public ViewInteraction check(Matcher<View> matcher, ViewAssertion assertion) {
         return waitWithCallback(matcher, (ViewInteraction interaction) -> {
             return interaction.check(assertion);

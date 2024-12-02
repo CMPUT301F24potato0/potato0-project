@@ -11,6 +11,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This is the user model test class
+ * This class tests the user model class
+ */
 public class UserModelTest {
     private UserModel mockUser;
     private final String fName = "John";

@@ -6,6 +6,10 @@ import com.example.eventlottery.Models.FacilityModel;
 
 import org.junit.Test;
 
+/**
+ * This is the facility model test class
+ * This class tests the facility model class
+ */
 public class FacilityModelTest {
     private FacilityModel mockFacility;
     private final String name = "Test Facility";

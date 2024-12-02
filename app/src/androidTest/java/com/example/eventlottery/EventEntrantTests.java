@@ -41,6 +41,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+/**
+ * This is EventEntrantTests
+ * This class is used to test the event entrant functionality
+ * The permissions are auto granted
+ */
 @LargeTest
 public class EventEntrantTests {
 
@@ -65,6 +71,10 @@ public class EventEntrantTests {
 
     private final Waiter waiter = new Waiter(10, 1);
 
+    /**
+     * This is the init method for the EventEntrantTests
+     * gets the user from MainActivity and creates a new ScanFragment instance
+     */
     private void init() {
         waiter.perform(withId(R.id.scanQR), click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
@@ -75,6 +85,12 @@ public class EventEntrantTests {
             fragment = new ScanFragment(db, curUser); // this is used to check an invalid event
         });
     }
+
+    /**
+     * This method tries to "scan" an invalid event.
+     * Basically it tries to pass in an invalid hash qr data and an invalid user id to the ScanFragment checkEvent method
+     * This should pop a Toast saying invalid event
+     */
     private void ScanInvalidEvent() {
         init();
         // This is basically checking if the user scans an invalid event
@@ -84,6 +100,11 @@ public class EventEntrantTests {
         onView(withId(R.id.scannerView)).check(matches(isDisplayed()));
     }
 
+    /**
+     * This method tries to join the geo event
+     * This checks if the geo requirement dialog fragment is being displayed
+     * then clicks the accept button
+     */
     private void JoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         waiter.perform(withId(R.id.event_entrant_page_join_button1), click());
@@ -92,12 +113,20 @@ public class EventEntrantTests {
         waiter.perform(withText("Accept"), click());
     }
 
+    /**
+     * This method tries to unjoin the geo event
+     * This method clicks the unjoin button after joining the geo event
+     */
     private void UnjoinGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_unjoin_button1)).perform(click());
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
     }
 
+    /**
+     * This method tries to join the no geo event
+     * There should be no geo location dialog for this event
+     */
     private void JoinNoGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
         waiter.perform(withId(R.id.event_entrant_page_join_button1), click());
@@ -105,12 +134,21 @@ public class EventEntrantTests {
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
     }
 
+    /**
+     * This method tries to unjoin the no geo event
+     */
     private void UnjoinNoGeoEvent() {
         waiter.check(withId(R.id.event_entrant_page_unjoin_button1), matches(isDisplayed()));
         onView(withId(R.id.event_entrant_page_unjoin_button1)).perform(click());
         waiter.check(withId(R.id.event_entrant_page_join_button1), matches(isDisplayed()));
     }
 
+    /**
+     * This method tries to join a geo event
+     * There are two invisible button on the top of the scanner view
+     * Those buttons open a hardcoded event in the firebase
+     * This method clicks the geo button and checks if the geo requirement dialog fragment is being displayed
+     */
     @Test
     public void EventEntrantTest() {
         init();

@@ -46,34 +46,14 @@ import org.junit.runner.RunWith;
 
 import java.util.UUID;
 
+/**
+ * This class is the AdminTests
+ * This class is used to test the admin functionality
+ * This class auto grants the permissions to use app
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AdminTests {
-
-    class Deleted extends Exception {
-        public Deleted(String message) {
-            super(message);
-        }
-    }
-
-    private ViewAction waitFor(long delay) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for " + delay + " milliseconds";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
-    }
 
     private UserModel curUser;
     private FacilityModel facilityModel;
@@ -83,6 +63,12 @@ public class AdminTests {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * This is the setup method for the AdminTests
+     * This goes to the scanner view and then clicks the facility button
+     * Then goes to scanner view again
+     * This is done so firebase data is loaded properly
+     */
     @Before
     public void setup() {
         waiter.perform(withId(R.id.scanQR), click());
@@ -105,6 +91,12 @@ public class AdminTests {
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.POST_NOTIFICATIONS
     );
+    /**
+     * This is the getText method
+     * This method is used to get the text from a view
+     * @param matcher The matcher to get the text from
+     * @return The text from the view
+     */
     String getText(final Matcher<View> matcher) {
         final String[] stringHolder = { null };
         onView(matcher).perform(new ViewAction() {
@@ -127,6 +119,18 @@ public class AdminTests {
         return stringHolder[0];
     }
 
+    /**
+     * This is the test for admin view
+     * This creates a profile first
+     * Then it navigates to the facility page
+     * Tries to create a facility
+     * New exception is thrown if facility already exists
+     * Then creates a new event with random UUID
+     * Then it navigates to profile page and clicks the admin button
+     * Then it opens the event that was created earlier and checks if the event has the same details
+     * Then goes to the facility page and checks if the facility has the same details
+     * Then goes to the user page and checks if the user has the same details
+     */
     @Test
     public void TestAdmin() {
         String fName = "IntentTestAdmin";
@@ -179,11 +183,17 @@ public class AdminTests {
         waiter.perform(withId(R.id.admin_user_cancel_button), click());
     }
 
+    /**
+     * This navigates to the profile page
+     */
     private void NavigateToProfile() {
         waiter.perform(withId(R.id.profile), click());
         waiter.check(withId(R.id.fProfile), matches(isDisplayed()));
     }
 
+    /**
+     * This navigates to the facility page
+     */
     private void NavigateToFacility() {
         onView(withId(R.id.scanQR)).perform(click());
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
@@ -191,6 +201,14 @@ public class AdminTests {
         waiter.check(withId(R.id.facilityOrganizerHomePage), matches(isDisplayed()));
     }
 
+    /**
+     * This creates a profile for testing
+     * Tries to navigate to the profile page and the replaces the texts and clicks the save profile button
+     * @param firstName first name of the user
+     * @param lastName last name of the user
+     * @param email email of the user
+     * @param phone phone number of the user
+     */
     private void CreateAProfile(
             String firstName,
             String lastName,
@@ -205,6 +223,9 @@ public class AdminTests {
         waiter.perform(withId(R.id.saveProfileBtn), click());
     }
 
+    /**
+     * This creates a facility for testing
+     */
     private void CreatingFacility() {
         onView(withId(R.id.create_facility_button)).perform(click());
         waiter.perform(withId(R.id.facility_details_edittext_facility_name), replaceText("Admin Intents Test Facility"));
@@ -215,6 +236,15 @@ public class AdminTests {
         onView(withId(R.id.facility_details_confirm_button)).perform(click());
     }
 
+    /**
+     * This creates an event for testing
+     * @param eventTitle event title
+     * @param eventLocation event location
+     * @param geoLocation geo location
+     * @param eventCapacity event capacity
+     * @param eventDescription event description
+     * @param waitListLimit wait list limit
+     */
     private void CreateEvent(
             String eventTitle,
             String eventLocation,

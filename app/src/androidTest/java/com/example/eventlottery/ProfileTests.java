@@ -32,6 +32,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * This is the profiles test
+ * This tests the profile page of the app
+ * Permissions are auto granted to the app
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ProfileTests {
@@ -46,12 +51,24 @@ public class ProfileTests {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.POST_NOTIFICATIONS
     );
+
+    /**
+     * This method navigates to the profile page
+     */
     private void NavigateToProfile() {
         waiter.check(withId(R.id.scannerView), matches(isDisplayed()));
         waiter.perform(withId(R.id.profile), click());
         waiter.check(withId(R.id.fProfile), matches(isDisplayed()));
     }
 
+    /**
+     * This test checks if the profile page is displayed
+     * This method calls the NavigateToProfile method
+     * then checks if the save button is disabled
+     * Then replaces the first name, last name, phone number, and email
+     * then clicks the save button
+     * Then it goes to scanner view and then navigates back to the profile to see if the profile is being saved
+     */
     @Test
     public void ProfileEditPersistent() {
         NavigateToProfile();
@@ -71,6 +88,13 @@ public class ProfileTests {
         onView(withId(R.id.phoneEditText)).check(matches(withText("000000000111")));
         onView(withId(R.id.emailEditText)).check(matches(withText("persist@example.com")));
     }
+
+    /**
+     * This test checks if the profile page is discarding unsaved changes
+     * It calls ProfileEditPersistent method
+     * Then it replaces the first name, last name, phone number, and email
+     * Then goes to the facility and goes back to profile page and checks if the new edits have been discarded
+     */
     @Test
     public void ProfileEditDiscardUnsaved() {
         ProfileEditPersistent();
