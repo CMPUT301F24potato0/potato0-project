@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- *
+ * This is the facility test class
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -35,6 +35,11 @@ public class FacilityTests {
     private FacilityModel facilityModel;
     private UserModel curUser;
 
+    /**
+     *  This is the setup method
+     *  Called before every test
+     *  This method gets the current user and facility model from MainActivity
+     */
     @Before
     public void setup() {
         activityRule.getScenario().onActivity(activity -> {
@@ -55,6 +60,11 @@ public class FacilityTests {
             Manifest.permission.POST_NOTIFICATIONS
     );
 
+    /**
+     * This is the NavigateToFacility method
+     * This method clicks scanQR and then checks if the scannerView is displayed
+     * Then clicks facility and checks if the facilityOrganizerHomePage is displayed
+     */
     private void NavigateToFacility() {
         waiter.perform(withId(R.id.scanQR), click());
 //        onView(withId(R.id.scanQR)).perform(click());
@@ -63,6 +73,11 @@ public class FacilityTests {
         onView(withId(R.id.facilityOrganizerHomePage)).check(matches(isDisplayed()));
     }
 
+    /**
+     * This method tests if editing a facility is working
+     * It navigates to facility and clicks the edit button
+     * Then updates the facility information and checks if it is updated
+     */
     private void TestEditFacility() {
         NavigateToFacility();
         waiter.check(withId(R.id.facility_page_facility_name), matches(withText("Test facility")));
@@ -76,6 +91,10 @@ public class FacilityTests {
         waiter.check(withId(R.id.facility_page_facility_name), matches(withText("Test facility 2")));
     }
 
+    /**
+     * This method checks if facility is being deleted
+     * Navigates to facility then clicks the delete button
+     */
     private void TestDeleteFacility() {
         NavigateToFacility();
         waiter.check(withId(R.id.facility_page_facility_name), matches(withText("Test facility 2")));
@@ -85,6 +104,9 @@ public class FacilityTests {
         assertEquals("", curUser.getFacilityID());
     }
 
+    /**
+     * This method tests if data validation on facility creation is working
+     */
     private void TestInvalidFacilityCreation() {
         NavigateToFacility();
         onView(withId(R.id.create_facility_button)).perform(click());
@@ -97,6 +119,10 @@ public class FacilityTests {
         waiter.check(withId(R.id.facility_details_cancel_button), matches(isDisplayed()));
     }
 
+    /**
+     * This is the main test
+     * This method tests all the methods above
+     */
     @Test
     public void TestFacility() {
         NavigateToFacility();

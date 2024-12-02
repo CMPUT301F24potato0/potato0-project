@@ -88,13 +88,9 @@ public class SendNotificationDialog extends DialogFragment {
     }
 
     /**
-     * on create
-     * @param savedInstanceState The last saved instance state of the Fragment,
-     * or null if this is a freshly created Fragment.
-     *
-     * @return the dialog after being created
+     * This is the onStart method
+     * This is customizing the dialog window
      */
-
     @Override
     public void onStart() {
         super.onStart();
