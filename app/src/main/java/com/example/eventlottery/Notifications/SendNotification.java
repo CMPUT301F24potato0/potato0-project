@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 /**
  * This class is the SendNotification
+ * This sends an android notification to the user
  */
 public class SendNotification implements Serializable {
 

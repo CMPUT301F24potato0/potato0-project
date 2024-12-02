@@ -10,8 +10,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
- * This class is the SubscribeToTopic
- * Not being used
+ * This class Subscribes the user to a topic
+ * This is required for sending notifications
  */
 public class SubscribeToTopic {
 

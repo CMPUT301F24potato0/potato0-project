@@ -12,7 +12,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * This class is the UnsubscribeFromTopic
- * Not being used
+ * This unsubscribes the user from a topic
  */
 public class UnsubscribeFromTopic {
 
