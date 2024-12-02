@@ -19,6 +19,9 @@ import android.widget.Button;
 import com.example.eventlottery.R;
 
 
+/**
+ * class that represent the button to go back to the past fragment or view
+ */
 public class ChosenListBackButtonDialogueFragment extends DialogFragment {
 
     /**
